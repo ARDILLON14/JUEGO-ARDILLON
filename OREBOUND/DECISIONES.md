@@ -1,6 +1,6 @@
 # OREBOUND — DECISIONES.md
 
-Versión: Etapa 9 · 2026-11-16
+Versión: Etapa 10 · 2026-11-16 · Diseño completo
 
 > **Estado de las fuentes.** Este archivo se ha construido solo con el documento
 > «OREBOUND — Prompts por partes» (prompt único con continuidad + partes 0 a 10).
@@ -222,7 +222,7 @@ Celestial
 Experiencia
 - E2-01. `XP(L) = techo(100 + 20·L + 0,8·L²)` de nivel 1 a 1.000 (fórmula del prompt). XP acumulada a nivel 1.000: 276.357.100.
 - E2-02. XP por hora base: `240 × (25 + 3,75·L)`. Con ella, nivel 1.000 cuesta 460,3 horas.
-- E2-03. Ajuste recomendado: XP por acción `25 + 3,75·L + 0,002·L²` → 344,6 horas a nivel 1.000.
+- E2-03. [ADOPTADO desde la Etapa 3] Ajuste de XP por acción `25 + 3,75·L + 0,002·L²` → 344,6 horas a nivel 1.000.
 - E2-04. Por encima de 1.000: `XP(L) = 820.100 + 900 × (L − 1.000)` (cola lineal); unas 95 horas por cada 100 niveles.
 
 Puntos de estadística
@@ -577,7 +577,37 @@ Sin verificar
 
 ---
 
-## 14. Registro de cambios
+## 14. Valores de la Etapa 10 — D_Roadmap.md (todos [PROVISIONAL])
+
+Fases
+- E10-01. Nueve fases hasta el MVP: 1 Cimientos; 2 Progresión; 3 Minería y economía base; 4 Combate y Núcleos; 5 Fabricación, rarezas y cajas; 6 Mascotas; 7 Jefes y mundo 1; 8 PvP y Zonas Fracturadas; 9 Optimización, beta y lanzamiento. Resuelve P-F-11 de forma provisional.
+- E10-02. Las fases 3 y 4, y la 5 y la 6, pueden ir en paralelo; la 8 no empieza hasta cerrar la 7.
+- E10-03. Núcleos de Poder en la fase 4 (solo Prismático); Zonas Fracturadas en la fase 8 (zona 3 de prueba); evolución de mascotas preparada en la fase 6 y con contenido desde la expansión 1.
+- E10-04. Expansiones: 1 = mundo 2, Despertar y forma desatada; 2 = mundo 3, temporadas, eventos y Celestial; 3 = mundo 4, Transformación y renacimiento; 4 en adelante = zonas por encima de la 10.
+- E10-05. El roadmap no da fechas; cada fase lleva tamaño relativo y criterio de salida.
+
+MVP
+- E10-06. Fuera del MVP: ranuras de mejora, Despertar de habilidad, Celestial, forma desatada, eventos, temporadas, semanales, renacimiento, códice y escuadrones de 3.
+- E10-07. Diez criterios de terminado (D_Roadmap, sección 2.2), entre ellos: 0 pérdidas de datos en 1.000 sesiones, 30 fotogramas por segundo en móvil de gama baja y tasa de Legendario o superior entre 3,9% y 4,9% con al menos 6.532 aperturas.
+
+Pruebas
+- E10-08. Margen del 25% para ritmos e ingresos; sin margen para los límites duros (tope de mascotas, 2,5 veces en Zonas Fracturadas, aturdimiento, sumas al 100% y garantías).
+- E10-09. Objetivos del MVP: niveles 10 / 50 / 100 / 200 / 300 en 0,2 / 1,9 / 5,8 / 19,7 / 40,7 horas; ingresos de 4.830 / 7.966 / 12.816 monedas por hora en las zonas 1 / 2 / 3.
+- E10-10. Beta en tres etapas: interna, cerrada (50–200 jugadores, datos borrables) y abierta (datos conservados).
+
+Expansión
+- E10-11. Una zona nueva solo necesita datos y arte: nombre, 6 o 7 minerales, prefijo de equipo, mapa y jefe; aporta entre 47 y 59 horas por cada 100 niveles.
+- E10-12. Regla de presupuesto para Núcleos nuevos: entre el 125% y el 154% de la potencia del arma por segundo.
+
+Coherencia
+- E10-13. Precedencia: B7 sobre B1–B6; los archivos B sobre A; C y D siguen a los B; las series E sobre la sección 2.2 de este archivo.
+- E10-14. Diez contradicciones abiertas listadas en D_Roadmap, sección 7.2. La principal: ningún documento se ha contrastado con el prompt maestro ni con el GDD original.
+- E10-15. Pendiente de recalcular: B5, sección 7 (valor de las mascotas de utilidad), con la regeneración en combate de la Etapa 7.
+- E10-16. Pendiente de fijar: total de gemas antiguas por semana, antes de la expansión 2.
+
+---
+
+## 15. Registro de cambios
 - 2026-11-16 · Etapa 0 (1/2): creación del archivo a partir del documento de prompts. Faltan las dos fuentes.
 - 2026-11-16 · Etapa 0 cerrada: incongruencias del prompt resueltas (C-25 a C-34) y prompt corregido.
 - 2026-11-16 · Etapa 1: valores E1-01 a E1-19.
@@ -589,3 +619,4 @@ Sin verificar
 - 2026-11-16 · Etapa 7: valores E7-01 a E7-23. Corrige B2 (Defensa y Vitalidad en PvP, puntos desde 1.001), B3 (topes de zonas mayores que 10, salida sin extraer) y B4 (daño PvP, ráfaga, golpes en área, grupos, regeneración). Documento B cerrado.
 - 2026-11-16 · Etapa 8: valores E8-01 a E8-17. Los archivos B no cambian.
 - 2026-11-16 · Etapa 9: valores E9-01 a E9-26. Los archivos A y B no cambian.
+- 2026-11-16 · Etapa 10: valores E10-01 a E10-16. Correcciones de coherencia en B2 (nota en 9.1), B5 (×0,06 en F27), A_GDD (pilar 3) y E2-03. Diseño completo.

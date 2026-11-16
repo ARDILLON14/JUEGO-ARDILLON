@@ -40,7 +40,7 @@ Frase de venta: *«Baja más hondo. Carga más. Decide cuándo salir.»*
 |---|---|---|---|
 | 1 | La zona pesa más que la suerte | Un objeto Común de zona alta supera a uno Ultra raro de 3 zonas atrás. Avanzar siempre compensa | [P] (B1) |
 | 2 | El riesgo es opcional y acotado | La mina es PvE. En las Zonas Fracturadas solo se arriesga el mineral que llevas; nunca armas, picos, mascotas, monedas ni nivel | [C] |
-| 3 | Varias formas de jugar valen parecido | Minero y combatiente ganan casi lo mismo (1,02–1,06); ninguna build extrema supera 1,17 veces a la equilibrada | [P] (B6, B7) |
+| 3 | Varias formas de jugar valen parecido | Minero y combatiente ganan casi lo mismo (1,02–1,06 con equipo al día; hasta 1,34 a favor de la minería al llegar a una zona con el arma anterior); ninguna build extrema supera 1,17 veces a la equilibrada | [P] (B6, B7) |
 | 4 | Todo tiene techo | Cada estadística, bono y efecto tiene un tope; no hay multiplicadores descontrolados | [P] (B1–B5) |
 | 5 | Lo que da poder no se compra | Celestial, Núcleos Despertados y Seguro de carga nunca se venden. Ninguna recompensa aleatoria se paga con dinero real | [C] los tres primeros; [P] el resto (B6) |
 | 6 | Nombres y mundo propios | No se usa «frutas» ni se copia nada de otros juegos | [C] |

@@ -88,7 +88,7 @@ Etapa 5 · 2026-11-16 · Script: `calculos/b5_mascotas.py`.
   - `MultDominio = 1 + 3·D/(D + 1.000)` (B2).
 - **Unidad:** puntos de daño por segundo, antes del tope.
 - **Ejemplo:** Atacante Legendaria de nivel 60, desatada, con Dominio 400 → 0,2568 × PotenciaArma por segundo: el 8,5% del DPS de un jugador con Fuerza 300.
-- **Límites:** el tope conjunto de la sección 6. El daño de mascota pasa por la fórmula F19 de B4 (Defensa del objetivo y ×0,07 en PvP).
+- **Límites:** el tope conjunto de la sección 6. El daño de mascota pasa por la fórmula F19 de B4 (Defensa del objetivo y ×0,06 en PvP; era ×0,07 antes de la Etapa 7).
 - **Posibles problemas:** como depende del arma del jugador, un arma muy mejorada sube también a las mascotas; el tope lo contiene.
 
 ### F28 — Vida de una mascota

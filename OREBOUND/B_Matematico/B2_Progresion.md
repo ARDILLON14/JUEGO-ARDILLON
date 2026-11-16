@@ -347,6 +347,8 @@ Comparación con una raíz cuadrada calibrada para dar lo mismo con 1.000 puntos
 
 ### 9.1 Comprobación con builds (nivel 1.000, 3.000 puntos, sin equipo)
 
+> Cálculo original de la Etapa 2, con las reglas PvP de entonces (`K = 3.000`, tope 60%, Vitalidad sin reducir). Se conserva porque explica el problema P1. Los valores vigentes en PvP están en B7, sección 5 (P3).
+
 | Build | DPS | Vida efectiva PvE | Vida efectiva PvP | Minería | Suerte |
 |---|---|---|---|---|---|
 | Cristal (Fuerza, Velocidad, Energía) | ×3,50 | ×1,00 | ×1,00 | ×1,00 | ×1,00 |
