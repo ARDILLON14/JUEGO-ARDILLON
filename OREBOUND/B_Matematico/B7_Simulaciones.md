@@ -1,13 +1,14 @@
 # OREBOUND — B7: Simulaciones y cierre del Documento B
 
-Etapa 7 · 2026-11-16 · Script: `calculos/b7_simulaciones.py` (reúne las fórmulas finales de B1 a B6 y las ejecuta juntas).
+Etapa 7, rehecha con el GDD · 2026-11-16 · Script: `calculos/b7_simulaciones.py` (genera este documento a partir de los resultados de B2 a B6).
 
-> **Aviso de fuentes.** No se dispone de la sección 23 del prompt maestro: los perfiles de los
-> jugadores A a G son propuestos; solo sus niveles (1, 50, 100, 300, 500, 800 y 1.000) vienen
-> del prompt de trabajo. Todo sigue siendo **[PROVISIONAL]** salvo las decisiones fijas.
+> **Fuentes.** Esta versión simula el diseño rehecho con el GDD de combate, minería PvPvE y
+> mascotas. No se dispone de la sección 23 del prompt maestro: los perfiles de los jugadores A
+> a G son propuestos; solo sus niveles vienen del prompt de trabajo. Todo es **[PROVISIONAL]**
+> salvo las decisiones fijas.
 >
-> **Esta etapa corrige B2, B3 y B4.** Las correcciones ya están aplicadas en esos archivos; la
-> tabla de la sección 6 dice qué cambia, de qué valor a cuál y por qué.
+> **Orden de ejecución.** `b1` a `b7` en orden: cada script deja sus resultados en
+> `calculos/_bN.json` y el siguiente los lee. Así ningún número se copia a mano.
 
 ---
 
@@ -16,63 +17,62 @@ Etapa 7 · 2026-11-16 · Script: `calculos/b7_simulaciones.py` (reúne las fórm
 | Jugador | Zona | Perfil |
 |---|---|---|
 | A · nivel 1 · recién llegado | 1 | Arma y pico Comunes sin mejoras; 1 cría |
-| B · nivel 50 · equilibrado | 1 | Equipo Raro +25 %; 2 crías de nivel 10 |
-| C · nivel 100 · recién llegado a la zona 2 | 2 | Equipo Raro de zona 1 (+25 %); 3 crías de nivel 15 |
-| D · nivel 300 · minero | 4 | 50 % Minería, 25 % Suerte, 25 % Vitalidad; pico Épico +50 %; 2 Recolectores |
-| E · nivel 500 · combatiente | 6 | 40 % Fuerza; arma Épica +50 %; 3 mascotas desatadas |
-| F · nivel 800 · híbrido de grieta | 9 | Fuerza, Vitalidad, Minería y Velocidad; equipo Legendario +50 % |
-| G · nivel 1.000 · final de juego | 10 | Fuerza, Vitalidad y Dominio a 1.000; arma Ultra rara +100 %; mascotas al máximo |
+| B · nivel 50 · equilibrado | 1 | Equipo Raro con la mitad de los bonos; 2 crías de nivel 10 |
+| C · nivel 100 · recién llegado a la zona 2 | 2 | Equipo Raro de zona 1; 3 crías de nivel 15 |
+| D · nivel 300 · minero | 4 | 50% Minería, 25% Suerte, 25% Vitalidad; pico Épico con la mitad de los bonos; 2 mascotas de Minería |
+| E · nivel 500 · combatiente | 6 | 40% Fuerza; arma Épica con la mitad de los bonos; 3 mascotas desatadas |
+| F · nivel 800 · híbrido de grieta | 9 | Fuerza, Vitalidad, Minería y Velocidad; equipo Legendario con la mitad de los bonos |
+| G · nivel 1.000 · final de juego | 10 | Fuerza, Vitalidad y Dominio a 1.000; arma Ultra rara al máximo; mascotas al máximo (incluido el Guiverno de Cuarzo) |
 
 ### 1.1 Tiempos de combate y de extracción en su zona
 
 | Jugador | Enemigo Común (s) | Élite (s) | Guardián (s) | Jefe en solitario (min) | Depósito Común (s) | Depósito Raro (s) | Depósito Legendario (s) |
 |---|---|---|---|---|---|---|---|
-| A | 6,9 | 27,6 | 103,6 | 8,6 | 6,0 | 14,0 | 34,0 |
-| B | 6,0 | 24,1 | 90,5 | 7,5 | 3,8 | 7,7 | 19,2 |
-| C | 10,0 | 40,1 | 150,5 | 12,5 | 5,8 | 13,5 | 31,7 |
-| D | 8,1 | 32,6 | 122,2 | 10,2 | 2,8 | 3,8 | 9,4 |
-| E | 2,8 | 11,1 | 41,7 | 3,5 | No puede | No puede | No puede |
-| F | 2,6 | 10,5 | 39,4 | 3,3 | 2,8 | 4,6 | 10,2 |
-| G | 1,3 | 5,2 | 19,3 | 1,6 | No puede | No puede | No puede |
+| A | 5,9 | 23,5 | 88,3 | 7,4 | 5,7 | 13,3 | 33,3 |
+| B | 5,9 | 23,7 | 88,7 | 7,4 | 3,7 | 7,3 | 18,3 |
+| C | 11,9 | 47,6 | 178,6 | 14,9 | 7,3 | 15,6 | 38,5 |
+| D | 8,2 | 32,8 | 123,0 | 10,2 | 2,5 | 3,3 | 8,3 |
+| E | 2,6 | 10,4 | 39,1 | 3,3 | No puede | No puede | No puede |
+| F | 2,1 | 8,4 | 31,4 | 2,6 | 2,4 | 3,2 | 8,0 |
+| G | 0,8 | 3,3 | 12,3 | 1,0 | No puede | No puede | No puede |
 
-- **A** tarda 6,9 s por enemigo gracias a la vida de tutorial a la mitad; sin ella serían 13,8 s.
-- **C** acaba de llegar a la zona 2 con equipo de la zona 1: 10 s por enemigo y 12,5 minutos el jefe. Es la señal de que toca renovar equipo.
-- **E** y **G** no tienen puntos en Minería y no pueden picar en su zona; tendrían que bajar a la zona 1.
-- **G** derrota al jefe de la zona 10 en solitario en 1,6 minutos. Para un jugador con todo al máximo es aceptable; el jefe sigue limitado a 3 botines diarios.
+- **A** derrota a un enemigo en 5,9 s gracias a la vida de tutorial a la mitad.
+- **C** acaba de llegar a la zona 2 con equipo de la zona 1: 11,9 s por enemigo y 14,9 minutos el jefe. Con crecimiento ×2,00 por zona, el equipo atrasado se nota más que antes: es la señal de que toca renovarlo.
+- **E** y **G** no tienen puntos en Minería y no pueden picar en su zona.
+- **G** derrota al jefe de la zona 10 en solitario en 1,0 minutos. El jefe sigue limitado a 3 botines diarios.
 
 ### 1.2 Economía y progreso
 
 | Jugador | Monedas/hora combatiendo | Monedas/hora minando | Combate / minería | Horas para el arma siguiente | Horas para el pico siguiente | Minutos para subir de nivel |
 |---|---|---|---|---|---|---|
-| A | 4.113 | 4.428 | 0,93 | 0,8 h (Poco común) | 0,8 h (Poco común) | 1,1 |
-| B | 4.838 | 5.817 | 0,83 | 2,6 h (Épico) | 2,6 h (Épico) | 2,9 |
-| C | 5.422 | 7.261 | 0,75 | 3,4 h (Épico) | 3,4 h (Épico) | 6,3 |
-| D | 18.527 | 34.070 | 0,54 | 2,0 h (Épico) | 3,9 h (Legendario) | 9,7 |
-| E | 95.955 | No puede | — | 3,8 h (Legendario) | 1,9 h (Épico) | 13,3 |
-| F | 442.507 | 379.093 | 1,17 | 7,4 h (Mítico) | 7,4 h (Mítico) | 18,2 |
-| G | 949.866 | No puede | — | 11,4 h (Ultra raro) | 11,4 h (Ultra raro) | 16,2 |
+| A | 4.813 | 4.541 | 1,06 | 0,8 h (Poco común) | 0,8 h (Poco común) | 1,1 |
+| B | 5.180 | 5.832 | 0,89 | 2,6 h (Épico) | 2,6 h (Épico) | 3,1 |
+| C | 5.689 | 7.920 | 0,72 | 3,9 h (Épico) | 3,9 h (Épico) | 7,5 |
+| D | 32.746 | 62.568 | 0,52 | 2,0 h (Épico) | 3,9 h (Legendario) | 10,0 |
+| E | 268.994 | No puede | — | 3,6 h (Legendario) | 1,8 h (Épico) | 13,1 |
+| F | 2.361.707 | 1.871.972 | 1,26 | 6,6 h (Mítico) | 6,6 h (Mítico) | 16,7 |
+| G | 6.232.465 | No puede | — | 10,1 h (Ultra raro) | 10,1 h (Ultra raro) | 14,7 |
 
 - «Horas para el siguiente» = horas de juego para pagar la rareza siguiente de su zona, guardando el 80% de lo que gana con su mejor actividad.
-- El arma o el pico siguiente cuestan entre 0,8 y 11,4 horas: ningún salto de equipo queda fuera de alcance.
-- Subir de nivel cuesta de 1 a 18 minutos. A nivel 1.000 ya no se sube; la cifra de G es el ritmo del nivel 999.
-- **Combate frente a minería:** con los perfiles equilibrados (A, B, C) minar rinde entre 1,08 y 1,34 veces lo que combatir. El peor caso es C (1,34), recién llegado a una zona con el arma vieja. Ver el problema P5.
+- El arma o el pico siguiente cuestan entre 0,8 y 10,1 horas: ningún salto de equipo queda fuera de alcance.
+- **Minería frente a combate en los perfiles iniciales:** 0,94 veces (A), 1,13 (B) y 1,39 (C). El caso de C supera 1,3: ver el problema P5.
+- Con equipo al día y defensa, el combatiente pasa por delante: F gana 1,26 veces más combatiendo que minando.
 
 ### 1.3 Mascotas y minerales raros
 
-| Jugador | DPS de mascotas sin tope | DPS de mascotas contado | Ayuda al picar | Daño desviado | Curación por segundo | Tiempo parado | Rareza máxima que pica | Depósitos Legendario o superior | Legendario+ por hora |
-|---|---|---|---|---|---|---|---|---|---|
-| A | 0,5 % | 0,5 % | 4,0 % | 0,0 % | 0,00 % | 11,3 % | Mítico | 2,50 % | 5,3 |
-| B | 3,1 % | 3,1 % | 5,4 % | 0,0 % | 0,00 % | 4,6 % | Mítico | 2,59 % | 7,2 |
-| C | 4,6 % | 4,6 % | 6,8 % | 5,6 % | 0,00 % | 7,0 % | Legendario | 2,68 % | 4,7 |
-| D | 3,8 % | 3,8 % | 10,8 % | 6,0 % | 0,00 % | 0,0 % | Mítico | 3,37 % | 11,1 |
-| E | 7,3 % | 7,3 % | 4,7 % | 7,8 % | 0,00 % | 0,0 % | Ninguna | 2,50 % | 0,0 |
-| F | 6,3 % | 6,3 % | 10,1 % | 0,0 % | 0,25 % | 0,0 % | Ultra raro | 2,50 % | 8,2 |
-| G | 36,0 % | 36,0 % | 11,8 % | 0,0 % | 0,59 % | 0,0 % | Ninguna | 2,50 % | 0,0 |
+| Jugador | DPS de mascotas sin tope | DPS de mascotas contado | Velocidad de extracción añadida | Escudo de mascota | Tiempo parado | Rareza máxima que pica | Depósitos Legendario o superior | Legendario+ por hora |
+|---|---|---|---|---|---|---|---|---|
+| A | 0,4% | 0,4% | 5,0% | No | 10,2% | Mítico | 2,50% | 5,5 |
+| B | 2,9% | 2,9% | 5,0% | No | 3,0% | Mítico | 2,59% | 7,2 |
+| C | 4,3% | 4,3% | 5,0% | No | 11,6% | Legendario | 2,68% | 4,3 |
+| D | 1,1% | 1,1% | 13,0% | No | 4,1% | Mítico | 3,37% | 11,5 |
+| E | 8,9% | 8,9% | 0,0% | Sí | 0,0% | Ninguna | 2,50% | 0,0 |
+| F | 9,5% | 9,5% | 15,2% | Sí | 0,0% | Ultra raro | 2,50% | 8,7 |
+| G | 64,7% | 40,0% | 0,0% | Sí | 0,0% | Ninguna | 2,50% | 0,0 |
 
-- Ningún jugador supera el tope del 40%: G se queda en el 36,0% con mascotas Ultra raras al máximo y Dominio 1.000.
-- La ayuda al picar va del 4% al 11,8%, lejos del tope del 20%.
-- Con la regeneración en combate de esta etapa, el tiempo parado recuperando vida baja al 4,6–11,3% al principio y a 0% desde el nivel 300.
-- D, el minero con un 25% de sus puntos en Suerte, ve un 3,37% de depósitos Legendario o superior (base 2,50%) y pica 11,1 por hora.
+- **Tope de mascotas:** G alcanza el 40% (sin tope harían el 65%). Nadie lo supera.
+- El tiempo parado recuperando vida no pasa del 11,6% y es 0% desde el nivel 500.
+- D, el minero con un 25% de sus puntos en Suerte, ve un 3,37% de depósitos Legendario o superior (base 2,50%) y pica 11,5 por hora.
 
 ---
 
@@ -80,26 +80,23 @@ Etapa 7 · 2026-11-16 · Script: `calculos/b7_simulaciones.py` (reúne las fórm
 
 ### 2.1 Todo en una estadística
 
-Nivel 1.000, equipo Legendario +50% y las mismas tres mascotas. «Todo en X» = 1.000 puntos en X y 285 en cada una de las otras siete.
+Nivel 1.000, equipo Legendario al máximo y las mismas tres mascotas. «Todo en X» = 1.000 puntos en X y 285 en cada una de las otras siete.
 
-| Build (nivel 1.000, equipo Legendario +50 %) | DPS (× equilibrada) | Vida efectiva PvE (× base) | Vida efectiva PvP (× base) | Monedas/h combate | × equilibrada | Monedas/h minería | × equilibrada | Mejor estilo × equilibrada | Legendario+ en depósitos | DPS de mascotas contado |
+| Build (nivel 1.000, equipo Legendario al máximo) | DPS (× equilibrada) | Vida efectiva PvE (× base) | Vida efectiva PvP (× base) | Monedas/h combate | × equilibrada | Monedas/h minería | × equilibrada | Mejor estilo × equilibrada | Legendario+ en depósitos | DPS de mascotas contado |
 |---|---|---|---|---|---|---|---|---|---|---|
-| Equilibrada (375 en todo) | 1,00 | 2,27 | 1,38 | 693.570 | 1,00 | 630.359 | 1,00 | 1,00 | 3,75 % | 17,1 % |
-| Todo en Fuerza | 1,28 | 1,98 | 1,30 | 775.035 | 1,12 | 540.180 | 0,86 | 1,12 | 3,53 % | 11,4 % |
-| Todo en Minería | 0,89 | 1,98 | 1,30 | 654.788 | 0,94 | 712.116 | 1,13 | 1,03 | 3,53 % | 17,1 % |
-| Todo en Suerte | 0,89 | 1,98 | 1,30 | 654.788 | 0,94 | 565.322 | 0,90 | 0,94 | 4,62 % | 17,1 % |
-| Todo en Defensa | 0,89 | 2,78 | 1,49 | 654.788 | 0,94 | 540.180 | 0,86 | 0,94 | 3,53 % | 17,1 % |
-| Todo en Dominio | 0,95 | 1,98 | 1,30 | 675.546 | 0,97 | 540.180 | 0,86 | 0,97 | 3,53 % | 25,7 % |
-| Minería + Suerte + Vitalidad | 0,47 | 2,50 | 1,50 | 448.235 | 0,65 | 780.673 | 1,24 | 1,13 | 4,62 % | 17,1 % |
-| Fuerza + Velocidad + Energía | 1,44 | 1,00 | 1,00 | 813.912 | 1,17 | 0 | 0,00 | 1,17 | 2,50 % | 6,8 % |
+| Equilibrada (375 en todo) | 1,00 | 2,27 | 1,38 | 4.895.283 | 1,00 | 3.980.517 | 1,00 | 1,00 | 3,75% | 24,3% |
+| Todo en Fuerza | 1,26 | 1,98 | 1,30 | 5.303.991 | 1,08 | 3.400.843 | 0,85 | 1,08 | 3,53% | 16,2% |
+| Todo en Minería | 0,89 | 1,98 | 1,30 | 4.673.258 | 0,95 | 4.365.155 | 1,10 | 0,95 | 3,53% | 24,3% |
+| Todo en Suerte | 0,89 | 1,98 | 1,30 | 4.673.258 | 0,95 | 3.576.008 | 0,90 | 0,95 | 4,62% | 24,3% |
+| Todo en Defensa | 0,89 | 2,78 | 1,49 | 4.673.258 | 0,95 | 3.400.843 | 0,85 | 0,95 | 3,53% | 24,3% |
+| Todo en Dominio | 0,96 | 1,98 | 1,30 | 4.825.150 | 0,99 | 3.422.490 | 0,86 | 0,99 | 3,53% | 36,5% |
+| Minería + Suerte + Vitalidad | 0,46 | 2,50 | 1,50 | 3.394.309 | 0,69 | 4.801.570 | 1,21 | 0,98 | 4,62% | 24,3% |
+| Fuerza + Velocidad + Energía | 1,43 | 1,00 | 1,00 | 5.517.837 | 1,13 | 0 | — | 1,13 | 2,50% | 9,7% |
 
-- **Ninguna build rinde más de 1,17 veces la equilibrada** en su mejor actividad. El límite de 1,3 se cumple con margen.
-- **Todo en Fuerza:** +28% de DPS, pero solo +12% de monedas, porque el tiempo de desplazamiento no cambia.
-- **Todo en Minería:** +13% minando. **Minería + Suerte + Vitalidad:** +24%, la mejor build de minero.
-- **Todo en Suerte:** sube los depósitos Legendario o superior de 3,75% a 4,62%, pero pierde monedas (0,90) porque pica más despacio. La Suerte sola no compensa; combinada con Minería, sí.
-- **Todo en Defensa:** la más resistente (×2,78 de vida efectiva en PvE) y de las que menos gana.
-- **Todo en Dominio:** sus mascotas pasan del 17,1% al 25,7% del DPS del jugador, pero la build rinde 0,97. El Dominio no sirve como estadística de daño; su valor está en la utilidad (B5).
-- **Fuerza + Velocidad + Energía:** el mayor DPS (×1,44), la que más gana combatiendo (1,17) y cero minería.
+- **Ninguna build rinde más de 1,13 veces la equilibrada** en su mejor actividad (Fuerza + Velocidad + Energía). El límite de 1,3 se cumple.
+- Todo en Fuerza: 1,08. Todo en Minería: 0,95. Todo en Suerte: 0,95. Todo en Defensa: 0,95. Todo en Dominio: 0,99.
+- Con los picos del GDD, casi todos los depósitos se pican en el mínimo de 3 golpes con equipo Legendario: la Minería extra apenas acelera, y por eso «todo en Minería» no destaca. Su valor está en acceder a las rarezas altas.
+- El Dominio sube el daño de mascotas contado, pero no convierte la build en la mejor: su valor está en la utilidad (B5).
 
 ### 2.2 Solo equipo Común, Ultra raro y Celestial
 
@@ -107,48 +104,53 @@ Build equilibrada de nivel 1.000 en la zona 10.
 
 | Equipo (build equilibrada, nivel 1.000) | Potencia | DPS (× Común) | Enemigo Común (s) | Jefe (min) | Depósito Común (s) | Monedas/h combate | × Común | Monedas/h minería | × Común |
 |---|---|---|---|---|---|---|---|---|---|
-| Solo Común sin mejoras | 9.065 | 1,00 | 7,7 | 9,6 | 6,0 | 389.250 | 1,00 | 419.550 | 1,00 |
-| Raro +25 % | 14.957 | 1,65 | 4,7 | 5,8 | 3,8 | 540.039 | 1,39 | 543.154 | 1,29 |
-| Legendario +50 % | 23.795 | 2,63 | 2,9 | 3,7 | 2,8 | 693.570 | 1,78 | 630.359 | 1,50 |
-| Ultra raro +100 % | 39.885 | 4,40 | 1,8 | 2,2 | 2,7 | 860.600 | 2,21 | 687.249 | 1,64 |
-| Celestial +100 % | 47.137 | 5,20 | 1,5 | 1,9 | 2,6 | 910.488 | 2,34 | 698.286 | 1,66 |
+| Solo Común sin mejoras | 51.200 | 1,00 | 7,1 | 8,9 | 5,6 | 2.406.816 | 1,00 | 2.500.254 | 1,00 |
+| Raro con la mitad de los bonos | 96.000 | 1,88 | 3,8 | 4,8 | 3,1 | 3.557.689 | 1,48 | 3.309.449 | 1,32 |
+| Legendario al máximo | 192.000 | 3,75 | 1,9 | 2,4 | 2,2 | 4.895.283 | 2,03 | 3.980.517 | 1,59 |
+| Ultra raro al máximo | 345.600 | 6,75 | 1,1 | 1,3 | 2,1 | 5.877.388 | 2,44 | 4.157.135 | 1,66 |
+| Celestial al máximo | 399.360 | 7,80 | 0,9 | 1,1 | 2,1 | 6.082.732 | 2,53 | 4.212.899 | 1,68 |
 
-- El equipo Ultra raro al máximo da 2,21 veces las monedas del Común en combate; el Celestial, 2,34.
-- **Celestial frente a Ultra raro: +5,8% de monedas.** Es mejor, pero no obligatorio.
-- En minería la diferencia se aplana (1,64 frente a 1,66) por el mínimo de 3 golpes por depósito.
-- Bajar a la zona 9 con equipo Ultra raro rinde 0,62 veces lo que la zona 10: no compensa farmear zonas inferiores.
+- El equipo Ultra raro al máximo da 2,44 veces las monedas del Común en combate; el Celestial, 2,53.
+- **Celestial frente a Ultra raro: +3,5% de monedas.** Es mejor, pero no obligatorio.
+- En minería la diferencia se aplana (1,66 frente a 1,68) por el mínimo de 3 golpes por depósito.
+- Bajar a la zona 9 con equipo Ultra raro rinde 0,51 veces lo que la zona 10: no compensa farmear zonas inferiores.
+- El daño real máximo simulado (G) es 8,7 veces el de un jugador equilibrado con equipo Común, lejos del máximo teórico de B4.
 
 ---
 
 ## 3. Escenarios de Zona Fracturada
 
-Nivel 1.000 en la Zona Fracturada de la zona 10, arma Legendaria +50%, mascotas al tope del 25%.
+Nivel 1.000 en la Zona Fracturada de la zona 10, arma Legendaria al máximo, mascotas al tope del 25%.
 
 ### 3.1 Minero solo contra 2 saqueadores
 
-Saqueadores: un Cristal (WalkSpeed 20) y un Tanque (WalkSpeed 16). El minero huye hacia una salida; salir requiere 3 s de canalización sin recibir daño.
+Saqueadores: un Cristal (WalkSpeed 20) y un Tanque (WalkSpeed 16). El minero huye; la distancia de escape cuenta sus dos cargas de dash (24 studs, que la carga no ralentiza) y los 3 s de canalización de la salida.
 
-| Situación | Carga | Velocidad del minero | WalkSpeed del minero | Tiempo hasta el primer golpe | Distancia máxima a una salida para escapar (studs) | Tiempo hasta morir si no escapa | Con mascotas en Proteger |
-|---|---|---|---|---|---|---|---|
-| Los ve a 60 studs | 25 % | 0 | 15,4 | 11,3 s | 128 | 21,5 s | 24,0 s |
-| Los ve a 60 studs | 25 % | 1.000 | 19,2 | 69,3 s | 1.276 | 79,4 s | 82,0 s |
-| Los ve a 60 studs | 50 % | 0 | 14,3 | 9,1 s | 87 | 19,3 s | 21,8 s |
-| Los ve a 60 studs | 50 % | 1.000 | 17,9 | 24,5 s | 384 | 34,7 s | 37,2 s |
-| Los ve a 60 studs | 100 % | 0 | 11,2 | 5,9 s | 32 | 13,9 s | 15,4 s |
-| Los ve a 60 studs | 100 % | 1.000 | 14,0 | 8,6 s | 79 | 18,8 s | 21,4 s |
-| Emboscada a 20 studs | 25 % | 0 | 15,4 | 2,6 s | 0 | 12,8 s | 15,3 s |
-| Emboscada a 20 studs | 25 % | 1.000 | 19,2 | 16,0 s | 249 | 26,1 s | 28,7 s |
-| Emboscada a 20 studs | 50 % | 0 | 14,3 | 2,1 s | 0 | 10,1 s | 11,6 s |
-| Emboscada a 20 studs | 50 % | 1.000 | 17,9 | 5,6 s | 47 | 15,8 s | 18,4 s |
-| Emboscada a 20 studs | 100 % | 0 | 11,2 | 1,4 s | 0 | 7,7 s | 9,2 s |
-| Emboscada a 20 studs | 100 % | 1.000 | 14,0 | 2,0 s | 0 | 9,6 s | 11,0 s |
+| Situación | Carga | Ralentización | Velocidad del minero | WalkSpeed | Tiempo hasta el primer golpe | Distancia máxima a una salida para escapar (studs) | Tiempo hasta caer si no escapa | Con Escudo Facetado |
+|---|---|---|---|---|---|---|---|---|
+| Los ve a 60 studs | 1 | 8% | 0 | 14,7 | 9,8 s | 123 | 19,7 s | 21,7 s |
+| Los ve a 60 studs | 1 | 8% | 1.000 | 18,3 | 31,3 s | 542 | 41,2 s | 43,1 s |
+| Los ve a 60 studs | 5 | 22% | 0 | 12,6 | 6,9 s | 74 | 16,2 s | 17,4 s |
+| Los ve a 60 studs | 5 | 22% | 1.000 | 15,7 | 12,1 s | 166 | 22,0 s | 24,0 s |
+| Los ve a 60 studs | 12 | 31% | 0 | 11,1 | 5,8 s | 55 | 13,6 s | 14,8 s |
+| Los ve a 60 studs | 12 | 31% | 1.000 | 13,8 | 8,4 s | 99 | 18,4 s | 20,3 s |
+| Los ve a 60 studs | 30 | 40% | 0 | 9,6 | 4,9 s | 43 | 12,1 s | 13,3 s |
+| Los ve a 60 studs | 30 | 40% | 1.000 | 12,0 | 6,4 s | 65 | 15,0 s | 16,2 s |
+| Emboscada a 20 studs | 1 | 8% | 0 | 14,7 | 2,2 s | 24 | 10,9 s | 12,1 s |
+| Emboscada a 20 studs | 1 | 8% | 1.000 | 18,3 | 7,2 s | 101 | 17,2 s | 19,1 s |
+| Emboscada a 20 studs | 5 | 22% | 0 | 12,6 | 1,6 s | 24 | 8,2 s | 9,4 s |
+| Emboscada a 20 studs | 5 | 22% | 1.000 | 15,7 | 2,7 s | 24 | 12,7 s | 14,7 s |
+| Emboscada a 20 studs | 12 | 31% | 0 | 11,1 | 1,3 s | 24 | 7,6 s | 8,8 s |
+| Emboscada a 20 studs | 12 | 31% | 1.000 | 13,8 | 1,9 s | 24 | 9,2 s | 10,5 s |
+| Emboscada a 20 studs | 30 | 40% | 0 | 9,6 | 1,2 s | 24 | 7,3 s | 8,5 s |
+| Emboscada a 20 studs | 30 | 40% | 1.000 | 12,0 | 1,5 s | 24 | 7,9 s | 9,1 s |
 
-- **Si planta cara, muere en 5,9 s** y solo le quita al Cristal el 25% de la vida. Pelear no es opción.
-- **Visto de lejos y con poca carga, escapa:** con el 25% de carga y Velocidad 1.000 tiene 69 s de ventaja.
-- **Cargado al 100% casi no escapa:** necesita una salida a menos de 32–79 studs.
-- **En una emboscada a 20 studs, solo escapa el minero con Velocidad y poca carga.**
-- Las mascotas en Proteger alargan la vida entre 1,5 y 2,6 s: ayudan, pero no salvan.
-- **Consecuencia de diseño:** el mapa de cada Zona Fracturada debe tener una salida o un Punto de Extracción a menos de 150 studs de cualquier depósito, y la decisión real del minero es cuánta carga acumular antes de extraer.
+- **Si planta cara, cae en 5,9 s.** Pelear solo contra dos no es opción.
+- La Carga 12 del ejemplo del GDD da un 31% de ralentización, y la Carga 16, un 34%: coinciden con el GDD (31% y 34%).
+- **Visto de lejos y con poca carga, escapa.** Con Carga 30 necesita una salida muy cerca.
+- **En una emboscada a 20 studs** solo le quedan los dos dash, el parpadeo y la Ruptura: es el caso que el GDD resuelve con decisiones (cambiar a Proteger, guardar la Ruptura) y no con velocidad.
+- El Escudo Facetado del Guiverno de Cuarzo alarga la vida entre 1 y 2 s.
+- **Consecuencia de diseño:** una salida o un Punto de Extracción a menos de 150 studs de cualquier depósito, y la decisión real es cuánto valor acumular antes de extraer.
 
 ### 3.2 Escuadrón de 3 contra 3
 
@@ -156,62 +158,71 @@ Cada escuadrón concentra el daño en el rival con menos vida.
 
 | Escuadrón A | Escuadrón B | Gana | Duración | Supervivientes | Vida restante del ganador |
 |---|---|---|---|---|---|
-| Cristal + Cristal + Cristal | Tanque + Tanque + Tanque | Escuadrón B | 11,9 s | 2 | 40 % |
-| Equilibrada + Equilibrada + Equilibrada | Tanque + Tanque + Tanque | Escuadrón B | 15,6 s | 2 | 50 % |
-| Cristal + Cristal + Tanque | Tanque + Tanque + Cristal | Escuadrón B | 20,7 s | 1 | 19 % |
-| Cristal + Tanque + Equilibrada | Equilibrada + Equilibrada + Equilibrada | Escuadrón A | 24,3 s | 1 | 12 % |
-| Minero + Minero + Minero | Cristal + Cristal + Cristal | Escuadrón B | 10,2 s | 3 | 71 % |
-| Minero + Minero + Tanque | Cristal + Cristal + Tanque | Escuadrón B | 18,9 s | 1 | 33 % |
+| Cristal + Cristal + Cristal | Tanque + Tanque + Tanque | Escuadrón B | 12,2 s | 2 | 37% |
+| Equilibrada + Equilibrada + Equilibrada | Tanque + Tanque + Tanque | Escuadrón B | 16,1 s | 2 | 48% |
+| Cristal + Cristal + Tanque | Tanque + Tanque + Cristal | Escuadrón B | 21,5 s | 1 | 17% |
+| Cristal + Tanque + Equilibrada | Equilibrada + Equilibrada + Equilibrada | Escuadrón A | 24,8 s | 1 | 9% |
+| Minero + Minero + Minero | Cristal + Cristal + Cristal | Escuadrón B | 10,2 s | 3 | 72% |
+| Minero + Minero + Tanque | Cristal + Cristal + Tanque | Escuadrón B | 17,3 s | 1 | 40% |
 
-- Los combates duran entre 10 y 24 s.
-- **Los escuadrones de Tanques ganan a los de Cristales y a los de Equilibradas.** Con fuego concentrado, la vida vale más que el daño. Ver el problema P3.
-- Los equipos mixtos se deciden por poco (12–19% de vida restante).
-- **Tres mineros pierden contra tres Cristales sin matar a ninguno.** Un Tanque de escolta cambia el resultado: los saqueadores ganan con un solo superviviente al 33%.
+- Los combates duran entre 10 y 25 s.
+- **Los escuadrones de Tanques ganan a los de Cristales y a los de Equilibradas.** Con fuego concentrado, la vida vale más que el daño. En duelo la ventaja del Tanque es de 1,27 veces.
+- Tres mineros pierden contra tres Cristales; un Tanque de escolta deja a los saqueadores con un solo superviviente.
 
 ### 3.3 Saqueador profesional frente a minero PvE
 
 Simulación de 4.000 horas. El saqueador busca objetivo, pelea 20 s y extrae al llegar al 50% de carga. Objetivos: 70% mineros solos, 20% mineros con escuadrón y 10% otros saqueadores.
 
-| Escenario | Muertes causadas por hora | Muertes propias por hora | Extracciones por hora | Ingresos (× minero PvE) | Con contratos (× minero PvE) |
+| Escenario | Derrotas causadas por hora | Derrotas propias por hora | Extracciones por hora | Ingresos (× minero PvE) | Con contratos (× minero PvE) |
 |---|---|---|---|---|---|
-| Servidor con pocos mineros (búsqueda de 5 min) | 6,3 | 1,76 | 1,35 | 0,25 | 0,35 |
-| Servidor normal (3 min) | 9,5 | 2,67 | 2,03 | 0,38 | 0,48 |
-| Servidor lleno de mineros (1,5 min) | 15,5 | 4,35 | 3,35 | 0,63 | 0,73 |
-| Servidor normal con 85 % recogible | 9,4 | 2,64 | 2,51 | 0,48 | 0,58 |
+| Servidor con pocos mineros (búsqueda de 5 min) | 6,2 | 1,76 | 1,57 | 0,24 | 0,34 |
+| Servidor normal (3 min) | 9,4 | 2,64 | 2,37 | 0,37 | 0,47 |
+| Servidor lleno de mineros (1,5 min) | 15,3 | 4,33 | 3,84 | 0,60 | 0,70 |
+| Servidor normal con todo recogible (recompensa por cabeza) | 9,3 | 2,63 | 2,84 | 0,47 | 0,57 |
 
-- **El saqueador profesional gana entre 0,35 y 0,73 veces lo que un minero PvE.** En un servidor normal, 0,48.
-- Confirma el 0,47 estimado en B6. Saquear no es una forma rentable de ganar monedas, y así se mantiene (decisión E6-23).
-- Subir lo recogible al 85% lo deja en 0,58: no cambia la conclusión.
+- **El saqueador profesional gana entre 0,34 y 0,70 veces lo que un minero PvE**; en un servidor normal, 0,47.
+- El GDD advierte de que «cazar portadores puede rendir más que minar». Con el 50% soltado, el 80% recogible y el multiplicador base ×1,5, no ocurre.
+- Cazando solo jugadores con recompensa por cabeza (todo recogible) llegaría a 0,57.
 
 Efecto sobre los mineros según cuántos saqueadores haya:
 
-| Saqueadores por mineros | Prob. de morir por viaje | Minero de grieta (× PvE) | Con contratos |
+| Saqueadores por mineros | Prob. de caer por viaje | Minero de grieta (× PvE) | Con contratos |
 |---|---|---|---|
-| 1 por cada 10 | 8,2 % | 2,18 | 2,28 |
-| 2 por cada 10 | 15,8 % | 2,05 | 2,15 |
-| 3 por cada 10 | 22,7 % | 1,94 | 2,04 |
-| 5 por cada 10 | 34,9 % | 1,74 | 1,84 |
-| 10 por cada 10 | 57,6 % | 1,35 | 1,45 |
+| 1 por cada 10 | 8,2% | 2,11 | 2,21 |
+| 2 por cada 10 | 15,7% | 1,90 | 2,00 |
+| 3 por cada 10 | 22,6% | 1,73 | 1,83 |
+| 5 por cada 10 | 34,8% | 1,49 | 1,59 |
+| 10 por cada 10 | 57,5% | 1,12 | 1,22 |
 
-- Incluso con un saqueador por cada minero, el minero de grieta gana 1,45 veces el PvE. El modo sigue mereciendo la pena.
-- Con 2–3 saqueadores por cada 10 mineros, la probabilidad de morir por viaje es del 16–23%, cerca del 30% usado en B6.
-- **Traspaso entre cuentas:** dejarse matar por un cómplice entrega 1,20 veces el valor base (1,45 con seguro), frente a 2,00 extrayendo. No hay incentivo para hacerlo.
+- Incluso con un saqueador por cada minero, el minero de grieta gana 1,22 veces el PvE.
+- Con 2–3 saqueadores por cada 10 mineros, la probabilidad de caer por viaje es del 16–23%.
+- **Traspaso entre cuentas:** dejarse derrotar por un cómplice entrega 1,10 veces el valor base, frente a 1,50 extrayendo sin racha. No hay incentivo.
+
+### 3.4 Simulación pedida por el GDD: zonas 2, 5 y 8
+
+| Zona | Minero PvE (monedas/hora) | Minero de grieta con 3 saqueadores por cada 10 mineros | × PvE | Saqueador profesional | × PvE |
+|---|---|---|---|---|---|
+| 2 | 10.349 | 18.986 | 1,83 | 4.830 | 0,47 |
+| 5 | 78.013 | 143.117 | 1,83 | 36.409 | 0,47 |
+| 8 | 589.714 | 1.081.850 | 1,83 | 275.225 | 0,47 |
+
+La relación es la misma en las tres zonas porque valores, precios y vida escalan juntos.
 
 ---
 
 ## 4. Escalado más allá del nivel 1.000
 
-Las fórmulas no cambian. Solo se añaden tres topes de parámetro (sección 6): requisito de Minería y dureza congelados a partir de la zona 10, y 1 punto de estadística por nivel desde el 1.001.
+Las fórmulas no cambian. Solo se añaden tres topes de parámetro: requisito de Minería y dureza congelados a partir de la zona 10, y 1 punto de estadística por nivel desde el 1.001.
 
 Regla de zonas: la zona `z` se abre en el nivel `100 × (z − 1)`. Los niveles 1.100, 1.200, 1.500 y 2.000 corresponden a las zonas 12, 13, 16 y 21.
 
-| Nivel | Zona | Potencia de zona | Vida del jefe | Vida base del jugador | XP para el siguiente nivel | Minutos por nivel | Monedas/hora | Depósito Común sin tope de dureza (s) | Con tope (s) | Enemigo Común sin tope (s) | Con tope (s) |
-|---|---|---|---|---|---|---|---|---|---|---|---|
-| 1.000 | 10 | 9,06 × 10^3 | 2,58 × 10^07 | 74.411 | 820.100 | 28,4 | 540.039 | 3,8 | 3,8 | 4,7 | 4,7 |
-| 1.100 | 12 | 2,47 × 10^4 | 7,4 × 10^07 | 122.777 | 910.100 | 28,4 | 1.437.500 | 3,8 | 3,8 | 5,1 | 4,8 |
-| 1.200 | 13 | 4,07 × 10^4 | 1,22 × 10^08 | 202.583 | 1.000.100 | 27,4 | 2.392.746 | 3,8 | 3,8 | 5,3 | 4,8 |
-| 1.500 | 16 | 1,83 × 10^5 | 5,49 × 10^08 | 910.027 | 1.270.100 | 24,8 | 11.003.152 | 4,8 | 3,8 | 5,7 | 4,6 |
-| 2.000 | 21 | 2,24 × 10^6 | 6,71 × 10^09 | 11.129.459 | 1.720.100 | 21,2 | 139.408.376 | 4,8 | 3,8 | 6,5 | 4,3 |
+| Nivel | Zona | Potencia de zona | Vida del jefe | XP para el siguiente nivel | Minutos por nivel | Monedas/hora | Depósito Común sin tope de dureza (s) | Con tope (s) | Enemigo Común sin tope (s) | Con tope (s) |
+|---|---|---|---|---|---|---|---|---|---|---|
+| 1.000 | 10 | 5,12 × 10^4 | 1,17 × 10^8 | 820.100 | 27,3 | 3.354.031 | 3,1 | 3,1 | 4,2 | 4,2 |
+| 1.100 | 12 | 2,05 × 10^5 | 4,92 × 10^8 | 910.100 | 27,2 | 13.131.409 | 3,8 | 3,1 | 4,6 | 4,4 |
+| 1.200 | 13 | 4,10 × 10^5 | 9,83 × 10^8 | 1.000.100 | 26,3 | 26.490.468 | 3,8 | 3,1 | 4,8 | 4,3 |
+| 1.500 | 16 | 3,28 × 10^6 | 7,86 × 10^9 | 1.270.100 | 23,8 | 216.864.647 | 3,8 | 3,1 | 5,2 | 4,2 |
+| 2.000 | 21 | 1,05 × 10^8 | 2,52 × 10^11 | 1.720.100 | 20,3 | 7.184.973.906 | 4,6 | 3,0 | 5,9 | 3,9 |
 
 | Nivel | Zona | Puntos (1 por nivel desde 1.001) | Estadísticas al máximo | Puntos si siguieran a 3 por nivel | Estadísticas al máximo | Minería para Ultra raro sin tope | Con tope | Rareza máxima (equilibrada) sin tope | Con tope |
 |---|---|---|---|---|---|---|---|---|---|
@@ -221,12 +232,11 @@ Regla de zonas: la zona `z` se abre en el nivel `100 × (z − 1)`. Los niveles 
 | 1.500 | 16 | 3.500 | 3 | 4.500 | 4 | 1.050 | 630 | Épico | Legendario |
 | 2.000 | 21 | 4.000 | 4 | 6.000 | 6 | 1.400 | 630 | Épico | Mítico |
 
-- **Sin los topes, el juego se rompe:** el Ultra raro de la zona 21 pediría Minería 1.400 (el máximo es 1.000) y una build equilibrada solo podría picar hasta Épico.
-- **Con los topes**, los tiempos se mantienen: 3,8 s por depósito Común y 4,3–4,8 s por enemigo.
-- **Con 3 puntos por nivel**, a nivel 2.000 se podrían llevar al máximo 6 de las 8 estadísticas y las builds dejarían de diferenciarse. Con 1 punto por nivel son 4.
-- Cada nivel cuesta entre 21 y 28 minutos, estable gracias a la cola lineal de XP de B2.
-- **Los números caben:** la vida del jefe de la zona 21 con 8 jugadores es 3,5 × 10¹⁰ y las monedas ganadas en total hasta el nivel 2.000 son 8,0 × 10⁹, muy por debajo del límite exacto de Roblox (9,0 × 10¹⁵).
-- **Para añadir una zona nueva basta con:** nombre, 6 o 7 minerales, un jefe y su Zona Fracturada. Vida, daño, valor, precios y requisitos salen de las fórmulas.
+- **Sin los topes, el juego se rompe:** el Ultra raro de la zona 21 pediría Minería 1.400 (el máximo es 1.000).
+- **Con los topes**, los tiempos se mantienen estables.
+- **Con 3 puntos por nivel**, a nivel 2.000 se podrían llevar al máximo 6 de las 8 estadísticas; con 1 punto por nivel son 4.
+- **¿Caben los números con crecimiento ×2,00? Sí.** La vida del jefe de la zona 21 con 8 jugadores es 1,3 × 10^12 y las monedas ganadas en total hasta el nivel 2.000 son 2,5 × 10^11; el límite exacto de Roblox es 9,0 × 10^15, 6.883 veces mayor.
+- **Aviso:** con ×2,00 por zona el margen se agota hacia la zona 34 (nivel 3.300). Antes de llegar ahí habrá que mostrar las cifras abreviadas y, si se sigue ampliando, reducir el crecimiento de las zonas nuevas.
 
 ---
 
@@ -234,101 +244,105 @@ Regla de zonas: la zona `z` se abre en el nivel `100 × (z − 1)`. Los niveles 
 
 | # | Combinación | Qué rompe | Corrección | Estado |
 |---|---|---|---|---|
-| P1 | Hacha o Lanza contra grupos de enemigos | Golpear a 5 objetivos al 100% daba 3,7 veces los enemigos por hora | Máximo 3 objetivos por golpe; los secundarios reciben el 25%; grupos de hasta 3 enemigos | Aplicada en B4 |
-| P2 | Núcleo Umbrío: Manto + Eclipse + Paso + Tajo | 97% de la vida de un Cristal en 3 s; con un crítico más, lo mata de un combo | Tope de ráfaga: no más del 60% de la vida máxima en 2 s en PvP | Aplicada en B4 |
-| P3 | Tanque (Fuerza + Vitalidad + Defensa) en PvP | Ganaba al Cristal con una ventaja de 1,69 veces | Vitalidad `M = 1,0`, Defensa `K = 4.500` y tope 50% en PvP; daño PvP ×0,06 | Aplicada en B2 y B4; ventaja 1,33 |
-| P4 | Subir por encima del nivel 1.000 | Requisitos imposibles y 6 estadísticas al máximo | Topes de requisito y dureza; 1 punto por nivel | Aplicada en B2 y B3 |
-| P5 | Minar al llegar a una zona nueva | Minar rendía hasta 2,1 veces más que combatir al principio | Regeneración del 0,5% de vida por segundo en combate PvE | Aplicada en B4; queda 1,34 en el peor caso |
-| P6 | Jefes 3 veces al día | 1,6 horas de ingreso gratis al día | Monedas de jefe de `250 × V` a `60 × V` | Aplicada en la Etapa 6 |
-| P7 | Farmear zonas bajas con equipo alto | Vaciar zonas de un golpe | Mínimo de 3 golpes por depósito; rinde 0,62 | Ya en B3; comprobado |
-| P8 | Traspasar mineral a una segunda cuenta | Duplicar el ×2,0 | Lo saqueado vale 1,20; misma víctima sin botín 10 minutos | Ya en B3; comprobado |
-| P9 | Mascotas con Dominio 1.000 | 141,7% del DPS del jugador | Tope del 40% y 25% aplicado por el servidor | Ya en B5; comprobado (máximo 36,0%) |
-| P10 | Encadenar aturdimientos | Bloqueo permanente | Rendimientos decrecientes y Rompecadenas a los 2,0 s | Ya en B4 |
-| P11 | Acumular Suerte | Legendario garantizado | Factor de suerte con techo ×4 | Ya en B1; todo en Suerte rinde 0,90–0,94 |
+| P1 | Hacha o Lanza contra grupos | Golpear a 5 objetivos al 100% daba 3,7 veces los enemigos por hora | Máximo 3 objetivos; los secundarios reciben el 25%; grupos de hasta 3 | En B4; queda en 1,24 |
+| P2 | Núcleo Umbrío: Manto + Tajo + Eclipse + Paso | 73% de la vida de un Cristal en un combo | Tope de ráfaga del 60% de la vida en 2 s en PvP | En B4 |
+| P3 | Tanque (Fuerza + Vitalidad + Defensa) en PvP | Domina duelos y escuadrones | Vitalidad `M = 1,0` y Defensa `K = 4.500` con tope 50% en PvP | En B2 y B4; ventaja 1,27 en duelo |
+| P4 | Subir por encima del nivel 1.000 | Requisitos imposibles y 6 estadísticas al máximo | Topes de requisito y dureza; 1 punto por nivel | En B2 y B3 |
+| P5 | Llegar a una zona con el arma anterior | Minar rinde 1,39 veces lo que combatir | Regeneración del 0,5% de vida por segundo en combate; el resto es transitorio | En B4; queda abierto |
+| P6 | Racha de ×1,5 con mineral al doble (GDD) | 3,17 veces el PvE | Multiplicador base ×1,5 | En B3 y B6 |
+| P7 | Multiplicadores de rareza del GDD con crecimiento 1,65 | Un Celestial de zona 6 superaba a un Común de zona 10 | Crecimiento ×2,00 y bonos hasta +50% | En B1 |
+| P8 | Tenacidad de 2 s (GDD) | 53% del tiempo bajo control | Tenacidad de 5 s | En B4 |
+| P9 | Fragmentos Celestiales al 0,02% (GDD) | 960 horas de grieta por objeto | 0,25% por depósito | En B1 y B3 |
+| P10 | Farmear zonas bajas con equipo alto | Vaciar zonas de un golpe | Mínimo de 3 golpes por depósito; rinde 0,51 | En B3; comprobado |
+| P11 | Traspasar mineral a una segunda cuenta | Duplicar el bono de grieta | Lo saqueado vale 1,10; misma víctima sin botín 10 minutos | En B3; comprobado |
+| P12 | Mascotas con Dominio alto | Hasta el 65% del DPS del jugador | Tope del 40% y 25% aplicado por el servidor | En B5; comprobado |
+| P13 | Saqueadores profesionales (riesgo señalado por el GDD) | Que cazar rinda más que minar | — | No ocurre: 0,47 veces el PvE |
 
 ### P1 — Golpes en área
 
-| Caso | Enemigos/hora | × un solo objetivo | × minero equivalente |
-|---|---|---|---|
-| Referencia de B4: un objetivo, enemigos sueltos | 310 | 1,00 | 1,03 |
-| Hacha antes: 5 objetivos al 100 %, grupos de hasta 5 | 1.142 | 3,68 | 3,79 |
-| Lanza antes: 3 objetivos al 100 %, grupos de hasta 5 | 927 | 2,99 | 3,08 |
-| Hacha después: secundarios al 25 %, máx. 3; grupos de hasta 3 | 385 | 1,24 | 1,28 |
-| Lanza después: secundarios al 25 %, máx. 3 | 372 | 1,20 | 1,23 |
-| Espada después: 2 objetivos, secundario al 25 % | 372 | 1,20 | 1,24 |
-| Daga después: un objetivo; grupos de hasta 3 | 349 | 1,13 | 1,16 |
-
-Con la regla nueva, el arma más favorecida (Hacha) queda en 1,28 veces el minero equivalente, bajo el límite de 1,3.
+| Caso | Enemigos/hora | × un solo objetivo |
+|---|---|---|
+| Un objetivo, enemigos sueltos (referencia de B4) | 310 | 1,00 |
+| Hacha sin regla: 5 objetivos al 100%, grupos de hasta 5 | 1.142 | 3,68 |
+| Hacha con la regla: secundarios al 25%, máx. 3; grupos de hasta 3 | 385 | 1,24 |
+| Lanza con la regla | 372 | 1,20 |
+| Espada con la regla (2 objetivos) | 372 | 1,20 |
+| Daga (un objetivo) | 349 | 1,13 |
 
 ### P2 — Ráfaga de un combo
 
-| Defensor | Vida máxima en PvP | Daño del combo Umbrío (C + V + X + Z, unos 3 s) | % de la vida | Sin tope de ráfaga | Con tope (60 % en 2 s) | Resultado |
-|---|---|---|---|---|---|---|
-| Cristal | 74.411 | 72.099 | 97 % | Sobrevive | 60 % | Sobrevive |
-| Minero | 111.616 | 72.099 | 65 % | Sobrevive | 60 % | Sobrevive |
-| Equilibrada | 94.704 | 66.553 | 70 % | Sobrevive | 60 % | Sobrevive |
-| Tanque | 111.616 | 58.990 | 53 % | Sobrevive | 60 % | Sobrevive |
+| Defensor | Vida máxima en PvP | Daño del combo Umbrío (Manto + Tajo + Eclipse + Paso) | % de la vida sin tope | Con el tope de ráfaga (en 2 s) |
+|---|---|---|---|---|
+| Cristal | 508.463 | 369.024 | 73% | 60% |
+| Minero | 762.695 | 369.024 | 48% | 48% |
+| Equilibrada | 647.135 | 340.638 | 53% | 53% |
+| Tanque | 762.695 | 301.929 | 40% | 40% |
 
-### P3 — Tanque frente a Cristal
+### P5 — Minería frente a combate al llegar a una zona
 
-| Regla PvP | Cristal mata al Tanque en | Tanque mata al Cristal en | Ventaja del Tanque | Duelo de Equilibradas | Duelo de Tanques |
-|---|---|---|---|---|---|
-| B4: Vitalidad M = 1,5; Defensa K = 3.000, tope 60 % | 15,8 s | 9,3 s | 1,69 | 16,8 s | 21,7 s |
-| Solo Vitalidad M = 1,0 | 13,5 s | 9,3 s | 1,45 | 15,2 s | 18,6 s |
-| Solo Defensa K = 4.500, tope 50 % | 14,5 s | 9,3 s | 1,55 | 16,2 s | 19,9 s |
-| Etapa 7: Vitalidad M = 1,0; Defensa K = 4.500, tope 50 % | 12,4 s | 9,3 s | 1,33 | 14,6 s | 17,1 s |
-
-- La ventaja restante (1,33) se deja: el Cristal tiene un 25% más de velocidad de movimiento y más usos de habilidad, que esta simulación no puede medir.
-- **Sigue siendo el punto más débil del PvP.** En escuadrones, los Tanques siguen ganando (sección 3.2). Hay que medirlo en la beta; el siguiente ajuste sería reducir la Defensa efectiva contra habilidades.
-
-Nueva tabla de Defensa en PvP (sustituye a la de B2):
-
-| Defensa | Reducción en PvP | Daño recibido | Vida efectiva |
-|---|---|---|---|
-| 10 | 0,22 % | 99,78 % | ×1,00 |
-| 100 | 2,17 % | 97,83 % | ×1,02 |
-| 500 | 10,00 % | 90,00 % | ×1,11 |
-| 1.000 | 18,18 % | 81,82 % | ×1,22 |
-| 2.500 | 35,71 % | 64,29 % | ×1,56 |
-| 5.000 | 50,00 % | 50,00 % | ×2,00 |
-
-### P5 — Combate frente a minería al principio
-
-- **Problema:** con el modelo de B5 (el jugador para a recuperar vida), los perfiles iniciales perdían entre el 16% y el 24% del tiempo. Minar rendía 1,36 veces lo que combatir para B y 1,51 para C.
-- **Corrección:** regeneración del 0,5% de la vida máxima por segundo durante el combate en PvE. El tiempo parado baja al 4,6–11,3%.
-- **Resultado:** minar rinde 1,08 (A), 1,20 (B) y 1,34 (C) veces lo que combatir.
-- **Lo que queda:** C sigue un poco por encima de 1,3. Es un estado transitorio (arma de la zona anterior) y se corrige al fabricar el arma de la zona, que cuesta 3,4 horas. No se toca más para no desajustar el final del juego, donde el combatiente ya gana 1,17 veces (F).
+- **Dato:** C mina 1,39 veces lo que gana combatiendo, por encima del límite de 1,3. B, con el equipo de su zona, está en 1,13.
+- **Por qué pasa:** con crecimiento ×2,00, un arma de la zona anterior hace la mitad del daño necesario, mientras que los depósitos tienen un mínimo de golpes que amortigua el retraso del pico.
+- **Por qué no se corrige con números:** subir las monedas de enemigo rompería el final del juego, donde el combatiente ya gana 1,26 veces más (F). La solución es de diseño: el arma Rara de la zona nueva cuesta 1,2 horas de ingreso, y el tutorial de cada zona debe empujar a fabricarla al llegar.
+- **Se mide en la beta:** tiempo que tardan los jugadores en renovar el arma al cambiar de zona.
 
 ### Sin corrección en esta etapa
 
-- **Núcleos de Escarcha y Sísmico** hacen hasta un 19% menos de daño. No rompe nada; se mide su uso en la beta (B4, P5).
-- **Máximo teórico de daño de 36 veces.** La build más fuerte simulada (G) hace 6,0 veces el daño de un jugador equilibrado con equipo Común. No hay builds por encima de 15 veces, así que no se bajan los topes (B4, P4).
-- **El tope total de 5.000 por estadística** es inalcanzable: el equipo no da estadísticas y los consumibles suman 100. Se mantiene como seguro para contenido futuro.
+- **Escuadrones de Tanques.** Siguen ganando en 3 contra 3. Hay que medirlo en la beta.
+- **Combinar técnicas de arma en las ranuras** puede dar más daño que el Núcleo completo (B4, P3). No se ha simulado en combate real.
+- **El tope total de 5.000 por estadística** sigue siendo inalcanzable: solo los picos Épico o superior dan una estadística de combate pequeña. Se mantiene como seguro.
 
 ---
 
-## 6. Tabla de cambios en los archivos B
+## 6. Tabla de cambios
 
-| # | Valor | Archivo | Antes | Ahora | Por qué |
+### 6.1 Cambios por adoptar el GDD
+
+| # | Valor | Archivo | Primera versión | Ahora | Por qué |
 |---|---|---|---|---|---|
-| 1 | Vitalidad en PvP (`M`) | B2 (P1), B4 (8.1) | 1,5 | 1,0 | Ventaja del Tanque de 1,69 a 1,33 |
-| 2 | Defensa en PvP (`K` y tope) | B2 (sección 7), B4 (F19, 8.1) | 3.000 y 60% | 4.500 y 50% | Igual que el anterior |
-| 3 | Multiplicador de daño PvP (`MultModo`) | B4 (F19, 8.1, 8.2) | 0,07 | 0,06 | Mantener los duelos en 8–25 s tras bajar la vida efectiva |
-| 4 | Tope de ráfaga en PvP | B4 (8.1) | No existía | 60% de la vida máxima en 2 s | Combo del Núcleo Umbrío |
-| 5 | Golpes en área del ataque básico | B4 (1.1) | Hasta 5 objetivos al 100% | Hasta 3; secundarios al 25% | Hacha y Lanza contra grupos |
-| 6 | Grupos de enemigos | B4 (sección 6) | Sin definir | 70% solos, 25% parejas, 5% tríos; 20 studs de separación | Igual que el anterior |
-| 7 | Regeneración de vida en combate PvE | B4 (sección 6) | 0 | 0,5% de la vida máxima por segundo | Combate peor que minería al principio |
-| 8 | Puntos de estadística desde el nivel 1.001 | B2 (sección 5) | 3 por nivel | 1 por nivel | Evitar 6 estadísticas al máximo |
-| 9 | Minería requerida en zonas mayores que 10 | B3 (F14) | `10 × (z − 1) × factor` | Congelada en el valor de la zona 10 | Requisito imposible (1.400) |
-| 10 | Dureza en zonas mayores que 10 | B3 (F13) | `1 + 0,1 × (z − 1)` | Máximo 2,0 | Tiempos de extracción y combate estables |
-| 11 | Salir de una Zona Fracturada sin extraer | B3 (7.5) | Sin definir | 3 s de canalización que el daño interrumpe | Escenario del minero perseguido |
-| 12 | Monedas de jefe | B4 | `250 × V` | `60 × V` | Hecho en la Etapa 6 |
-| 13 | Coste del reinicio de estadísticas | B2 | `1.000 × nivel` | 1,5 horas de ingreso | Hecho en la Etapa 6 |
-| 14 | Mochila en Zona Fracturada y racha | B3 | 60 unidades; sin racha | 120 unidades; racha de +2% hasta +10% | Hecho en la Etapa 6 |
-| 15 | XP por depósito | B3 | Sin factor | × 0,73 | Hecho en la Etapa 3 |
-| 16 | Monedas y XP de enemigos | B4 | 1,5 / 6 / 18 y 0,82 | 1,35 / 5,4 / 16 y 0,72 | Hecho en la Etapa 4 |
+| 1 | Multiplicadores de rareza | B1 | 1,00 a 2,60 | 1,00 / 1,25 / 1,50 / 1,90 / 2,50 / 3,30 / 4,50 / 5,20 | GDD |
+| 2 | Crecimiento por zona (potencia, valor y vida base) | B1, B2, B3, B4 | 1,65 | 2,00 | Mantener la regla de la zona con los multiplicadores del GDD |
+| 3 | Tope de bonos de objeto | B1, B3, B6 | +100% (50 + 30 + 20) | +50% (25 + 15 + 10) | Igual que el anterior |
+| 4 | Potencia de pico requerida por zona | B3 | 0,6 × PotZona | 0,5 × PotZona | Que la cumpla un pico Común de la zona anterior |
+| 5 | Colores de Ultra raro y Celestial | B1 | Turquesa; blanco y dorado | Arcoíris; blanco perla con núcleo cian | GDD |
+| 6 | Fragmentos por objeto Celestial y fuente | B1, B3 | 60; por extracción | 50; 0,25% por depósito de grieta de zona 6 o más | GDD (el 0,02% del GDD daba 960 horas) |
+| 7 | Debuff de carga | B3 | `0,30 × c^1,5` según mochila | `mín(0,40; 0,12 × ln(1 + Carga))` según valor | GDD |
+| 8 | Reparto del cofre | B3, B6 | 70% y 30% | 80% y 20% | GDD |
+| 9 | Protecciones de grieta | B3 | 5 s; escudo de 120 s en 3 entradas; rotación cada 2 min | 10 s; 5 entradas sin pérdida; cambio cada 10 min | GDD |
+| 10 | Picos | B3 | Una habilidad por rareza | Pasivas menor, mayor o única y estadística de combate con tope PvP | GDD |
+| 11 | Multiplicador base del mineral fracturado | B3, B6 | ×2,0 | ×1,5 | Para que quepa la racha del GDD bajo 2,5 |
+| 12 | Racha de extracción | B3, B6 | +2% hasta +10% | ×1,1 hasta ×1,5 | GDD |
+| 13 | Ranuras Z, X, C, V | B4 | Solo habilidades del Núcleo | Mezcla de 4 del Núcleo y 2 técnicas del arma | GDD |
+| 14 | Núcleo Prismático | B4 | Conjunto propuesto | Lanza Prismática, Campo de Refracción, Paso de Relámpago y Prisma Total | GDD |
+| 15 | Factor de habilidades | B2, B4, B5 | ×1,75 | ×1,39 | Enfriamientos del GDD (6 a 60 s) |
+| 16 | Vida de enemigos (Común) | B4 | 20 × PotZona | 16 × PotZona | Mantener 6–7 s por enemigo con el factor nuevo |
+| 17 | Despertar y Transformación | B4 | Maestría 75 y 100; barra de Sincronía | Ambos a maestría 100; barra de Resonancia; +25% en PvE y 10% en PvP | GDD |
+| 18 | Dash y parpadeo | B2, B4 | 1 dash cada 2,5 s; parpadeo de 16 studs | 2 cargas con 3 s de recarga; 12 studs | GDD |
+| 19 | Esquiva | B2, B4 | Acción aparte | Dash justo antes del golpe («esquiva perfecta») | El GDD no le da botón propio |
+| 20 | Control repetido | B4 | Ventana de 10 s; inmunidad de 6 s; tope de 2,0 s | Ventana de 6 s; Tenacidad de 5 s; tope de 2,5 s | GDD (Tenacidad ampliada de 2 a 5 s) |
+| 21 | Ruptura | B4 | Guardia rota; liberación automática | Liberarse por 50 de energía tras 0,8 s; 15 s | GDD |
+| 22 | Controles | B4 | Propuestos | Los del GDD | GDD |
+| 23 | Posturas de mascota | B5 | Atacar, Recolectar y Proteger | Recolectar (+50% radio, −50% daño) y Proteger (lo contrario) | GDD |
+| 24 | Roles y utilidad de mascota | B5 | Tanque, Atacante, Recolector… con valores propuestos | Defensa, Ofensiva, Minería… con los ejemplos del GDD | GDD |
+| 25 | Qué desbloquea cada fase | B5 | Habilidades por fase | Pasiva de recolección, habilidad activa y ataque coordinado | GDD |
+| 26 | Incubación y evolución | B5 | Minutos de juego; Vínculos | Golpes de pico; fragmentos de su elemento y material de jefe | GDD |
+| 27 | Guiverno de Cuarzo | B5 | Atacante propuesto | Defensa con Escudo Facetado y Haz de Cuarzo | GDD |
+| 28 | Seguro de carga | B6 | Se compra con monedas | Se fabrica con minerales; protege el 50% de una carga | GDD |
+| 29 | Contratos de grieta | B6 | Nunca piden derrotar jugadores | Extraer rarezas o derrotar portadores, con opción de cambio | GDD |
+| 30 | Cajas de Núcleos y eventos de grieta | B6 | No existían | Caja de Núcleos, Grieta Celestial, recompensa por cabeza, rastro de venganza, jefes de grieta | GDD |
 
-B1, B5 y B6 no cambian en esta etapa. La tabla de duelos de B4 (8.2) y la tabla de Defensa de B2 (sección 7) se han regenerado con los valores nuevos.
+### 6.2 Correcciones que se mantienen de la primera versión
+
+| # | Valor | Archivo | Motivo |
+|---|---|---|---|
+| 31 | Vitalidad `M = 1,0` y Defensa `K = 4.500` con tope 50% en PvP | B2, B4 | Dominio del Tanque |
+| 32 | Multiplicador de daño entre jugadores (ahora 0,062) y topes del 35% por golpe y del 60% en 2 s | B4 | Duelos de 1 s y combos letales |
+| 33 | Golpes en área al 25%, máximo 3 objetivos; grupos de hasta 3 enemigos | B4 | Hacha y Lanza |
+| 34 | Regeneración de vida en combate PvE: 0,5% por segundo | B4 | Combate frente a minería |
+| 35 | Monedas de jefe: `60 × V` | B4, B6 | Fuente excesiva |
+| 36 | Reinicio de estadísticas: 1,5 horas de ingreso | B2, B6 | Coste desajustado |
+| 37 | Mochila doble dentro de la grieta | B3 | Dar sentido al saqueo |
+| 38 | 1 punto de estadística por nivel desde el 1.001; requisitos y dureza congelados desde la zona 10 | B2, B3 | Expansión |
+| 39 | Sincronización de nivel en las Zonas Fracturadas | B3, B4 | Los requisitos de acceso del GDD son mínimos |
 
 ---
 
@@ -336,7 +350,7 @@ B1, B5 y B6 no cambian en esta etapa. La tabla de duelos de B4 (8.2) y la tabla 
 
 | # | Fórmula | Expresión final | Archivo |
 |---|---|---|---|
-| F1 | Potencia de objeto | `PotZona(z) × MultRareza × (1 + mín(BonoNivel + BonoMejoras + BonoHabilidades, 1,00))`; `PotZona(z) = 100 × 1,65^(z−1)` | B1 |
+| F1 | Potencia de objeto | `PotZona(z) × MultRareza × (1 + mín(bonos, 0,50))`; `PotZona(z) = 100 × 2,00^(z−1)` | B1 |
 | F2 | Factor de suerte | `F(S) = 1 + 3·S/(S + 1.000)` | B1 |
 | F3 | Peso con suerte | `Peso × F^e`, normalizado a 100%; `e` = 0 / 0,2 / 0,4 / 0,6 / 0,8 / 1 / 1 | B1 |
 | F4 | Protección A (Legendario+) | `p0` hasta la apertura 40; `p0 + (1 − p0)·((n − 40)/10)²` de 41 a 49; 100% en 50 | B1 |
@@ -344,34 +358,34 @@ B1, B5 y B6 no cambian en esta etapa. La tabla de duelos de B4 (8.2) y la tabla 
 | F6 | XP por nivel | `techo(100 + 20·L + 0,8·L²)` hasta 1.000 | B2 |
 | F7 | XP por acción | `25 + 3,75·L + 0,002·L²`, a unas 240 acciones por hora | B2 |
 | F8 | XP por encima de 1.000 | `820.100 + 900 × (L − 1.000)` | B2 |
-| F9 | Puntos de estadística | `3 + 3 × (L − 1)` hasta 1.000; +1 por nivel después; máximo 1.000 por estadística | B2, B7 |
-| F10 | Curva de estadística | `1 + M·S/(S + 1.000)`; `M` = 3 (Fuerza, Vitalidad, Minería, Suerte, Dominio), 1,5 (recolección y utilidad), 0,8 (velocidad de ataque), 0,5 (movimiento), 1 (regeneración de energía) | B2 |
-| F11 | Vida base | `500 × 1,65^((L − 1)/100)` | B2 |
-| F12 | Defensa | `mín(D/(D + K), Tope)`; PvE 1.500 y 75%; PvP 4.500 y 50% | B2, B7 |
+| F9 | Puntos de estadística | `3 + 3 × (L − 1)` hasta 1.000; +1 por nivel después; máximo 1.000 por estadística | B2 |
+| F10 | Curva de estadística | `1 + M·S/(S + 1.000)`; `M` = 3 (Fuerza, Vitalidad, Minería, Suerte, Dominio), 1,5 (utilidad de mascotas), 0,8 (velocidad de ataque), 0,5 (movimiento), 1 (regeneración de energía) | B2 |
+| F11 | Vida base | `500 × 2,00^((L − 1)/100)` | B2 |
+| F12 | Defensa | `mín(D/(D + K), Tope)`; PvE 1.500 y 75%; PvP 4.500 y 50% | B2 |
 | — | Energía | Máxima `100 + 300·E/(E + 1.000)`; regeneración 8/s en combate y 20/s fuera, por `(1 + E/(E + 1.000))`; pausa de 1,5 s | B2 |
-| F13 | Requisitos de zona | Nivel `100 × (z − 1)`; Minería `10 × (z − 1)`; pico `0,6 × PotZona`; dureza `mín(2, 1 + 0,1 × (z − 1))` | B3, B7 |
-| F14 | Minería por depósito | `10 × (mín(z, 10) − 1) ×` 1 / 1 / 1,5 / 2,5 / 3,5 / 5 / 7 | B3, B7 |
-| F15 | Depósito | Vida `PotZona × FactorVida × Dureza`; valor `10 × 1,65^(z−1) × FactorValor`; XP `0,73 × XPacción × FactorXP` | B3 |
+| F13 | Requisitos de zona | Nivel `100 × (z − 1)`; Minería `10 × (z − 1)`; pico `0,5 × PotZona`; dureza `mín(2, 1 + 0,1 × (z − 1))` | B3 |
+| F14 | Minería por depósito | `10 × (mín(z, 10) − 1) ×` 1 / 1 / 1,5 / 2,5 / 3,5 / 5 / 7 | B3 |
+| F15 | Depósito | Vida `PotZona × FactorVida × Dureza`; valor `10 × 2,00^(z−1) × FactorValor`; XP calibrada a la XP por hora de B2 | B3 |
 | F16 | Tiempo de extracción | `máx(3, techo(Vida/(PotenciaPico × MultMinería))) / GolpesPorSegundo` | B3 |
-| F17 | Debuff de carga | Velocidad `× (1 − 0,30 × c^1,5)`; dash `20 × (1 + 0,5 × c)` | B3 |
+| F17 | Debuff de carga (GDD) | `Carga = valor / (20 × V(z))`; `Ralentización = mín(0,40; 0,12 × ln(1 + Carga))` | B3 |
 | F18 | Daño por golpe | `PotenciaArma × Coef(tipo)` | B4 |
-| F19 | Daño final | `PotenciaArma × Coef × MultFuerza × MultMaestría × MultCrítico × (1 + Estados) × (1 − Defensa) × MultModo`; `MultModo` = 1 en PvE y 0,06 en PvP | B4, B7 |
+| F19 | Daño final | `PotenciaArma × Coef × MultFuerza × MultMaestría × MultCrítico × (1 + Estados) × (1 − Defensa) × MultModo`; `MultModo` = 1 en PvE y 0,062 en PvP | B4 |
 | F20 | Maestría | `techo(10 + 2·n + 0,04·n²)`; +0,1% de daño por nivel hasta +10% | B4 |
-| F21 | Vida de enemigo | `PotZona × Dureza ×` 20 / 80 / 300 / 1.500 | B4 |
+| F21 | Vida de enemigo | `PotZona × Dureza ×` 16 / 64 / 240 / 1.200 | B4 |
 | F22 | Daño de enemigo | `VidaBase(zona) ×` 3 / 6 / 10 / 15% | B4 |
-| F23 | XP de enemigo | `0,72 × XPacción ×` 1 / 3,5 / 10 / 60 | B4 |
-| F24 | Monedas de enemigo | `V(z) ×` 1,35 / 5,4 / 16 / 60 | B4, B6 |
+| F23 | XP de enemigo | `XPacción ×` 1 / 3,5 / 10 / 60, calibrada a la XP por hora de B2 | B4 |
+| F24 | Monedas de enemigo | `V(z) ×` factor calibrado para igualar al minero; jefe `60 × V` | B4, B6 |
 | F25 | Escalado de jefe | Vida `× (1 + 0,6 × (n − 1))`; daño `× (1 + 0,05 × (n − 1))` | B4 |
 | F26 | Nivel de mascota | `techo(15 + 3·n + 0,09·n²)`; daño `1 + 0,015 × (n − 1)` | B5 |
-| F27 | DPS de mascota | `PotenciaArma × b × MultRareza × MultNivel × FactorFase × MultDominio × MultVelocidadNivel` | B5 |
+| F27 | DPS de mascota | `PotenciaArma × b × MultRareza × MultNivel × FactorFase × MultDominio × MultVelocidadNivel × Postura` | B5 |
 | F28 | Vida de mascota | `VidaBase × h × MultRareza × (1 + 0,01 × (n − 1)) × FactorFase × MultDominio` | B5 |
 | F29 | Velocidad de ataque de mascota | `VelBase × (1 + 0,002 × (n − 1))`, máximo 2,0 | B5 |
-| F30 | Utilidad de mascota | `ValorBase × FactorFase × (1 + 0,005 × (n − 1)) × (1 + 1,5·D/(D + 1.000))` | B5 |
-| F31 | Tope de DPS de mascotas | `mín(1, Tope × DPSref / Σ DPS)` y ventana de 5 s; `DPSref = PotenciaArma × MultFuerza × 1,025 × MultMaestría × 1,75`; tope 40% y 25% | B5 |
-| F32 | Ingreso de referencia | `I(z)` ≈ `480 × V(z)`; `V(z) = 10 × 1,65^(z−1)` | B6 |
+| F30 | Utilidad de mascota | Valor del GDD escalado por fase, nivel y Dominio (`M = 1,5`) | B5 |
+| F31 | Tope de DPS de mascotas | `mín(1, Tope × DPSref / Σ DPS)` y ventana de 5 s; `DPSref = PotenciaArma × MultFuerza × 1,025 × MultMaestría × 1,39`; tope 40% y 25% | B5 |
+| F32 | Ingreso de referencia | `I(z)`: media del minero y el combatiente equilibrados; `V(z) = 10 × 2,00^(z−1)` | B6 |
 | F33 | Precio de equipo | `I(z) ×` 0,3 / 0,6 / 1,2 / 2,5 / 5 / 10 / 20; mejoras 5,75 veces el base | B6 |
-| F34 | Mineral fracturado | `× 2,0 × (1 + 0,02 × mín(racha, 5))` al extraer; ×1,0 si no | B3, B6 |
-| F35 | Saqueo | Se suelta el 50%; el 70% de eso va al cofre y el 30% se destruye | B3 |
-| F36 | Seguro de carga | Prima `6 × V`; paga el 50% del valor base de lo soltado | B6 |
+| F34 | Mineral fracturado | `× 1,5 × mín(1 + 0,1 × racha; 1,5)` al extraer; ×1,0 si no | B3, B6 |
+| F35 | Saqueo (GDD) | Se suelta el 50%; el 80% de eso va al cofre y el 20% se destruye | B3 |
+| F36 | Seguro de carga (GDD) | Consumible fabricado; con él se suelta el 25% en lugar del 50% | B6 |
 
-Los nombres completos, variables, ejemplos y límites de cada una están en su archivo. Los catálogos (minerales, picos, armas y precios) están en los CSV de `calculos/`.
+Los nombres completos, variables, ejemplos y límites de cada una están en su archivo. Los catálogos están en los CSV de `calculos/`.
