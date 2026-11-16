@@ -1,12 +1,14 @@
 # OREBOUND — B4: Combate
 
-Etapa 4 · 2026-11-16 (corregido en las Etapas 6 y 7; ver B7, sección 6) · Script: `calculos/b4_combate.py` · Catálogo completo de armas: `calculos/b4_armas.csv` (450 armas).
+Etapa 4, rehecha con el GDD · 2026-11-16 · Script: `calculos/b4_combate.py` (genera este documento) · Catálogo de armas: `calculos/b4_armas.csv` (450 armas).
 
-> **Aviso de fuentes.** No se dispone de las secciones 10, 15 y 17 del prompt maestro ni de la
-> sección de combate del GDD. El sexto tipo de arma, los valores del Núcleo Prismático y los
-> jefes son propuestas **[PROVISIONAL]**. Son **[CONFIRMADO]** las decisiones fijas: ataque
-> básico + 4 ranuras (Z, X, C, V) + movilidad (dash, doble salto, parpadeo), tope de mascotas
-> del 25% en PvP y el nombre provisional «Núcleos de Poder».
+> **Fuentes.** Esta versión usa el GDD de combate, minería PvPvE y mascotas. De él vienen los
+> controles, las ranuras mixtas de arma y Núcleo, el Núcleo Prismático, el Despertar y la
+> Transformación, la movilidad y las reglas contra el combo infinito. Sus cifras están
+> pendientes de simulación: son **[PROVISIONAL]**. No se dispone del prompt maestro: los tipos
+> de arma, los enemigos, los jefes y las reglas PvP numéricas siguen siendo propuestas
+> **[PROVISIONAL]**. Son **[CONFIRMADO]**: ataque básico + 4 ranuras (Z, X, C, V) + movilidad
+> (dash, doble salto y parpadeo) y el tope de mascotas del 25% en PvP.
 
 ---
 
@@ -14,60 +16,129 @@ Etapa 4 · 2026-11-16 (corregido en las Etapas 6 y 7; ver B7, sección 6) · Scr
 
 ### 1.1 Los 6 tipos
 
-| Tipo | Golpes/s | Coef. por golpe | Alcance (studs) | Objetivos | DPS relativo (con críticos) | Frente a la media de los 5 | Qué lo diferencia |
+| Tipo | Golpes/s | Coef. por golpe | Alcance (studs) | Objetivos por golpe | DPS relativo (con críticos) | Frente a la media de los 5 | Qué lo diferencia |
 |---|---|---|---|---|---|---|---|
-| Espada | 1,60 | 0,625 | 8 | 2 | 1,025 | +0,8 % | Equilibrada; combo de 4 golpes; bloquear cuesta 20 % menos |
-| Hacha | 0,90 | 1,150 | 9 | 3 | 1,061 | +4,3 % | Arco de 180°; golpea hasta 3; daño a la guardia ×1,5 |
-| Daga | 2,60 | 0,365 | 6 | 1 | 1,020 | +0,3 % | +10 % de crítico; +25 % de daño por la espalda |
-| Lanza | 1,20 | 0,810 | 14 | 3 | 0,996 | -2,1 % | Largo alcance; atraviesa hasta 3 en línea |
-| Bastón | 1,00 | 0,960 | 35 | 1 | 0,984 | -3,3 % | Proyectil a media distancia; habilidades cuestan 10 % menos de energía |
-| Arco | 1,10 | 0,727 | 70 | 1 | 0,820 | -19,4 % | Sexto tipo: largo alcance; DPS menor a propósito |
+| Espada | 1,60 | 0,625 | 8 | 2 | 1,025 | +0,8% | Equilibrada; combo de 4 golpes; bloquear cuesta 20% menos |
+| Hacha | 0,90 | 1,150 | 9 | 3 | 1,061 | +4,3% | Arco de 180°; daño a la guardia ×1,5 |
+| Daga | 2,60 | 0,365 | 6 | 1 | 1,020 | +0,3% | +10% de crítico; +25% de daño por la espalda |
+| Lanza | 1,20 | 0,810 | 14 | 3 | 0,996 | -2,1% | Largo alcance; atraviesa en línea |
+| Bastón | 1,00 | 0,960 | 35 | 1 | 0,984 | -3,3% | Proyectil a media distancia; habilidades cuestan 10% menos de energía |
+| Arco | 1,10 | 0,727 | 70 | 1 | 0,820 | -19,4% | Sexto tipo (propuesto): largo alcance; DPS menor a propósito |
 
 - **F18 — Daño por golpe:** `DañoGolpe = PotenciaArma × Coef(tipo)`, con `PotenciaArma = PotZona(z) × MultRareza × (1 + bonos)` (B1).
-- **DPS relativo:** `Golpes/s × Coef × (1 + ProbCrítico × 0,5)`. La Daga suma +10% de crítico.
-- **Resultado:** Espada, Hacha, Daga, Lanza y Bastón quedan entre −3,3% y +4,3% de su media. El requisito era ±10%.
-- **Arco (sexto tipo):** queda un 19,4% por debajo a propósito (decisión C-30). Lo compensa con 70 studs de alcance. El prompt no nombra el sexto tipo; el Arco es propuesta.
-- El Hacha tiene el DPS más alto de los cinco porque sus golpes lentos se fallan con más facilidad.
-- **Golpes en área (regla de la Etapa 7):** un golpe básico alcanza como máximo 3 objetivos; el primero recibe el 100% y los demás el 25%. Sin esta regla, el Hacha contra grupos multiplicaba por 3,7 los enemigos por hora.
+- **DPS relativo:** `Golpes/s × Coef × (1 + ProbCrítico × 0,5)`.
+- **Resultado:** Espada, Hacha, Daga, Lanza y Bastón quedan entre -3,3% y +4,3% de su media. El requisito era ±10%.
+- **Arco:** queda un 19,4% por debajo a propósito y lo compensa con 70 studs de alcance. El sexto tipo no se conoce; el Arco es propuesta.
+- **Golpes en área:** el primer objetivo recibe el 100% y los demás el 25% (B7).
+- El ataque básico es un combo de 4 golpes (GDD).
 
 ### 1.2 Daño por golpe de un arma Común, por zona
 
 | Zona | Nivel | Potencia (Común) | Espada | Hacha | Daga | Lanza | Bastón | Arco |
 |---|---|---|---|---|---|---|---|---|
 | 1 | 1 | 100 | 62,5 | 115,0 | 36,5 | 81,0 | 96,0 | 72,7 |
-| 2 | 100 | 165 | 103,1 | 189,7 | 60,2 | 133,7 | 158,4 | 120,0 |
-| 3 | 200 | 272 | 170,2 | 313,1 | 99,4 | 220,5 | 261,4 | 197,9 |
-| 4 | 300 | 449 | 280,8 | 516,6 | 164,0 | 363,9 | 431,2 | 326,6 |
-| 5 | 400 | 741 | 463,3 | 852,4 | 270,5 | 600,4 | 711,6 | 538,9 |
-| 6 | 500 | 1.223 | 764,4 | 1.406,4 | 446,4 | 990,6 | 1.174,1 | 889,1 |
-| 7 | 600 | 2.018 | 1.261,2 | 2.320,6 | 736,5 | 1.634,5 | 1.937,2 | 1.467,0 |
-| 8 | 700 | 3.330 | 2.081,0 | 3.829,0 | 1.215,3 | 2.696,9 | 3.196,4 | 2.420,6 |
-| 9 | 800 | 5.494 | 3.433,6 | 6.317,9 | 2.005,2 | 4.450,0 | 5.274,0 | 3.994,0 |
-| 10 | 900 | 9.065 | 5.665,5 | 10.424,5 | 3.308,6 | 7.342,4 | 8.702,2 | 6.590,1 |
+| 2 | 100 | 200 | 125,0 | 230,0 | 73,0 | 162,0 | 192,0 | 145,4 |
+| 3 | 200 | 400 | 250,0 | 460,0 | 146,0 | 324,0 | 384,0 | 290,8 |
+| 4 | 300 | 800 | 500,0 | 920,0 | 292,0 | 648,0 | 768,0 | 581,6 |
+| 5 | 400 | 1.600 | 1.000,0 | 1.840,0 | 584,0 | 1.296,0 | 1.536,0 | 1.163,2 |
+| 6 | 500 | 3.200 | 2.000,0 | 3.680,0 | 1.168,0 | 2.592,0 | 3.072,0 | 2.326,4 |
+| 7 | 600 | 6.400 | 4.000,0 | 7.360,0 | 2.336,0 | 5.184,0 | 6.144,0 | 4.652,8 |
+| 8 | 700 | 12.800 | 8.000,0 | 14.720,0 | 4.672,0 | 10.368,0 | 12.288,0 | 9.305,6 |
+| 9 | 800 | 25.600 | 16.000,0 | 29.440,0 | 9.344,0 | 20.736,0 | 24.576,0 | 18.611,2 |
+| 10 | 900 | 51.200 | 32.000,0 | 58.880,0 | 18.688,0 | 41.472,0 | 49.152,0 | 37.222,4 |
 
-Para otra rareza se multiplica por su factor; con mejoras, por `(1 + bonos)` hasta ×2.
+Para otra rareza se multiplica por su factor; con mejoras, por `(1 + bonos)` hasta ×1,5.
 
-### 1.3 Rareza y habilidad de arma
+### 1.3 Rareza y pasiva de arma
 
-| Rareza | Mult. potencia | Habilidad de arma |
+| Rareza | Mult. de potencia | Pasiva de arma |
 |---|---|---|
-| Común | 1,00 | Ninguna |
-| Poco común | 1,15 | Filo templado: el 4.º golpe del combo hace +30 % |
-| Raro | 1,32 | Sed de combate: +5 % de velocidad de ataque 3 s tras matar |
-| Épico | 1,52 | Golpe resonante: cada 8 s el siguiente golpe aplica Vulnerable 3 s |
-| Legendario | 1,75 | Furia medida: +10 % de daño con la vida por encima del 80 % |
-| Mítico | 1,98 | Eco del acero: 15 % de repetir el golpe al 40 % |
-| Ultra raro | 2,20 | Remate: +20 % de daño a objetivos por debajo del 25 % de vida |
-| Celestial | 2,60 | Juicio astral: cada 20 s el siguiente golpe es crítico seguro y aplica Vulnerable |
+| Común | ×1,00 | Ninguna |
+| Poco común | ×1,25 | Filo templado: el 4.º golpe del combo hace +30% |
+| Raro | ×1,50 | Sed de combate: +5% de velocidad de ataque 3 s tras derrotar a un enemigo |
+| Épico | ×1,90 | Golpe resonante: cada 8 s el siguiente golpe aplica Vulnerable 3 s |
+| Legendario | ×2,50 | Furia medida: +10% de daño con la vida por encima del 80% |
+| Mítico | ×3,30 | Eco del acero: 15% de repetir el golpe al 40% |
+| Ultra raro | ×4,50 | Remate: +20% de daño a objetivos por debajo del 25% de vida |
+| Celestial | ×5,20 | Juicio astral: cada 20 s el siguiente golpe es crítico seguro y aplica Vulnerable |
 
-- **Nivel requerido:** el de la zona del arma (`100 × (zona − 1)`).
-- **Catálogo:** 6 tipos × 10 zonas × 7 rarezas = 420 armas, más 30 Celestiales (6 tipos × zonas 6 a 10). Total 450, fila a fila en el CSV.
-- **Nombres:** tipo + «de» + Pizarra, Verdín, Sal, Brasa, Escarcha, Eco, Obsidiana, Magma, Vitral o Astral.
-- **Mejoras:** las mismas que los picos (B3): nivel de objeto +50%, ranuras +30% y Despertar de habilidad +20%.
+- **Nivel requerido:** el de la zona del arma.
+- **Catálogo:** 420 armas (6 tipos × 10 zonas × 7 rarezas) más 30 Celestiales (zonas 6 a 10): 450 en total.
+- **Mejoras:** las de los picos (B3): nivel de objeto +25%, ranuras +15% y Despertar de habilidad +10%.
+
+### 1.4 Técnicas de arma
+
+El GDD establece que las cuatro ranuras se configuran mezclando habilidades del arma y del Núcleo. Cada tipo de arma aporta 2 técnicas (propuestas):
+
+| Arma | Técnica | Maestría de arma | Daño (% de potencia) | Energía | Enfriamiento (s) | % por segundo | Efecto |
+|---|---|---|---|---|---|---|---|
+| Espada | Tajo Giratorio | 10 | 150% | 15 | 5 | 30,0 | Área de 8 studs a tu alrededor |
+| Espada | Contragolpe | 50 | 300% | 30 | 12 | 25,0 | Solo tras bloquear un golpe en el último segundo |
+| Hacha | Hendidura | 10 | 170% | 15 | 6 | 28,3 | Cono frontal; daño a la guardia ×2 |
+| Hacha | Terremoto Menor | 50 | 320% | 30 | 14 | 22,9 | Salto e impacto; derribo de 0,6 s en PvE |
+| Daga | Puñalada Doble | 10 | 160% | 15 | 5 | 32,0 | Dos golpes del 80% |
+| Daga | Sombra Fugaz | 50 | 280% | 30 | 12 | 23,3 | Te coloca 8 studs detrás del objetivo |
+| Lanza | Estocada Larga | 10 | 160% | 15 | 5 | 32,0 | Línea de 16 studs |
+| Lanza | Barrido de Asta | 50 | 300% | 30 | 12 | 25,0 | Giro completo que empuja |
+| Bastón | Orbe Cargado | 10 | 170% | 15 | 5 | 34,0 | Proyectil que atraviesa |
+| Bastón | Pulso Arcano | 50 | 300% | 30 | 12 | 25,0 | Área de 10 studs; Lento 20% 2 s |
+| Arco | Disparo Cargado | 10 | 190% | 15 | 6 | 31,7 | Mantener para cargar |
+| Arco | Lluvia de Flechas | 50 | 320% | 30 | 14 | 22,9 | Zona de 3 s |
 
 ---
 
-## 2. Fórmula completa de daño
+## 2. Ranuras, controles y movilidad
+
+### 2.1 Las cuatro ranuras
+
+- El jugador tiene 6 habilidades disponibles: 4 del Núcleo equipado y 2 técnicas del arma. Elige cuáles 4 lleva en Z, X, C y V. Se cambian fuera de combate.
+- La ranura V es la definitiva: solo admite la definitiva del Núcleo o la segunda técnica del arma.
+
+| Qué se pone en Z, X, C y V (Espada + Prismático) | Daño por segundo sin límite de energía | Energía por segundo |
+|---|---|---|
+| Las 4 del Núcleo (referencia) | 72,5% | 8,86 |
+| Lanza, Campo y Prisma Total + Tajo Giratorio | 89,2% | 9,08 |
+| Lanza y Prisma Total + las 2 técnicas de Espada | 101,7% | 9,50 |
+| Lanza, Paso de Relámpago y las 2 técnicas | 105,0% | 11,61 |
+
+- La combinación con más daño (101,7% por segundo) pide 9,50 de energía por segundo, más de lo que se regenera en combate (8). Renunciar al control y a la movilidad del Núcleo da daño, pero no gratis.
+
+### 2.2 Controles (GDD)
+
+| Acción | PC | Móvil | Consola |
+|---|---|---|---|
+| Ataque básico (combo de 4 golpes) y picar | Clic izquierdo | Botón grande | RT |
+| Habilidad 1 (Z) | Z | Botón 1 | X / Cuadrado |
+| Habilidad 2 (X) | X | Botón 2 | Y / Triángulo |
+| Habilidad 3 (C) | C | Botón 3 | B / Círculo |
+| Habilidad 4 o definitiva (V) | V | Botón 4 | RB |
+| Dash | Q | Botón de dash | LB |
+| Salto y doble salto | Espacio | Botón de salto | A / Cruz |
+| Bloquear | F | Botón de escudo | LT |
+| Parpadeo (propuesta) | E | Mantener el botón de dash | LB + A |
+| Ruptura (propuesta) | Espacio mientras estás bajo control | Botón que aparece al estar bajo control | A mientras estás bajo control |
+| Transformación (propuesta) | G | Botón que aparece al llenarse la barra | Pulsar los dos sticks |
+| Interactuar (propuesta) | R | Botón contextual | Cruceta abajo |
+| Postura de mascotas (propuesta) | T | Botón de mascotas | Cruceta arriba |
+
+- Móvil: apuntado asistido hacia el enemigo más cercano en un cono de 30°. En las tres plataformas se pueden reasignar los controles.
+
+### 2.3 Movilidad
+
+| Acción | Efecto | Energía | Enfriamiento | Origen |
+|---|---|---|---|---|
+| Doble salto | Segundo salto | 0 | 1 por salto | GDD |
+| Dash | 12 studs, aéreo o terrestre | 20 | 2 cargas; 3 s de recarga por carga | GDD (la distancia es propuesta) |
+| Esquiva perfecta | Un dash hecho en los 0,25 s anteriores a un golpe da 0,3 s de invulnerabilidad | La del dash | La del dash | Propuesta (el GDD la menciona sin definirla) |
+| Parpadeo | Teletransporte de 12 studs; no atraviesa paredes | 30 | 8 s | GDD |
+| Bloqueo | Reduce el daño frontal un 70% | 8/s + 10 por golpe | — | Propuesta |
+
+- El parpadeo «se desbloquea con Agilidad» (GDD). No se sabe si Agilidad es una estadística del prompt maestro; se propone desbloquearlo con 50 puntos de Velocidad.
+- En una Zona Fracturada, dash y parpadeo no se ralentizan con la carga; con Carga 10 o más cuestan un 25% más (B3).
+
+---
+
+## 3. Fórmula completa de daño
 
 ### F19 — Daño final
 
@@ -78,358 +149,342 @@ Daño = PotenciaArma × Coef × MultFuerza × MultMaestría × MultCrítico
 
 | Término | Fórmula o valor | Límite |
 |---|---|---|
-| `PotenciaArma` | `PotZona × MultRareza × (1 + bonos)` | Bonos hasta +100% (B1) |
-| `Coef` | Coeficiente del golpe básico (tabla 1.1) o de la habilidad (sección 4) | — |
+| `PotenciaArma` | `PotZona × MultRareza × (1 + bonos)` | Bonos hasta +50% (B1) |
+| `Coef` | Coeficiente del golpe básico (1.1), de la técnica (1.4) o de la habilidad (sección 5) | — |
 | `MultFuerza` | `1 + 3·F/(F + 1.000)` | Máximo ×4 (B2) |
 | `MultMaestría` | `1 + 0,001 × nivel de maestría` | Máximo ×1,10 |
 | `MultCrítico` | ×1,5 con probabilidad 5% | Probabilidad máxima 30%; multiplicador máximo ×2,0 |
-| `EstadosDelObjetivo` | Suma de Vulnerable, Descarga y Ruptura | Máximo +40% |
-| `ReducciónDefensa` | `mín(D/(D + K), Tope)` | 75% en PvE, 50% en PvP (B2, corregido en la Etapa 7) |
-| `MultModo` | 1 en PvE; 0,06 en PvP y Zonas Fracturadas | — |
+| `EstadosDelObjetivo` | Suma de Refractado, Vulnerable, Descarga y Guardia rota | Máximo +40% |
+| `ReducciónDefensa` | `mín(D/(D + K), Tope)` | 75% en PvE, 50% en PvP (B2, B7) |
+| `MultModo` | 1 en PvE; 0,062 en PvP y Zonas Fracturadas | — |
 
-- **Unidad:** puntos de vida.
-- **Orden:** los términos se multiplican en ese orden; la Defensa va después de todos los bonos del atacante. El daño mínimo es 1.
+- **Unidad:** puntos de vida. El daño mínimo es 1.
 - **Ejemplo:**
 
 | Paso | Daño |
 |---|---|
-| Golpe de Espada Épica de zona 5 con +50 % de bonos | 1.056 |
-| × Fuerza 500 (×2,000) | 2.112 |
-| × Maestría 50 (×1,05) | 2.218 |
-| × crítico (×1,5) | 3.327 |
-| × objetivo Vulnerable (+15 %) | 3.826 |
-| × (1 − 25 %) por Defensa 500 en PvE | 2.870 |
+| Golpe de Espada Épica de zona 5 con +25% de bonos | 2.375 |
+| × Fuerza 500 (×2,000) | 4.750 |
+| × Maestría 50 (×1,05) | 4.988 |
+| × crítico (×1,5) | 7.481 |
+| × objetivo Vulnerable (+15%) | 8.603 |
+| × (1 − 25%) por Defensa 500 en PvE | 6.453 |
 
-- **Límites del conjunto:** en la misma zona, una build final típica hace 8,5 veces el daño de un arma Común sin nada. El máximo teórico, con todos los topes a la vez, es 36,4 veces. Nueve zonas de diferencia son 90,6 veces: la zona sigue pesando más que la build.
-- **Posibles problemas:** el máximo teórico es alto. Ningún término nuevo debe multiplicar fuera de esta lista; cualquier bono futuro entra en `bonos` o en `EstadosDelObjetivo`, que tienen tope.
+- **Límites del conjunto:** en la misma zona, una build final típica hace 10,2 veces el daño de un arma Común sin nada. El máximo teórico, con todos los topes a la vez, es 54,7 veces. Nueve zonas de diferencia son 512 veces: la zona sigue pesando más.
+- **Posibles problemas:** ningún término nuevo debe multiplicar fuera de esta lista.
 
-### 2.1 Estados alterados
+### 3.1 Estados alterados
 
 | Estado | Efecto | Duración | En PvP |
 |---|---|---|---|
-| Quemadura | Daño en el tiempo indicado por la habilidad; no se acumula, se renueva | 4 s | Igual (ya reducido por `MultModo`) |
-| Lento | −20% o −40% de velocidad de movimiento | 1,5–2 s | Igual |
+| Refractado | +10% de daño recibido; objetivo del Paso de Relámpago y del Guiverno de Cuarzo | 6 s | Igual (GDD) |
+| Quemadura | Daño en el tiempo indicado por la habilidad; se renueva, no se acumula | 4 s | Igual |
+| Lento | −20% a −40% de velocidad de movimiento | 1,5–2 s | Igual |
 | Congelación | Inmoviliza | 1,2–2 s | Se convierte en Lento 40% o dura la mitad |
 | Descarga | El siguiente golpe recibido hace +15% | Hasta consumirse o 5 s | Igual |
-| Vulnerable | +10% o +15% de daño recibido | 3–4 s | Igual |
-| Ruptura | Aturdido y +25% de daño recibido | 2,0 s aturdido en PvE, 1,5 s en PvP; +25% durante 3 s | Inmune a otra Ruptura 8 s |
+| Vulnerable | +15% de daño recibido | 3 s | Igual |
+| Guardia rota | Aturdido y +25% de daño recibido | 2,0 s aturdido en PvE, 1,5 s en PvP; +25% durante 3 s | Inmune a otra durante 8 s |
 
-Los aumentos de daño recibido se suman entre sí y no pasan de +40%.
+Los aumentos de daño recibido se suman y no pasan de +40%. «Guardia rota» es lo que la primera versión llamaba Ruptura; en el GDD, Ruptura es otra cosa (sección 6).
 
 ---
 
-## 3. Maestría de armas y de Núcleos
+## 4. Maestría de armas y de Núcleos
 
 ### F20 — XP de maestría
 
-- **Expresión:** `XPm(n) = techo(10 + 2·n + 0,04·n²)` para pasar del nivel `n` al `n+1`.
-- **Cómo se gana:** al derrotar enemigos con esa arma o ese Núcleo equipado. Común 1 punto, Élite 4, Guardián 12, Jefe 80. Solo cuentan enemigos de la zona del jugador o de la anterior.
+- **Expresión:** `XPm(n) = techo(10 + 2·n + 0,04·n²)`.
+- **Cómo se gana:** usándolo. Cada enemigo derrotado con esa arma o ese Núcleo equipado da puntos: Común 1, Élite 4, Guardián 12, Jefe 80.
 - **Ejemplo:** `XPm(50) = techo(10 + 100 + 100) = 210`.
 - **Bono:** +0,1% de daño por nivel, hasta +10% en el nivel 100.
-- **Una maestría por tipo de arma** (6) y **una por Núcleo** (6). Avanzan a la vez la del arma y la del Núcleo equipados.
+- Hay una maestría por tipo de arma (6) y una por Núcleo (6).
 
 | Nivel de maestría | XP para el siguiente | XP acumulada | Horas acumuladas | Desbloqueo (Núcleo / arma) |
 |---|---|---|---|---|
-| 1 | 13 | 0 | 0,0 | Habilidad Z del Núcleo / combo básico del arma |
-| 10 | 34 | 196 | 0,6 | Habilidad X / remate de combo del arma |
-| 25 | 85 | 1.046 | 2,9 | Habilidad C / pasiva de arma 1 |
-| 50 | 210 | 4.577 | 12,9 | Habilidad V / pasiva de arma 2 |
-| 75 | 385 | 11.833 | 33,4 | Despertar disponible / variante de ataque cargado |
-| 100 | 610 | 24.064 | 67,9 | Transformación / título y aspecto de maestro |
+| 1 | 13 | 0 | 0,0 | Habilidad Z / combo básico |
+| 10 | 34 | 196 | 0,5 | Habilidad X / técnica 1 del arma |
+| 25 | 85 | 1.046 | 2,9 | Habilidad C / pasiva de arma mejorada |
+| 50 | 210 | 4.577 | 12,7 | Habilidad V / técnica 2 del arma |
+| 75 | 385 | 11.833 | 33,0 | Pasiva del Núcleo mejorada / ataque cargado |
+| 100 | 610 | 24.064 | 67,0 | Despertar y Transformación / título y aspecto de maestro |
 
-- Ritmo: 355 puntos por hora (combatiente equilibrado en zona 5). Nivel 100 en 67,9 horas por arma o Núcleo.
-- Las cuatro habilidades de un Núcleo están disponibles a las 12,9 horas (maestría 50).
-
-### 3.1 ¿Debe seguir después de 100?
-
-**Sí, pero sin dar poder.** Por encima de 100:
-
-- Cada nivel cuesta lo mismo que el 100 (610 puntos, unos 103 minutos).
-- No da más daño: el bono se queda en +10%.
-- Da una estrella de prestigio visible en el perfil y, cada 10 niveles, un cofre de monedas y un aspecto de arma.
-
-Así los jugadores veteranos tienen algo que seguir subiendo sin que crezca la diferencia de poder.
+- Ritmo: 359 puntos por hora. Las cuatro habilidades del Núcleo están disponibles a las 12,7 horas; el nivel 100, a las 67,0.
+- **Más allá de 100 (GDD):** niveles solo cosméticos que cambian el color de los efectos. Cada uno cuesta 610 puntos (unos 102 minutos) y no da daño.
 
 ---
 
-## 4. Núcleos de Poder
+## 5. Núcleos de Poder
 
-### 4.1 Estructura común
+### 5.1 Estructura (GDD)
 
-- Cada Núcleo tiene **4 habilidades** (ranuras Z, X, C y V) **y 1 pasiva**. Se equipa uno a la vez; cambiarlo solo es posible fuera de combate.
-- El daño de las habilidades es un porcentaje de la potencia del arma equipada y usa la fórmula F19. Un Núcleo no queda obsoleto al cambiar de zona.
-- **Presupuesto de referencia** (Núcleo Prismático): Z 180% / 15 de energía / 4 s; X 320% / 25 / 8 s; C 500% / 35 / 14 s; V 1.000% / 50 / 30 s.
-- **Desbloqueo por maestría del Núcleo:** Z al nivel 1, X al 10, C al 25, V al 50.
+- Artefactos cristalizados que se extraen como reliquias de las profundidades de la mina.
+- Cada Núcleo trae **4 habilidades (área, control, movilidad y definitiva) y 1 pasiva**.
+- Solo se equipa uno a la vez. Cambiarlo es libre en la ciudad; fuera de ella cuesta un consumible (Sello de Reajuste, B6).
+- Se consiguen en jefes, cajas de Núcleos, eventos y como reliquias raras en depósitos profundos.
+- Su daño es un porcentaje de la potencia del arma equipada: un Núcleo no queda obsoleto al cambiar de zona.
+- Los Núcleos tienen rareza (el Prismático es Épico en el GDD). La rareza marca lo difícil que es conseguirlo, no su potencia (propuesta).
+- **Desbloqueo por maestría:** Z al nivel 1, X al 10, C al 25 y V al 50.
 
-### 4.2 Despertar
+### 5.2 Despertar y Transformación (GDD)
 
-| Aspecto | Valor |
-|---|---|
-| Requisito | Maestría 75 del Núcleo, una misión propia y materiales de jefe |
-| Efecto | +15% al daño de las cuatro habilidades y un efecto nuevo por Núcleo (tabla 4.4) |
-| En PvP | El +15% se reduce a +8% |
-| Venta | Nunca se vende por dinero real **[decisión del prompt]** |
-
-### 4.3 Transformación
-
-| Aspecto | PvE | PvP y Zonas Fracturadas |
+| Aspecto | Valor | Origen |
 |---|---|---|
-| Requisito | Núcleo Despertado y maestría 100 | Igual |
-| Carga | Barra de Sincronía: se llena haciendo y recibiendo daño (unos 90 s de combate) | Igual |
-| Duración | 20 s | 12 s |
-| Daño de habilidades | +20% | +10% |
-| Enfriamientos | −20% | −10% |
-| Enfriamiento de la Transformación | 120 s | 120 s |
-| Otros | Cambia el aspecto y la animación del ataque básico; no cura ni da invulnerabilidad | Visible para todos con un aviso de 1 s |
+| Requisito del Despertar | Maestría 100 del Núcleo y materiales de jefe | GDD |
+| Efecto del Despertar | Sus habilidades mejoran (+15% de daño; +8% en PvP; un efecto propio) y se desbloquea la Transformación | GDD; los porcentajes son propuesta |
+| Carga | Barra de Resonancia: se llena al hacer y recibir daño | GDD |
+| Duración y enfriamiento | 20 s y 120 s | GDD |
+| Cambios visibles | Modelo del personaje, marco de la interfaz e iconos de habilidad | GDD |
+| Bono en PvE | Hasta +25% de daño | GDD |
+| Bono en PvP | Limitado al 10%, con aviso visual claro al activarla | GDD |
+| Venta | Los Núcleos Despertados nunca se venden por dinero real | GDD |
 
-### 4.4 Los 6 Núcleos de lanzamiento
+### 5.3 Los 6 Núcleos de lanzamiento
 
-| Núcleo | Elemento | Rol | Daño por segundo con todo en uso | Energía por segundo | Daño por energía | Pasiva | Despertar | Transformación |
-|---|---|---|---|---|---|---|---|---|
-| Núcleo Prismático | Luz | Versátil a media distancia | 154,0 % | 11,04 | 14,0 | Refracción: cada 4.º golpe básico lanza un destello del 40 % a un segundo objetivo | El Haz rebota una vez al 50 % | Forma Caleidoscopio |
-| Núcleo de Brasa | Fuego | Daño en el tiempo | 154,0 % | 11,04 | 14,0 | Rescoldo: los golpes críticos aplican Quemadura | La Quemadura se propaga a un enemigo cercano | Forma Ascua Viva |
-| Núcleo de Escarcha | Hielo | Control | 124,8 % | 10,59 | 11,8 | Piel de Escarcha: quien te golpea queda con Lento 20 % 2 s (una vez cada 10 s) | Los enemigos con Lento reciben +10 % de tus habilidades | Forma Glaciar |
-| Núcleo de Tormenta | Rayo | Movilidad y cadenas | 144,8 % | 11,04 | 13,1 | Carga Estática: cada 10 studs recorridos da 1 carga (máx. 5); el siguiente básico hace +6 % por carga | Paso Relámpago guarda 2 cargas | Forma Tempestad |
-| Núcleo Sísmico | Tierra | Aguante y Ruptura | 128,2 % | 10,00 | 12,8 | Corteza: +8 % de reducción de daño tras 1 s sin moverte (sin superar el tope de Defensa) | Bastión también protege a aliados a 10 studs al 50 % | Forma Coloso |
-| Núcleo Umbrío | Sombra | Asesino | 135,7 % | 10,88 | 12,5 | Hambre de Vacío: cada muerte reduce los enfriamientos 1 s (0,5 s en PvP) | Manto Nocturno dura 1 s más y no se rompe al usar Paso de Sombra | Forma Penumbra |
-
-- Prismático y Brasa marcan el daño de referencia (154% de la potencia del arma por segundo con todo en uso).
-- Tormenta (−6%), Umbrío (−12%), Sísmico (−17%) y Escarcha (−19%) hacen menos daño a cambio de movilidad, invisibilidad, escudo o control. Es intencionado.
-- El Núcleo inicial de todos los jugadores es el Prismático. Los demás se consiguen jugando (jefes y misiones; se concreta en la Etapa 6).
-
-### 4.5 Habilidades
-
-| Núcleo | Habilidad | Daño (% de potencia de arma) | Energía | Enfriamiento (s) | % por segundo | % por punto de energía | Efecto |
+| Núcleo | Rareza | Elemento | Daño por segundo con todo en uso | Energía por segundo | Pasiva | Despertar | Transformación |
 |---|---|---|---|---|---|---|---|
-| Núcleo Prismático | Z · Haz Facetado | 180 % | 15 | 4,0 | 45,0 | 12,0 | Rayo en línea de 25 studs |
-| Núcleo Prismático | X · Abanico Espectral | 320 % | 25 | 8,0 | 40,0 | 12,8 | 5 esquirlas en cono (64 % cada una) |
-| Núcleo Prismático | C · Prisma Centinela | 500 % | 35 | 14,0 | 35,7 | 14,3 | Prisma 6 s: 10 pulsos del 50 % en 12 studs |
-| Núcleo Prismático | V · Espectro Total | 1000 % | 50 | 30,0 | 33,3 | 20,0 | Rayo canalizado 2,5 s; aplica Vulnerable +10 % 4 s |
-| Núcleo de Brasa | Z · Chispa Voraz | 180 % | 15 | 4,0 | 45,0 | 12,0 | 120 % + Quemadura del 60 % en 4 s |
-| Núcleo de Brasa | X · Estela Ígnea | 320 % | 25 | 8,0 | 40,0 | 12,8 | Carrera de fuego: 200 % + rastro de 120 % en 3 s |
-| Núcleo de Brasa | C · Géiser de Ceniza | 500 % | 35 | 14,0 | 35,7 | 14,3 | Área de 10 studs tras 0,8 s: 420 % + Quemadura del 80 % |
-| Núcleo de Brasa | V · Sol Menor | 1000 % | 50 | 30,0 | 33,3 | 20,0 | Orbe 5 s: 10 pulsos del 100 % |
-| Núcleo de Escarcha | Z · Esquirla Gélida | 160 % | 15 | 4,0 | 40,0 | 10,7 | Proyectil; Lento 20 % 2 s |
-| Núcleo de Escarcha | X · Muro de Hielo | 240 % | 25 | 9,0 | 26,7 | 9,6 | Barrera 4 s que bloquea proyectiles; daña al aparecer |
-| Núcleo de Escarcha | C · Ventisca Corta | 420 % | 35 | 14,0 | 30,0 | 12,0 | Cono; Congelación 1,2 s en PvE, Lento 40 % 1,5 s en PvP |
-| Núcleo de Escarcha | V · Cero Absoluto | 900 % | 50 | 32,0 | 28,1 | 18,0 | Área de 14 studs; Congelación 2 s en PvE, 1 s en PvP |
-| Núcleo de Tormenta | Z · Arco Voltaico | 180 % | 15 | 4,0 | 45,0 | 12,0 | 110 % + salta a 2 objetivos más al 35 % |
-| Núcleo de Tormenta | X · Paso Relámpago | 280 % | 25 | 8,0 | 35,0 | 11,2 | Parpadeo de 18 studs que daña en la trayectoria |
-| Núcleo de Tormenta | C · Jaula Estática | 440 % | 35 | 14,0 | 31,4 | 12,6 | Zona 5 s: 8 pulsos del 55 %; aplica Descarga |
-| Núcleo de Tormenta | V · Juicio del Trueno | 1000 % | 50 | 30,0 | 33,3 | 20,0 | 3 rayos del 300 % + cadena del 100 % |
-| Núcleo Sísmico | Z · Puño de Roca | 190 % | 15 | 4,5 | 42,2 | 12,7 | Golpe corto; daño a la guardia ×1,5 |
-| Núcleo Sísmico | X · Bastión | 200 % | 25 | 10,0 | 20,0 | 8,0 | Escudo del 15 % de la vida máxima 4 s; estalla al acabar |
-| Núcleo Sísmico | C · Falla Abierta | 480 % | 35 | 14,0 | 34,3 | 13,7 | Grieta de 20 studs; derribo 0,8 s en PvE; cuenta como 3 golpes de pico en depósitos |
-| Núcleo Sísmico | V · Cataclismo | 950 % | 50 | 30,0 | 31,7 | 19,0 | Salto e impacto en 16 studs; rompe la guardia al instante |
-| Núcleo Umbrío | Z · Tajo Velado | 170 % | 15 | 4,0 | 42,5 | 11,3 | +30 % de daño por la espalda |
-| Núcleo Umbrío | X · Paso de Sombra | 260 % | 25 | 8,0 | 32,5 | 10,4 | Parpadeo de 12 studs detrás del objetivo |
-| Núcleo Umbrío | C · Manto Nocturno | 460 % | 35 | 15,0 | 30,7 | 13,1 | Invisible 3 s; el siguiente golpe es crítico seguro |
-| Núcleo Umbrío | V · Eclipse | 900 % | 50 | 30,0 | 30,0 | 18,0 | 6 cortes del 150 % a un objetivo |
+| Núcleo Prismático | Épico | Luz | 72,5% | 8,86 | Fragmentos de luz: los críticos devuelven 5 de energía (1 vez por segundo) | La Lanza rebota una vez al 50% | Forma Prisma: la Lanza dispara 3 proyectiles en abanico; en PvP solo +10% de velocidad de movimiento |
+| Núcleo de Brasa | Raro | Fuego | 70,4% | 8,86 | Rescoldo: los críticos aplican Quemadura | La Quemadura se propaga a un enemigo cercano | Forma Ascua Viva |
+| Núcleo de Escarcha | Raro | Hielo | 62,6% | 8,86 | Piel de Escarcha: quien te golpea queda con Lento 20% 2 s (una vez cada 10 s) | Los enemigos con Lento reciben +10% de tus habilidades | Forma Glaciar |
+| Núcleo de Tormenta | Épico | Rayo | 71,1% | 8,86 | Carga Estática: cada 10 studs recorridos da 1 carga (máx. 5); el siguiente básico hace +6% por carga | Salto de Chispa guarda 2 cargas | Forma Tempestad |
+| Núcleo Sísmico | Legendario | Tierra | 67,1% | 8,86 | Corteza: +8% de reducción de daño tras 1 s sin moverte (sin superar el tope de Defensa) | La Embestida también protege a aliados a 10 studs al 50% | Forma Coloso |
+| Núcleo Umbrío | Legendario | Sombra | 67,8% | 8,86 | Hambre de Vacío: cada derrota reduce los enfriamientos 1 s (0,5 s en PvP) | Manto Nocturno dura 1 s más | Forma Penumbra |
+
+- El Prismático es el del GDD y marca la referencia: 72,5% de la potencia del arma por segundo con todo en uso.
+- Los otros cinco son propuestos, con la misma estructura y entre -13,6% y 0,0% de ese daño.
+- El Núcleo inicial de todos los jugadores es el Prismático (propuesta).
+
+### 5.4 Habilidades
+
+| Núcleo | Habilidad | Tipo | Daño (% de potencia de arma) | Energía | Enfriamiento (s) | % por segundo | Efecto | Origen |
+|---|---|---|---|---|---|---|---|---|
+| Núcleo Prismático | Z · Lanza Prismática | Área | 220% | 20 | 6 | 36,7 | Proyectil; ralentiza 25% 1,5 s | GDD |
+| Núcleo Prismático | X · Campo de Refracción | Control | 150% | 25 | 12 | 12,5 | Área de 14 studs; aplica Refractado 6 s (+10% de daño recibido) | GDD; el daño es propuesta |
+| Núcleo Prismático | C · Paso de Relámpago | Movilidad | 120% | 25 | 9 | 13,3 | Parpadeo de 18 studs hacia un objetivo Refractado; 10 si no hay | GDD; el daño es propuesta |
+| Núcleo Prismático | V · Prisma Total | Definitiva | 600% | 40 | 60 | 10,0 | Cúpula de 6 s; enemigos 20% más lentos y un rayo del 100% por segundo | GDD; el daño es propuesta |
+| Núcleo de Brasa | Z · Chispa Voraz | Área | 200% | 20 | 6 | 33,3 | 140% + Quemadura del 60% en 4 s | Propuesta |
+| Núcleo de Brasa | X · Cerco de Ascuas | Control | 140% | 25 | 12 | 11,7 | Anillo de 10 studs durante 4 s; quien lo cruza recibe Quemadura | Propuesta |
+| Núcleo de Brasa | C · Estela Ígnea | Movilidad | 130% | 25 | 9 | 14,4 | Carrera de 14 studs que deja un rastro de fuego 3 s | Propuesta |
+| Núcleo de Brasa | V · Sol Menor | Definitiva | 660% | 40 | 60 | 11,0 | Orbe de 6 s: 6 pulsos del 110% | Propuesta |
+| Núcleo de Escarcha | Z · Esquirla Gélida | Área | 190% | 20 | 6 | 31,7 | Proyectil que estalla; Lento 20% 2 s | Propuesta |
+| Núcleo de Escarcha | X · Ventisca Corta | Control | 130% | 25 | 12 | 10,8 | Cono; Congelación 1,2 s en PvE, Lento 40% 1,5 s en PvP | Propuesta |
+| Núcleo de Escarcha | C · Patín de Hielo | Movilidad | 100% | 25 | 9 | 11,1 | Deslizamiento de 14 studs que deja hielo (Lento 20%) | Propuesta |
+| Núcleo de Escarcha | V · Cero Absoluto | Definitiva | 540% | 40 | 60 | 9,0 | Área de 14 studs; Congelación 2 s en PvE, 1 s en PvP | Propuesta |
+| Núcleo de Tormenta | Z · Arco Voltaico | Área | 210% | 20 | 6 | 35,0 | 130% + salta a 2 objetivos más al 40% | Propuesta |
+| Núcleo de Tormenta | X · Jaula Estática | Control | 140% | 25 | 12 | 11,7 | Zona de 5 s; aplica Descarga | Propuesta |
+| Núcleo de Tormenta | C · Salto de Chispa | Movilidad | 130% | 25 | 9 | 14,4 | Parpadeo de 16 studs que daña en la trayectoria | Propuesta |
+| Núcleo de Tormenta | V · Juicio del Trueno | Definitiva | 600% | 40 | 60 | 10,0 | 3 rayos del 200% | Propuesta |
+| Núcleo Sísmico | Z · Puño de Roca | Área | 210% | 20 | 6 | 35,0 | Onda corta; daño a la guardia ×1,5 | Propuesta |
+| Núcleo Sísmico | X · Falla Abierta | Control | 140% | 25 | 12 | 11,7 | Grieta de 20 studs; derribo de 0,8 s en PvE; cuenta como 3 golpes de pico en depósitos | Propuesta |
+| Núcleo Sísmico | C · Embestida Pétrea | Movilidad | 100% | 25 | 9 | 11,1 | Carga de 12 studs con un escudo del 10% de la vida máxima 3 s | Propuesta |
+| Núcleo Sísmico | V · Cataclismo | Definitiva | 560% | 40 | 60 | 9,3 | Salto e impacto en 16 studs; rompe la guardia al instante | Propuesta |
+| Núcleo Umbrío | Z · Tajo Velado | Área | 200% | 20 | 6 | 33,3 | Arco frontal; +30% de daño por la espalda | Propuesta |
+| Núcleo Umbrío | X · Manto Nocturno | Control | 120% | 25 | 12 | 10,0 | Invisible 3 s; el siguiente golpe es crítico seguro y aplica Lento 30% 2 s | Propuesta |
+| Núcleo Umbrío | C · Paso de Sombra | Movilidad | 130% | 25 | 9 | 14,4 | Parpadeo de 12 studs detrás del objetivo | Propuesta |
+| Núcleo Umbrío | V · Eclipse | Definitiva | 600% | 40 | 60 | 10,0 | 6 cortes del 100% a un objetivo | Propuesta |
+
+### 5.5 Factor de habilidades
+
+- Con la energía base, un jugador usa las cuatro habilidades del Prismático lo bastante para sumar un 47,4% de la potencia del arma por segundo (B2, sección 8.4). Con 1.000 puntos de Energía, 73,2%.
+- **Factor de referencia: ×1,39** sobre el ataque básico. Lo usan el «jugador típico» de este documento y el tope de DPS de mascotas de B5.
 
 ---
 
-## 5. Movilidad y anti-combo infinito
+## 6. Anti-combo infinito
 
-### 5.1 Movilidad
+### 6.1 Reglas del GDD
 
-| Acción | Efecto | Energía | Enfriamiento | Notas |
-|---|---|---|---|---|
-| Dash | 12 studs en 0,2 s | 20 | 2,5 s | Sin invulnerabilidad |
-| Doble salto | Segundo salto al 70% de altura | 0 | 1 por salto | — |
-| Parpadeo | Teletransporte de 16 studs | 30 | 8 s | No atraviesa paredes; con carga del 75% o más en Zona Fracturada, 12 studs |
-| Esquiva | Rodar 8 studs | 20 | 1,2 s | 0,3 s de invulnerabilidad |
-| Bloqueo | Reduce el daño frontal un 70% | 8/s + 10 por golpe | — | Con energía 0: Ruptura |
-
-### 5.2 Escalado de daño en combo
-
-A partir del 5.º golpe seguido sobre un objetivo aturdido, cada golpe hace menos daño.
-
-| Golpe del combo | Daño | Acumulado | Acumulado sin la regla |
-|---|---|---|---|
-| 1 | 100 % | 100 % | 100 % |
-| 2 | 100 % | 200 % | 200 % |
-| 3 | 100 % | 300 % | 300 % |
-| 4 | 100 % | 400 % | 400 % |
-| 5 | 90 % | 490 % | 500 % |
-| 6 | 80 % | 570 % | 600 % |
-| 7 | 70 % | 640 % | 700 % |
-| 8 | 60 % | 700 % | 800 % |
-| 9 | 50 % | 750 % | 900 % |
-| 10 | 50 % | 800 % | 1000 % |
-
-### 5.3 Rendimientos decrecientes del control
-
-| Control sobre el mismo objetivo en 10 s | Duración | Ejemplo con un aturdimiento de 1,5 s |
+| Regla | Valor | Origen |
 |---|---|---|
-| 1.º | 100 % | 1,50 s |
-| 2.º | 50 % | 0,75 s |
-| 3.º | 25 % | 0,38 s |
-| 4.º | Inmune 6 s | 0 s |
+| Rendimientos decrecientes | En una ventana de 6 s, el segundo control dura el 50% y el tercero no se aplica: da inmunidad (Tenacidad) | GDD |
+| Duración de la Tenacidad | 5 s | El GDD propone 2 s; ver 6.2 |
+| Tope de aturdimiento | Nadie puede estar aturdido más de 2,5 s seguidos | GDD |
+| Ruptura | Tras 0,8 s bajo control, el jugador puede gastar 50 de energía para liberarse y empujar al atacante; enfriamiento de 15 s | GDD |
+| Cancelación de animaciones | El dash cancela la recuperación de los ataques básicos, pero no la de las habilidades | GDD |
+| Servidor autoritativo | El cliente pide la acción; el servidor valida alcance, enfriamientos, energía y daño | GDD |
 
-### 5.4 Resto de reglas
+### 6.2 Por qué la Tenacidad dura 5 s
+
+Con dos controles de 1,5 s encadenados (2,25 s en total):
+
+| Inmunidad (Tenacidad) tras el segundo control | Tiempo máximo bajo control | Con Ruptura disponible |
+|---|---|---|
+| 2 s (GDD) | 53% | 44% |
+| 3 s | 43% | 34% |
+| 5 s (adoptada) | 31% | 24% |
+| 6 s | 27% | 21% |
+
+- Con los 2 s del GDD, un jugador sin Ruptura disponible podría pasar el 53% del tiempo bajo control.
+- Con 5 s baja al 31%. La Ruptura lo reduce más, pero cuesta la mitad de la barra de energía base y tiene 15 s de enfriamiento.
+
+### 6.3 Reglas añadidas
 
 | Regla | Valor |
 |---|---|
-| Tope de aturdimiento | 2,0 s de aturdimiento acumulado en una ventana de 4 s |
-| Rompecadenas | Al llegar al tope, el objetivo queda libre con 0,6 s de invulnerabilidad y empuja a quien esté a 6 studs |
-| Aturdimiento por golpe básico | 0,25 s en PvP; los enemigos comunes no tienen límite, los jefes son inmunes |
-| Ruptura | Al quedarse sin energía bloqueando: 1,5 s aturdido en PvP (2,0 s en PvE) y +25% de daño recibido 3 s; después, 8 s de inmunidad a Ruptura |
-| Cancelación de animaciones | Un básico solo se puede cancelar con dash, esquiva o habilidad a partir del 60% de la animación |
-| Coste de cancelar | El dash o la esquiva usados para cancelar cuestan +50% de energía |
-| Límite de cancelaciones | 1 cada 1,5 s |
-| Habilidad en habilidad | No se puede cancelar una habilidad con otra |
+| Escalado de daño en combo | Golpes 1 a 4 al 100%; después 90, 80, 70, 60 y 50% (mínimo 50%) |
+| Guardia rota | Al quedarse sin energía bloqueando: 1,5 s aturdido en PvP (2,0 s en PvE); después, 8 s de inmunidad |
+| Jefes | Inmunes a aturdimiento, Congelación y derribo; Lento les afecta a la mitad |
 
-**Resultado:** encadenando tres aturdimientos de 1,5 s, el control total sería 2,63 s, pero el tope lo corta en 2,0 s. Con la inmunidad de 6 s, un jugador no puede estar controlado más del 12,5% del tiempo.
+| Golpe del combo | Daño | Acumulado | Acumulado sin la regla |
+|---|---|---|---|
+| 1 | 100% | 100% | 100% |
+| 2 | 100% | 200% | 200% |
+| 3 | 100% | 300% | 300% |
+| 4 | 100% | 400% | 400% |
+| 5 | 90% | 490% | 500% |
+| 6 | 80% | 570% | 600% |
+| 7 | 70% | 640% | 700% |
+| 8 | 60% | 700% | 800% |
+| 9 | 50% | 750% | 900% |
+| 10 | 50% | 800% | 1000% |
 
 ---
 
-## 6. Enemigos
+## 7. Enemigos
 
-### 6.1 Multiplicadores por tipo
+### 7.1 Multiplicadores por tipo
 
 | Tipo | Vida (× PotZona × dureza) | Daño por golpe (% de la vida base del jugador de la zona) | Segundos entre golpes | XP (× Común) | Monedas (× valor de zona) | Puntos de maestría | Parte de los enemigos |
 |---|---|---|---|---|---|---|---|
-| Común | 20 | 3 % | 1,5 | 1,0 | 1,4 | 1 | 88 % |
-| Élite | 80 | 6 % | 1,8 | 3,5 | 5,4 | 4 | 10 % |
-| Guardián | 300 | 10 % | 2,2 | 10,0 | 16,0 | 12 | 2 % |
-| Jefe | 1500 | 15 % | 2,5 | 60,0 | 60,0 | 80 | 1 por zona |
+| Común | 16 | 3% | 1,5 | 1,0 | 1,40 | 1 | 88% |
+| Élite | 64 | 6% | 1,8 | 3,5 | 5,60 | 4 | 10% |
+| Guardián | 240 | 10% | 2,2 | 10,0 | 16,80 | 12 | 2% |
+| Jefe | 1200 | 15% | 2,5 | 60,0 | 60,00 | 80 | 1 por zona |
 
 - **F21 — Vida:** `Vida = PotZona(z) × FactorVida × Dureza(z)`.
 - **F22 — Daño por golpe:** `Daño = VidaBase(nivel de la zona) × FactorDaño`.
-- **F23 — XP:** `XP = 0,72 × (25 + 3,75·L + 0,002·L²) × FactorXP`, con `L` = nivel medio de la zona.
-- **F24 — Monedas:** `Monedas = 10 × 1,65^(z−1) × FactorMonedas`.
-- **Ejemplo:** Élite de zona 1 → vida `100 × 80 × 1,0 = 8.000`; golpe `500 × 6% = 30`.
+- **F23 — XP:** `XP = 0,71 × (25 + 3,75·L + 0,002·L²) × FactorXP`.
+- **F24 — Monedas:** `Monedas = 10 × 2,00^(z−1) × FactorMonedas`.
+- **Ejemplo:** Élite de zona 1 → vida `100 × 64 × 1,0 = 6.400`; golpe `500 × 6% = 30`.
+- Los factores de XP y de monedas los calibra el script para cumplir la XP por hora de B2 y quedar a la par del minero de B3.
 - **Tutorial:** hasta el nivel 10 los enemigos de la zona 1 tienen la mitad de vida.
-- **Regeneración en combate (Etapa 7):** en PvE el jugador recupera el 0,5% de su vida máxima por segundo durante el combate (5% fuera de combate). No se aplica en PvP.
-- **Grupos de enemigos (Etapa 7):** aparecen solos (70%), en parejas (25%) o en tríos (5%), separados al menos 20 studs.
+- **Regeneración en combate:** en PvE el jugador recupera el 0,5% de su vida máxima por segundo (5% fuera de combate). No se aplica en PvP.
+- **Grupos:** los enemigos aparecen solos (70%), en parejas (25%) o en tríos (5%), separados al menos 20 studs.
 
-### 6.2 Tabla de las 10 zonas
+### 7.2 Tabla de las 10 zonas
 
-«Jugador típico» = arma Rara de la zona con +25% de bonos, build equilibrada y uso normal de habilidades.
+«Jugador típico» = arma Rara de la zona con la mitad de los bonos (×1,69 en total), build equilibrada y uso normal de habilidades.
 
-| Zona | Tipo | Vida | Daño por golpe | Segundos entre golpes | XP | Monedas | Segundos para matarlo (jugador típico) |
-|---|---|---|---|---|---|---|---|
-| 1 | Común | 2.000 | 15 | 1,5 | 157 | 14 | 6,4 |
-| 1 | Élite | 8.000 | 30 | 1,8 | 548 | 54 | 25,6 |
-| 1 | Guardián | 30.000 | 50 | 2,2 | 1.566 | 160 | 96,1 |
-| 1 | Jefe | 150.000 | 75 | 2,5 | 9.396 | 600 | 480,3 |
-| 2 | Común | 3.630 | 25 | 1,5 | 455 | 22 | 6,4 |
-| 2 | Élite | 14.520 | 49 | 1,8 | 1.594 | 89 | 25,6 |
-| 2 | Guardián | 54.450 | 82 | 2,2 | 4.554 | 264 | 96,1 |
-| 2 | Jefe | 272.250 | 123 | 2,5 | 27.324 | 990 | 480,7 |
-| 3 | Común | 6.534 | 41 | 1,5 | 783 | 37 | 6,5 |
-| 3 | Élite | 26.136 | 81 | 1,8 | 2.740 | 147 | 25,8 |
-| 3 | Guardián | 98.010 | 135 | 2,2 | 7.830 | 436 | 96,8 |
-| 3 | Jefe | 490.050 | 203 | 2,5 | 46.980 | 1.633 | 483,8 |
-| 4 | Común | 11.680 | 67 | 1,5 | 1.139 | 61 | 6,5 |
-| 4 | Élite | 46.718 | 134 | 1,8 | 3.988 | 243 | 26,1 |
-| 4 | Guardián | 175.193 | 223 | 2,2 | 11.394 | 719 | 97,7 |
-| 4 | Jefe | 875.964 | 335 | 2,5 | 68.364 | 2.695 | 488,7 |
-| 5 | Común | 20.754 | 111 | 1,5 | 1.525 | 100 | 6,6 |
-| 5 | Élite | 83.014 | 221 | 1,8 | 5.336 | 400 | 26,4 |
-| 5 | Guardián | 311.304 | 369 | 2,2 | 15.246 | 1.186 | 99,0 |
-| 5 | Jefe | 1.556.521 | 553 | 2,5 | 91.476 | 4.447 | 495,1 |
-| 6 | Común | 36.689 | 183 | 1,5 | 1.939 | 165 | 6,7 |
-| 6 | Élite | 146.758 | 365 | 1,8 | 6.785 | 660 | 26,8 |
-| 6 | Guardián | 550.341 | 608 | 2,2 | 19.386 | 1.957 | 100,5 |
-| 6 | Jefe | 2.751.707 | 913 | 2,5 | 116.316 | 7.338 | 502,5 |
-| 7 | Común | 64.573 | 301 | 1,5 | 2.381 | 272 | 6,8 |
-| 7 | Élite | 258.294 | 602 | 1,8 | 8.335 | 1.090 | 27,2 |
-| 7 | Guardián | 968.601 | 1.004 | 2,2 | 23.814 | 3.229 | 102,1 |
-| 7 | Jefe | 4.843.005 | 1.506 | 2,5 | 142.884 | 12.108 | 510,7 |
-| 8 | Común | 113.205 | 497 | 1,5 | 2.853 | 449 | 6,9 |
-| 8 | Élite | 452.821 | 994 | 1,8 | 9.986 | 1.798 | 27,7 |
-| 8 | Guardián | 1.698.079 | 1.656 | 2,2 | 28.530 | 5.327 | 103,9 |
-| 8 | Jefe | 8.490.393 | 2.485 | 2,5 | 171.180 | 19.977 | 519,5 |
-| 9 | Común | 197.776 | 820 | 1,5 | 3.353 | 742 | 7,1 |
-| 9 | Élite | 791.105 | 1.640 | 1,8 | 11.737 | 2.967 | 28,2 |
-| 9 | Guardián | 2.966.643 | 2.733 | 2,2 | 33.534 | 8.790 | 105,8 |
-| 9 | Jefe | 14.833.216 | 4.100 | 2,5 | 201.204 | 32.963 | 528,8 |
-| 10 | Común | 344.460 | 1.353 | 1,5 | 3.883 | 1.224 | 7,2 |
-| 10 | Élite | 1.377.841 | 2.706 | 1,8 | 13.589 | 4.895 | 28,7 |
-| 10 | Guardián | 5.166.904 | 4.510 | 2,2 | 38.826 | 14.504 | 107,7 |
-| 10 | Jefe | 25.834.518 | 6.765 | 2,5 | 232.956 | 54.388 | 538,6 |
+| Zona | Tipo | Vida | Daño por golpe | XP | Monedas | Segundos para derrotarlo (jugador típico) |
+|---|---|---|---|---|---|---|
+| 1 | Común | 1.600 | 15 | 154 | 14 | 6,3 |
+| 1 | Élite | 6.400 | 30 | 540 | 56 | 25,2 |
+| 1 | Guardián | 24.000 | 50 | 1.544 | 168 | 94,3 |
+| 1 | Jefe | 120.000 | 75 | 9.265 | 600 | 471,6 |
+| 2 | Común | 3.520 | 30 | 449 | 28 | 6,3 |
+| 2 | Élite | 14.080 | 60 | 1.572 | 112 | 25,2 |
+| 2 | Guardián | 52.800 | 99 | 4.491 | 336 | 94,4 |
+| 2 | Jefe | 264.000 | 149 | 26.944 | 1.200 | 472,0 |
+| 3 | Común | 7.680 | 60 | 772 | 56 | 6,3 |
+| 3 | Élite | 30.720 | 119 | 2.702 | 224 | 25,3 |
+| 3 | Guardián | 115.200 | 199 | 7.721 | 672 | 95,0 |
+| 3 | Jefe | 576.000 | 298 | 46.328 | 2.400 | 475,0 |
+| 4 | Común | 16.640 | 119 | 1.124 | 112 | 6,4 |
+| 4 | Élite | 66.560 | 238 | 3.933 | 448 | 25,6 |
+| 4 | Guardián | 249.600 | 397 | 11.236 | 1.344 | 96,0 |
+| 4 | Jefe | 1.248.000 | 596 | 67.414 | 4.800 | 479,9 |
+| 5 | Común | 35.840 | 238 | 1.503 | 224 | 6,5 |
+| 5 | Élite | 143.360 | 477 | 5.262 | 896 | 25,9 |
+| 5 | Guardián | 537.600 | 794 | 15.034 | 2.688 | 97,2 |
+| 5 | Jefe | 2.688.000 | 1.192 | 90.206 | 9.600 | 486,1 |
+| 6 | Común | 76.800 | 477 | 1.912 | 448 | 6,6 |
+| 6 | Élite | 307.200 | 953 | 6.691 | 1.792 | 26,3 |
+| 6 | Guardián | 1.152.000 | 1.589 | 19.117 | 5.376 | 98,7 |
+| 6 | Jefe | 5.760.000 | 2.383 | 114.700 | 19.200 | 493,4 |
+| 7 | Común | 163.840 | 953 | 2.348 | 896 | 6,7 |
+| 7 | Élite | 655.360 | 1.907 | 8.219 | 3.584 | 26,7 |
+| 7 | Guardián | 2.457.600 | 3.178 | 23.483 | 10.752 | 100,3 |
+| 7 | Jefe | 12.288.000 | 4.767 | 140.900 | 38.400 | 501,4 |
+| 8 | Común | 348.160 | 1.907 | 2.813 | 1.792 | 6,8 |
+| 8 | Élite | 1.392.640 | 3.813 | 9.847 | 7.168 | 27,2 |
+| 8 | Guardián | 5.222.400 | 6.356 | 28.134 | 21.504 | 102,0 |
+| 8 | Jefe | 26.112.000 | 9.534 | 168.802 | 76.800 | 510,1 |
+| 9 | Común | 737.280 | 3.813 | 3.307 | 3.584 | 6,9 |
+| 9 | Élite | 2.949.120 | 7.627 | 11.574 | 14.336 | 27,7 |
+| 9 | Guardián | 11.059.200 | 12.712 | 33.068 | 43.008 | 103,8 |
+| 9 | Jefe | 55.296.000 | 19.067 | 198.410 | 153.600 | 519,2 |
+| 10 | Común | 1.556.480 | 7.627 | 3.829 | 7.168 | 7,1 |
+| 10 | Élite | 6.225.920 | 15.254 | 13.400 | 28.672 | 28,2 |
+| 10 | Guardián | 23.347.200 | 25.423 | 38.287 | 86.016 | 105,8 |
+| 10 | Jefe | 116.736.000 | 38.135 | 229.720 | 307.200 | 528,8 |
 
-### 6.3 Ritmo e ingresos del combatiente
+### 7.3 Ritmo e ingresos del combatiente
 
 | Zona | Build | s por enemigo Común | Enemigos/hora | XP/hora | XP/hora objetivo (B2) | Monedas/hora | Monedas/hora del minero equivalente (B3) | Combatiente / minero |
 |---|---|---|---|---|---|---|---|---|
-| 1 | Equilibrada (12,5 %) | 6,4 | 238 | 53.325 | 52.200 | 4.877 | 4.782 | 1,02 |
-| 1 | Combate (35 % en Fuerza) | 5,9 | 252 | 56.427 | 52.200 | 5.160 | 5.181 | 1,00 |
-| 2 | Equilibrada (12,5 %) | 6,4 | 238 | 154.985 | 151.800 | 8.042 | 7.890 | 1,02 |
-| 2 | Combate (35 % en Fuerza) | 5,3 | 270 | 175.742 | 151.800 | 9.119 | 8.884 | 1,03 |
-| 3 | Equilibrada (12,5 %) | 6,5 | 237 | 265.338 | 261.000 | 13.213 | 12.418 | 1,06 |
-| 3 | Combate (35 % en Fuerza) | 5,0 | 279 | 312.704 | 261.000 | 15.572 | 15.586 | 1,00 |
-| 4 | Equilibrada (12,5 %) | 6,5 | 235 | 383.472 | 379.800 | 21.652 | 20.419 | 1,06 |
-| 4 | Combate (35 % en Fuerza) | 4,9 | 284 | 462.426 | 379.800 | 26.110 | 25.565 | 1,02 |
-| 5 | Equilibrada (12,5 %) | 6,6 | 233 | 508.668 | 508.200 | 35.417 | 33.692 | 1,05 |
-| 5 | Combate (35 % en Fuerza) | 4,8 | 285 | 622.118 | 508.200 | 43.316 | 42.511 | 1,02 |
-| 6 | Equilibrada (12,5 %) | 6,7 | 231 | 640.338 | 646.200 | 57.854 | 55.523 | 1,04 |
-| 6 | Combate (35 % en Fuerza) | 4,8 | 285 | 790.011 | 646.200 | 71.377 | 69.600 | 1,03 |
-| 7 | Equilibrada (12,5 %) | 6,8 | 228 | 777.988 | 793.800 | 94.414 | 91.613 | 1,03 |
-| 7 | Combate (35 % en Fuerza) | 4,9 | 283 | 964.884 | 793.800 | 117.096 | 115.569 | 1,01 |
-| 8 | Equilibrada (12,5 %) | 6,9 | 226 | 921.193 | 951.000 | 153.968 | 150.461 | 1,02 |
-| 8 | Combate (35 % en Fuerza) | 4,9 | 281 | 1.145.842 | 951.000 | 191.516 | 180.726 | 1,06 |
-| 9 | Equilibrada (12,5 %) | 7,1 | 223 | 1.069.581 | 1.117.800 | 250.954 | 242.713 | 1,03 |
-| 9 | Combate (35 % en Fuerza) | 5,0 | 278 | 1.332.195 | 1.117.800 | 312.570 | 297.570 | 1,05 |
-| 10 | Equilibrada (12,5 %) | 7,2 | 220 | 1.222.823 | 1.294.200 | 408.875 | 399.993 | 1,02 |
-| 10 | Combate (35 % en Fuerza) | 5,1 | 274 | 1.523.393 | 1.294.200 | 509.376 | 476.187 | 1,07 |
+| 1 | Equilibrada (12,5%) | 6,3 | 241 | 53.230 | 52.200 | 5.130 | 5.175 | 0,99 |
+| 1 | Combate (35% en Fuerza) | 5,8 | 255 | 56.307 | 52.200 | 5.426 | 5.354 | 1,01 |
+| 2 | Equilibrada (12,5%) | 6,3 | 241 | 154.710 | 151.800 | 10.253 | 10.349 | 0,99 |
+| 2 | Combate (35% en Fuerza) | 5,2 | 273 | 175.288 | 151.800 | 11.617 | 11.382 | 1,02 |
+| 3 | Equilibrada (12,5%) | 6,3 | 240 | 264.875 | 261.000 | 20.420 | 19.661 | 1,04 |
+| 3 | Combate (35% en Fuerza) | 4,9 | 282 | 311.821 | 261.000 | 24.039 | 23.519 | 1,02 |
+| 4 | Equilibrada (12,5%) | 6,4 | 238 | 382.818 | 379.800 | 40.562 | 39.007 | 1,04 |
+| 4 | Combate (35% en Fuerza) | 4,8 | 287 | 461.067 | 379.800 | 48.853 | 47.184 | 1,04 |
+| 5 | Equilibrada (12,5%) | 6,5 | 236 | 507.827 | 508.200 | 80.425 | 78.013 | 1,03 |
+| 5 | Combate (35% en Fuerza) | 4,7 | 289 | 620.267 | 508.200 | 98.232 | 95.111 | 1,03 |
+| 6 | Equilibrada (12,5%) | 6,6 | 234 | 639.317 | 646.200 | 159.253 | 155.819 | 1,02 |
+| 6 | Combate (35% en Fuerza) | 4,7 | 288 | 787.667 | 646.200 | 196.207 | 188.736 | 1,04 |
+| 7 | Equilibrada (12,5%) | 6,7 | 231 | 776.798 | 793.800 | 315.040 | 295.882 | 1,06 |
+| 7 | Combate (35% en Fuerza) | 4,8 | 286 | 962.062 | 793.800 | 390.176 | 376.451 | 1,04 |
+| 8 | Equilibrada (12,5%) | 6,8 | 229 | 919.846 | 951.000 | 622.778 | 589.714 | 1,06 |
+| 8 | Combate (35% en Fuerza) | 4,9 | 284 | 1.142.562 | 951.000 | 773.567 | 738.758 | 1,05 |
+| 9 | Equilibrada (12,5%) | 6,9 | 226 | 1.068.092 | 1.117.800 | 1.230.476 | 1.177.945 | 1,04 |
+| 9 | Combate (35% en Fuerza) | 4,9 | 281 | 1.328.485 | 1.117.800 | 1.530.457 | 1.468.285 | 1,04 |
+| 10 | Equilibrada (12,5%) | 7,1 | 223 | 1.221.208 | 1.294.200 | 2.430.226 | 2.355.890 | 1,03 |
+| 10 | Combate (35% en Fuerza) | 5,0 | 277 | 1.519.283 | 1.294.200 | 3.023.401 | 2.783.904 | 1,09 |
 
-- **XP:** el combatiente equilibrado queda entre −6% y +2% del objetivo de B2.
-- **Monedas:** el combatiente gana entre 1,00 y 1,07 veces lo que el minero equivalente (equilibrado contra equilibrado, especialista contra especialista). El límite era 1,3.
-- La Etapa 6 añade a ambos estilos los materiales, las cajas y los gastos.
+- Un enemigo Común cae en 6,3–7,1 s en cualquier zona.
+- **XP:** el combatiente equilibrado queda entre -6% y 2% del objetivo de B2.
+- **Monedas:** el combatiente gana entre 0,99 y 1,09 veces lo que el minero equivalente. El límite era 1,3.
 
 ---
 
-## 7. Jefes
+## 8. Jefes
 
-### 7.1 Reglas comunes
+### 8.1 Reglas comunes
 
 - **Tres fases** por vida: 100–60%, 60–30% y 30–0%. Al cambiar de fase el jefe es invulnerable 2 s y cambia de patrón.
 - **Ataques telegrafiados:** todo ataque marca su zona en el suelo antes de golpear.
 
 | Ataque | Aviso | Daño (% de la vida base del jugador de la zona) | Cómo se evita |
 |---|---|---|---|
-| Golpe normal | 0,6 s | 15% | Bloqueo o esquiva |
-| Ataque fuerte | 1,2 s | 35% | Salir de la zona marcada o esquivar |
+| Golpe normal | 0,6 s | 15% | Bloqueo o esquiva perfecta |
+| Ataque fuerte | 1,2 s | 35% | Salir de la zona marcada |
 | Ataque letal | 2,5 s | 70% | Mecánica propia del jefe |
 
-- **Ventana de vulnerabilidad:** tras cada ataque letal fallado o mecánica superada, el jefe queda expuesto 6 s y recibe +50% de daño.
+- **Ventana de vulnerabilidad:** tras superar la mecánica, el jefe queda expuesto 6 s y recibe +50% de daño.
 - **Furia:** a los 12 minutos el jefe hace +10% de daño cada 30 s.
-- **Los jefes son inmunes** a aturdimiento, Congelación y derribo; Lento les afecta a la mitad.
 
-### 7.2 Escalado cooperativo de 1 a 8 jugadores
+### 8.2 Escalado cooperativo de 1 a 8 jugadores
 
 - **F25:** `VidaJefe(n) = VidaBase × (1 + 0,6 × (n − 1))` y `DañoJefe(n) = DañoBase × (1 + 0,05 × (n − 1))`.
 
-| Jugadores | Vida del jefe | Daño del jefe | Vida por jugador | Capataz: minutos | Madre Liquen: minutos | Leviatán: minutos |
+| Jugadores | Vida del jefe | Daño del jefe | Vida por jugador | Capataz de Pizarra: minutos | Madre Liquen: minutos | Leviatán de Salmuera: minutos |
 |---|---|---|---|---|---|---|
-| 1 | ×1,0 | ×1,00 | 100 % | 8,0 | 8,0 | 8,1 |
-| 2 | ×1,6 | ×1,05 | 80 % | 6,4 | 6,4 | 6,5 |
-| 3 | ×2,2 | ×1,10 | 73 % | 5,9 | 5,9 | 5,9 |
-| 4 | ×2,8 | ×1,15 | 70 % | 5,6 | 5,6 | 5,6 |
-| 5 | ×3,4 | ×1,20 | 68 % | 5,4 | 5,4 | 5,5 |
-| 6 | ×4,0 | ×1,25 | 67 % | 5,3 | 5,3 | 5,4 |
-| 7 | ×4,6 | ×1,30 | 66 % | 5,3 | 5,3 | 5,3 |
-| 8 | ×5,2 | ×1,35 | 65 % | 5,2 | 5,2 | 5,2 |
+| 1 | ×1,0 | ×1,00 | 100% | 7,9 | 7,9 | 7,9 |
+| 2 | ×1,6 | ×1,05 | 80% | 6,3 | 6,3 | 6,3 |
+| 3 | ×2,2 | ×1,10 | 73% | 5,8 | 5,8 | 5,8 |
+| 4 | ×2,8 | ×1,15 | 70% | 5,5 | 5,5 | 5,5 |
+| 5 | ×3,4 | ×1,20 | 68% | 5,3 | 5,3 | 5,4 |
+| 6 | ×4,0 | ×1,25 | 67% | 5,2 | 5,2 | 5,3 |
+| 7 | ×4,6 | ×1,30 | 66% | 5,2 | 5,2 | 5,2 |
+| 8 | ×5,2 | ×1,35 | 65% | 5,1 | 5,1 | 5,1 |
 
-- En solitario el combate dura unos 8 minutos; con 8 jugadores, 5,2 minutos.
-- Cada jugador adicional aporta más de lo que añade al jefe: ir en grupo siempre compensa, pero el jefe se puede hacer solo.
-- El número de jugadores se fija al empezar el combate; quien entra después no cambia la vida del jefe ni recibe botín.
+- En solitario el combate dura unos 7,9 minutos; con 8 jugadores, 5,1.
+- El número de jugadores se fija al empezar el combate.
 
-### 7.3 Los 3 jefes del MVP
+### 8.3 Los 3 jefes del MVP
 
-| Jefe | Zona | Vida (1 jugador) | Vida (8 jugadores) | Vida base del jugador de la zona | Golpe normal (15 %) | Ataque fuerte (35 %) | Ataque letal avisado (70 %) | Monedas por jugador | XP por jugador |
+| Jefe | Zona | Vida (1 jugador) | Vida (8 jugadores) | Vida base del jugador de la zona | Golpe normal (15%) | Ataque fuerte (35%) | Ataque letal avisado (70%) | Monedas por jugador | XP por jugador |
 |---|---|---|---|---|---|---|---|---|---|
-| Capataz de Pizarra | 1 | 150.000 | 780.000 | 500 | 75 | 175 | 350 | 600 | 9.396 |
-| Madre Liquen | 2 | 272.250 | 1.415.700 | 821 | 123 | 287 | 575 | 990 | 27.324 |
-| Leviatán de Salmuera | 3 | 490.050 | 2.548.260 | 1.354 | 203 | 474 | 948 | 1.633 | 46.980 |
+| Capataz de Pizarra | 1 | 120.000 | 624.000 | 500 | 75 | 175 | 350 | 600 | 9.265 |
+| Madre Liquen | 2 | 264.000 | 1.372.800 | 993 | 149 | 348 | 695 | 1.200 | 26.944 |
+| Leviatán de Salmuera | 3 | 576.000 | 2.995.200 | 1.986 | 298 | 695 | 1.390 | 2.400 | 46.328 |
 
 **Capataz de Pizarra (zona 1, Cantera del Alba).** Gólem minero con un pico enorme.
 
 | Fase | Patrón | Ataque letal | Ventana de vulnerabilidad |
 |---|---|---|---|
-| 1 (100–60%) | Barridos de pico en arco de 180° (golpe normal) y pisotón en área (ataque fuerte) | — | Tras 3 barridos se le atasca el pico 4 s |
+| 1 (100–60%) | Barridos de pico en arco (golpe normal) y pisotón en área (ataque fuerte) | — | Tras 3 barridos se le atasca el pico 4 s |
 | 2 (60–30%) | Añade desprendimientos: 5 rocas marcadas en el suelo | «Derrumbe»: toda la sala salvo 3 zonas seguras | 6 s si nadie recibe el Derrumbe |
 | 3 (30–0%) | Barridos dobles; invoca 2 enemigos comunes cada 20 s | «Derrumbe» con 2 zonas seguras | 6 s tras cada Derrumbe |
 
@@ -446,149 +501,116 @@ A partir del 5.º golpe seguido sobre un objetivo aturdido, cada golpe hace meno
 | Fase | Patrón | Ataque letal | Ventana de vulnerabilidad |
 |---|---|---|---|
 | 1 (100–60%) | Mordisco frontal (golpe normal) y coletazo en arco trasero (ataque fuerte) | — | Tras emerger queda quieto 4 s |
-| 2 (60–30%) | Se sumerge y emerge bajo un jugador marcado; deja pilares de sal | «Marea Seca»: embestida en línea que atraviesa la sala; se evita poniéndose tras un pilar | Si choca contra un pilar queda aturdido 6 s |
+| 2 (60–30%) | Se sumerge y emerge bajo un jugador marcado; deja pilares de sal | «Marea Seca»: embestida en línea; se evita poniéndose tras un pilar | Si choca contra un pilar queda aturdido 6 s |
 | 3 (30–0%) | Dos zonas de emersión a la vez; los pilares duran la mitad | «Marea Seca» dos veces seguidas | 6 s tras cada choque |
 
-### 7.4 Recompensas
+### 8.4 Recompensas
 
 | Recompensa | Valor |
 |---|---|
-| Monedas | `60 × valor de zona` por jugador (tabla 7.3). Corregido en la Etapa 6: antes `250 ×` |
+| Monedas | `60 × valor de zona` por jugador |
 | XP | 60 veces la de un enemigo Común, por jugador |
 | Material de jefe | 3 garantizados por derrota; no depende de la Suerte |
-| Tirada extra | 1 tirada en la tabla de depósitos de la zona (admite Suerte, B1) |
+| Núcleo | Cada jefe tiene un Núcleo asociado con una probabilidad pequeña de soltarlo (B6) |
 | Requisito | Haber hecho al menos el 5% del daño o de la curación del grupo |
 | Límite diario | 3 derrotas con botín completo por jefe y día; después, 25% de monedas y XP y sin material |
-| Botín | Individual: cada jugador recibe el suyo y no se reparte |
 
 ---
 
-## 8. Reglas PvP
+## 9. Reglas PvP
 
-### 8.1 Reglas comunes (arenas y Zonas Fracturadas)
+### 9.1 Reglas comunes (arenas y Zonas Fracturadas)
 
 | Regla | Valor |
 |---|---|
-| Multiplicador de daño entre jugadores | ×0,06 (Etapa 7; antes ×0,07) |
-| Defensa | `K = 4.500`, tope 50% (Etapa 7; antes 3.000 y 60%) |
-| Vitalidad | `M = 1,0` en lugar de 3 (Etapa 7; antes 1,5) |
+| Multiplicador de daño entre jugadores | ×0,062 |
+| Defensa | `K = 4.500`, tope 50% |
+| Vitalidad | `M = 1,0` en lugar de 3 |
 | Tope por golpe | Ningún golpe quita más del 35% de la vida máxima del objetivo |
-| Tope de ráfaga (Etapa 7) | Un jugador no pierde más del 60% de su vida máxima en 2 s por daño de otros jugadores |
+| Tope de ráfaga | Un jugador no pierde más del 60% de su vida máxima en 2 s por daño de otros jugadores |
 | Tope de mascotas | 25% del DPS del jugador **[CONFIRMADO]** |
 | Curación | Reducida un 50% |
-| Control | Duraciones según la tabla 2.1; rendimientos decrecientes y Rompecadenas (sección 5) |
-| Despertar y Transformación | Bonos reducidos (secciones 4.2 y 4.3) |
-| Consumibles de energía | 1 cada 30 s (B2) |
+| Control | Reglas de la sección 6; Congelación convertida en Lento |
+| Transformación | Bono limitado al 10% (GDD) |
+| Estadística de combate de los picos | Con su tope PvP (B3) |
 
-### 8.2 Duración de un duelo (nivel 1.000, arma Legendaria con +50%)
+### 9.2 Duración de un duelo (nivel 1.000, arma Legendaria al máximo)
 
 Segundos que tarda el atacante en derrotar al defensor.
 
 | Atacante ↓ / Defensor → | Cristal (Fue/Vel/Ene) | Tanque (Vit/Def/Fue) | Equilibrada (375 × 8) | Minero (Min/Sue/Vit) |
 |---|---|---|---|---|
-| Cristal (Fue/Vel/Ene) | 8,4 s | 15,5 s | 11,7 s | 12,7 s |
-| Tanque (Vit/Def/Fue) | 11,6 s | 21,3 s | 16,0 s | 17,5 s |
-| Equilibrada (375 × 8) | 13,6 s | 25,0 s | 18,8 s | 20,4 s |
-| Minero (Min/Sue/Vit) | 29,1 s | 53,3 s | 40,1 s | 43,6 s |
+| Cristal (Fue/Vel/Ene) | 8,3 s | 15,1 s | 11,4 s | 12,4 s |
+| Tanque (Vit/Def/Fue) | 12,0 s | 21,9 s | 16,5 s | 17,9 s |
+| Equilibrada (375 × 8) | 13,0 s | 23,8 s | 17,9 s | 19,5 s |
+| Minero (Min/Sue/Vit) | 29,9 s | 54,8 s | 41,2 s | 44,8 s |
 
-- Sin el multiplicador ×0,06, un duelo entre dos builds equilibradas duraría 1,1 s.
-- Con él, los duelos entre builds de combate duran entre 8 y 25 s.
-- La habilidad V de una build Cristal haría el 48% de la vida base de un golpe; el tope la deja en el 35%.
-- El Tanque sigue ganando al Cristal, con una ventaja de 1,33 veces (era 1,69 antes de la corrección de la Etapa 7). El Cristal lo compensa con movilidad y más usos de habilidad.
+- Sin el multiplicador, un duelo entre dos builds equilibradas duraría 1,1 s. El multiplicador se calibra para que dure 18 s.
+- Los duelos entre builds de combate duran entre 8 y 24 s.
+- El Tanque gana al Cristal con una ventaja de 1,27 veces; el Cristal lo compensa con movilidad.
+- Una definitiva completa de un Cristal quita el 35% de la vida base, repartida en 6 s. El combo más explosivo (Núcleo Umbrío) sumaría el 73%: el tope de ráfaga lo deja en el 60%.
 
-### 8.3 Arenas
+### 9.3 Arenas
 
 | Regla | Valor |
 |---|---|
 | Modos | 1 contra 1, 2 contra 2 y 3 contra 3 |
-| Igualación | Por tramos de 100 niveles; dentro del tramo, todos pelean con el nivel máximo del tramo y la potencia de arma de esa zona |
-| Emparejamiento | Puntuación Elo: inicio 1.000, factor 32; se busca rival a ±100 puntos y el margen crece 50 cada 15 s |
+| Igualación | Por tramos de 100 niveles; todos pelean con el nivel máximo del tramo y la potencia de arma de esa zona |
+| Emparejamiento | Puntuación Elo: inicio 1.000, factor 32; rival a ±100 puntos, con margen que crece 50 cada 15 s |
 | Qué se arriesga | Solo puntuación |
 | Formato | Al mejor de 3 rondas de 90 s |
 
-### 8.4 Reglas específicas de las Zonas Fracturadas
+### 9.4 Reglas específicas de las Zonas Fracturadas
 
 | Regla | Valor |
 |---|---|
 | PvP | Siempre activo **[CONFIRMADO]** |
-| Sincronización de nivel | Nivel efectivo máximo `100 × z` (B3); la potencia de arma y pico se limita a la de un Ultra raro de esa zona al máximo |
-| Escuadrón | Hasta 3 jugadores; sin fuego amigo; comparten la exclusividad del Cofre de Saqueo |
-| Debuff de carga | Fórmula F17 de B3 |
-| Invisibilidad | Manto Nocturno no oculta en el minimapa a quien lleve el 75% de carga o más |
-| Extracción | No se puede curar ni usar habilidades mientras se canaliza |
+| Protección | 10 s al entrar y al reaparecer mientras no ataques (GDD) |
+| Sincronización de nivel | Nivel efectivo máximo `100 × z`; potencia de arma y pico limitada a la de un Ultra raro de esa zona al máximo |
+| Escuadrón | Hasta 3 jugadores; sin fuego amigo; carga compartida y extracción más rápida (GDD; valores en B6) |
+| Debuff de carga | Fórmula F17 de B3; dash y parpadeo no se ralentizan |
+| Invisibilidad | Manto Nocturno no oculta el resplandor de carga ni la marca del minimapa |
+| Extracción | 8 s de canalización; el daño la reinicia |
 | Qué se arriesga | Solo el mineral transportado **[CONFIRMADO]** |
-| Escudos de novato y de entrada, anti-acampada | Ver B3, secciones 7.6 y 7.7 |
-
----
-
-## 9. Controles
-
-| Acción | PC | Móvil | Consola (mando) |
-|---|---|---|---|
-| Moverse | W A S D | Joystick izquierdo | Stick izquierdo |
-| Cámara | Ratón | Arrastrar en la mitad derecha | Stick derecho |
-| Ataque básico / picar | Clic izquierdo | Botón grande derecho | RT |
-| Bloqueo | Clic derecho (mantener) | Botón de escudo (mantener) | LT |
-| Habilidad Z | Z | Botón 1 del arco | LB + X |
-| Habilidad X | X | Botón 2 del arco | LB + Y |
-| Habilidad C | C | Botón 3 del arco | LB + B |
-| Habilidad V | V | Botón 4 del arco | LB + A |
-| Salto y doble salto | Espacio | Botón de salto | A |
-| Dash | Q | Botón de dash | RB |
-| Esquiva | Ctrl izquierdo + dirección | Deslizar sobre el botón de dash | B |
-| Parpadeo | E | Botón de parpadeo | Y |
-| Transformación | G | Botón superior (aparece al llenarse la barra) | Pulsar los dos sticks |
-| Interactuar | F | Botón contextual | X |
-| Fijar objetivo | Tab | Tocar al enemigo | Pulsar stick derecho |
-| Postura de mascotas | R | Botón de mascotas | Cruceta arriba |
-
-- **Móvil:** apuntado asistido hacia el enemigo más cercano en un cono de 30°; botones de tamaño mínimo de 48 puntos; posición de los botones ajustable.
-- **Consola:** con LB pulsado, los botones X, Y, B y A lanzan las habilidades; sin LB hacen su acción normal.
-- En las tres plataformas se pueden reasignar los controles.
 
 ---
 
 ## 10. Problemas de balance detectados y alternativas
 
-### P1 — El combatiente ganaba más que el minero
+### P1 — La Tenacidad de 2 s del GDD permite controlar más de la mitad del tiempo
 
-- **Problema:** con los primeros valores, el combatiente equilibrado ganaba 1,14 veces lo que el minero y un 16% más de XP que el objetivo.
-- **Corrección aplicada:** monedas de enemigo ×0,9 (Común 1,35; Élite 5,4; Guardián 16) y factor de XP 0,72. Ahora la relación es 1,00–1,07.
+- Resuelto con Tenacidad de 5 s (sección 6.2). Se valida en arenas de prueba.
 
-### P2 — Sin multiplicador PvP los duelos duran 1,3 s
+### P2 — Las habilidades del GDD pesan menos que las de la primera versión
 
-- **Problema:** las armas y habilidades están calibradas contra enemigos con 20 veces la potencia de zona en vida; un jugador solo tiene 5.
-- **Corrección aplicada:** `MultModo` (0,07 al principio; 0,06 desde la Etapa 7) y tope del 35% por golpe.
-- **Alternativa equivalente:** multiplicar la vida de los jugadores por 14 solo en PvP. Se descarta porque obliga a mostrar dos barras de vida distintas.
+- **Dato:** el Prismático del GDD suma 72,5% de la potencia del arma por segundo (enfriamientos de 6 a 60 s). El conjunto propuesto antes sumaba 154%.
+- **Efecto:** el factor de habilidades baja de ×1,75 a ×1,39. Se ha recalibrado la vida de los enemigos (20 → 16 veces la potencia de zona para el Común) para mantener 6–7 s por enemigo.
+- **Consecuencia:** el ataque básico y la movilidad pesan más; las habilidades son momentos puntuales. Encaja con «el combate premia moverse bien» del GDD.
 
-### P3 — El Tanque sigue por delante del Cristal en duelo
+### P3 — Mezclar técnicas de arma puede dar más daño que el Núcleo completo
 
-- **Dato inicial:** ventaja de 1,69 veces con la Vitalidad a la mitad.
-- **Corregido en la Etapa 7:** Vitalidad con `M = 1,0` y Defensa con `K = 4.500` y tope 50% en PvP. La ventaja baja a 1,33 veces.
+- **Dato:** hasta 101,7% por segundo frente a 72,5%, a cambio de 9,50 de energía por segundo y de perder el control y la movilidad del Núcleo.
+- **A vigilar en B7:** que no se convierta en la única configuración usada en PvE.
 
-### P4 — El máximo teórico de daño es 36 veces el de un arma Común
+### P4 — Sin multiplicador PvP los duelos duran 1,1 s
 
-- **Problema:** es el producto de siete topes a la vez; nadie debería alcanzarlos todos, pero los enemigos están calibrados para ×3–8.
-- **Alternativa:** si la Etapa 7 muestra builds por encima de ×15 en la práctica, bajar el tope de estados de +40% a +25% y el de crítico de ×2,0 a ×1,75 (máximo teórico: 30,7 veces).
+- Las armas están calibradas contra enemigos con mucha más vida que un jugador. Resuelto con `MultModo = 0,062` y los topes de golpe y de ráfaga.
 
-### P5 — Diferencia de daño entre Núcleos
+### P5 — El Tanque sigue por delante del Cristal
 
-- **Dato:** Escarcha hace un 19% menos de daño que Prismático.
-- **Riesgo:** que en PvE todos usen Prismático o Brasa.
-- **Alternativa:** si la telemetría muestra menos del 10% de uso en PvE, subir Escarcha y Sísmico un 8%.
+- Ventaja de 1,27 veces con Vitalidad `M = 1,0` y Defensa con tope 50% en PvP. Se mide en la beta.
 
-### P6 — Un jugador recién llegado tarda 14 s por enemigo
+### P6 — El máximo teórico de daño es 54,7 veces el de un arma Común
 
-- **Dato:** con arma Común sin mejoras y solo la habilidad Z.
-- **Corrección aplicada:** enemigos de tutorial con la mitad de vida hasta el nivel 10.
+- Exige alcanzar todos los topes a la vez. B7 comprueba el máximo real.
 
 ### Cómo probar los valores provisionales
 
 | Valor | Prueba |
 |---|---|
-| Coeficientes de arma | Prueba de juego con cada tipo contra el mismo enemigo; diferencia de tiempo menor del 10% |
-| Vida y daño de enemigos | 6–7 s por enemigo Común y menos de 2 muertes por hora para un jugador típico |
-| `MultModo = 0,06` | Arenas de prueba: duelos de 8–25 s |
+| Coeficientes de arma y técnicas | Prueba de juego con cada tipo contra el mismo enemigo; diferencia menor del 10% |
+| Daño de las habilidades del Prismático | Construir el Núcleo y medir el factor real de habilidades (objetivo ×1,39) |
+| Vida y daño de enemigos | 6–7 s por enemigo Común y menos de 2 muertes por hora |
+| `MultModo = 0,062` | Arenas de prueba: duelos de 10–25 s |
+| Tenacidad y Ruptura | Prueba dirigida: tiempo máximo bajo control |
 | Escalado de jefes | Tiempo real de derrota con 1, 4 y 8 jugadores |
-| Maestría | Telemetría: horas hasta maestría 50 y 100 |
-| Anti-combo | Prueba dirigida: intentar mantener a un jugador controlado; no debe superar 2,0 s |
