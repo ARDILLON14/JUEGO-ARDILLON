@@ -1,6 +1,6 @@
 # OREBOUND — DECISIONES.md
 
-Versión: Etapa 2 · 2026-11-16
+Versión: Etapa 3 · 2026-11-16
 
 > **Estado de las fuentes.** Este archivo se ha construido solo con el documento
 > «OREBOUND — Prompts por partes» (prompt único con continuidad + partes 0 a 10).
@@ -249,8 +249,65 @@ Energía
 
 ---
 
-## 7. Registro de cambios
+## 7. Valores de la Etapa 3 — B3_Mineria.md (todos [PROVISIONAL] salvo los marcados)
+
+Zonas
+- E3-01. Nombres de las 10 zonas: Cantera del Alba, Galerías de Musgo, Vetas Salinas, Grutas de Brasa, Sima Helada, Bóveda de Ecos, Raíces de Obsidiana, Mar de Magma, Catedral de Cristal, Núcleo Astral.
+- E3-02. Requisitos de zona: nivel `100 × (z − 1)` (zona 1 desde nivel 1); Minería `10 × (z − 1)`; potencia de pico `0,6 × PotZona(z)`.
+- E3-03. Dureza de zona `1 + 0,1 × (z − 1)`.
+- E3-04. Minería requerida por depósito: `10 × (z − 1) ×` 1 / 1 / 1,5 / 2,5 / 3,5 / 5 / 7 según rareza.
+- E3-05. Zonas con Ultra raro: 3, 5, 7, 8, 9 y 10.
+
+Depósitos y minerales
+- E3-06. `Vida = PotZona × FactorVida × Dureza`; FactorVida 6 / 9 / 14 / 22 / 35 / 55 / 90.
+- E3-07. `Valor = 10 × 1,65^(z−1) × FactorValor`; FactorValor 1 / 1,8 / 3,2 / 6 / 12 / 25 / 60.
+- E3-08. `XP = 0,73 × (25 + 3,75·L + 0,002·L²) × FactorXP`; FactorXP 1 / 1,4 / 2 / 3 / 4,5 / 7 / 11.
+- E3-09. Unidades por depósito 4 / 4 / 3 / 3 / 2 / 2 / 1. Mochila base 60 unidades.
+- E3-10. Catálogo de 66 minerales con nombres originales (`calculos/b3_minerales.csv`).
+- E3-11. Materiales por rareza: Lingote, Lingote, Placa, Gema tallada, Núcleo, Catalizador, Esencia.
+
+Picos
+- E3-12. 75 picos: 10 zonas × 7 rarezas + 5 Celestiales en zonas 6 a 10 (`calculos/b3_picos.csv`).
+- E3-13. Golpes por segundo por rareza: 1,00 / 1,02 / 1,04 / 1,06 / 1,08 / 1,10 / 1,12; Celestial 1,15. Máximo 2,0.
+- E3-14. Minería para equipar: `(zona − 1) ×` 10 / 10 / 12 / 15 / 20 / 25 / 30; Celestial 30.
+- E3-15. Mínimo de 3 golpes por depósito.
+- E3-16. Una habilidad especial por rareza (Golpe certero, Veta abierta, Onda sísmica, Prospector, Fractura en cadena, Resonancia, Eco estelar).
+- E3-17. Mejoras: nivel de objeto 1–10 (+5% cada uno), 3 ranuras (+10% cada una), Despertar de habilidad (+20%).
+
+Generación
+- E3-18. 40 depósitos activos por zona, regeneración de 45 s, +5 depósitos por minero por encima de 8, máximo 80. Supuesto de 20 jugadores por servidor.
+- E3-19. Depósitos compartidos; reparto de unidades y XP en proporción al daño.
+- E3-20. La Suerte de depósitos es la media de los jugadores de la zona (precisa E1-11 y la tabla 5.3 de B1).
+
+Ritmo e ingresos (base para la Etapa 6)
+- E3-21. Minero equilibrado: 225–232 depósitos por hora; valida las 240 acciones por hora de B2.
+- E3-22. Monedas por hora del minero equilibrado: 4.782 (zona 1), 12.418 (zona 3), 33.692 (zona 5), 150.461 (zona 8), 399.993 (zona 10).
+- E3-23. La build de Minería gana entre 1,08 y 1,26 veces lo que la equilibrada.
+
+Zonas Fracturadas
+- E3-24. Mineral fracturado: ×2,0 de valor y ×1,25 de XP si se extrae; ×1,0 si no.
+- E3-25. Debuff de carga: `Velocidad × (1 − 0,30 × c^1,5)`; coste de dash `20 × (1 + 0,5 × c)`; visible en el minimapa desde el 75% de carga.
+- E3-26. Muerte contra jugador: se suelta el 50% [PROVISIONAL, P-01]; de lo soltado, el 70% va al Cofre de Saqueo y el 30% se destruye.
+- E3-27. Cofre de Saqueo: 90 s; 10 s de exclusividad; 3 s para abrir.
+- E3-28. Muerte contra enemigo o entorno en Zona Fracturada: 20% a un cofre abierto a cualquiera.
+- E3-29. Puntos de Extracción: 3 por zona, 1 activo, rotación cada 120 s, aviso 20 s antes, canalización de 8 s.
+- E3-30. Protección de novato: escudo de 120 s en las 3 primeras entradas; escudo de entrada de 5 s; sincronización de nivel a `100 × z`; sin pérdida por debajo del 10% de carga.
+- E3-31. Anti-acampada: 45 s a menos de 25 studs del punto → marcado y −5% de vida por segundo; marca de saqueador tras 3 muertes en 5 minutos; misma víctima sin botín durante 10 minutos; reentrada a los 30 s.
+- E3-32. El minero gana más que en PvE mientras muera en menos del 66,7% de los viajes.
+
+Muerte en PvE y banco
+- E3-33. Pérdida del 20% de la carga [CONFIRMADO]; queda en un saco recuperable por su dueño durante 120 s.
+- E3-34. Sin pérdida por debajo del nivel 25.
+- E3-35. Banco en la ciudad y en la entrada de cada zona PvE; no hay banco en Zonas Fracturadas.
+
+Pendiente para la Etapa 6
+- E3-36. El coste del reinicio de estadísticas (E2-07) no encaja en niveles bajos; propuesta: `1,5 × monedas por hora de la zona`.
+
+---
+
+## 8. Registro de cambios
 - 2026-11-16 · Etapa 0 (1/2): creación del archivo a partir del documento de prompts. Faltan las dos fuentes.
 - 2026-11-16 · Etapa 0 cerrada: incongruencias del prompt resueltas (C-25 a C-34) y prompt corregido.
 - 2026-11-16 · Etapa 1: valores E1-01 a E1-19.
 - 2026-11-16 · Etapa 2: valores E2-01 a E2-18. B1 no cambia.
+- 2026-11-16 · Etapa 3: valores E3-01 a E3-36. Precisa B1 (Suerte de depósitos de grupo); B2 no cambia todavía.
