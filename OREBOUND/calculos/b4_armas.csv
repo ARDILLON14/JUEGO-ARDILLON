@@ -1,0 +1,451 @@
+arma,tipo,zona,rareza,potencia,dano_golpe,golpes_s,dps_base,alcance,nivel,habilidad
+Espada de Pizarra (Común),Espada,1,Común,100,62.5,1.6,100.0,8,1,Ninguna
+Espada de Pizarra (Poco común),Espada,1,Poco común,115,71.9,1.6,115.0,8,1,Filo templado: el 4.º golpe del combo hace +30 %
+Espada de Pizarra (Raro),Espada,1,Raro,132,82.5,1.6,132.0,8,1,Sed de combate: +5 % de velocidad de ataque 3 s tras matar
+Espada de Pizarra (Épico),Espada,1,Épico,152,95.0,1.6,152.0,8,1,Golpe resonante: cada 8 s el siguiente golpe aplica Vulnerable 3 s
+Espada de Pizarra (Legendario),Espada,1,Legendario,175,109.4,1.6,175.0,8,1,Furia medida: +10 % de daño con la vida por encima del 80 %
+Espada de Pizarra (Mítico),Espada,1,Mítico,198,123.8,1.6,198.0,8,1,Eco del acero: 15 % de repetir el golpe al 40 %
+Espada de Pizarra (Ultra raro),Espada,1,Ultra raro,220,137.5,1.6,220.0,8,1,Remate: +20 % de daño a objetivos por debajo del 25 % de vida
+Hacha de Pizarra (Común),Hacha,1,Común,100,115.0,0.9,103.5,9,1,Ninguna
+Hacha de Pizarra (Poco común),Hacha,1,Poco común,115,132.2,0.9,119.0,9,1,Filo templado: el 4.º golpe del combo hace +30 %
+Hacha de Pizarra (Raro),Hacha,1,Raro,132,151.8,0.9,136.6,9,1,Sed de combate: +5 % de velocidad de ataque 3 s tras matar
+Hacha de Pizarra (Épico),Hacha,1,Épico,152,174.8,0.9,157.3,9,1,Golpe resonante: cada 8 s el siguiente golpe aplica Vulnerable 3 s
+Hacha de Pizarra (Legendario),Hacha,1,Legendario,175,201.2,0.9,181.1,9,1,Furia medida: +10 % de daño con la vida por encima del 80 %
+Hacha de Pizarra (Mítico),Hacha,1,Mítico,198,227.7,0.9,204.9,9,1,Eco del acero: 15 % de repetir el golpe al 40 %
+Hacha de Pizarra (Ultra raro),Hacha,1,Ultra raro,220,253.0,0.9,227.7,9,1,Remate: +20 % de daño a objetivos por debajo del 25 % de vida
+Daga de Pizarra (Común),Daga,1,Común,100,36.5,2.6,94.9,6,1,Ninguna
+Daga de Pizarra (Poco común),Daga,1,Poco común,115,42.0,2.6,109.1,6,1,Filo templado: el 4.º golpe del combo hace +30 %
+Daga de Pizarra (Raro),Daga,1,Raro,132,48.2,2.6,125.3,6,1,Sed de combate: +5 % de velocidad de ataque 3 s tras matar
+Daga de Pizarra (Épico),Daga,1,Épico,152,55.5,2.6,144.2,6,1,Golpe resonante: cada 8 s el siguiente golpe aplica Vulnerable 3 s
+Daga de Pizarra (Legendario),Daga,1,Legendario,175,63.9,2.6,166.1,6,1,Furia medida: +10 % de daño con la vida por encima del 80 %
+Daga de Pizarra (Mítico),Daga,1,Mítico,198,72.3,2.6,187.9,6,1,Eco del acero: 15 % de repetir el golpe al 40 %
+Daga de Pizarra (Ultra raro),Daga,1,Ultra raro,220,80.3,2.6,208.8,6,1,Remate: +20 % de daño a objetivos por debajo del 25 % de vida
+Lanza de Pizarra (Común),Lanza,1,Común,100,81.0,1.2,97.2,14,1,Ninguna
+Lanza de Pizarra (Poco común),Lanza,1,Poco común,115,93.1,1.2,111.8,14,1,Filo templado: el 4.º golpe del combo hace +30 %
+Lanza de Pizarra (Raro),Lanza,1,Raro,132,106.9,1.2,128.3,14,1,Sed de combate: +5 % de velocidad de ataque 3 s tras matar
+Lanza de Pizarra (Épico),Lanza,1,Épico,152,123.1,1.2,147.7,14,1,Golpe resonante: cada 8 s el siguiente golpe aplica Vulnerable 3 s
+Lanza de Pizarra (Legendario),Lanza,1,Legendario,175,141.8,1.2,170.1,14,1,Furia medida: +10 % de daño con la vida por encima del 80 %
+Lanza de Pizarra (Mítico),Lanza,1,Mítico,198,160.4,1.2,192.5,14,1,Eco del acero: 15 % de repetir el golpe al 40 %
+Lanza de Pizarra (Ultra raro),Lanza,1,Ultra raro,220,178.2,1.2,213.8,14,1,Remate: +20 % de daño a objetivos por debajo del 25 % de vida
+Bastón de Pizarra (Común),Bastón,1,Común,100,96.0,1.0,96.0,35,1,Ninguna
+Bastón de Pizarra (Poco común),Bastón,1,Poco común,115,110.4,1.0,110.4,35,1,Filo templado: el 4.º golpe del combo hace +30 %
+Bastón de Pizarra (Raro),Bastón,1,Raro,132,126.7,1.0,126.7,35,1,Sed de combate: +5 % de velocidad de ataque 3 s tras matar
+Bastón de Pizarra (Épico),Bastón,1,Épico,152,145.9,1.0,145.9,35,1,Golpe resonante: cada 8 s el siguiente golpe aplica Vulnerable 3 s
+Bastón de Pizarra (Legendario),Bastón,1,Legendario,175,168.0,1.0,168.0,35,1,Furia medida: +10 % de daño con la vida por encima del 80 %
+Bastón de Pizarra (Mítico),Bastón,1,Mítico,198,190.1,1.0,190.1,35,1,Eco del acero: 15 % de repetir el golpe al 40 %
+Bastón de Pizarra (Ultra raro),Bastón,1,Ultra raro,220,211.2,1.0,211.2,35,1,Remate: +20 % de daño a objetivos por debajo del 25 % de vida
+Arco de Pizarra (Común),Arco,1,Común,100,72.7,1.1,80.0,70,1,Ninguna
+Arco de Pizarra (Poco común),Arco,1,Poco común,115,83.6,1.1,92.0,70,1,Filo templado: el 4.º golpe del combo hace +30 %
+Arco de Pizarra (Raro),Arco,1,Raro,132,96.0,1.1,105.6,70,1,Sed de combate: +5 % de velocidad de ataque 3 s tras matar
+Arco de Pizarra (Épico),Arco,1,Épico,152,110.5,1.1,121.6,70,1,Golpe resonante: cada 8 s el siguiente golpe aplica Vulnerable 3 s
+Arco de Pizarra (Legendario),Arco,1,Legendario,175,127.2,1.1,139.9,70,1,Furia medida: +10 % de daño con la vida por encima del 80 %
+Arco de Pizarra (Mítico),Arco,1,Mítico,198,143.9,1.1,158.3,70,1,Eco del acero: 15 % de repetir el golpe al 40 %
+Arco de Pizarra (Ultra raro),Arco,1,Ultra raro,220,159.9,1.1,175.9,70,1,Remate: +20 % de daño a objetivos por debajo del 25 % de vida
+Espada de Verdín (Común),Espada,2,Común,165,103.1,1.6,165.0,8,100,Ninguna
+Espada de Verdín (Poco común),Espada,2,Poco común,190,118.6,1.6,189.7,8,100,Filo templado: el 4.º golpe del combo hace +30 %
+Espada de Verdín (Raro),Espada,2,Raro,218,136.1,1.6,217.8,8,100,Sed de combate: +5 % de velocidad de ataque 3 s tras matar
+Espada de Verdín (Épico),Espada,2,Épico,251,156.8,1.6,250.8,8,100,Golpe resonante: cada 8 s el siguiente golpe aplica Vulnerable 3 s
+Espada de Verdín (Legendario),Espada,2,Legendario,289,180.5,1.6,288.8,8,100,Furia medida: +10 % de daño con la vida por encima del 80 %
+Espada de Verdín (Mítico),Espada,2,Mítico,327,204.2,1.6,326.7,8,100,Eco del acero: 15 % de repetir el golpe al 40 %
+Espada de Verdín (Ultra raro),Espada,2,Ultra raro,363,226.9,1.6,363.0,8,100,Remate: +20 % de daño a objetivos por debajo del 25 % de vida
+Hacha de Verdín (Común),Hacha,2,Común,165,189.7,0.9,170.8,9,100,Ninguna
+Hacha de Verdín (Poco común),Hacha,2,Poco común,190,218.2,0.9,196.4,9,100,Filo templado: el 4.º golpe del combo hace +30 %
+Hacha de Verdín (Raro),Hacha,2,Raro,218,250.5,0.9,225.4,9,100,Sed de combate: +5 % de velocidad de ataque 3 s tras matar
+Hacha de Verdín (Épico),Hacha,2,Épico,251,288.4,0.9,259.6,9,100,Golpe resonante: cada 8 s el siguiente golpe aplica Vulnerable 3 s
+Hacha de Verdín (Legendario),Hacha,2,Legendario,289,332.1,0.9,298.9,9,100,Furia medida: +10 % de daño con la vida por encima del 80 %
+Hacha de Verdín (Mítico),Hacha,2,Mítico,327,375.7,0.9,338.1,9,100,Eco del acero: 15 % de repetir el golpe al 40 %
+Hacha de Verdín (Ultra raro),Hacha,2,Ultra raro,363,417.5,0.9,375.7,9,100,Remate: +20 % de daño a objetivos por debajo del 25 % de vida
+Daga de Verdín (Común),Daga,2,Común,165,60.2,2.6,156.6,6,100,Ninguna
+Daga de Verdín (Poco común),Daga,2,Poco común,190,69.3,2.6,180.1,6,100,Filo templado: el 4.º golpe del combo hace +30 %
+Daga de Verdín (Raro),Daga,2,Raro,218,79.5,2.6,206.7,6,100,Sed de combate: +5 % de velocidad de ataque 3 s tras matar
+Daga de Verdín (Épico),Daga,2,Épico,251,91.5,2.6,238.0,6,100,Golpe resonante: cada 8 s el siguiente golpe aplica Vulnerable 3 s
+Daga de Verdín (Legendario),Daga,2,Legendario,289,105.4,2.6,274.0,6,100,Furia medida: +10 % de daño con la vida por encima del 80 %
+Daga de Verdín (Mítico),Daga,2,Mítico,327,119.2,2.6,310.0,6,100,Eco del acero: 15 % de repetir el golpe al 40 %
+Daga de Verdín (Ultra raro),Daga,2,Ultra raro,363,132.5,2.6,344.5,6,100,Remate: +20 % de daño a objetivos por debajo del 25 % de vida
+Lanza de Verdín (Común),Lanza,2,Común,165,133.7,1.2,160.4,14,100,Ninguna
+Lanza de Verdín (Poco común),Lanza,2,Poco común,190,153.7,1.2,184.4,14,100,Filo templado: el 4.º golpe del combo hace +30 %
+Lanza de Verdín (Raro),Lanza,2,Raro,218,176.4,1.2,211.7,14,100,Sed de combate: +5 % de velocidad de ataque 3 s tras matar
+Lanza de Verdín (Épico),Lanza,2,Épico,251,203.1,1.2,243.8,14,100,Golpe resonante: cada 8 s el siguiente golpe aplica Vulnerable 3 s
+Lanza de Verdín (Legendario),Lanza,2,Legendario,289,233.9,1.2,280.7,14,100,Furia medida: +10 % de daño con la vida por encima del 80 %
+Lanza de Verdín (Mítico),Lanza,2,Mítico,327,264.6,1.2,317.6,14,100,Eco del acero: 15 % de repetir el golpe al 40 %
+Lanza de Verdín (Ultra raro),Lanza,2,Ultra raro,363,294.0,1.2,352.8,14,100,Remate: +20 % de daño a objetivos por debajo del 25 % de vida
+Bastón de Verdín (Común),Bastón,2,Común,165,158.4,1.0,158.4,35,100,Ninguna
+Bastón de Verdín (Poco común),Bastón,2,Poco común,190,182.2,1.0,182.2,35,100,Filo templado: el 4.º golpe del combo hace +30 %
+Bastón de Verdín (Raro),Bastón,2,Raro,218,209.1,1.0,209.1,35,100,Sed de combate: +5 % de velocidad de ataque 3 s tras matar
+Bastón de Verdín (Épico),Bastón,2,Épico,251,240.8,1.0,240.8,35,100,Golpe resonante: cada 8 s el siguiente golpe aplica Vulnerable 3 s
+Bastón de Verdín (Legendario),Bastón,2,Legendario,289,277.2,1.0,277.2,35,100,Furia medida: +10 % de daño con la vida por encima del 80 %
+Bastón de Verdín (Mítico),Bastón,2,Mítico,327,313.6,1.0,313.6,35,100,Eco del acero: 15 % de repetir el golpe al 40 %
+Bastón de Verdín (Ultra raro),Bastón,2,Ultra raro,363,348.5,1.0,348.5,35,100,Remate: +20 % de daño a objetivos por debajo del 25 % de vida
+Arco de Verdín (Común),Arco,2,Común,165,120.0,1.1,132.0,70,100,Ninguna
+Arco de Verdín (Poco común),Arco,2,Poco común,190,137.9,1.1,151.7,70,100,Filo templado: el 4.º golpe del combo hace +30 %
+Arco de Verdín (Raro),Arco,2,Raro,218,158.3,1.1,174.2,70,100,Sed de combate: +5 % de velocidad de ataque 3 s tras matar
+Arco de Verdín (Épico),Arco,2,Épico,251,182.3,1.1,200.6,70,100,Golpe resonante: cada 8 s el siguiente golpe aplica Vulnerable 3 s
+Arco de Verdín (Legendario),Arco,2,Legendario,289,209.9,1.1,230.9,70,100,Furia medida: +10 % de daño con la vida por encima del 80 %
+Arco de Verdín (Mítico),Arco,2,Mítico,327,237.5,1.1,261.3,70,100,Eco del acero: 15 % de repetir el golpe al 40 %
+Arco de Verdín (Ultra raro),Arco,2,Ultra raro,363,263.9,1.1,290.3,70,100,Remate: +20 % de daño a objetivos por debajo del 25 % de vida
+Espada de Sal (Común),Espada,3,Común,272,170.2,1.6,272.2,8,200,Ninguna
+Espada de Sal (Poco común),Espada,3,Poco común,313,195.7,1.6,313.1,8,200,Filo templado: el 4.º golpe del combo hace +30 %
+Espada de Sal (Raro),Espada,3,Raro,359,224.6,1.6,359.4,8,200,Sed de combate: +5 % de velocidad de ataque 3 s tras matar
+Espada de Sal (Épico),Espada,3,Épico,414,258.6,1.6,413.8,8,200,Golpe resonante: cada 8 s el siguiente golpe aplica Vulnerable 3 s
+Espada de Sal (Legendario),Espada,3,Legendario,476,297.8,1.6,476.4,8,200,Furia medida: +10 % de daño con la vida por encima del 80 %
+Espada de Sal (Mítico),Espada,3,Mítico,539,336.9,1.6,539.1,8,200,Eco del acero: 15 % de repetir el golpe al 40 %
+Espada de Sal (Ultra raro),Espada,3,Ultra raro,599,374.3,1.6,598.9,8,200,Remate: +20 % de daño a objetivos por debajo del 25 % de vida
+Hacha de Sal (Común),Hacha,3,Común,272,313.1,0.9,281.8,9,200,Ninguna
+Hacha de Sal (Poco común),Hacha,3,Poco común,313,360.1,0.9,324.0,9,200,Filo templado: el 4.º golpe del combo hace +30 %
+Hacha de Sal (Raro),Hacha,3,Raro,359,413.3,0.9,371.9,9,200,Sed de combate: +5 % de velocidad de ataque 3 s tras matar
+Hacha de Sal (Épico),Hacha,3,Épico,414,475.9,0.9,428.3,9,200,Golpe resonante: cada 8 s el siguiente golpe aplica Vulnerable 3 s
+Hacha de Sal (Legendario),Hacha,3,Legendario,476,547.9,0.9,493.1,9,200,Furia medida: +10 % de daño con la vida por encima del 80 %
+Hacha de Sal (Mítico),Hacha,3,Mítico,539,619.9,0.9,557.9,9,200,Eco del acero: 15 % de repetir el golpe al 40 %
+Hacha de Sal (Ultra raro),Hacha,3,Ultra raro,599,688.8,0.9,619.9,9,200,Remate: +20 % de daño a objetivos por debajo del 25 % de vida
+Daga de Sal (Común),Daga,3,Común,272,99.4,2.6,258.4,6,200,Ninguna
+Daga de Sal (Poco común),Daga,3,Poco común,313,114.3,2.6,297.1,6,200,Filo templado: el 4.º golpe del combo hace +30 %
+Daga de Sal (Raro),Daga,3,Raro,359,131.2,2.6,341.0,6,200,Sed de combate: +5 % de velocidad de ataque 3 s tras matar
+Daga de Sal (Épico),Daga,3,Épico,414,151.0,2.6,392.7,6,200,Golpe resonante: cada 8 s el siguiente golpe aplica Vulnerable 3 s
+Daga de Sal (Legendario),Daga,3,Legendario,476,173.9,2.6,452.1,6,200,Furia medida: +10 % de daño con la vida por encima del 80 %
+Daga de Sal (Mítico),Daga,3,Mítico,539,196.8,2.6,511.6,6,200,Eco del acero: 15 % de repetir el golpe al 40 %
+Daga de Sal (Ultra raro),Daga,3,Ultra raro,599,218.6,2.6,568.4,6,200,Remate: +20 % de daño a objetivos por debajo del 25 % de vida
+Lanza de Sal (Común),Lanza,3,Común,272,220.5,1.2,264.6,14,200,Ninguna
+Lanza de Sal (Poco común),Lanza,3,Poco común,313,253.6,1.2,304.3,14,200,Filo templado: el 4.º golpe del combo hace +30 %
+Lanza de Sal (Raro),Lanza,3,Raro,359,291.1,1.2,349.3,14,200,Sed de combate: +5 % de velocidad de ataque 3 s tras matar
+Lanza de Sal (Épico),Lanza,3,Épico,414,335.2,1.2,402.2,14,200,Golpe resonante: cada 8 s el siguiente golpe aplica Vulnerable 3 s
+Lanza de Sal (Legendario),Lanza,3,Legendario,476,385.9,1.2,463.1,14,200,Furia medida: +10 % de daño con la vida por encima del 80 %
+Lanza de Sal (Mítico),Lanza,3,Mítico,539,436.6,1.2,524.0,14,200,Eco del acero: 15 % de repetir el golpe al 40 %
+Lanza de Sal (Ultra raro),Lanza,3,Ultra raro,599,485.1,1.2,582.2,14,200,Remate: +20 % de daño a objetivos por debajo del 25 % de vida
+Bastón de Sal (Común),Bastón,3,Común,272,261.4,1.0,261.4,35,200,Ninguna
+Bastón de Sal (Poco común),Bastón,3,Poco común,313,300.6,1.0,300.6,35,200,Filo templado: el 4.º golpe del combo hace +30 %
+Bastón de Sal (Raro),Bastón,3,Raro,359,345.0,1.0,345.0,35,200,Sed de combate: +5 % de velocidad de ataque 3 s tras matar
+Bastón de Sal (Épico),Bastón,3,Épico,414,397.3,1.0,397.3,35,200,Golpe resonante: cada 8 s el siguiente golpe aplica Vulnerable 3 s
+Bastón de Sal (Legendario),Bastón,3,Legendario,476,457.4,1.0,457.4,35,200,Furia medida: +10 % de daño con la vida por encima del 80 %
+Bastón de Sal (Mítico),Bastón,3,Mítico,539,517.5,1.0,517.5,35,200,Eco del acero: 15 % de repetir el golpe al 40 %
+Bastón de Sal (Ultra raro),Bastón,3,Ultra raro,599,575.0,1.0,575.0,35,200,Remate: +20 % de daño a objetivos por debajo del 25 % de vida
+Arco de Sal (Común),Arco,3,Común,272,197.9,1.1,217.7,70,200,Ninguna
+Arco de Sal (Poco común),Arco,3,Poco común,313,227.6,1.1,250.4,70,200,Filo templado: el 4.º golpe del combo hace +30 %
+Arco de Sal (Raro),Arco,3,Raro,359,261.3,1.1,287.4,70,200,Sed de combate: +5 % de velocidad de ataque 3 s tras matar
+Arco de Sal (Épico),Arco,3,Épico,414,300.8,1.1,330.9,70,200,Golpe resonante: cada 8 s el siguiente golpe aplica Vulnerable 3 s
+Arco de Sal (Legendario),Arco,3,Legendario,476,346.4,1.1,381.0,70,200,Furia medida: +10 % de daño con la vida por encima del 80 %
+Arco de Sal (Mítico),Arco,3,Mítico,539,391.9,1.1,431.1,70,200,Eco del acero: 15 % de repetir el golpe al 40 %
+Arco de Sal (Ultra raro),Arco,3,Ultra raro,599,435.4,1.1,479.0,70,200,Remate: +20 % de daño a objetivos por debajo del 25 % de vida
+Espada de Brasa (Común),Espada,4,Común,449,280.8,1.6,449.2,8,300,Ninguna
+Espada de Brasa (Poco común),Espada,4,Poco común,517,322.9,1.6,516.6,8,300,Filo templado: el 4.º golpe del combo hace +30 %
+Espada de Brasa (Raro),Espada,4,Raro,593,370.6,1.6,593.0,8,300,Sed de combate: +5 % de velocidad de ataque 3 s tras matar
+Espada de Brasa (Épico),Espada,4,Épico,683,426.8,1.6,682.8,8,300,Golpe resonante: cada 8 s el siguiente golpe aplica Vulnerable 3 s
+Espada de Brasa (Legendario),Espada,4,Legendario,786,491.3,1.6,786.1,8,300,Furia medida: +10 % de daño con la vida por encima del 80 %
+Espada de Brasa (Mítico),Espada,4,Mítico,889,555.9,1.6,889.4,8,300,Eco del acero: 15 % de repetir el golpe al 40 %
+Espada de Brasa (Ultra raro),Espada,4,Ultra raro,988,617.7,1.6,988.3,8,300,Remate: +20 % de daño a objetivos por debajo del 25 % de vida
+Hacha de Brasa (Común),Hacha,4,Común,449,516.6,0.9,464.9,9,300,Ninguna
+Hacha de Brasa (Poco común),Hacha,4,Poco común,517,594.1,0.9,534.7,9,300,Filo templado: el 4.º golpe del combo hace +30 %
+Hacha de Brasa (Raro),Hacha,4,Raro,593,681.9,0.9,613.7,9,300,Sed de combate: +5 % de velocidad de ataque 3 s tras matar
+Hacha de Brasa (Épico),Hacha,4,Épico,683,785.2,0.9,706.7,9,300,Golpe resonante: cada 8 s el siguiente golpe aplica Vulnerable 3 s
+Hacha de Brasa (Legendario),Hacha,4,Legendario,786,904.0,0.9,813.6,9,300,Furia medida: +10 % de daño con la vida por encima del 80 %
+Hacha de Brasa (Mítico),Hacha,4,Mítico,889,1022.9,0.9,920.6,9,300,Eco del acero: 15 % de repetir el golpe al 40 %
+Hacha de Brasa (Ultra raro),Hacha,4,Ultra raro,988,1136.5,0.9,1022.9,9,300,Remate: +20 % de daño a objetivos por debajo del 25 % de vida
+Daga de Brasa (Común),Daga,4,Común,449,164.0,2.6,426.3,6,300,Ninguna
+Daga de Brasa (Poco común),Daga,4,Poco común,517,188.6,2.6,490.2,6,300,Filo templado: el 4.º golpe del combo hace +30 %
+Daga de Brasa (Raro),Daga,4,Raro,593,216.4,2.6,562.7,6,300,Sed de combate: +5 % de velocidad de ataque 3 s tras matar
+Daga de Brasa (Épico),Daga,4,Épico,683,249.2,2.6,648.0,6,300,Golpe resonante: cada 8 s el siguiente golpe aplica Vulnerable 3 s
+Daga de Brasa (Legendario),Daga,4,Legendario,786,286.9,2.6,746.0,6,300,Furia medida: +10 % de daño con la vida por encima del 80 %
+Daga de Brasa (Mítico),Daga,4,Mítico,889,324.6,2.6,844.1,6,300,Eco del acero: 15 % de repetir el golpe al 40 %
+Daga de Brasa (Ultra raro),Daga,4,Ultra raro,988,360.7,2.6,937.9,6,300,Remate: +20 % de daño a objetivos por debajo del 25 % de vida
+Lanza de Brasa (Común),Lanza,4,Común,449,363.9,1.2,436.6,14,300,Ninguna
+Lanza de Brasa (Poco común),Lanza,4,Poco común,517,418.4,1.2,502.1,14,300,Filo templado: el 4.º golpe del combo hace +30 %
+Lanza de Brasa (Raro),Lanza,4,Raro,593,480.3,1.2,576.4,14,300,Sed de combate: +5 % de velocidad de ataque 3 s tras matar
+Lanza de Brasa (Épico),Lanza,4,Épico,683,553.1,1.2,663.7,14,300,Golpe resonante: cada 8 s el siguiente golpe aplica Vulnerable 3 s
+Lanza de Brasa (Legendario),Lanza,4,Legendario,786,636.8,1.2,764.1,14,300,Furia medida: +10 % de daño con la vida por encima del 80 %
+Lanza de Brasa (Mítico),Lanza,4,Mítico,889,720.4,1.2,864.5,14,300,Eco del acero: 15 % de repetir el golpe al 40 %
+Lanza de Brasa (Ultra raro),Lanza,4,Ultra raro,988,800.5,1.2,960.6,14,300,Remate: +20 % de daño a objetivos por debajo del 25 % de vida
+Bastón de Brasa (Común),Bastón,4,Común,449,431.2,1.0,431.2,35,300,Ninguna
+Bastón de Brasa (Poco común),Bastón,4,Poco común,517,495.9,1.0,495.9,35,300,Filo templado: el 4.º golpe del combo hace +30 %
+Bastón de Brasa (Raro),Bastón,4,Raro,593,569.2,1.0,569.2,35,300,Sed de combate: +5 % de velocidad de ataque 3 s tras matar
+Bastón de Brasa (Épico),Bastón,4,Épico,683,655.5,1.0,655.5,35,300,Golpe resonante: cada 8 s el siguiente golpe aplica Vulnerable 3 s
+Bastón de Brasa (Legendario),Bastón,4,Legendario,786,754.7,1.0,754.7,35,300,Furia medida: +10 % de daño con la vida por encima del 80 %
+Bastón de Brasa (Mítico),Bastón,4,Mítico,889,853.9,1.0,853.9,35,300,Eco del acero: 15 % de repetir el golpe al 40 %
+Bastón de Brasa (Ultra raro),Bastón,4,Ultra raro,988,948.7,1.0,948.7,35,300,Remate: +20 % de daño a objetivos por debajo del 25 % de vida
+Arco de Brasa (Común),Arco,4,Común,449,326.6,1.1,359.2,70,300,Ninguna
+Arco de Brasa (Poco común),Arco,4,Poco común,517,375.6,1.1,413.1,70,300,Filo templado: el 4.º golpe del combo hace +30 %
+Arco de Brasa (Raro),Arco,4,Raro,593,431.1,1.1,474.2,70,300,Sed de combate: +5 % de velocidad de ataque 3 s tras matar
+Arco de Brasa (Épico),Arco,4,Épico,683,496.4,1.1,546.0,70,300,Golpe resonante: cada 8 s el siguiente golpe aplica Vulnerable 3 s
+Arco de Brasa (Legendario),Arco,4,Legendario,786,571.5,1.1,628.7,70,300,Furia medida: +10 % de daño con la vida por encima del 80 %
+Arco de Brasa (Mítico),Arco,4,Mítico,889,646.6,1.1,711.3,70,300,Eco del acero: 15 % de repetir el golpe al 40 %
+Arco de Brasa (Ultra raro),Arco,4,Ultra raro,988,718.5,1.1,790.3,70,300,Remate: +20 % de daño a objetivos por debajo del 25 % de vida
+Espada de Escarcha (Común),Espada,5,Común,741,463.3,1.6,741.2,8,400,Ninguna
+Espada de Escarcha (Poco común),Espada,5,Poco común,852,532.7,1.6,852.4,8,400,Filo templado: el 4.º golpe del combo hace +30 %
+Espada de Escarcha (Raro),Espada,5,Raro,978,611.5,1.6,978.4,8,400,Sed de combate: +5 % de velocidad de ataque 3 s tras matar
+Espada de Escarcha (Épico),Espada,5,Épico,1127,704.1,1.6,1126.6,8,400,Golpe resonante: cada 8 s el siguiente golpe aplica Vulnerable 3 s
+Espada de Escarcha (Legendario),Espada,5,Legendario,1297,810.7,1.6,1297.1,8,400,Furia medida: +10 % de daño con la vida por encima del 80 %
+Espada de Escarcha (Mítico),Espada,5,Mítico,1468,917.2,1.6,1467.6,8,400,Eco del acero: 15 % de repetir el golpe al 40 %
+Espada de Escarcha (Ultra raro),Espada,5,Ultra raro,1631,1019.2,1.6,1630.6,8,400,Remate: +20 % de daño a objetivos por debajo del 25 % de vida
+Hacha de Escarcha (Común),Hacha,5,Común,741,852.4,0.9,767.1,9,400,Ninguna
+Hacha de Escarcha (Poco común),Hacha,5,Poco común,852,980.2,0.9,882.2,9,400,Filo templado: el 4.º golpe del combo hace +30 %
+Hacha de Escarcha (Raro),Hacha,5,Raro,978,1125.1,0.9,1012.6,9,400,Sed de combate: +5 % de velocidad de ataque 3 s tras matar
+Hacha de Escarcha (Épico),Hacha,5,Épico,1127,1295.6,0.9,1166.1,9,400,Golpe resonante: cada 8 s el siguiente golpe aplica Vulnerable 3 s
+Hacha de Escarcha (Legendario),Hacha,5,Legendario,1297,1491.7,0.9,1342.5,9,400,Furia medida: +10 % de daño con la vida por encima del 80 %
+Hacha de Escarcha (Mítico),Hacha,5,Mítico,1468,1687.7,0.9,1518.9,9,400,Eco del acero: 15 % de repetir el golpe al 40 %
+Hacha de Escarcha (Ultra raro),Hacha,5,Ultra raro,1631,1875.2,0.9,1687.7,9,400,Remate: +20 % de daño a objetivos por debajo del 25 % de vida
+Daga de Escarcha (Común),Daga,5,Común,741,270.5,2.6,703.4,6,400,Ninguna
+Daga de Escarcha (Poco común),Daga,5,Poco común,852,311.1,2.6,808.9,6,400,Filo templado: el 4.º golpe del combo hace +30 %
+Daga de Escarcha (Raro),Daga,5,Raro,978,357.1,2.6,928.5,6,400,Sed de combate: +5 % de velocidad de ataque 3 s tras matar
+Daga de Escarcha (Épico),Daga,5,Épico,1127,411.2,2.6,1069.2,6,400,Golpe resonante: cada 8 s el siguiente golpe aplica Vulnerable 3 s
+Daga de Escarcha (Legendario),Daga,5,Legendario,1297,473.4,2.6,1230.9,6,400,Furia medida: +10 % de daño con la vida por encima del 80 %
+Daga de Escarcha (Mítico),Daga,5,Mítico,1468,535.7,2.6,1392.7,6,400,Eco del acero: 15 % de repetir el golpe al 40 %
+Daga de Escarcha (Ultra raro),Daga,5,Ultra raro,1631,595.2,2.6,1547.5,6,400,Remate: +20 % de daño a objetivos por debajo del 25 % de vida
+Lanza de Escarcha (Común),Lanza,5,Común,741,600.4,1.2,720.4,14,400,Ninguna
+Lanza de Escarcha (Poco común),Lanza,5,Poco común,852,690.4,1.2,828.5,14,400,Filo templado: el 4.º golpe del combo hace +30 %
+Lanza de Escarcha (Raro),Lanza,5,Raro,978,792.5,1.2,951.0,14,400,Sed de combate: +5 % de velocidad de ataque 3 s tras matar
+Lanza de Escarcha (Épico),Lanza,5,Épico,1127,912.6,1.2,1095.1,14,400,Golpe resonante: cada 8 s el siguiente golpe aplica Vulnerable 3 s
+Lanza de Escarcha (Legendario),Lanza,5,Legendario,1297,1050.7,1.2,1260.8,14,400,Furia medida: +10 % de daño con la vida por encima del 80 %
+Lanza de Escarcha (Mítico),Lanza,5,Mítico,1468,1188.7,1.2,1426.5,14,400,Eco del acero: 15 % de repetir el golpe al 40 %
+Lanza de Escarcha (Ultra raro),Lanza,5,Ultra raro,1631,1320.8,1.2,1585.0,14,400,Remate: +20 % de daño a objetivos por debajo del 25 % de vida
+Bastón de Escarcha (Común),Bastón,5,Común,741,711.6,1.0,711.6,35,400,Ninguna
+Bastón de Escarcha (Poco común),Bastón,5,Poco común,852,818.3,1.0,818.3,35,400,Filo templado: el 4.º golpe del combo hace +30 %
+Bastón de Escarcha (Raro),Bastón,5,Raro,978,939.2,1.0,939.2,35,400,Sed de combate: +5 % de velocidad de ataque 3 s tras matar
+Bastón de Escarcha (Épico),Bastón,5,Épico,1127,1081.6,1.0,1081.6,35,400,Golpe resonante: cada 8 s el siguiente golpe aplica Vulnerable 3 s
+Bastón de Escarcha (Legendario),Bastón,5,Legendario,1297,1245.2,1.0,1245.2,35,400,Furia medida: +10 % de daño con la vida por encima del 80 %
+Bastón de Escarcha (Mítico),Bastón,5,Mítico,1468,1408.9,1.0,1408.9,35,400,Eco del acero: 15 % de repetir el golpe al 40 %
+Bastón de Escarcha (Ultra raro),Bastón,5,Ultra raro,1631,1565.4,1.0,1565.4,35,400,Remate: +20 % de daño a objetivos por debajo del 25 % de vida
+Arco de Escarcha (Común),Arco,5,Común,741,538.9,1.1,592.7,70,400,Ninguna
+Arco de Escarcha (Poco común),Arco,5,Poco común,852,619.7,1.1,681.6,70,400,Filo templado: el 4.º golpe del combo hace +30 %
+Arco de Escarcha (Raro),Arco,5,Raro,978,711.3,1.1,782.4,70,400,Sed de combate: +5 % de velocidad de ataque 3 s tras matar
+Arco de Escarcha (Épico),Arco,5,Épico,1127,819.1,1.1,901.0,70,400,Golpe resonante: cada 8 s el siguiente golpe aplica Vulnerable 3 s
+Arco de Escarcha (Legendario),Arco,5,Legendario,1297,943.0,1.1,1037.3,70,400,Furia medida: +10 % de daño con la vida por encima del 80 %
+Arco de Escarcha (Mítico),Arco,5,Mítico,1468,1066.9,1.1,1173.6,70,400,Eco del acero: 15 % de repetir el golpe al 40 %
+Arco de Escarcha (Ultra raro),Arco,5,Ultra raro,1631,1185.5,1.1,1304.0,70,400,Remate: +20 % de daño a objetivos por debajo del 25 % de vida
+Espada de Eco (Común),Espada,6,Común,1223,764.4,1.6,1223.0,8,500,Ninguna
+Espada de Eco (Poco común),Espada,6,Poco común,1406,879.0,1.6,1406.4,8,500,Filo templado: el 4.º golpe del combo hace +30 %
+Espada de Eco (Raro),Espada,6,Raro,1614,1009.0,1.6,1614.3,8,500,Sed de combate: +5 % de velocidad de ataque 3 s tras matar
+Espada de Eco (Épico),Espada,6,Épico,1859,1161.8,1.6,1858.9,8,500,Golpe resonante: cada 8 s el siguiente golpe aplica Vulnerable 3 s
+Espada de Eco (Legendario),Espada,6,Legendario,2140,1337.6,1.6,2140.2,8,500,Furia medida: +10 % de daño con la vida por encima del 80 %
+Espada de Eco (Mítico),Espada,6,Mítico,2422,1513.4,1.6,2421.5,8,500,Eco del acero: 15 % de repetir el golpe al 40 %
+Espada de Eco (Ultra raro),Espada,6,Ultra raro,2691,1681.6,1.6,2690.6,8,500,Remate: +20 % de daño a objetivos por debajo del 25 % de vida
+Espada Celestial de Eco,Espada,6,Celestial,3180,1987.3,1.6,3179.8,8,500,Juicio astral: cada 20 s el siguiente golpe es crítico seguro y aplica Vulnerable
+Hacha de Eco (Común),Hacha,6,Común,1223,1406.4,0.9,1265.8,9,500,Ninguna
+Hacha de Eco (Poco común),Hacha,6,Poco común,1406,1617.4,0.9,1455.7,9,500,Filo templado: el 4.º golpe del combo hace +30 %
+Hacha de Eco (Raro),Hacha,6,Raro,1614,1856.5,0.9,1670.8,9,500,Sed de combate: +5 % de velocidad de ataque 3 s tras matar
+Hacha de Eco (Épico),Hacha,6,Épico,1859,2137.8,0.9,1924.0,9,500,Golpe resonante: cada 8 s el siguiente golpe aplica Vulnerable 3 s
+Hacha de Eco (Legendario),Hacha,6,Legendario,2140,2461.2,0.9,2215.1,9,500,Furia medida: +10 % de daño con la vida por encima del 80 %
+Hacha de Eco (Mítico),Hacha,6,Mítico,2422,2784.7,0.9,2506.3,9,500,Eco del acero: 15 % de repetir el golpe al 40 %
+Hacha de Eco (Ultra raro),Hacha,6,Ultra raro,2691,3094.1,0.9,2784.7,9,500,Remate: +20 % de daño a objetivos por debajo del 25 % de vida
+Hacha Celestial de Eco,Hacha,6,Celestial,3180,3656.7,0.9,3291.0,9,500,Juicio astral: cada 20 s el siguiente golpe es crítico seguro y aplica Vulnerable
+Daga de Eco (Común),Daga,6,Común,1223,446.4,2.6,1160.6,6,500,Ninguna
+Daga de Eco (Poco común),Daga,6,Poco común,1406,513.3,2.6,1334.7,6,500,Filo templado: el 4.º golpe del combo hace +30 %
+Daga de Eco (Raro),Daga,6,Raro,1614,589.2,2.6,1532.0,6,500,Sed de combate: +5 % de velocidad de ataque 3 s tras matar
+Daga de Eco (Épico),Daga,6,Épico,1859,678.5,2.6,1764.1,6,500,Golpe resonante: cada 8 s el siguiente golpe aplica Vulnerable 3 s
+Daga de Eco (Legendario),Daga,6,Legendario,2140,781.2,2.6,2031.1,6,500,Furia medida: +10 % de daño con la vida por encima del 80 %
+Daga de Eco (Mítico),Daga,6,Mítico,2422,883.8,2.6,2298.0,6,500,Eco del acero: 15 % de repetir el golpe al 40 %
+Daga de Eco (Ultra raro),Daga,6,Ultra raro,2691,982.1,2.6,2553.3,6,500,Remate: +20 % de daño a objetivos por debajo del 25 % de vida
+Daga Celestial de Eco,Daga,6,Celestial,3180,1160.6,2.6,3017.6,6,500,Juicio astral: cada 20 s el siguiente golpe es crítico seguro y aplica Vulnerable
+Lanza de Eco (Común),Lanza,6,Común,1223,990.6,1.2,1188.7,14,500,Ninguna
+Lanza de Eco (Poco común),Lanza,6,Poco común,1406,1139.2,1.2,1367.0,14,500,Filo templado: el 4.º golpe del combo hace +30 %
+Lanza de Eco (Raro),Lanza,6,Raro,1614,1307.6,1.2,1569.1,14,500,Sed de combate: +5 % de velocidad de ataque 3 s tras matar
+Lanza de Eco (Épico),Lanza,6,Épico,1859,1505.7,1.2,1806.9,14,500,Golpe resonante: cada 8 s el siguiente golpe aplica Vulnerable 3 s
+Lanza de Eco (Legendario),Lanza,6,Legendario,2140,1733.6,1.2,2080.3,14,500,Furia medida: +10 % de daño con la vida por encima del 80 %
+Lanza de Eco (Mítico),Lanza,6,Mítico,2422,1961.4,1.2,2353.7,14,500,Eco del acero: 15 % de repetir el golpe al 40 %
+Lanza de Eco (Ultra raro),Lanza,6,Ultra raro,2691,2179.4,1.2,2615.2,14,500,Remate: +20 % de daño a objetivos por debajo del 25 % de vida
+Lanza Celestial de Eco,Lanza,6,Celestial,3180,2575.6,1.2,3090.7,14,500,Juicio astral: cada 20 s el siguiente golpe es crítico seguro y aplica Vulnerable
+Bastón de Eco (Común),Bastón,6,Común,1223,1174.1,1.0,1174.1,35,500,Ninguna
+Bastón de Eco (Poco común),Bastón,6,Poco común,1406,1350.2,1.0,1350.2,35,500,Filo templado: el 4.º golpe del combo hace +30 %
+Bastón de Eco (Raro),Bastón,6,Raro,1614,1549.8,1.0,1549.8,35,500,Sed de combate: +5 % de velocidad de ataque 3 s tras matar
+Bastón de Eco (Épico),Bastón,6,Épico,1859,1784.6,1.0,1784.6,35,500,Golpe resonante: cada 8 s el siguiente golpe aplica Vulnerable 3 s
+Bastón de Eco (Legendario),Bastón,6,Legendario,2140,2054.6,1.0,2054.6,35,500,Furia medida: +10 % de daño con la vida por encima del 80 %
+Bastón de Eco (Mítico),Bastón,6,Mítico,2422,2324.6,1.0,2324.6,35,500,Eco del acero: 15 % de repetir el golpe al 40 %
+Bastón de Eco (Ultra raro),Bastón,6,Ultra raro,2691,2582.9,1.0,2582.9,35,500,Remate: +20 % de daño a objetivos por debajo del 25 % de vida
+Bastón Celestial de Eco,Bastón,6,Celestial,3180,3052.6,1.0,3052.6,35,500,Juicio astral: cada 20 s el siguiente golpe es crítico seguro y aplica Vulnerable
+Arco de Eco (Común),Arco,6,Común,1223,889.1,1.1,978.0,70,500,Ninguna
+Arco de Eco (Poco común),Arco,6,Poco común,1406,1022.5,1.1,1124.7,70,500,Filo templado: el 4.º golpe del combo hace +30 %
+Arco de Eco (Raro),Arco,6,Raro,1614,1173.6,1.1,1291.0,70,500,Sed de combate: +5 % de velocidad de ataque 3 s tras matar
+Arco de Eco (Épico),Arco,6,Épico,1859,1351.4,1.1,1486.6,70,500,Golpe resonante: cada 8 s el siguiente golpe aplica Vulnerable 3 s
+Arco de Eco (Legendario),Arco,6,Legendario,2140,1555.9,1.1,1711.5,70,500,Furia medida: +10 % de daño con la vida por encima del 80 %
+Arco de Eco (Mítico),Arco,6,Mítico,2422,1760.4,1.1,1936.5,70,500,Eco del acero: 15 % de repetir el golpe al 40 %
+Arco de Eco (Ultra raro),Arco,6,Ultra raro,2691,1956.0,1.1,2151.6,70,500,Remate: +20 % de daño a objetivos por debajo del 25 % de vida
+Arco Celestial de Eco,Arco,6,Celestial,3180,2311.7,1.1,2542.8,70,500,Juicio astral: cada 20 s el siguiente golpe es crítico seguro y aplica Vulnerable
+Espada de Obsidiana (Común),Espada,7,Común,2018,1261.2,1.6,2017.9,8,600,Ninguna
+Espada de Obsidiana (Poco común),Espada,7,Poco común,2321,1450.4,1.6,2320.6,8,600,Filo templado: el 4.º golpe del combo hace +30 %
+Espada de Obsidiana (Raro),Espada,7,Raro,2664,1664.8,1.6,2663.7,8,600,Sed de combate: +5 % de velocidad de ataque 3 s tras matar
+Espada de Obsidiana (Épico),Espada,7,Épico,3067,1917.0,1.6,3067.2,8,600,Golpe resonante: cada 8 s el siguiente golpe aplica Vulnerable 3 s
+Espada de Obsidiana (Legendario),Espada,7,Legendario,3531,2207.1,1.6,3531.4,8,600,Furia medida: +10 % de daño con la vida por encima del 80 %
+Espada de Obsidiana (Mítico),Espada,7,Mítico,3995,2497.2,1.6,3995.5,8,600,Eco del acero: 15 % de repetir el golpe al 40 %
+Espada de Obsidiana (Ultra raro),Espada,7,Ultra raro,4439,2774.6,1.6,4439.4,8,600,Remate: +20 % de daño a objetivos por debajo del 25 % de vida
+Espada Celestial de Obsidiana,Espada,7,Celestial,5247,3279.1,1.6,5246.6,8,600,Juicio astral: cada 20 s el siguiente golpe es crítico seguro y aplica Vulnerable
+Hacha de Obsidiana (Común),Hacha,7,Común,2018,2320.6,0.9,2088.5,9,600,Ninguna
+Hacha de Obsidiana (Poco común),Hacha,7,Poco común,2321,2668.7,0.9,2401.8,9,600,Filo templado: el 4.º golpe del combo hace +30 %
+Hacha de Obsidiana (Raro),Hacha,7,Raro,2664,3063.2,0.9,2756.9,9,600,Sed de combate: +5 % de velocidad de ataque 3 s tras matar
+Hacha de Obsidiana (Épico),Hacha,7,Épico,3067,3527.3,0.9,3174.6,9,600,Golpe resonante: cada 8 s el siguiente golpe aplica Vulnerable 3 s
+Hacha de Obsidiana (Legendario),Hacha,7,Legendario,3531,4061.1,0.9,3655.0,9,600,Furia medida: +10 % de daño con la vida por encima del 80 %
+Hacha de Obsidiana (Mítico),Hacha,7,Mítico,3995,4594.8,0.9,4135.3,9,600,Eco del acero: 15 % de repetir el golpe al 40 %
+Hacha de Obsidiana (Ultra raro),Hacha,7,Ultra raro,4439,5105.3,0.9,4594.8,9,600,Remate: +20 % de daño a objetivos por debajo del 25 % de vida
+Hacha Celestial de Obsidiana,Hacha,7,Celestial,5247,6033.6,0.9,5430.2,9,600,Juicio astral: cada 20 s el siguiente golpe es crítico seguro y aplica Vulnerable
+Daga de Obsidiana (Común),Daga,7,Común,2018,736.5,2.6,1915.0,6,600,Ninguna
+Daga de Obsidiana (Poco común),Daga,7,Poco común,2321,847.0,2.6,2202.3,6,600,Filo templado: el 4.º golpe del combo hace +30 %
+Daga de Obsidiana (Raro),Daga,7,Raro,2664,972.2,2.6,2527.8,6,600,Sed de combate: +5 % de velocidad de ataque 3 s tras matar
+Daga de Obsidiana (Épico),Daga,7,Épico,3067,1119.5,2.6,2910.8,6,600,Golpe resonante: cada 8 s el siguiente golpe aplica Vulnerable 3 s
+Daga de Obsidiana (Legendario),Daga,7,Legendario,3531,1288.9,2.6,3351.3,6,600,Furia medida: +10 % de daño con la vida por encima del 80 %
+Daga de Obsidiana (Mítico),Daga,7,Mítico,3995,1458.3,2.6,3791.7,6,600,Eco del acero: 15 % de repetir el golpe al 40 %
+Daga de Obsidiana (Ultra raro),Daga,7,Ultra raro,4439,1620.4,2.6,4213.0,6,600,Remate: +20 % de daño a objetivos por debajo del 25 % de vida
+Daga Celestial de Obsidiana,Daga,7,Celestial,5247,1915.0,2.6,4979.0,6,600,Juicio astral: cada 20 s el siguiente golpe es crítico seguro y aplica Vulnerable
+Lanza de Obsidiana (Común),Lanza,7,Común,2018,1634.5,1.2,1961.4,14,600,Ninguna
+Lanza de Obsidiana (Poco común),Lanza,7,Poco común,2321,1879.7,1.2,2255.6,14,600,Filo templado: el 4.º golpe del combo hace +30 %
+Lanza de Obsidiana (Raro),Lanza,7,Raro,2664,2157.6,1.2,2589.1,14,600,Sed de combate: +5 % de velocidad de ataque 3 s tras matar
+Lanza de Obsidiana (Épico),Lanza,7,Épico,3067,2484.5,1.2,2981.4,14,600,Golpe resonante: cada 8 s el siguiente golpe aplica Vulnerable 3 s
+Lanza de Obsidiana (Legendario),Lanza,7,Legendario,3531,2860.4,1.2,3432.5,14,600,Furia medida: +10 % de daño con la vida por encima del 80 %
+Lanza de Obsidiana (Mítico),Lanza,7,Mítico,3995,3236.3,1.2,3883.6,14,600,Eco del acero: 15 % de repetir el golpe al 40 %
+Lanza de Obsidiana (Ultra raro),Lanza,7,Ultra raro,4439,3595.9,1.2,4315.1,14,600,Remate: +20 % de daño a objetivos por debajo del 25 % de vida
+Lanza Celestial de Obsidiana,Lanza,7,Celestial,5247,4249.7,1.2,5099.7,14,600,Juicio astral: cada 20 s el siguiente golpe es crítico seguro y aplica Vulnerable
+Bastón de Obsidiana (Común),Bastón,7,Común,2018,1937.2,1.0,1937.2,35,600,Ninguna
+Bastón de Obsidiana (Poco común),Bastón,7,Poco común,2321,2227.8,1.0,2227.8,35,600,Filo templado: el 4.º golpe del combo hace +30 %
+Bastón de Obsidiana (Raro),Bastón,7,Raro,2664,2557.1,1.0,2557.1,35,600,Sed de combate: +5 % de velocidad de ataque 3 s tras matar
+Bastón de Obsidiana (Épico),Bastón,7,Épico,3067,2944.5,1.0,2944.5,35,600,Golpe resonante: cada 8 s el siguiente golpe aplica Vulnerable 3 s
+Bastón de Obsidiana (Legendario),Bastón,7,Legendario,3531,3390.1,1.0,3390.1,35,600,Furia medida: +10 % de daño con la vida por encima del 80 %
+Bastón de Obsidiana (Mítico),Bastón,7,Mítico,3995,3835.7,1.0,3835.7,35,600,Eco del acero: 15 % de repetir el golpe al 40 %
+Bastón de Obsidiana (Ultra raro),Bastón,7,Ultra raro,4439,4261.8,1.0,4261.8,35,600,Remate: +20 % de daño a objetivos por debajo del 25 % de vida
+Bastón Celestial de Obsidiana,Bastón,7,Celestial,5247,5036.7,1.0,5036.7,35,600,Juicio astral: cada 20 s el siguiente golpe es crítico seguro y aplica Vulnerable
+Arco de Obsidiana (Común),Arco,7,Común,2018,1467.0,1.1,1613.7,70,600,Ninguna
+Arco de Obsidiana (Poco común),Arco,7,Poco común,2321,1687.1,1.1,1855.8,70,600,Filo templado: el 4.º golpe del combo hace +30 %
+Arco de Obsidiana (Raro),Arco,7,Raro,2664,1936.5,1.1,2130.1,70,600,Sed de combate: +5 % de velocidad de ataque 3 s tras matar
+Arco de Obsidiana (Épico),Arco,7,Épico,3067,2229.9,1.1,2452.9,70,600,Golpe resonante: cada 8 s el siguiente golpe aplica Vulnerable 3 s
+Arco de Obsidiana (Legendario),Arco,7,Legendario,3531,2567.3,1.1,2824.0,70,600,Furia medida: +10 % de daño con la vida por encima del 80 %
+Arco de Obsidiana (Mítico),Arco,7,Mítico,3995,2904.7,1.1,3195.2,70,600,Eco del acero: 15 % de repetir el golpe al 40 %
+Arco de Obsidiana (Ultra raro),Arco,7,Ultra raro,4439,3227.5,1.1,3550.2,70,600,Remate: +20 % de daño a objetivos por debajo del 25 % de vida
+Arco Celestial de Obsidiana,Arco,7,Celestial,5247,3814.3,1.1,4195.7,70,600,Juicio astral: cada 20 s el siguiente golpe es crítico seguro y aplica Vulnerable
+Espada de Magma (Común),Espada,8,Común,3330,2081.0,1.6,3329.6,8,700,Ninguna
+Espada de Magma (Poco común),Espada,8,Poco común,3829,2393.1,1.6,3829.0,8,700,Filo templado: el 4.º golpe del combo hace +30 %
+Espada de Magma (Raro),Espada,8,Raro,4395,2746.9,1.6,4395.0,8,700,Sed de combate: +5 % de velocidad de ataque 3 s tras matar
+Espada de Magma (Épico),Espada,8,Épico,5061,3163.1,1.6,5060.9,8,700,Golpe resonante: cada 8 s el siguiente golpe aplica Vulnerable 3 s
+Espada de Magma (Legendario),Espada,8,Legendario,5827,3641.7,1.6,5826.7,8,700,Furia medida: +10 % de daño con la vida por encima del 80 %
+Espada de Magma (Mítico),Espada,8,Mítico,6593,4120.3,1.6,6592.5,8,700,Eco del acero: 15 % de repetir el golpe al 40 %
+Espada de Magma (Ultra raro),Espada,8,Ultra raro,7325,4578.2,1.6,7325.0,8,700,Remate: +20 % de daño a objetivos por debajo del 25 % de vida
+Espada Celestial de Magma,Espada,8,Celestial,8657,5410.5,1.6,8656.9,8,700,Juicio astral: cada 20 s el siguiente golpe es crítico seguro y aplica Vulnerable
+Hacha de Magma (Común),Hacha,8,Común,3330,3829.0,0.9,3446.1,9,700,Ninguna
+Hacha de Magma (Poco común),Hacha,8,Poco común,3829,4403.4,0.9,3963.0,9,700,Filo templado: el 4.º golpe del combo hace +30 %
+Hacha de Magma (Raro),Hacha,8,Raro,4395,5054.3,0.9,4548.9,9,700,Sed de combate: +5 % de velocidad de ataque 3 s tras matar
+Hacha de Magma (Épico),Hacha,8,Épico,5061,5820.1,0.9,5238.1,9,700,Golpe resonante: cada 8 s el siguiente golpe aplica Vulnerable 3 s
+Hacha de Magma (Legendario),Hacha,8,Legendario,5827,6700.8,0.9,6030.7,9,700,Furia medida: +10 % de daño con la vida por encima del 80 %
+Hacha de Magma (Mítico),Hacha,8,Mítico,6593,7581.4,0.9,6823.3,9,700,Eco del acero: 15 % de repetir el golpe al 40 %
+Hacha de Magma (Ultra raro),Hacha,8,Ultra raro,7325,8423.8,0.9,7581.4,9,700,Remate: +20 % de daño a objetivos por debajo del 25 % de vida
+Hacha Celestial de Magma,Hacha,8,Celestial,8657,9955.4,0.9,8959.9,9,700,Juicio astral: cada 20 s el siguiente golpe es crítico seguro y aplica Vulnerable
+Daga de Magma (Común),Daga,8,Común,3330,1215.3,2.6,3159.8,6,700,Ninguna
+Daga de Magma (Poco común),Daga,8,Poco común,3829,1397.6,2.6,3633.7,6,700,Filo templado: el 4.º golpe del combo hace +30 %
+Daga de Magma (Raro),Daga,8,Raro,4395,1604.2,2.6,4170.9,6,700,Sed de combate: +5 % de velocidad de ataque 3 s tras matar
+Daga de Magma (Épico),Daga,8,Épico,5061,1847.2,2.6,4802.8,6,700,Golpe resonante: cada 8 s el siguiente golpe aplica Vulnerable 3 s
+Daga de Magma (Legendario),Daga,8,Legendario,5827,2126.8,2.6,5529.6,6,700,Furia medida: +10 % de daño con la vida por encima del 80 %
+Daga de Magma (Mítico),Daga,8,Mítico,6593,2406.3,2.6,6256.3,6,700,Eco del acero: 15 % de repetir el golpe al 40 %
+Daga de Magma (Ultra raro),Daga,8,Ultra raro,7325,2673.6,2.6,6951.5,6,700,Remate: +20 % de daño a objetivos por debajo del 25 % de vida
+Daga Celestial de Magma,Daga,8,Celestial,8657,3159.8,2.6,8215.4,6,700,Juicio astral: cada 20 s el siguiente golpe es crítico seguro y aplica Vulnerable
+Lanza de Magma (Común),Lanza,8,Común,3330,2696.9,1.2,3236.3,14,700,Ninguna
+Lanza de Magma (Poco común),Lanza,8,Poco común,3829,3101.5,1.2,3721.8,14,700,Filo templado: el 4.º golpe del combo hace +30 %
+Lanza de Magma (Raro),Lanza,8,Raro,4395,3560.0,1.2,4272.0,14,700,Sed de combate: +5 % de velocidad de ataque 3 s tras matar
+Lanza de Magma (Épico),Lanza,8,Épico,5061,4099.4,1.2,4919.2,14,700,Golpe resonante: cada 8 s el siguiente golpe aplica Vulnerable 3 s
+Lanza de Magma (Legendario),Lanza,8,Legendario,5827,4719.7,1.2,5663.6,14,700,Furia medida: +10 % de daño con la vida por encima del 80 %
+Lanza de Magma (Mítico),Lanza,8,Mítico,6593,5340.0,1.2,6407.9,14,700,Eco del acero: 15 % de repetir el golpe al 40 %
+Lanza de Magma (Ultra raro),Lanza,8,Ultra raro,7325,5933.3,1.2,7119.9,14,700,Remate: +20 % de daño a objetivos por debajo del 25 % de vida
+Lanza Celestial de Magma,Lanza,8,Celestial,8657,7012.1,1.2,8414.5,14,700,Juicio astral: cada 20 s el siguiente golpe es crítico seguro y aplica Vulnerable
+Bastón de Magma (Común),Bastón,8,Común,3330,3196.4,1.0,3196.4,35,700,Ninguna
+Bastón de Magma (Poco común),Bastón,8,Poco común,3829,3675.8,1.0,3675.8,35,700,Filo templado: el 4.º golpe del combo hace +30 %
+Bastón de Magma (Raro),Bastón,8,Raro,4395,4219.2,1.0,4219.2,35,700,Sed de combate: +5 % de velocidad de ataque 3 s tras matar
+Bastón de Magma (Épico),Bastón,8,Épico,5061,4858.5,1.0,4858.5,35,700,Golpe resonante: cada 8 s el siguiente golpe aplica Vulnerable 3 s
+Bastón de Magma (Legendario),Bastón,8,Legendario,5827,5593.7,1.0,5593.7,35,700,Furia medida: +10 % de daño con la vida por encima del 80 %
+Bastón de Magma (Mítico),Bastón,8,Mítico,6593,6328.8,1.0,6328.8,35,700,Eco del acero: 15 % de repetir el golpe al 40 %
+Bastón de Magma (Ultra raro),Bastón,8,Ultra raro,7325,7032.0,1.0,7032.0,35,700,Remate: +20 % de daño a objetivos por debajo del 25 % de vida
+Bastón Celestial de Magma,Bastón,8,Celestial,8657,8310.6,1.0,8310.6,35,700,Juicio astral: cada 20 s el siguiente golpe es crítico seguro y aplica Vulnerable
+Arco de Magma (Común),Arco,8,Común,3330,2420.6,1.1,2662.7,70,700,Ninguna
+Arco de Magma (Poco común),Arco,8,Poco común,3829,2783.7,1.1,3062.1,70,700,Filo templado: el 4.º golpe del combo hace +30 %
+Arco de Magma (Raro),Arco,8,Raro,4395,3195.2,1.1,3514.7,70,700,Sed de combate: +5 % de velocidad de ataque 3 s tras matar
+Arco de Magma (Épico),Arco,8,Épico,5061,3679.3,1.1,4047.2,70,700,Golpe resonante: cada 8 s el siguiente golpe aplica Vulnerable 3 s
+Arco de Magma (Legendario),Arco,8,Legendario,5827,4236.0,1.1,4659.6,70,700,Furia medida: +10 % de daño con la vida por encima del 80 %
+Arco de Magma (Mítico),Arco,8,Mítico,6593,4792.8,1.1,5272.1,70,700,Eco del acero: 15 % de repetir el golpe al 40 %
+Arco de Magma (Ultra raro),Arco,8,Ultra raro,7325,5325.3,1.1,5857.8,70,700,Remate: +20 % de daño a objetivos por debajo del 25 % de vida
+Arco Celestial de Magma,Arco,8,Celestial,8657,6293.5,1.1,6922.9,70,700,Juicio astral: cada 20 s el siguiente golpe es crítico seguro y aplica Vulnerable
+Espada de Vitral (Común),Espada,9,Común,5494,3433.6,1.6,5493.8,8,800,Ninguna
+Espada de Vitral (Poco común),Espada,9,Poco común,6318,3948.7,1.6,6317.9,8,800,Filo templado: el 4.º golpe del combo hace +30 %
+Espada de Vitral (Raro),Espada,9,Raro,7252,4532.4,1.6,7251.8,8,800,Sed de combate: +5 % de velocidad de ataque 3 s tras matar
+Espada de Vitral (Épico),Espada,9,Épico,8351,5219.1,1.6,8350.6,8,800,Golpe resonante: cada 8 s el siguiente golpe aplica Vulnerable 3 s
+Espada de Vitral (Legendario),Espada,9,Legendario,9614,6008.8,1.6,9614.1,8,800,Furia medida: +10 % de daño con la vida por encima del 80 %
+Espada de Vitral (Mítico),Espada,9,Mítico,10878,6798.6,1.6,10877.7,8,800,Eco del acero: 15 % de repetir el golpe al 40 %
+Espada de Vitral (Ultra raro),Espada,9,Ultra raro,12086,7554.0,1.6,12086.3,8,800,Remate: +20 % de daño a objetivos por debajo del 25 % de vida
+Espada Celestial de Vitral,Espada,9,Celestial,14284,8927.4,1.6,14283.8,8,800,Juicio astral: cada 20 s el siguiente golpe es crítico seguro y aplica Vulnerable
+Hacha de Vitral (Común),Hacha,9,Común,5494,6317.9,0.9,5686.1,9,800,Ninguna
+Hacha de Vitral (Poco común),Hacha,9,Poco común,6318,7265.5,0.9,6539.0,9,800,Filo templado: el 4.º golpe del combo hace +30 %
+Hacha de Vitral (Raro),Hacha,9,Raro,7252,8339.6,0.9,7505.6,9,800,Sed de combate: +5 % de velocidad de ataque 3 s tras matar
+Hacha de Vitral (Épico),Hacha,9,Épico,8351,9603.1,0.9,8642.8,9,800,Golpe resonante: cada 8 s el siguiente golpe aplica Vulnerable 3 s
+Hacha de Vitral (Legendario),Hacha,9,Legendario,9614,11056.2,0.9,9950.6,9,800,Furia medida: +10 % de daño con la vida por encima del 80 %
+Hacha de Vitral (Mítico),Hacha,9,Mítico,10878,12509.3,0.9,11258.4,9,800,Eco del acero: 15 % de repetir el golpe al 40 %
+Hacha de Vitral (Ultra raro),Hacha,9,Ultra raro,12086,13899.3,0.9,12509.3,9,800,Remate: +20 % de daño a objetivos por debajo del 25 % de vida
+Hacha Celestial de Vitral,Hacha,9,Celestial,14284,16426.4,0.9,14783.8,9,800,Juicio astral: cada 20 s el siguiente golpe es crítico seguro y aplica Vulnerable
+Daga de Vitral (Común),Daga,9,Común,5494,2005.2,2.6,5213.6,6,800,Ninguna
+Daga de Vitral (Poco común),Daga,9,Poco común,6318,2306.0,2.6,5995.6,6,800,Filo templado: el 4.º golpe del combo hace +30 %
+Daga de Vitral (Raro),Daga,9,Raro,7252,2646.9,2.6,6882.0,6,800,Sed de combate: +5 % de velocidad de ataque 3 s tras matar
+Daga de Vitral (Épico),Daga,9,Épico,8351,3048.0,2.6,7924.7,6,800,Golpe resonante: cada 8 s el siguiente golpe aplica Vulnerable 3 s
+Daga de Vitral (Legendario),Daga,9,Legendario,9614,3509.2,2.6,9123.8,6,800,Furia medida: +10 % de daño con la vida por encima del 80 %
+Daga de Vitral (Mítico),Daga,9,Mítico,10878,3970.4,2.6,10322.9,6,800,Eco del acero: 15 % de repetir el golpe al 40 %
+Daga de Vitral (Ultra raro),Daga,9,Ultra raro,12086,4411.5,2.6,11469.9,6,800,Remate: +20 % de daño a objetivos por debajo del 25 % de vida
+Daga Celestial de Vitral,Daga,9,Celestial,14284,5213.6,2.6,13555.4,6,800,Juicio astral: cada 20 s el siguiente golpe es crítico seguro y aplica Vulnerable
+Lanza de Vitral (Común),Lanza,9,Común,5494,4450.0,1.2,5340.0,14,800,Ninguna
+Lanza de Vitral (Poco común),Lanza,9,Poco común,6318,5117.5,1.2,6141.0,14,800,Filo templado: el 4.º golpe del combo hace +30 %
+Lanza de Vitral (Raro),Lanza,9,Raro,7252,5874.0,1.2,7048.7,14,800,Sed de combate: +5 % de velocidad de ataque 3 s tras matar
+Lanza de Vitral (Épico),Lanza,9,Épico,8351,6763.9,1.2,8116.7,14,800,Golpe resonante: cada 8 s el siguiente golpe aplica Vulnerable 3 s
+Lanza de Vitral (Legendario),Lanza,9,Legendario,9614,7787.4,1.2,9344.9,14,800,Furia medida: +10 % de daño con la vida por encima del 80 %
+Lanza de Vitral (Mítico),Lanza,9,Mítico,10878,8810.9,1.2,10573.1,14,800,Eco del acero: 15 % de repetir el golpe al 40 %
+Lanza de Vitral (Ultra raro),Lanza,9,Ultra raro,12086,9789.9,1.2,11747.9,14,800,Remate: +20 % de daño a objetivos por debajo del 25 % de vida
+Lanza Celestial de Vitral,Lanza,9,Celestial,14284,11569.9,1.2,13883.9,14,800,Juicio astral: cada 20 s el siguiente golpe es crítico seguro y aplica Vulnerable
+Bastón de Vitral (Común),Bastón,9,Común,5494,5274.0,1.0,5274.0,35,800,Ninguna
+Bastón de Vitral (Poco común),Bastón,9,Poco común,6318,6065.1,1.0,6065.1,35,800,Filo templado: el 4.º golpe del combo hace +30 %
+Bastón de Vitral (Raro),Bastón,9,Raro,7252,6961.7,1.0,6961.7,35,800,Sed de combate: +5 % de velocidad de ataque 3 s tras matar
+Bastón de Vitral (Épico),Bastón,9,Épico,8351,8016.5,1.0,8016.5,35,800,Golpe resonante: cada 8 s el siguiente golpe aplica Vulnerable 3 s
+Bastón de Vitral (Legendario),Bastón,9,Legendario,9614,9229.6,1.0,9229.6,35,800,Furia medida: +10 % de daño con la vida por encima del 80 %
+Bastón de Vitral (Mítico),Bastón,9,Mítico,10878,10442.6,1.0,10442.6,35,800,Eco del acero: 15 % de repetir el golpe al 40 %
+Bastón de Vitral (Ultra raro),Bastón,9,Ultra raro,12086,11602.9,1.0,11602.9,35,800,Remate: +20 % de daño a objetivos por debajo del 25 % de vida
+Bastón Celestial de Vitral,Bastón,9,Celestial,14284,13712.5,1.0,13712.5,35,800,Juicio astral: cada 20 s el siguiente golpe es crítico seguro y aplica Vulnerable
+Arco de Vitral (Común),Arco,9,Común,5494,3994.0,1.1,4393.4,70,800,Ninguna
+Arco de Vitral (Poco común),Arco,9,Poco común,6318,4593.1,1.1,5052.4,70,800,Filo templado: el 4.º golpe del combo hace +30 %
+Arco de Vitral (Raro),Arco,9,Raro,7252,5272.1,1.1,5799.3,70,800,Sed de combate: +5 % de velocidad de ataque 3 s tras matar
+Arco de Vitral (Épico),Arco,9,Épico,8351,6070.9,1.1,6677.9,70,800,Golpe resonante: cada 8 s el siguiente golpe aplica Vulnerable 3 s
+Arco de Vitral (Legendario),Arco,9,Legendario,9614,6989.5,1.1,7688.4,70,800,Furia medida: +10 % de daño con la vida por encima del 80 %
+Arco de Vitral (Mítico),Arco,9,Mítico,10878,7908.1,1.1,8698.9,70,800,Eco del acero: 15 % de repetir el golpe al 40 %
+Arco de Vitral (Ultra raro),Arco,9,Ultra raro,12086,8786.8,1.1,9665.4,70,800,Remate: +20 % de daño a objetivos por debajo del 25 % de vida
+Arco Celestial de Vitral,Arco,9,Celestial,14284,10384.3,1.1,11422.8,70,800,Juicio astral: cada 20 s el siguiente golpe es crítico seguro y aplica Vulnerable
+Espada de Astral (Común),Espada,10,Común,9065,5665.5,1.6,9064.7,8,900,Ninguna
+Espada de Astral (Poco común),Espada,10,Poco común,10424,6515.3,1.6,10424.5,8,900,Filo templado: el 4.º golpe del combo hace +30 %
+Espada de Astral (Raro),Espada,10,Raro,11965,7478.4,1.6,11965.5,8,900,Sed de combate: +5 % de velocidad de ataque 3 s tras matar
+Espada de Astral (Épico),Espada,10,Épico,13778,8611.5,1.6,13778.4,8,900,Golpe resonante: cada 8 s el siguiente golpe aplica Vulnerable 3 s
+Espada de Astral (Legendario),Espada,10,Legendario,15863,9914.6,1.6,15863.3,8,900,Furia medida: +10 % de daño con la vida por encima del 80 %
+Espada de Astral (Mítico),Espada,10,Mítico,17948,11217.6,1.6,17948.2,8,900,Eco del acero: 15 % de repetir el golpe al 40 %
+Espada de Astral (Ultra raro),Espada,10,Ultra raro,19942,12464.0,1.6,19942.4,8,900,Remate: +20 % de daño a objetivos por debajo del 25 % de vida
+Espada Celestial de Astral,Espada,10,Celestial,23568,14730.2,1.6,23568.3,8,900,Juicio astral: cada 20 s el siguiente golpe es crítico seguro y aplica Vulnerable
+Hacha de Astral (Común),Hacha,10,Común,9065,10424.5,0.9,9382.0,9,900,Ninguna
+Hacha de Astral (Poco común),Hacha,10,Poco común,10424,11988.1,0.9,10789.3,9,900,Filo templado: el 4.º golpe del combo hace +30 %
+Hacha de Astral (Raro),Hacha,10,Raro,11965,13760.3,0.9,12384.3,9,900,Sed de combate: +5 % de velocidad de ataque 3 s tras matar
+Hacha de Astral (Épico),Hacha,10,Épico,13778,15845.2,0.9,14260.7,9,900,Golpe resonante: cada 8 s el siguiente golpe aplica Vulnerable 3 s
+Hacha de Astral (Legendario),Hacha,10,Legendario,15863,18242.8,0.9,16418.5,9,900,Furia medida: +10 % de daño con la vida por encima del 80 %
+Hacha de Astral (Mítico),Hacha,10,Mítico,17948,20640.4,0.9,18576.4,9,900,Eco del acero: 15 % de repetir el golpe al 40 %
+Hacha de Astral (Ultra raro),Hacha,10,Ultra raro,19942,22933.8,0.9,20640.4,9,900,Remate: +20 % de daño a objetivos por debajo del 25 % de vida
+Hacha Celestial de Astral,Hacha,10,Celestial,23568,27103.6,0.9,24393.2,9,900,Juicio astral: cada 20 s el siguiente golpe es crítico seguro y aplica Vulnerable
+Daga de Astral (Común),Daga,10,Común,9065,3308.6,2.6,8602.4,6,900,Ninguna
+Daga de Astral (Poco común),Daga,10,Poco común,10424,3804.9,2.6,9892.8,6,900,Filo templado: el 4.º golpe del combo hace +30 %
+Daga de Astral (Raro),Daga,10,Raro,11965,4367.4,2.6,11355.2,6,900,Sed de combate: +5 % de velocidad de ataque 3 s tras matar
+Daga de Astral (Épico),Daga,10,Épico,13778,5029.1,2.6,13075.7,6,900,Golpe resonante: cada 8 s el siguiente golpe aplica Vulnerable 3 s
+Daga de Astral (Legendario),Daga,10,Legendario,15863,5790.1,2.6,15054.3,6,900,Furia medida: +10 % de daño con la vida por encima del 80 %
+Daga de Astral (Mítico),Daga,10,Mítico,17948,6551.1,2.6,17032.8,6,900,Eco del acero: 15 % de repetir el golpe al 40 %
+Daga de Astral (Ultra raro),Daga,10,Ultra raro,19942,7279.0,2.6,18925.4,6,900,Remate: +20 % de daño a objetivos por debajo del 25 % de vida
+Daga Celestial de Astral,Daga,10,Celestial,23568,8602.4,2.6,22366.3,6,900,Juicio astral: cada 20 s el siguiente golpe es crítico seguro y aplica Vulnerable
+Lanza de Astral (Común),Lanza,10,Común,9065,7342.4,1.2,8810.9,14,900,Ninguna
+Lanza de Astral (Poco común),Lanza,10,Poco común,10424,8443.8,1.2,10132.6,14,900,Filo templado: el 4.º golpe del combo hace +30 %
+Lanza de Astral (Raro),Lanza,10,Raro,11965,9692.0,1.2,11630.4,14,900,Sed de combate: +5 % de velocidad de ataque 3 s tras matar
+Lanza de Astral (Épico),Lanza,10,Épico,13778,11160.5,1.2,13392.6,14,900,Golpe resonante: cada 8 s el siguiente golpe aplica Vulnerable 3 s
+Lanza de Astral (Legendario),Lanza,10,Legendario,15863,12849.3,1.2,15419.1,14,900,Furia medida: +10 % de daño con la vida por encima del 80 %
+Lanza de Astral (Mítico),Lanza,10,Mítico,17948,14538.0,1.2,17445.6,14,900,Eco del acero: 15 % de repetir el golpe al 40 %
+Lanza de Astral (Ultra raro),Lanza,10,Ultra raro,19942,16153.4,1.2,19384.0,14,900,Remate: +20 % de daño a objetivos por debajo del 25 % de vida
+Lanza Celestial de Astral,Lanza,10,Celestial,23568,19090.3,1.2,22908.4,14,900,Juicio astral: cada 20 s el siguiente golpe es crítico seguro y aplica Vulnerable
+Bastón de Astral (Común),Bastón,10,Común,9065,8702.2,1.0,8702.2,35,900,Ninguna
+Bastón de Astral (Poco común),Bastón,10,Poco común,10424,10007.5,1.0,10007.5,35,900,Filo templado: el 4.º golpe del combo hace +30 %
+Bastón de Astral (Raro),Bastón,10,Raro,11965,11486.8,1.0,11486.8,35,900,Sed de combate: +5 % de velocidad de ataque 3 s tras matar
+Bastón de Astral (Épico),Bastón,10,Épico,13778,13227.3,1.0,13227.3,35,900,Golpe resonante: cada 8 s el siguiente golpe aplica Vulnerable 3 s
+Bastón de Astral (Legendario),Bastón,10,Legendario,15863,15228.8,1.0,15228.8,35,900,Furia medida: +10 % de daño con la vida por encima del 80 %
+Bastón de Astral (Mítico),Bastón,10,Mítico,17948,17230.3,1.0,17230.3,35,900,Eco del acero: 15 % de repetir el golpe al 40 %
+Bastón de Astral (Ultra raro),Bastón,10,Ultra raro,19942,19144.7,1.0,19144.7,35,900,Remate: +20 % de daño a objetivos por debajo del 25 % de vida
+Bastón Celestial de Astral,Bastón,10,Celestial,23568,22625.6,1.0,22625.6,35,900,Juicio astral: cada 20 s el siguiente golpe es crítico seguro y aplica Vulnerable
+Arco de Astral (Común),Arco,10,Común,9065,6590.1,1.1,7249.1,70,900,Ninguna
+Arco de Astral (Poco común),Arco,10,Poco común,10424,7578.6,1.1,8336.4,70,900,Filo templado: el 4.º golpe del combo hace +30 %
+Arco de Astral (Raro),Arco,10,Raro,11965,8698.9,1.1,9568.8,70,900,Sed de combate: +5 % de velocidad de ataque 3 s tras matar
+Arco de Astral (Épico),Arco,10,Épico,13778,10016.9,1.1,11018.6,70,900,Golpe resonante: cada 8 s el siguiente golpe aplica Vulnerable 3 s
+Arco de Astral (Legendario),Arco,10,Legendario,15863,11532.6,1.1,12685.9,70,900,Furia medida: +10 % de daño con la vida por encima del 80 %
+Arco de Astral (Mítico),Arco,10,Mítico,17948,13048.3,1.1,14353.2,70,900,Eco del acero: 15 % de repetir el golpe al 40 %
+Arco de Astral (Ultra raro),Arco,10,Ultra raro,19942,14498.2,1.1,15948.0,70,900,Remate: +20 % de daño a objetivos por debajo del 25 % de vida
+Arco Celestial de Astral,Arco,10,Celestial,23568,17134.2,1.1,18847.6,70,900,Juicio astral: cada 20 s el siguiente golpe es crítico seguro y aplica Vulnerable

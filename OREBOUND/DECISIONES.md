@@ -1,6 +1,6 @@
 # OREBOUND — DECISIONES.md
 
-Versión: Etapa 3 · 2026-11-16
+Versión: Etapa 4 · 2026-11-16
 
 > **Estado de las fuentes.** Este archivo se ha construido solo con el documento
 > «OREBOUND — Prompts por partes» (prompt único con continuidad + partes 0 a 10).
@@ -305,9 +305,71 @@ Pendiente para la Etapa 6
 
 ---
 
-## 8. Registro de cambios
+## 8. Valores de la Etapa 4 — B4_Combate.md (todos [PROVISIONAL] salvo los marcados)
+
+Armas
+- E4-01. Los 6 tipos: Espada, Hacha, Daga, Lanza, Bastón y Arco (el Arco es el sexto, propuesto; resuelve P-F-07 de forma provisional).
+- E4-02. Golpes por segundo y coeficiente por golpe: Espada 1,60 / 0,625; Hacha 0,90 / 1,150; Daga 2,60 / 0,365; Lanza 1,20 / 0,810; Bastón 1,00 / 0,960; Arco 1,10 / 0,727.
+- E4-03. Alcance en studs: 8 / 9 / 6 / 14 / 35 / 70.
+- E4-04. DPS de los 5 tipos entre −3,3% y +4,3% de su media; Arco −19,4% a propósito.
+- E4-05. 450 armas (420 + 30 Celestiales en zonas 6 a 10), en `calculos/b4_armas.csv`. Nivel requerido: el de su zona.
+- E4-06. Una habilidad de arma por rareza (Filo templado, Sed de combate, Golpe resonante, Furia medida, Eco del acero, Remate, Juicio astral).
+
+Fórmula de daño
+- E4-07. `Daño = PotenciaArma × Coef × MultFuerza × MultMaestría × MultCrítico × (1 + Estados) × (1 − Defensa) × MultModo`.
+- E4-08. Crítico: 5% de probabilidad y ×1,5; topes 30% y ×2,0. Daga +10% de probabilidad.
+- E4-09. Maestría: +0,1% de daño por nivel, máximo +10%.
+- E4-10. Estados: Quemadura, Lento, Congelación, Descarga (+15%), Vulnerable (+10–15%) y Ruptura (+25%); aumento de daño recibido máximo +40%.
+- E4-11. `MultModo = 0,07` en PvP y Zonas Fracturadas.
+
+Maestría
+- E4-12. `XPm(n) = techo(10 + 2·n + 0,04·n²)`; puntos por enemigo 1 / 4 / 12 / 80; nivel 100 en 67,9 horas.
+- E4-13. Hitos: 1, 10, 25 y 50 desbloquean Z, X, C y V; 75 permite el Despertar; 100, la Transformación.
+- E4-14. Por encima de 100 la maestría sigue sin dar poder (610 puntos por nivel; solo prestigio y aspectos).
+
+Núcleos de Poder
+- E4-15. Estructura: 4 habilidades + 1 pasiva; un Núcleo equipado; daño como porcentaje de la potencia del arma.
+- E4-16. Presupuesto de referencia: Z 180% / 15 / 4 s; X 320% / 25 / 8 s; C 500% / 35 / 14 s; V 1.000% / 50 / 30 s.
+- E4-17. Los 6 de lanzamiento: Prismático (luz), de Brasa (fuego), de Escarcha (hielo), de Tormenta (rayo), Sísmico (tierra) y Umbrío (sombra). El Prismático es el inicial.
+- E4-18. Despertar: maestría 75 + misión + materiales de jefe; +15% de daño de habilidades (+8% en PvP) y un efecto por Núcleo. Nunca se vende.
+- E4-19. Transformación: 20 s, +20% de daño y −20% de enfriamientos en PvE; 12 s, +10% y −10% en PvP; enfriamiento de 120 s.
+
+Movilidad y anti-combo
+- E4-20. Dash 12 studs; parpadeo 16 studs (12 con carga del 75% o más); esquiva 8 studs con 0,3 s de invulnerabilidad; bloqueo reduce un 70% el daño frontal.
+- E4-21. Escalado de combo: golpes 1–4 al 100%, después 90 / 80 / 70 / 60 / 50%, mínimo 50%.
+- E4-22. Control repetido en 10 s: 100% / 50% / 25% / inmune 6 s.
+- E4-23. Tope de aturdimiento de 2,0 s en 4 s; Rompecadenas con 0,6 s de invulnerabilidad.
+- E4-24. Ruptura: 1,5 s en PvP y 2,0 s en PvE; 8 s de inmunidad.
+- E4-25. Cancelación de animaciones desde el 60%, con +50% de energía y máximo 1 cada 1,5 s.
+
+Enemigos
+- E4-26. Vida `PotZona × Dureza ×` 20 / 80 / 300 / 1.500 (Común / Élite / Guardián / Jefe).
+- E4-27. Daño por golpe: 3 / 6 / 10 / 15% de la vida base del jugador de la zona; cada 1,5 / 1,8 / 2,2 / 2,5 s.
+- E4-28. XP `0,72 × XP por acción ×` 1 / 3,5 / 10 / 60. Monedas `valor de zona ×` 1,35 / 5,4 / 16 / 250.
+- E4-29. Mezcla de enemigos: 88% Común, 10% Élite, 2% Guardián. Enemigos de tutorial con la mitad de vida hasta el nivel 10.
+- E4-30. El combatiente gana entre 1,00 y 1,07 veces lo que el minero equivalente.
+
+Jefes
+- E4-31. Tres fases (100–60–30%); avisos de 0,6 / 1,2 / 2,5 s; daños del 15 / 35 / 70%; ventana de vulnerabilidad de 6 s con +50% de daño; furia a los 12 minutos.
+- E4-32. Escalado: vida `× (1 + 0,6 × (n − 1))`, daño `× (1 + 0,05 × (n − 1))`, de 1 a 8 jugadores.
+- E4-33. Jefes del MVP: Capataz de Pizarra (zona 1), Madre Liquen (zona 2) y Leviatán de Salmuera (zona 3).
+- E4-34. Recompensas: `250 × valor de zona` en monedas, 3 materiales de jefe garantizados, 1 tirada extra; 3 derrotas con botín completo por jefe y día.
+
+PvP
+- E4-35. Vitalidad con `M = 1,5` en PvP: confirmada (cierra E2-12).
+- E4-36. Tope del 35% de la vida máxima por golpe; curación −50%.
+- E4-37. Arenas 1v1, 2v2 y 3v3, igualadas por tramos de 100 niveles, con Elo (inicio 1.000, factor 32).
+- E4-38. Zonas Fracturadas: escuadrones de hasta 3, sin fuego amigo; potencia limitada a la de un Ultra raro de la zona al máximo.
+
+Controles
+- E4-39. Esquemas de PC, móvil y consola definidos en B4, sección 9, todos reasignables.
+
+---
+
+## 9. Registro de cambios
 - 2026-11-16 · Etapa 0 (1/2): creación del archivo a partir del documento de prompts. Faltan las dos fuentes.
 - 2026-11-16 · Etapa 0 cerrada: incongruencias del prompt resueltas (C-25 a C-34) y prompt corregido.
 - 2026-11-16 · Etapa 1: valores E1-01 a E1-19.
 - 2026-11-16 · Etapa 2: valores E2-01 a E2-18. B1 no cambia.
 - 2026-11-16 · Etapa 3: valores E3-01 a E3-36. Precisa B1 (Suerte de depósitos de grupo); B2 no cambia todavía.
+- 2026-11-16 · Etapa 4: valores E4-01 a E4-39. Confirma E2-12; B1, B2 y B3 no cambian.
