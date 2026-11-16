@@ -1,6 +1,6 @@
 # OREBOUND — B4: Combate
 
-Etapa 4 · 2026-11-16 · Script: `calculos/b4_combate.py` · Catálogo completo de armas: `calculos/b4_armas.csv` (450 armas).
+Etapa 4 · 2026-11-16 (corregido en la Etapa 6: monedas de jefe) · Script: `calculos/b4_combate.py` · Catálogo completo de armas: `calculos/b4_armas.csv` (450 armas).
 
 > **Aviso de fuentes.** No se dispone de las secciones 10, 15 y 17 del prompt maestro ni de la
 > sección de combate del GDD. El sexto tipo de arma, los valores del Núcleo Prismático y los
@@ -291,7 +291,7 @@ A partir del 5.º golpe seguido sobre un objetivo aturdido, cada golpe hace meno
 | Común | 20 | 3 % | 1,5 | 1,0 | 1,4 | 1 | 88 % |
 | Élite | 80 | 6 % | 1,8 | 3,5 | 5,4 | 4 | 10 % |
 | Guardián | 300 | 10 % | 2,2 | 10,0 | 16,0 | 12 | 2 % |
-| Jefe | 1500 | 15 % | 2,5 | 60,0 | 250,0 | 80 | 1 por zona |
+| Jefe | 1500 | 15 % | 2,5 | 60,0 | 60,0 | 80 | 1 por zona |
 
 - **F21 — Vida:** `Vida = PotZona(z) × FactorVida × Dureza(z)`.
 - **F22 — Daño por golpe:** `Daño = VidaBase(nivel de la zona) × FactorDaño`.
@@ -309,43 +309,43 @@ A partir del 5.º golpe seguido sobre un objetivo aturdido, cada golpe hace meno
 | 1 | Común | 2.000 | 15 | 1,5 | 157 | 14 | 6,4 |
 | 1 | Élite | 8.000 | 30 | 1,8 | 548 | 54 | 25,6 |
 | 1 | Guardián | 30.000 | 50 | 2,2 | 1.566 | 160 | 96,1 |
-| 1 | Jefe | 150.000 | 75 | 2,5 | 9.396 | 2.500 | 480,3 |
+| 1 | Jefe | 150.000 | 75 | 2,5 | 9.396 | 600 | 480,3 |
 | 2 | Común | 3.630 | 25 | 1,5 | 455 | 22 | 6,4 |
 | 2 | Élite | 14.520 | 49 | 1,8 | 1.594 | 89 | 25,6 |
 | 2 | Guardián | 54.450 | 82 | 2,2 | 4.554 | 264 | 96,1 |
-| 2 | Jefe | 272.250 | 123 | 2,5 | 27.324 | 4.125 | 480,7 |
+| 2 | Jefe | 272.250 | 123 | 2,5 | 27.324 | 990 | 480,7 |
 | 3 | Común | 6.534 | 41 | 1,5 | 783 | 37 | 6,5 |
 | 3 | Élite | 26.136 | 81 | 1,8 | 2.740 | 147 | 25,8 |
 | 3 | Guardián | 98.010 | 135 | 2,2 | 7.830 | 436 | 96,8 |
-| 3 | Jefe | 490.050 | 203 | 2,5 | 46.980 | 6.806 | 483,8 |
+| 3 | Jefe | 490.050 | 203 | 2,5 | 46.980 | 1.633 | 483,8 |
 | 4 | Común | 11.680 | 67 | 1,5 | 1.139 | 61 | 6,5 |
 | 4 | Élite | 46.718 | 134 | 1,8 | 3.988 | 243 | 26,1 |
 | 4 | Guardián | 175.193 | 223 | 2,2 | 11.394 | 719 | 97,7 |
-| 4 | Jefe | 875.964 | 335 | 2,5 | 68.364 | 11.230 | 488,7 |
+| 4 | Jefe | 875.964 | 335 | 2,5 | 68.364 | 2.695 | 488,7 |
 | 5 | Común | 20.754 | 111 | 1,5 | 1.525 | 100 | 6,6 |
 | 5 | Élite | 83.014 | 221 | 1,8 | 5.336 | 400 | 26,4 |
 | 5 | Guardián | 311.304 | 369 | 2,2 | 15.246 | 1.186 | 99,0 |
-| 5 | Jefe | 1.556.521 | 553 | 2,5 | 91.476 | 18.530 | 495,1 |
+| 5 | Jefe | 1.556.521 | 553 | 2,5 | 91.476 | 4.447 | 495,1 |
 | 6 | Común | 36.689 | 183 | 1,5 | 1.939 | 165 | 6,7 |
 | 6 | Élite | 146.758 | 365 | 1,8 | 6.785 | 660 | 26,8 |
 | 6 | Guardián | 550.341 | 608 | 2,2 | 19.386 | 1.957 | 100,5 |
-| 6 | Jefe | 2.751.707 | 913 | 2,5 | 116.316 | 30.575 | 502,5 |
+| 6 | Jefe | 2.751.707 | 913 | 2,5 | 116.316 | 7.338 | 502,5 |
 | 7 | Común | 64.573 | 301 | 1,5 | 2.381 | 272 | 6,8 |
 | 7 | Élite | 258.294 | 602 | 1,8 | 8.335 | 1.090 | 27,2 |
 | 7 | Guardián | 968.601 | 1.004 | 2,2 | 23.814 | 3.229 | 102,1 |
-| 7 | Jefe | 4.843.005 | 1.506 | 2,5 | 142.884 | 50.448 | 510,7 |
+| 7 | Jefe | 4.843.005 | 1.506 | 2,5 | 142.884 | 12.108 | 510,7 |
 | 8 | Común | 113.205 | 497 | 1,5 | 2.853 | 449 | 6,9 |
 | 8 | Élite | 452.821 | 994 | 1,8 | 9.986 | 1.798 | 27,7 |
 | 8 | Guardián | 1.698.079 | 1.656 | 2,2 | 28.530 | 5.327 | 103,9 |
-| 8 | Jefe | 8.490.393 | 2.485 | 2,5 | 171.180 | 83.239 | 519,5 |
+| 8 | Jefe | 8.490.393 | 2.485 | 2,5 | 171.180 | 19.977 | 519,5 |
 | 9 | Común | 197.776 | 820 | 1,5 | 3.353 | 742 | 7,1 |
 | 9 | Élite | 791.105 | 1.640 | 1,8 | 11.737 | 2.967 | 28,2 |
 | 9 | Guardián | 2.966.643 | 2.733 | 2,2 | 33.534 | 8.790 | 105,8 |
-| 9 | Jefe | 14.833.216 | 4.100 | 2,5 | 201.204 | 137.345 | 528,8 |
+| 9 | Jefe | 14.833.216 | 4.100 | 2,5 | 201.204 | 32.963 | 528,8 |
 | 10 | Común | 344.460 | 1.353 | 1,5 | 3.883 | 1.224 | 7,2 |
 | 10 | Élite | 1.377.841 | 2.706 | 1,8 | 13.589 | 4.895 | 28,7 |
 | 10 | Guardián | 5.166.904 | 4.510 | 2,2 | 38.826 | 14.504 | 107,7 |
-| 10 | Jefe | 25.834.518 | 6.765 | 2,5 | 232.956 | 226.619 | 538,6 |
+| 10 | Jefe | 25.834.518 | 6.765 | 2,5 | 232.956 | 54.388 | 538,6 |
 
 ### 6.3 Ritmo e ingresos del combatiente
 
@@ -418,9 +418,9 @@ A partir del 5.º golpe seguido sobre un objetivo aturdido, cada golpe hace meno
 
 | Jefe | Zona | Vida (1 jugador) | Vida (8 jugadores) | Vida base del jugador de la zona | Golpe normal (15 %) | Ataque fuerte (35 %) | Ataque letal avisado (70 %) | Monedas por jugador | XP por jugador |
 |---|---|---|---|---|---|---|---|---|---|
-| Capataz de Pizarra | 1 | 150.000 | 780.000 | 500 | 75 | 175 | 350 | 2.500 | 9.396 |
-| Madre Liquen | 2 | 272.250 | 1.415.700 | 821 | 123 | 287 | 575 | 4.125 | 27.324 |
-| Leviatán de Salmuera | 3 | 490.050 | 2.548.260 | 1.354 | 203 | 474 | 948 | 6.806 | 46.980 |
+| Capataz de Pizarra | 1 | 150.000 | 780.000 | 500 | 75 | 175 | 350 | 600 | 9.396 |
+| Madre Liquen | 2 | 272.250 | 1.415.700 | 821 | 123 | 287 | 575 | 990 | 27.324 |
+| Leviatán de Salmuera | 3 | 490.050 | 2.548.260 | 1.354 | 203 | 474 | 948 | 1.633 | 46.980 |
 
 **Capataz de Pizarra (zona 1, Cantera del Alba).** Gólem minero con un pico enorme.
 
@@ -450,7 +450,7 @@ A partir del 5.º golpe seguido sobre un objetivo aturdido, cada golpe hace meno
 
 | Recompensa | Valor |
 |---|---|
-| Monedas | `250 × valor de zona` por jugador (tabla 7.3) |
+| Monedas | `60 × valor de zona` por jugador (tabla 7.3). Corregido en la Etapa 6: antes `250 ×`, que daba 1,6 horas de ingreso al día con 3 derrotas |
 | XP | 60 veces la de un enemigo Común, por jugador |
 | Material de jefe | 3 garantizados por derrota; no depende de la Suerte |
 | Tirada extra | 1 tirada en la tabla de depósitos de la zona (admite Suerte, B1) |

@@ -1,6 +1,6 @@
 # OREBOUND — B2: Progresión y estadísticas
 
-Etapa 2 · 2026-11-16 · Script: `calculos/b2_progresion.py` · Tabla completa de XP: `calculos/b2_xp_niveles.csv` (niveles 1 a 1.000).
+Etapa 2 · 2026-11-16 (corregido en la Etapa 6: coste del reinicio) · Script: `calculos/b2_progresion.py` · Tabla completa de XP: `calculos/b2_xp_niveles.csv` (niveles 1 a 1.000).
 
 > **Aviso de fuentes.** No se dispone de las secciones 5 y 6 del prompt maestro. La fórmula de XP
 > viene del prompt de trabajo. Todo lo demás es **[PROVISIONAL]**: las fórmulas originales de las
@@ -160,16 +160,16 @@ Sensibilidad de la curva base si la XP por hora real se desvía:
 | 1 | 3 | 0,00 | Gratis |
 | 10 | 30 | 0,03 | Gratis |
 | 25 | 75 | 0,07 | Gratis |
-| 50 | 150 | 0,15 | 50.000 monedas |
-| 100 | 300 | 0,30 | 100.000 monedas |
-| 200 | 600 | 0,60 | 200.000 monedas |
-| 250 | 750 | 0,75 | 250.000 monedas |
-| 300 | 900 | 0,90 | 300.000 monedas |
-| 400 | 1.200 | 1,20 | 400.000 monedas |
-| 500 | 1.500 | 1,50 | 500.000 monedas |
-| 650 | 1.950 | 1,95 | 650.000 monedas |
-| 800 | 2.400 | 2,40 | 800.000 monedas |
-| 1.000 | 3.000 | 3,00 | 1.000.000 monedas |
+| 50 | 150 | 0,15 | 7.244 monedas |
+| 100 | 300 | 0,30 | 11.949 monedas |
+| 200 | 600 | 0,60 | 19.223 monedas |
+| 250 | 750 | 0,75 | 19.223 monedas |
+| 300 | 900 | 0,90 | 31.553 monedas |
+| 400 | 1.200 | 1,20 | 51.832 monedas |
+| 500 | 1.500 | 1,50 | 85.033 monedas |
+| 650 | 1.950 | 1,95 | 139.520 monedas |
+| 800 | 2.400 | 2,40 | 370.250 monedas |
+| 1.000 | 3.000 | 3,00 | 606.651 monedas |
 
 A nivel máximo se pueden llevar al tope 3 de las 8 estadísticas. Eso obliga a elegir build.
 
@@ -177,12 +177,12 @@ A nivel máximo se pueden llevar al tope 3 de las 8 estadísticas. Eso obliga a 
 
 | Vía | Cómo funciona |
 |---|---|
-| Servicio en la ciudad | Reinicio completo. Gratis por debajo del nivel 50; después `1.000 × nivel` monedas. |
+| Servicio en la ciudad | Reinicio completo. Gratis por debajo del nivel 50; después 1,5 horas de ingreso de la zona del jugador (B6). Corregido en la Etapa 6: antes `1.000 × nivel`. |
 | Objeto «Tomo de Reajuste» | Un reinicio gratis. Se gana en misiones semanales y temporadas. |
 | Reinicio parcial | No existe: siempre se devuelven todos los puntos. |
 
 - No se puede redistribuir en combate ni dentro de una Zona Fracturada.
-- El coste en monedas se valida en la Etapa 6 contra los ingresos por hora; debe equivaler a 1–2 horas de juego.
+- El coste se fijó en la Etapa 6: 1,5 horas de ingreso de la zona (tabla de arriba, con el ingreso de referencia de B6).
 
 ---
 
@@ -400,4 +400,4 @@ Comparación con una raíz cuadrada calibrada para dar lo mismo con 1.000 puntos
 | Topes de Defensa (75% y 60%) | Etapa 4: tiempo para morir contra jefes y en duelos |
 | Vida base por nivel | Etapa 4: golpes que aguanta un jugador contra enemigos de su zona |
 | Energía (costes, pausa, regeneración) | Prueba de juego: que un combate de 60 s no deje al jugador sin opciones más de 5 s seguidos |
-| Coste del reinicio | Etapa 6: que equivalga a 1–2 horas de ingresos |
+| Coste del reinicio | Fijado en la Etapa 6 en 1,5 horas de ingreso |

@@ -1,6 +1,6 @@
 # OREBOUND — B3: Minería
 
-Etapa 3 · 2026-11-16 · Script: `calculos/b3_mineria.py` · Catálogos completos: `calculos/b3_minerales.csv` (66 minerales) y `calculos/b3_picos.csv` (75 picos).
+Etapa 3 · 2026-11-16 (ampliado en la Etapa 6: contenedor de grieta y racha) · Script: `calculos/b3_mineria.py` · Catálogos completos: `calculos/b3_minerales.csv` (66 minerales) y `calculos/b3_picos.csv` (75 picos).
 
 > **Aviso de fuentes.** No se dispone de las secciones 7, 8, 9 y 14 del prompt maestro ni de la
 > sección de Minería PvPvE del GDD. Los 30 minerales de referencia y los valores de las Zonas
@@ -387,6 +387,8 @@ Cada zona de la mina tiene su Zona Fracturada: un área aparte, opcional, con Pv
 - **Si se extrae** por un Punto de Extracción, vale **×2,0** y da ×1,25 de XP.
 - **Si no se extrae** (el jugador muere y conserva una parte), esa parte vale ×1,0, como mineral normal.
 - Depósitos: misma tabla de rarezas que la zona PvE, sin Suerte (B1).
+- **Contenedor de grieta (añadido en la Etapa 6):** dentro de la Zona Fracturada la mochila admite el doble (120 unidades base). Con 60, una carga completa valía 4 minutos de ingreso y el saqueo no tenía sentido.
+- **Racha de extracción (Etapa 6):** +2% al multiplicador por cada extracción seguida, hasta +10% (×2,20). Con ella el máximo teórico pasa de 2,00 a 2,43 veces el PvE (B6, sección 7), todavía bajo el techo de 2,5.
 
 ### 7.2 Debuff de carga
 
@@ -436,7 +438,7 @@ Al morir contra un jugador con 100 unidades de carga:
 
 - Valores relativos a picar la misma carga en PvE (= 1,00).
 - El minero sale ganando frente al PvE mientras muera en menos del 66,7% de los viajes.
-- El máximo teórico es 2,00, por debajo del techo de 2,5 que fija el prompt.
+- El máximo teórico de esta tabla es 2,00. Con la racha y los contratos de la Etapa 6 sube a 2,43, por debajo del techo de 2,5 que fija el prompt.
 
 ### 7.5 Puntos de Extracción
 

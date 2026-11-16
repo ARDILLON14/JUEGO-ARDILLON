@@ -1,6 +1,6 @@
 # OREBOUND — DECISIONES.md
 
-Versión: Etapa 5 · 2026-11-16
+Versión: Etapa 6 · 2026-11-16
 
 > **Estado de las fuentes.** Este archivo se ha construido solo con el documento
 > «OREBOUND — Prompts por partes» (prompt único con continuidad + partes 0 a 10).
@@ -228,7 +228,7 @@ Experiencia
 Puntos de estadística
 - E2-05. 3 puntos por nivel: `Puntos(L) = 3 + 3 × (L − 1)`; 3.000 a nivel 1.000.
 - E2-06. Tope de 1.000 puntos asignados por estadística; tope de 5.000 de valor total con equipo.
-- E2-07. Reinicio completo en la ciudad: gratis bajo nivel 50; después `1.000 × nivel` monedas. Objeto «Tomo de Reajuste» para un reinicio gratis.
+- E2-07. [SUSTITUIDO por E6-13] Reinicio completo en la ciudad: gratis bajo nivel 50; después `1.000 × nivel` monedas. Objeto «Tomo de Reajuste» para un reinicio gratis.
 
 Estadísticas
 - E2-08. Las 8: Fuerza, Vitalidad, Defensa, Velocidad, Energía, Minería, Suerte y Dominio de mascotas (Energía es la octava propuesta; resuelve P-F-05 de forma provisional).
@@ -345,7 +345,7 @@ Movilidad y anti-combo
 Enemigos
 - E4-26. Vida `PotZona × Dureza ×` 20 / 80 / 300 / 1.500 (Común / Élite / Guardián / Jefe).
 - E4-27. Daño por golpe: 3 / 6 / 10 / 15% de la vida base del jugador de la zona; cada 1,5 / 1,8 / 2,2 / 2,5 s.
-- E4-28. XP `0,72 × XP por acción ×` 1 / 3,5 / 10 / 60. Monedas `valor de zona ×` 1,35 / 5,4 / 16 / 250.
+- E4-28. XP `0,72 × XP por acción ×` 1 / 3,5 / 10 / 60. Monedas `valor de zona ×` 1,35 / 5,4 / 16 / 60 (el jefe era 250; corregido por E6-10).
 - E4-29. Mezcla de enemigos: 88% Común, 10% Élite, 2% Guardián. Enemigos de tutorial con la mitad de vida hasta el nivel 10.
 - E4-30. El combatiente gana entre 1,00 y 1,07 veces lo que el minero equivalente.
 
@@ -353,7 +353,7 @@ Jefes
 - E4-31. Tres fases (100–60–30%); avisos de 0,6 / 1,2 / 2,5 s; daños del 15 / 35 / 70%; ventana de vulnerabilidad de 6 s con +50% de daño; furia a los 12 minutos.
 - E4-32. Escalado: vida `× (1 + 0,6 × (n − 1))`, daño `× (1 + 0,05 × (n − 1))`, de 1 a 8 jugadores.
 - E4-33. Jefes del MVP: Capataz de Pizarra (zona 1), Madre Liquen (zona 2) y Leviatán de Salmuera (zona 3).
-- E4-34. Recompensas: `250 × valor de zona` en monedas, 3 materiales de jefe garantizados, 1 tirada extra; 3 derrotas con botín completo por jefe y día.
+- E4-34. Recompensas: `60 × valor de zona` en monedas (corregido por E6-10), 3 materiales de jefe garantizados, 1 tirada extra; 3 derrotas con botín completo por jefe y día.
 
 PvP
 - E4-35. Vitalidad con `M = 1,5` en PvP: confirmada (cierra E2-12).
@@ -412,7 +412,58 @@ Valor y espacios
 
 ---
 
-## 10. Registro de cambios
+## 10. Valores de la Etapa 6 — B6_Economia.md (todos [PROVISIONAL] salvo los marcados)
+
+Unidad y recursos
+- E6-01. Los precios se expresan en horas de ingreso de la zona, `I(z)`: media del minero y el combatiente equilibrados (4.830 en zona 1; 34.554 en zona 5; 404.434 en zona 10; unas 480 veces el valor de zona).
+- E6-02. Seis recursos: monedas, minerales, Cristales, materiales de jefe, gemas antiguas y fragmentos Celestiales.
+- E6-03. Los Cristales no se cambian por monedas ni compran cajas. Sin comercio entre jugadores en el lanzamiento.
+
+Precios
+- E6-04. Venta de mineral: `V(z) × FactorValor / Unidades` por unidad (`calculos/b6_precios_minerales.csv`).
+- E6-05. Fabricar pico o arma: 0,3 / 0,6 / 1,2 / 2,5 / 5 / 10 / 20 horas de ingreso según rareza, más la receta de minerales (`calculos/b6_precios_equipo.csv`).
+- E6-06. Mejoras: nivel `n` = `0,05 × n ×` coste base; ranura = 0,5 × base + 6 Gemas talladas; Despertar de habilidad = 1,5 × base + 4 Catalizadores. Total al máximo: 6,75 veces el base.
+- E6-07. Venta de equipo al mercader: 10% del coste. Reciclar devuelve el 30% de los materiales de mejora.
+- E6-08. Mochila: 80 / 100 / 120 / 140 / 160 / 180 / 200 unidades desde las zonas 2 / 3 / 4 / 5 / 6 / 8 / 10, por 0,5 / 1 / 2 / 3 / 5 / 8 / 12 horas.
+- E6-09. Consumibles: poción de vida 0,01 h; tónico de energía 0,01 h; Elixir de Suerte 0,10 h; Pergamino de XP 0,15 h; Baliza de extracción 0,05 h. Sin reparaciones ni durabilidad.
+- E6-10. Monedas de jefe: `60 × V` por derrota (corrige B4; antes 250).
+- E6-11. Evolución de mascotas: 2 horas (desatada) y 8 horas (máxima) por mascota. Forjar un Celestial: 60 fragmentos + 10 horas.
+- E6-12. Aspectos de prestigio: 20 horas cada uno (sumidero de final de juego).
+- E6-13. Reinicio de estadísticas: 1,5 horas de ingreso de la zona; gratis bajo nivel 50 (sustituye E2-07; cierra E3-36).
+
+Cajas
+- E6-14. Precios: Caja de armas 1,0 h; Caja de zona 0,6 h; Caja de mascotas 0,75 h de la zona más alta desbloqueada. Solo se compran con monedas.
+- E6-15. Caja de armas: tipo 17 / 17 / 17 / 17 / 16 / 16% (Espada, Hacha, Daga, Lanza, Bastón, Arco); rareza estándar de B1.
+- E6-16. Caja de mascotas: Topillo 25, Luciérnaga 25, Zorro 13, Tortuga 13, Murciélago 7, Nutria 7, Búho 3,5, Carnero 3,5, Mantis 1,2, Guiverno 1,2, Ciervo 0,5, Sierpe 0,1%.
+- E6-17. Caja de zona: pico 35%, lote de minerales 40%, materiales 15%, consumibles 10%; después rareza estándar.
+- E6-18. Caja de evento: solo con fichas de evento; tabla de B1; no admite Suerte.
+- E6-19. Ninguna caja genera monedas: el contenido vale de media menos que el precio y la reventa devuelve el 10–42%.
+
+Ingresos y límites
+- E6-20. Gasto típico: consumibles 5% del ingreso, cajas 15%, equipo y mejoras el resto hasta el 58–93%.
+- E6-21. Combatiente frente a minero (equilibrados): 1,02–1,06 (límite 1,3).
+- E6-22. Zona Fracturada frente a PvE: 1,59–2,16 según muertes; máximo teórico 2,43 (límite 2,5).
+- E6-23. Saqueador puro: 0,47 veces el PvE; se recompensa con reputación y cosméticos, no con monedas.
+
+Zonas Fracturadas
+- E6-24. Contenedor de grieta: mochila ×2 dentro de la Zona Fracturada (120 unidades base). Amplía B3.
+- E6-25. Racha de extracción: +2% por extracción seguida, máximo +10% (×2,20); se pierde al morir.
+- E6-26. Seguro de carga: 6 V por entrada; paga el 50% del valor base de lo soltado; 5 al día; nunca se vende por dinero real [CONFIRMADO].
+- E6-27. Contratos de grieta: 3 diarios (0,20 horas de ingreso en total) y 1 semanal (2 gemas antiguas); nunca piden matar jugadores.
+- E6-28. Se mantiene el 50% de carga soltada (P-01 sigue PROVISIONAL, validado frente al techo de 2,5).
+
+Inflación
+- E6-29. Simulación de 1.000 jugadores y 90 días: ahorro mediano estable en 3,4–4,5 horas de ingreso; 10% más rico en 9–11 horas; sin sumideros serían 57,5 horas.
+
+Monetización
+- E6-30. Se vende: cosméticos, pase de temporada, almacén de mascotas, tercera incubadora, Pergamino de XP, pestañas de banco y el sexto espacio de mascota (también ganable gratis).
+- E6-31. Nunca se vende: Celestial, Núcleos Despertados, Seguro de carga [CONFIRMADO]; ni monedas, minerales, materiales de jefe, gemas antiguas, Suerte, cajas o ventajas PvP.
+- E6-32. Sin recompensas aleatorias de pago en el lanzamiento. El servidor consulta `PolicyService` (`ArePaidRandomItemsRestricted`) y las cajas muestran sus probabilidades.
+- E6-33. Política de Roblox consultada solo a través de resúmenes del buscador (16-11-2026); pendiente de releer las páginas oficiales antes de publicar.
+
+---
+
+## 11. Registro de cambios
 - 2026-11-16 · Etapa 0 (1/2): creación del archivo a partir del documento de prompts. Faltan las dos fuentes.
 - 2026-11-16 · Etapa 0 cerrada: incongruencias del prompt resueltas (C-25 a C-34) y prompt corregido.
 - 2026-11-16 · Etapa 1: valores E1-01 a E1-19.
@@ -420,3 +471,4 @@ Valor y espacios
 - 2026-11-16 · Etapa 3: valores E3-01 a E3-36. Precisa B1 (Suerte de depósitos de grupo); B2 no cambia todavía.
 - 2026-11-16 · Etapa 4: valores E4-01 a E4-39. Confirma E2-12; B1, B2 y B3 no cambian.
 - 2026-11-16 · Etapa 5: valores E5-01 a E5-28. B1 a B4 no cambian.
+- 2026-11-16 · Etapa 6: valores E6-01 a E6-33. Corrige B4 (monedas de jefe), B2 (coste del reinicio) y amplía B3 (contenedor de grieta y racha).
