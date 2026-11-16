@@ -1,6 +1,6 @@
 # OREBOUND — DECISIONES.md
 
-Versión: Etapa 1 · 2026-11-16
+Versión: Etapa 2 · 2026-11-16
 
 > **Estado de las fuentes.** Este archivo se ha construido solo con el documento
 > «OREBOUND — Prompts por partes» (prompt único con continuidad + partes 0 a 10).
@@ -217,7 +217,40 @@ Celestial
 
 ---
 
-## 6. Registro de cambios
+## 6. Valores de la Etapa 2 — B2_Progresion.md (todos [PROVISIONAL] salvo E2-01)
+
+Experiencia
+- E2-01. `XP(L) = techo(100 + 20·L + 0,8·L²)` de nivel 1 a 1.000 (fórmula del prompt). XP acumulada a nivel 1.000: 276.357.100.
+- E2-02. XP por hora base: `240 × (25 + 3,75·L)`. Con ella, nivel 1.000 cuesta 460,3 horas.
+- E2-03. Ajuste recomendado: XP por acción `25 + 3,75·L + 0,002·L²` → 344,6 horas a nivel 1.000.
+- E2-04. Por encima de 1.000: `XP(L) = 820.100 + 900 × (L − 1.000)` (cola lineal); unas 95 horas por cada 100 niveles.
+
+Puntos de estadística
+- E2-05. 3 puntos por nivel: `Puntos(L) = 3 + 3 × (L − 1)`; 3.000 a nivel 1.000.
+- E2-06. Tope de 1.000 puntos asignados por estadística; tope de 5.000 de valor total con equipo.
+- E2-07. Reinicio completo en la ciudad: gratis bajo nivel 50; después `1.000 × nivel` monedas. Objeto «Tomo de Reajuste» para un reinicio gratis.
+
+Estadísticas
+- E2-08. Las 8: Fuerza, Vitalidad, Defensa, Velocidad, Energía, Minería, Suerte y Dominio de mascotas (Energía es la octava propuesta; resuelve P-F-05 de forma provisional).
+- E2-09. Curva común: `Mult(S) = 1 + M × S/(S + 1.000)`. Sustituye a la raíz cuadrada (P-06).
+- E2-10. `M` por efecto: Fuerza 3; Vitalidad 3; Minería 3; Suerte 3; Dominio (daño y vida de mascota) 3; Dominio (recolección) 1,5; Velocidad de ataque 0,8; Velocidad de movimiento 0,5 (WalkSpeed máximo 24); regeneración de Energía 1.
+- E2-11. `VidaBase(L) = 500 × 1,65^((L − 1)/100)`.
+- E2-12. En PvP y Zonas Fracturadas la Vitalidad usa `M = 1,5` (recomendación; la Etapa 4 la confirma).
+
+Defensa
+- E2-13. `Reducción = mín(D/(D + K), Tope)`. PvE: `K = 1.500`, tope 75%. PvP y Zonas Fracturadas: `K = 3.000`, tope 60%.
+
+Energía
+- E2-14. Energía máxima `100 + 300·E/(E + 1.000)`; regeneración 8/s en combate y 20/s fuera, por `(1 + E/(E + 1.000))`.
+- E2-15. Pausa de regeneración de 1,5 s tras gastar; «en combate» = 5 s desde el último golpe.
+- E2-16. Costes: esquiva 20, bloqueo 8/s más 10 por golpe, dash 20, doble salto 0, parpadeo 30, habilidades Z/X/C/V 15/25/35/50.
+- E2-17. Enfriamientos: esquiva 1,2 s, dash 2,5 s, parpadeo 8 s, Z/X/C/V 4/8/14/30 s (referencia).
+- E2-18. Reducción de costes máxima del 30%; consumibles de energía cada 30 s en PvP.
+
+---
+
+## 7. Registro de cambios
 - 2026-11-16 · Etapa 0 (1/2): creación del archivo a partir del documento de prompts. Faltan las dos fuentes.
 - 2026-11-16 · Etapa 0 cerrada: incongruencias del prompt resueltas (C-25 a C-34) y prompt corregido.
 - 2026-11-16 · Etapa 1: valores E1-01 a E1-19.
+- 2026-11-16 · Etapa 2: valores E2-01 a E2-18. B1 no cambia.
