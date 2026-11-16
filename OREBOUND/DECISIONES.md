@@ -1,6 +1,6 @@
 # OREBOUND — DECISIONES.md
 
-Versión: contraste con el GDD · 2026-11-16 · Diseño completo, pendiente de rehacer con el GDD
+Versión: rehecho con el GDD · 2026-11-16 · Diseño completo
 
 > **Estado de las fuentes.** Este archivo se ha construido solo con el documento
 > «OREBOUND — Prompts por partes» (prompt único con continuidad + partes 0 a 10).
@@ -610,7 +610,7 @@ Coherencia
 
 ## 15. Valores del GDD de combate, minería PvPvE y mascotas
 
-Fuente: `00_Fuentes/GDD_combate_mineria_mascotas.pdf`. Contraste completo: `00_Fuentes/Contraste_GDD.md`. El GDD marca todas sus cifras como provisionales y pendientes de simulación. Estos valores mandan sobre las series E1 a E10; los archivos A, B, C y D aún no los reflejan (plan en G-60).
+Fuente: `00_Fuentes/GDD_combate_mineria_mascotas.pdf`. Contraste completo: `00_Fuentes/Contraste_GDD.md`. El GDD marca todas sus cifras como provisionales y pendientes de simulación. Estos valores mandan sobre las series E1 a E10. Los archivos A, B, C y D ya los reflejan (serie R, sección 16).
 
 Rarezas y arte
 - G-01. Nombres de las 7 rarezas confirmados: Común, Poco común, Raro, Épico, Legendario, Mítico y Ultra raro. Cierra P-F-03 en cuanto a nombres.
@@ -688,11 +688,85 @@ Términos
 - G-59. «Paso de Relámpago» es del Núcleo Prismático; se renombra la habilidad del Núcleo de Tormenta.
 
 Plan
-- G-60. Rehacer en este orden: Etapa 1, retoque de B2, Etapas 3, 4, 5, 6 y 7, y después actualizar A, C y D.
+- G-60. [HECHO] Rehechas las Etapas 1, 3, 4, 5, 6 y 7, retocada B2 y actualizados A, C y D.
 
 ---
 
-## 16. Registro de cambios
+## 16. Valores vigentes tras rehacer con el GDD (serie R)
+
+Orden de precedencia: serie R y serie G sobre las series E1 a E10. Donde una entrada E no aparece sustituida aquí ni en la serie G, sigue vigente.
+
+Estructura de trabajo
+- R-01. Los archivos B1 a B7 los generan los scripts `calculos/b1` a `b7` a partir de `plantillas/`; cada script deja sus resultados en `calculos/_bN.json` para el siguiente. Hay que ejecutarlos en orden.
+
+Rarezas y potencia (B1)
+- R-02. Multiplicadores 1,00 / 1,25 / 1,50 / 1,90 / 2,50 / 3,30 / 4,50 / 5,20 (GDD; el 1,25 es supuesto).
+- R-03. Crecimiento por zona 2,00 (potencia, valor de zona y vida base); tope de bonos +50% (nivel 25, ranuras 15, Despertar de habilidad 10). Sustituye E1-08, E1-09 y E2-11. Corrección al GDD.
+- R-04. Un Común sin mejoras supera a cualquier objeto de 3 zonas atrás; rango dentro de una zona ×7,80.
+- R-05. Celestial: 50 fragmentos (GDD); 0,25% por depósito de grieta de zona 6 o más (el GDD proponía 0,02%); ×4 en la Grieta Celestial; jefe de evento 2 fragmentos, 5 por semana.
+- R-06. Sin cambios: tablas de caja y depósitos, Suerte y protección contra mala suerte (E1-03 a E1-06, E1-10 a E1-15).
+
+Progresión (B2)
+- R-07. `VidaBase(L) = 500 × 2,00^((L − 1)/100)`.
+- R-08. Dash: 2 cargas, 20 de energía, 3 s de recarga (GDD). Parpadeo: 12 studs, 30 de energía, 8 s; se desbloquea con Velocidad 50 (propuesta para «Agilidad»). Ruptura: 50 de energía, 15 s.
+- R-09. La esquiva no es una acción aparte: un dash en los 0,25 s previos a un golpe da 0,3 s de invulnerabilidad.
+- R-10. Factor de habilidades de referencia ×1,39 (antes 1,75); con Energía 1.000, ×1,65.
+
+Minería (B3)
+- R-11. Potencia de pico requerida `0,5 × PotZona`. Zona 7: Minas Oscuras (GDD).
+- R-12. Picos: pasivas menor, mayor o única y estadística de combate con tope PvP (GDD). Material Legendario renombrado a «Núcleo de mena».
+- R-13. XP de depósito con factor 0,69 (calibrado por el script).
+- R-14. Ingresos del minero equilibrado: 5.175 (zona 1) a 2.355.890 (zona 10) monedas por hora.
+- R-15. Grieta: mineral ×1,5 por racha (×1,1 a ×1,5); debuff de carga del GDD; cofre 80/20; 10 s de protección; 5 entradas de novato; sin pérdida bajo Carga 1; puntos de extracción cada 10 minutos. Máximo teórico 2,38 veces el PvE.
+- R-16. Se mantienen como añadidos: sincronización de nivel, mochila doble en grieta, misma víctima sin botín 10 minutos, salida con 3 s de canalización.
+
+Combate (B4)
+- R-17. Ranuras mixtas: 4 habilidades del Núcleo y 2 técnicas del arma (maestría 10 y 50); V solo admite la definitiva o la segunda técnica.
+- R-18. Núcleo Prismático del GDD; daños propuestos para Campo (150%), Paso (120%) y Prisma Total (6 rayos del 100%). Total 72,5% de la potencia del arma por segundo.
+- R-19. Los otros cinco Núcleos rehechos con la estructura del GDD (área, control, movilidad y definitiva); entre −13,6% y 0% del Prismático. Rarezas: Brasa y Escarcha Raro; Prismático y Tormenta Épico; Sísmico y Umbrío Legendario.
+- R-20. Despertar y Transformación a maestría 100 (GDD); barra de Resonancia; +25% en PvE y tope del 10% en PvP.
+- R-21. Anti-combo del GDD con Tenacidad de 5 s (el GDD proponía 2 s); tope de aturdimiento 2,5 s. «Guardia rota» sustituye al antiguo uso de «Ruptura».
+- R-22. Enemigos: vida 16 / 64 / 240 / 1.200 × PotZona × dureza; monedas 1,40 / 5,60 / 16,80 / 60 × valor de zona; XP con factor 0,71.
+- R-23. `MultModo = 0,062` en PvP; duelos de 8 a 24 s; ventaja del Tanque sobre el Cristal 1,27.
+- R-24. Controles del GDD (bloqueo en F y LT; habilidades en X, Y, B y RB; dash en Q y LB).
+
+Mascotas (B5)
+- R-25. Dos posturas (GDD): Recolectar (radio ×1,5, daño ×0,5) y Proteger (radio ×0,5, daño ×1,5); radio base 20 studs; 5 s para cambiar.
+- R-26. Roles y coeficientes: Ofensiva 0,016; Control 0,010; Defensa 0,008; Apoyo 0,005; Minería 0,004.
+- R-27. Fases del GDD: cría (pasiva de recolección), desatada (habilidad activa), máxima (ataque coordinado). Incubación por golpes de pico: 500 a 30.000 según rareza.
+- R-28. Evolución: fragmentos de su elemento 10 a 130 (desatada) y material de jefe 5 a 16 (máxima). Sustituye a los Vínculos.
+- R-29. Utilidad con los valores del GDD (escudo del 20% 5 s cada 30 s; +15% de velocidad de ataque 6 s; ralentización del 30% 2 s; +20% de extracción 10 s); tope de +40% de velocidad de extracción.
+- R-30. Guiverno de Cuarzo: rol Defensa con el conjunto del GDD.
+- R-31. Aporte de las mascotas: +18% a +28% de monedas en combate y +15% a +22% en minería; sexto espacio +2,4%.
+
+Economía (B6)
+- R-32. Ingreso de referencia: 5.152 (zona 1) a 2.393.058 (zona 10); unas 490 veces el valor de zona.
+- R-33. Cajas: de armas 1,0 h; de zona 0,6 h; de mascotas 0,75 h; de Núcleos 3,0 h (30 / 30 / 15 / 15 / 5 / 5%).
+- R-34. Seguro de carga fabricable: 8 Lingotes Poco común y 1 Placa Raro; con él se suelta el 25%; 5 al día.
+- R-35. Contratos: extraer rarezas o derrotar portadores con Carga 5 o más; el segundo se puede cambiar una vez al día.
+- R-36. Eventos de grieta: recompensa por cabeza (racha 5; todo recogible), Grieta Celestial (cada 2 h, 10 min), rastro de venganza (3 min), jefes de grieta, escuadrones (extracción en 6 y 5 s).
+- R-37. Límites: combatiente frente a minero 0,99–1,06; grieta 1,34–2,02 (máximo teórico 2,48); saqueador puro 0,42.
+- R-38. Ahorro mediano en la simulación de 90 días: 3,5–4,7 horas de ingreso.
+
+Simulaciones (B7)
+- R-39. Ninguna build extrema supera 1,13 veces a la equilibrada.
+- R-40. Equipo Celestial al máximo: +3,5% de monedas sobre Ultra raro al máximo.
+- R-41. Saqueador profesional: 0,34–0,70 veces el minero PvE (0,47 en un servidor normal).
+- R-42. Abierto: minería frente a combate al llegar a una zona con el arma anterior, 1,39.
+- R-43. Los números caben hasta la zona 21; el margen se agota hacia la zona 34.
+
+A, C y D
+- R-44. Arte y VFX del GDD: anime de colores saturados; 2.000 partículas en Alto y 800 en Bajo; efectos ajenos al 50% (40% en Bajo, corrección); accesibilidad.
+- R-45. MVP: se añade el Guiverno de Cuarzo (7 mascotas) para validar la sinergia con el Prismático, como pide el GDD.
+- R-46. Especificación técnica: 13 módulos de configuración (se añade `VFX`), 46 Remotes del cliente, validación de movimiento de 65 / 94 / 122 studs en 0,5 / 1 / 2 s.
+- R-47. Roadmap: prototipo de debuff de carga y extracción entre las fases 3 y 4.
+
+Pendiente de decisión del autor
+- R-48. Aceptar o revertir las seis correcciones a valores del GDD: crecimiento ×2,00 con bonos +50%; base de grieta ×1,5; fragmentos al 0,25%; Tenacidad de 5 s; sincronización de nivel; efectos ajenos al 40% en calidad Baja.
+
+---
+
+## 17. Registro de cambios
 - 2026-11-16 · Etapa 0 (1/2): creación del archivo a partir del documento de prompts. Faltan las dos fuentes.
 - 2026-11-16 · Etapa 0 cerrada: incongruencias del prompt resueltas (C-25 a C-34) y prompt corregido.
 - 2026-11-16 · Etapa 1: valores E1-01 a E1-19.
@@ -706,3 +780,4 @@ Plan
 - 2026-11-16 · Etapa 9: valores E9-01 a E9-26. Los archivos A y B no cambian.
 - 2026-11-16 · Etapa 10: valores E10-01 a E10-16. Correcciones de coherencia en B2 (nota en 9.1), B5 (×0,06 en F27), A_GDD (pilar 3) y E2-03. Diseño completo.
 - 2026-11-16 · Recibido el GDD. Contraste en `00_Fuentes/Contraste_GDD.md`; valores G-01 a G-60. Los archivos A, B, C y D están pendientes de rehacer.
+- 2026-11-16 · Rehecho con el GDD: B1, B3, B4, B5, B6 y B7 regenerados; B2 retocado; A, C y D actualizados. Valores R-01 a R-48.

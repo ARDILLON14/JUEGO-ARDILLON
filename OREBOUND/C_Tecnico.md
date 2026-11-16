@@ -1,15 +1,17 @@
 # OREBOUND — Documento C: Especificación técnica
 
-Etapa 9 · 2026-11-16 · Cálculos de apoyo: `calculos/b9_tecnico.py`.
+Etapa 9, actualizada con el GDD de combate, minería PvPvE y mascotas · 2026-11-16 · Cálculos de apoyo: `calculos/b9_tecnico.py`.
 
 > **Alcance.** Este documento especifica cómo construir el juego; no lo implementa. Los
 > fragmentos de Luau son tablas de configuración o ejemplos cortos de un patrón.
 >
-> **Aviso de fuentes.** No se ha dispuesto de la sección 20 del prompt maestro: la arquitectura
-> y la lista de operaciones a validar son propuestas **[PROVISIONAL]**. Los valores de las
-> tablas de configuración vienen de los archivos B y heredan su estado. Son **[CONFIRMADO]**:
-> el servidor decide el premio de una caja antes de la animación, los topes de DPS de mascotas
-> (40% y 25%) y que en las Zonas Fracturadas solo se arriesga el mineral.
+> **Fuentes.** Esta versión incorpora el GDD de combate, minería PvPvE y mascotas: sus reglas
+> están en los módulos de configuración (sección 2) y en la validación (sección 7). No se ha
+> dispuesto de la sección 20 del prompt maestro: la arquitectura y la lista de operaciones a
+> validar son propuestas **[PROVISIONAL]**. Los valores de configuración vienen de los archivos B
+> y heredan su estado. Son **[CONFIRMADO]**: el servidor decide el premio de una caja antes de
+> la animación, los topes de DPS de mascotas (40% y 25%) y que en las Zonas Fracturadas solo
+> se arriesga el mineral.
 >
 > **Datos de la plataforma sin verificar.** Los límites de DataStore y de MemoryStore que se
 > citan proceden de conocimiento general de Roblox, no de una consulta a la documentación
@@ -46,7 +48,7 @@ src/
     Config/                    Tablas de datos (sección 2). Sin lógica.
       Stats.luau  Rarity.luau  Mining.luau  Pickaxes.luau  Weapons.luau
       PowerCores.luau  Pets.luau  Economy.luau  Boxes.luau  Fracture.luau
-      Worlds.luau  PvP.luau
+      Worlds.luau  PvP.luau  VFX.luau
     Formulas/                  Funciones puras F1 a F36 (B7, sección 7)
       Potencia.luau  Suerte.luau  Progresion.luau  Defensa.luau
       Mineria.luau  Dano.luau  Mascotas.luau  Economia.luau
@@ -108,7 +110,7 @@ El lugar de pruebas usa `pruebas.project.json`, igual que el anterior más `"Tes
 
 Reglas comunes:
 
-- Un módulo por sistema, en `Shared/Config`. Solo datos: ninguna función.
+- Un módulo por sistema, en `Shared/Config`. Es lo que pide el GDD: pasar todas las cifras a módulos de configuración para ajustarlas sin tocar los servicios. Solo datos: ninguna función.
 - Están en `ReplicatedStorage` porque el cliente los necesita para mostrar cifras. **No son un secreto y no dan autoridad:** el servidor calcula siempre con su propia copia.
 - Las claves van en inglés y coinciden con los nombres de módulo pedidos. Los identificadores de contenido son cadenas estables (`"Rare"`, `"Sword"`), nunca posiciones.
 - Los catálogos largos (66 minerales, 450 armas) se generan a partir de los CSV de `calculos/`.
@@ -123,14 +125,17 @@ return {
 	Curve = { K = 1000 },
 	M = { Strength = 3, Vitality = 3, Mining = 3, Luck = 3, PetMastery = 3,
 	      PetUtility = 1.5, AttackSpeed = 0.8, MoveSpeed = 0.5, EnergyRegen = 1 },
-	BaseHealth = { Base = 500, Growth = 1.65, LevelsPerStep = 100 },
+	BaseHealth = { Base = 500, Growth = 2.00, LevelsPerStep = 100 },
 	WalkSpeed = { Base = 16, Max = 24 },
 	Defense = { PvE = { K = 1500, Cap = 0.75 }, PvP = { K = 4500, Cap = 0.50 } },
 	HealthRegen = { InCombatPvE = 0.005, OutOfCombat = 0.05, CombatTimeout = 5 },
-	Energy = { Base = 100, Bonus = 300, RegenCombat = 8, RegenIdle = 20, RegenPause = 1.5,
-	           MaxCostReduction = 0.30,
-	           Cost = { Dodge = 20, BlockPerSec = 8, BlockHit = 10, Dash = 20, Blink = 30 },
-	           Cooldown = { Dodge = 1.2, Dash = 2.5, Blink = 8 } },
+	Energy = { Base = 100, Bonus = 300, RegenCombat = 8, RegenIdle = 20, RegenPause = 1.5, MaxCostReduction = 0.30,
+	           Cost = { BlockPerSec = 8, BlockHit = 10, Dash = 20, Blink = 30, Break = 50 },
+	           Cooldown = { Blink = 8, Break = 15 } },
+	Dash = { Charges = 2, RechargeSeconds = 3, Distance = 12, PerfectDodgeWindow = 0.25, PerfectDodgeInvuln = 0.3 },   -- GDD
+	Blink = { Distance = 12, UnlockSpeedStat = 50 },                                                                    -- GDD
+	Break = { MinControlledSeconds = 0.8 },                                                                             -- GDD: Ruptura
+	AbilityFactorRef = 1.39,
 	Respec = { FreeBelowLevel = 50, CostIncomeHours = 1.5 },
 }
 ```
@@ -140,19 +145,18 @@ return {
 ```lua
 return {
 	Order = { "Common", "Uncommon", "Rare", "Epic", "Legendary", "Mythic", "UltraRare", "Celestial" },
-	Multiplier = { Common = 1.00, Uncommon = 1.15, Rare = 1.32, Epic = 1.52,
-	               Legendary = 1.75, Mythic = 1.98, UltraRare = 2.20, Celestial = 2.60 },
-	Color = { Common = "#9AA0A6", Uncommon = "#4CAF50", Rare = "#2F80ED", Epic = "#9B51E0",
-	          Legendary = "#F2B01E", Mythic = "#E5383B", UltraRare = "#19D3C5", Celestial = "#FFF4D6" },
-	Power = { ZoneBase = 100, ZoneGrowth = 1.65, BonusCap = 1.00,
-	          LevelBonusMax = 0.50, UpgradeBonusMax = 0.30, AbilityBonusMax = 0.20 },
+	Multiplier = { Common = 1.00, Uncommon = 1.25, Rare = 1.50, Epic = 1.90,
+	               Legendary = 2.50, Mythic = 3.30, UltraRare = 4.50, Celestial = 5.20 },   -- GDD
+	Color = { Common = "Gray", Uncommon = "Green", Rare = "Blue", Epic = "Purple", Legendary = "Gold",
+	          Mythic = "Red", UltraRare = "RainbowCycle", Celestial = "PearlWhiteCyanCore" },   -- GDD
+	Announce = { UltraRare = "Server", Celestial = "Global" },                                  -- GDD
+	Power = { ZoneBase = 100, ZoneGrowth = 2.00, BonusCap = 0.50,
+	          LevelBonusMax = 0.25, UpgradeBonusMax = 0.15, AbilityBonusMax = 0.10 },
 	Luck = { FMax = 3, K = 1000,
 	         Exponent = { Common = 0, Uncommon = 0.2, Rare = 0.4, Epic = 0.6,
 	                      Legendary = 0.8, Mythic = 1.0, UltraRare = 1.0 } },
-	Celestial = { FragmentsPerItem = 60, MinAnchorZone = 6, EventBossFragments = 2,
-	              EventBossWeeklyKills = 5, DirectDropChance = 0.005,
-	              FractureChance = { [6] = 0.10, [7] = 0.125, [8] = 0.15, [9] = 0.175, [10] = 0.20 },
-	              FractureWeeklyCap = 10 },
+	Celestial = { FragmentsPerItem = 50, MinAnchorZone = 6, FractureDepositChance = 0.0025, RiftEventMultiplier = 4,
+	              EventBossFragments = 2, EventBossWeeklyKills = 5, DirectDropChance = 0.005 },
 }
 ```
 
@@ -160,7 +164,7 @@ return {
 
 ```lua
 return {
-	Zone = { LevelPerZone = 100, MiningReqPerZone = 10, PickPowerReqFactor = 0.6,
+	Zone = { LevelPerZone = 100, MiningReqPerZone = 10, PickPowerReqFactor = 0.5,
 	         HardnessBase = 1, HardnessPerZone = 0.1, HardnessMax = 2.0, ReqFreezeZone = 10 },
 	ZonesWithUltraRare = { 3, 5, 7, 8, 9, 10 },
 	SpawnWeights = {   -- suman 100
@@ -173,7 +177,7 @@ return {
 		XPFactor     = { Common = 1, Uncommon = 1.4, Rare = 2, Epic = 3, Legendary = 4.5, Mythic = 7, UltraRare = 11 },
 		Units        = { Common = 4, Uncommon = 4, Rare = 3, Epic = 3, Legendary = 2, Mythic = 2, UltraRare = 1 },
 		MiningReqFactor = { Common = 1, Uncommon = 1, Rare = 1.5, Epic = 2.5, Legendary = 3.5, Mythic = 5, UltraRare = 7 },
-		XPScale = 0.73, ValueBase = 10, ValueGrowth = 1.65, MinHits = 3, MaxReach = 10,
+		XPScale = 0.69, ValueBase = 10, ValueGrowth = 2.00, MinHits = 3, MaxReach = 10,
 	},
 	Spawn = { ActiveBase = 40, RespawnSeconds = 45, ExtraPerMinerAbove = 5, MinerThreshold = 8, ActiveMax = 80 },
 	Backpack = { Base = 60 },
@@ -191,9 +195,22 @@ return {
 	HitsPerSecondMax = 2.0,
 	EquipMiningPerZone = { Common = 10, Uncommon = 10, Rare = 12, Epic = 15, Legendary = 20,
 	                       Mythic = 25, UltraRare = 30, Celestial = 30 },
-	Ability = { Uncommon = "SureStrike", Rare = "OpenVein", Epic = "SeismicWave", Legendary = "Prospector",
-	            Mythic = "ChainFracture", UltraRare = "Resonance", Celestial = "StellarEcho" },
-	Upgrade = { LevelMax = 10, LevelBonus = 0.05, Slots = 3, SlotBonus = 0.10, AwakenBonus = 0.20 },
+	PassiveSlots = {   -- GDD
+		Common = { Minor = 1 }, Uncommon = { Minor = 1 }, Rare = { Minor = 1 },
+		Epic = { Major = 1 }, Legendary = { Major = 1 },
+		Mythic = { Major = 1, Minor = 1 }, UltraRare = { Major = 1, Minor = 1 }, Celestial = { Unique = 1 },
+	},
+	Passives = {
+		Minor  = { "BladeEcho", "LightBallast", "SureStrike" },            -- Eco del filo, Lastre ligero (GDD), Golpe certero
+		Major  = { "RunicSonar", "OpenVein", "SeismicWave", "ChainFracture" },   -- Sonar rúnico (GDD) y propuestas
+		Unique = { "StellarEcho" },
+	},
+	PassiveValues = { BladeEcho = 0.10, LightBallast = 0.15, RunicSonarStuds = 30 },   -- GDD
+	CombatStat = {   -- GDD: defensa o velocidad de ataque; tope en PvP
+		Epic = { PvE = 0.03, PvP = 0.02 }, Legendary = { PvE = 0.03, PvP = 0.02 },
+		Mythic = { PvE = 0.05, PvP = 0.03 }, UltraRare = { PvE = 0.05, PvP = 0.03 }, Celestial = { PvE = 0.06, PvP = 0.03 },
+	},
+	Upgrade = { LevelMax = 10, LevelBonus = 0.025, Slots = 3, SlotBonus = 0.05, AwakenBonus = 0.10 },
 	ZonePrefix = { "Pizarra", "Verdín", "Sal", "Brasa", "Escarcha", "Eco", "Obsidiana", "Magma", "Vitral", "Astral" },
 }
 ```
@@ -210,28 +227,34 @@ return {
 		Staff  = { HitsPerSecond = 1.00, Coef = 0.960, Range = 35, MaxTargets = 1, CritBonus = 0, EnergyDiscount = 0.10 },
 		Bow    = { HitsPerSecond = 1.10, Coef = 0.727, Range = 70, MaxTargets = 1, CritBonus = 0 },
 	},
+	EnabledTypes = { "Sword", "Dagger", "Staff" },   -- MVP
+	ComboHits = 4,                                   -- GDD
 	SecondaryTargetDamage = 0.25,
+	Techniques = {   -- 2 por arma; se equipan en Z, X, C o V junto a las del Núcleo (GDD)
+		Sword = { { Id = "SpinningSlash", Coef = 1.5, Energy = 15, Cooldown = 5,  Mastery = 10 },
+		          { Id = "Riposte",       Coef = 3.0, Energy = 30, Cooldown = 12, Mastery = 50 } },
+		-- Axe, Dagger, Spear, Staff y Bow: misma forma; valores en B4, sección 1.4
+	},
 	Crit = { Chance = 0.05, Multiplier = 1.5, ChanceCap = 0.30, MultiplierCap = 2.0 },
 	Mastery = { XPBase = 10, XPLinear = 2, XPQuad = 0.04, MaxPowerLevel = 100, DamagePerLevel = 0.001,
-	            Points = { Common = 1, Elite = 4, Guardian = 12, Boss = 80 },
-	            Unlocks = { [1] = "Z", [10] = "X", [25] = "C", [50] = "V", [75] = "Awaken", [100] = "Transform" } },
+	            Points = { Common = 1, Elite = 4, Guardian = 12, Boss = 80 } },
 	StatusCap = 0.40,
 	Combo = { FullHits = 4, Falloff = { 0.9, 0.8, 0.7, 0.6, 0.5 }, Min = 0.5 },
-	Control = { Window = 10, Durations = { 1.0, 0.5, 0.25 }, Immunity = 6, StunCap = 2.0, StunWindow = 4,
-	            ChainBreakInvuln = 0.6, GuardBreakPvE = 2.0, GuardBreakPvP = 1.5, GuardBreakImmunity = 8 },
-	Cancel = { FromFraction = 0.6, EnergySurcharge = 0.5, MinInterval = 1.5 },
+	Control = { Window = 6, SecondFactor = 0.5, TenacitySeconds = 5, StunCap = 2.5,        -- GDD; Tenacidad ampliada de 2 a 5 s
+	            GuardBreakPvE = 2.0, GuardBreakPvP = 1.5, GuardBreakImmunity = 8 },
+	Cancel = { DashCancelsBasicRecovery = true, DashCancelsAbilities = false },           -- GDD
 	Enemies = {
-		Common   = { Health = 20,   Damage = 0.03, Interval = 1.5, XP = 1,   Coins = 1.35, Share = 0.88 },
-		Elite    = { Health = 80,   Damage = 0.06, Interval = 1.8, XP = 3.5, Coins = 5.4,  Share = 0.10 },
-		Guardian = { Health = 300,  Damage = 0.10, Interval = 2.2, XP = 10,  Coins = 16,   Share = 0.02 },
-		Boss     = { Health = 1500, Damage = 0.15, Interval = 2.5, XP = 60,  Coins = 60 },
-		XPScale = 0.72, TutorialHealthFactor = 0.5, TutorialMaxLevel = 10,
+		Common   = { Health = 16,   Damage = 0.03, Interval = 1.5, XP = 1,   Coins = 1.40,  Share = 0.88 },
+		Elite    = { Health = 64,   Damage = 0.06, Interval = 1.8, XP = 3.5, Coins = 5.60,  Share = 0.10 },
+		Guardian = { Health = 240,  Damage = 0.10, Interval = 2.2, XP = 10,  Coins = 16.80, Share = 0.02 },
+		Boss     = { Health = 1200, Damage = 0.15, Interval = 2.5, XP = 60,  Coins = 60 },
+		XPScale = 0.71, TutorialHealthFactor = 0.5, TutorialMaxLevel = 10,
 		PackWeights = { [1] = 70, [2] = 25, [3] = 5 }, PackSpacing = 20,
 	},
 	Boss = { PhaseThresholds = { 0.60, 0.30 }, HealthPerExtraPlayer = 0.6, DamagePerExtraPlayer = 0.05, MaxPlayers = 8,
 	         Telegraph = { Normal = 0.6, Heavy = 1.2, Lethal = 2.5 }, DamageFraction = { Normal = 0.15, Heavy = 0.35, Lethal = 0.70 },
 	         VulnerableSeconds = 6, VulnerableBonus = 0.5, EnrageSeconds = 720, DailyFullLoot = 3, MaterialsPerKill = 3,
-	         MinContribution = 0.05 },
+	         MinContribution = 0.05, CoreDropChance = 0.01 },
 }
 ```
 
@@ -240,17 +263,21 @@ return {
 ```lua
 return {
 	Starter = "Prismatic",
-	Awaken = { MasteryRequired = 75, DamageBonusPvE = 0.15, DamageBonusPvP = 0.08 },
-	Transform = { MasteryRequired = 100, Cooldown = 120,
-	              PvE = { Duration = 20, Damage = 0.20, CooldownReduction = 0.20 },
-	              PvP = { Duration = 12, Damage = 0.10, CooldownReduction = 0.10 } },
+	SlotTypes = { Z = "Area", X = "Control", C = "Mobility", V = "Ultimate" },             -- GDD
+	MasteryUnlocks = { [1] = "Z", [10] = "X", [25] = "C", [50] = "V", [100] = "Awaken" },
+	SwapOutsideCityItem = "ReadjustSeal",                                                   -- GDD: cuesta un consumible
+	Awaken = { MasteryRequired = 100, DamageBonusPvE = 0.15, DamageBonusPvP = 0.08, UnlocksTransform = true },   -- GDD
+	Transform = { Duration = 20, Cooldown = 120, Gauge = "Resonance", BonusPvE = 0.25, BonusCapPvP = 0.10 },     -- GDD
 	Cores = {
-		Prismatic = { Element = "Light", Passive = "Refraction", Abilities = {
-			Z = { Id = "FacetedBeam",    Coef = 1.80,  Energy = 15, Cooldown = 4 },
-			X = { Id = "SpectralFan",    Coef = 3.20,  Energy = 25, Cooldown = 8 },
-			C = { Id = "SentinelPrism",  Coef = 5.00,  Energy = 35, Cooldown = 14 },
-			V = { Id = "FullSpectrum",   Coef = 10.00, Energy = 50, Cooldown = 30 } } },
-		-- Ember, Frost, Storm, Seismic y Umbral: misma forma; valores en B4, sección 4.5
+		Prismatic = { Rarity = "Epic", Element = "Light", Passive = "LightShards", PassiveEnergyOnCrit = 5,     -- GDD
+			Abilities = {
+				Z = { Id = "PrismaticLance",  Coef = 2.2, Energy = 20, Cooldown = 6,  Slow = 0.25, SlowSeconds = 1.5 },
+				X = { Id = "RefractionField", Coef = 1.5, Energy = 25, Cooldown = 12, Radius = 14, RefractedSeconds = 6, RefractedBonus = 0.10 },
+				C = { Id = "LightningStep",   Coef = 1.2, Energy = 25, Cooldown = 9,  Distance = 18, DistanceNoTarget = 10 },
+				V = { Id = "TotalPrism",      Coef = 6.0, Energy = 40, Cooldown = 60, Seconds = 6, Slow = 0.20, Rays = 6 },
+			},
+			Transform = { Id = "PrismForm", LanceProjectiles = 3, PvPMoveSpeed = 0.10 } },
+		-- Ember (Rare), Frost (Rare), Storm (Epic), Seismic (Legendary) y Umbral (Legendary): misma forma; valores en B4, sección 5.4
 	},
 }
 ```
@@ -264,21 +291,34 @@ return {
 	XPSource = { Enemy = { Common = 2, Elite = 8, Guardian = 24, Boss = 160 },
 	             Deposit = { Common = 2, Uncommon = 3, Rare = 4, Epic = 6, Legendary = 9, Mythic = 14, UltraRare = 22 },
 	             NestFraction = 0.15, NestSlots = 2 },
-	Phase = { Hatchling = { Factor = 1.00 }, Unleashed = { Factor = 1.25, Level = 50 }, UnleashedMax = { Factor = 1.50, Level = 100 } },
-	Role = { Attacker = { b = 0.030, h = 0.40 }, Control = { b = 0.018, h = 0.50 }, Tank = { b = 0.015, h = 1.00 },
-	         Support = { b = 0.010, h = 0.50 }, Gatherer = { b = 0.008, h = 0.40 } },
-	Utility = { TankRedirect = 0.05, TankRedirectCap = 0.30, TankShield = 0.02, TankShieldInterval = 20,
-	            SupportHeal = 0.0015, SupportHealCap = 0.01, SupportHealCapPvP = 0.005,
-	            ControlReduction = 0.08, ControlCap = 0.25, GathererPick = 0.04, OtherPick = 0.01, PickCap = 0.20 },
-	DPSCap = { PvE = 0.40, PvP = 0.25, WindowSeconds = 5, RefAbilityFactor = 1.75, RefCritFactor = 1.025,
+	Phase = {   -- GDD
+		Hatchling    = { Factor = 1.00, Unlocks = "GatherPassive" },
+		Unleashed    = { Factor = 1.25, Level = 50,  Unlocks = "ActiveAbility", Scale = 1.8 },
+		UnleashedMax = { Factor = 1.50, Level = 100, Unlocks = "CoordinatedAttack" },
+	},
+	Role = { Offense = { b = 0.016, h = 0.40 }, Control = { b = 0.010, h = 0.50 }, Defense = { b = 0.008, h = 1.00 },
+	         Support = { b = 0.005, h = 0.50 }, Mining = { b = 0.004, h = 0.40 } },
+	Stance = { Gather = { Radius = 1.5, Damage = 0.5 }, Protect = { Radius = 0.5, Damage = 1.5 }, SwitchCooldown = 5 },   -- GDD
+	PickupRadius = 20,                                                                                                     -- GDD
+	Utility = {   -- valores del GDD para forma desatada de nivel 50 sin Dominio
+		DefenseShield = { Fraction = 0.20, Seconds = 5, Cooldown = 30, OwnerHealthBelow = 0.5 },
+		SupportHaste = { AttackSpeed = 0.15, Seconds = 6, Cooldown = 20 }, SupportHealOnPerfectDodge = 0.08,
+		ControlSlow = { Slow = 0.30, Seconds = 2, Cooldown = 10 },
+		MiningHaste = { ExtractSpeed = 0.20, Seconds = 10, Cooldown = 30 },
+		MiningPassive = { Common = 0.05, Uncommon = 0.06, Rare = 0.08, Epic = 0.10, Legendary = 0.15, Mythic = 0.18, UltraRare = 0.22 },
+		ExtractSpeedCap = 0.40, ControlCap = 0.25, RefFactor = 1.556,
+	},
+	DPSCap = { PvE = 0.40, PvP = 0.25, WindowSeconds = 5, RefAbilityFactor = 1.39, RefCritFactor = 1.025,
 	           MaxActivePvP = 3, CombatTimeout = 5 },
-	Stance = { Attack = 1.0, Gather = 0, Protect = 0.6, SwitchCooldown = 3, SwitchCooldownPvP = 6,
-	           PickupRadius = 12, ChestOpenSeconds = 4.5, ChestMaxDistance = 15 },
+	ChestOpenSeconds = 4.5,
 	Respawn = { PvE = 20, Fracture = 30 },
 	Slots = { Start = 3, Unlock = { [4] = { Level = 300 }, [5] = { Level = 700 }, [6] = { SeasonFragments = 60, GamePass = true } } },
-	Hatch = { Minutes = { Common = 10, Uncommon = 20, Rare = 40, Epic = 90, Legendary = 180, Mythic = 360, UltraRare = 720 } },
-	Bond = { FromDuplicate = { Common = 1, Uncommon = 2, Rare = 4, Epic = 8, Legendary = 16, Mythic = 32, UltraRare = 64 } },
-	Species = {},   -- 12 entradas: Id, Rarity, Element, Role, HitsPerSecond (B5, sección 4)
+	Hatch = { PickHits = { Common = 500, Uncommon = 1000, Rare = 2000, Epic = 4000, Legendary = 8000, Mythic = 15000, UltraRare = 30000 },
+	          HitsPerEnemy = 5 },                                                                                          -- GDD: se incuba minando
+	Evolve = { ElementFragments = { Common = 10, Uncommon = 15, Rare = 25, Epic = 40, Legendary = 60, Mythic = 90, UltraRare = 130 },
+	           BossMaterials = { Common = 5, Uncommon = 5, Rare = 8, Epic = 8, Legendary = 12, Mythic = 12, UltraRare = 16 },
+	           FragmentsFromDuplicate = { Common = 1, Uncommon = 2, Rare = 4, Epic = 8, Legendary = 16, Mythic = 32, UltraRare = 64 } },
+	Species = {},   -- 12 entradas: Id, Rarity, Element, Role, HitsPerSecond, GatherPassive, ActiveAbility, CoordinatedAttack (B5, sección 5)
 }
 ```
 
@@ -286,14 +326,14 @@ return {
 
 ```lua
 return {
-	IncomePerZoneValue = 480,       -- I(z) ~ 480 x V(z)
+	IncomePerZoneValue = 490,       -- I(z) ~ 490 x V(z)
 	GearCostHours = { Common = 0.3, Uncommon = 0.6, Rare = 1.2, Epic = 2.5, Legendary = 5, Mythic = 10, UltraRare = 20 },
 	Upgrade = { LevelCostFactor = 0.05, SlotCostFactor = 0.5, SlotGems = 6, AwakenCostFactor = 1.5, AwakenCatalysts = 4 },
 	Sell = { GearFraction = 0.10, RecycleFraction = 0.30 },
 	Backpack = { { Capacity = 80, Zone = 2, Hours = 0.5 }, { Capacity = 100, Zone = 3, Hours = 1 }, { Capacity = 120, Zone = 4, Hours = 2 },
 	             { Capacity = 140, Zone = 5, Hours = 3 }, { Capacity = 160, Zone = 6, Hours = 5 }, { Capacity = 180, Zone = 8, Hours = 8 },
 	             { Capacity = 200, Zone = 10, Hours = 12 } },
-	Consumable = { HealthPotion = 0.01, EnergyTonic = 0.01, LuckElixir = 0.10, XPScroll = 0.15, ExtractionBeacon = 0.05 },
+	Consumable = { HealthPotion = 0.01, EnergyTonic = 0.01, LuckElixir = 0.10, XPScroll = 0.15, ReadjustSeal = 0.05 },
 	PetEvolveHours = { Unleashed = 2, UnleashedMax = 8 },
 	CelestialForgeHours = 10, PrestigeSkinHours = 20,
 	QuestCoinBonus = 0.10,
@@ -316,31 +356,45 @@ return {
 		           CategoryWeights = { Pickaxe = 35, Minerals = 40, Materials = 15, Consumables = 10 },
 		           LotHours = { Common = 0.15, Uncommon = 0.25, Rare = 0.4, Epic = 0.8, Legendary = 2, Mythic = 5, UltraRare = 12 } },
 		Pet    = { PriceHours = 0.75, Currency = "Coins", PriceZone = "HighestUnlocked" },
+		Core   = { PriceHours = 3.0, Currency = "Coins", PriceZone = "HighestUnlocked", DuplicateMasteryPoints = 200,   -- GDD: cajas de Núcleos
+		           Weights = { Ember = 30, Frost = 30, Prismatic = 15, Storm = 15, Seismic = 5, Umbral = 5 } },
 		Event  = { Currency = "EventTokens", LuckApplies = false, GuaranteeBMin = "UltraRare",
 		           Weights = { Rare = 45, Epic = 33, Legendary = 15, Mythic = 5, UltraRare = 1.5, Celestial = 0.5 } },
 	},
+	ShowOddsBeforeOpen = true,       -- GDD
 	Animation = { Seconds = 2.5, FastSeconds = 1.0, Skippable = true, MultiOpen = 10 },
 	LogSize = 200,
 }
 ```
 
-### 2.10 `Fracture`  (B3 y B6)
+### 2.10 `Fracture`  (B3 y B6; el GDD pide un módulo así: «FractureConfig»)
 
 ```lua
 return {
-	ValueMultiplier = 2.0, XPMultiplier = 1.25, BackpackMultiplier = 2,
-	Streak = { PerStep = 0.02, MaxSteps = 5, MinLoadFraction = 0.5 },
-	LoadDebuff = { SpeedLoss = 0.30, Exponent = 1.5, DashCostBonus = 0.5, RevealFraction = 0.75, BlinkDistanceLoaded = 12 },
-	PvPDeath = { DropFraction = 0.50, LootableFraction = 0.70, NoDropBelowLoad = 0.10, SameVictimMinutes = 10 },
+	ValueMultiplier = 1.5, XPMultiplier = 1.25, BackpackMultiplier = 2,
+	Streak = { Steps = { 1.0, 1.1, 1.2, 1.3, 1.4, 1.5 }, BountyAtStreak = 5 },                       -- GDD
+	Load = { ZoneValueDivisor = 20, SlowLogFactor = 0.12, SlowCap = 0.40,                             -- GDD
+	         MobilityEnergySurchargeAtLoad = 10, MobilityEnergySurcharge = 0.25,
+	         ParticlesAtLoad = 5, ParticlesStuds = 60, MinimapAtLoad = 10, ZoneAnnounceAtLoad = 30 },
+	PvPDeath = { DropFraction = 0.50, LootableFraction = 0.80, ProtectedBelowLoad = 1, SameVictimMinutes = 10 },   -- GDD salvo SameVictim
 	PvEDeath = { DropFraction = 0.20 },
 	Chest = { Seconds = 90, ExclusiveSeconds = 10, OpenSeconds = 3 },
-	Extraction = { Points = 3, RotationSeconds = 120, WarningSeconds = 20, ChannelSeconds = 8 },
+	Extraction = { Positions = 3, RelocateMinutes = 10, WarningSeconds = 30, ChannelSeconds = 8, DamageResets = true,
+	               SquadChannelSeconds = { [2] = 6, [3] = 5 }, SquadRadius = 10 },                    -- GDD salvo valores de escuadrón
 	Exit = { ChannelSeconds = 3 },
-	Entry = { ShieldSeconds = 5, NoviceEntries = 3, NoviceShieldSeconds = 120, NoviceBreakLoad = 0.5, ReentrySeconds = 30 },
-	AntiCamp = { Radius = 25, Seconds = 45, HealthLossPerSecond = 0.05, RaiderKills = 3, RaiderWindowMinutes = 5, RaiderMarkSeconds = 60 },
-	Insurance = { PremiumZoneValues = 6, PayoutFraction = 0.5, DailyLimit = 5 },
-	Contracts = { Daily = 3, DailyIncomeHours = 0.20, WeeklyExtractions = 5, WeeklyAncientGems = 2 },
-	Squad = { MaxSize = 3, FriendlyFire = false },
+	Entry = { ProtectionSeconds = 10, ProtectionOnRespawn = true, NoviceEntriesWithoutLoss = 5, ReentrySeconds = 30,
+	          LevelSyncPerZone = 100 },                                                               -- GDD salvo reentrada y sincronización
+	AntiCamp = { Radius = 25, Seconds = 60, RevealOnMinimap = true },
+	Insurance = { Craftable = true, ProtectedFraction = 0.5, DailyLimit = 5,                          -- GDD
+	              Recipe = { UncommonIngot = 8, RarePlate = 1 } },
+	Contracts = { Daily = 3, DailyIncomeHours = 0.20, Types = { "ExtractRarity", "DefeatCarriers" },  -- GDD
+	              CarrierMinLoad = 5, SwapPvPContractPerDay = 1, WeeklyExtractions = 5, WeeklyAncientGems = 2 },
+	Bounty = { LootableFraction = 1.0 },
+	Revenge = { MarkSeconds = 180 },                                                                  -- GDD
+	CelestialRift = { EveryMinutes = 120, AnnounceMinutes = 5, DurationMinutes = 10, FragmentMultiplier = 4 },   -- GDD
+	RiftBoss = { FightersRequired = 6, WindowMinutes = 5, BossMaterials = 2 },
+	Season = { Weeks = 8, RankBy = "ExtractedValue" },                                                -- GDD
+	Squad = { MaxSize = 3, FriendlyFire = false, SharedLoad = true },                                 -- GDD
 }
 ```
 
@@ -359,7 +413,8 @@ return {
 		{ Id = 1, Name = "Cantera del Alba",  Boss = "CapatazDePizarra" },
 		{ Id = 2, Name = "Galerías de Musgo", Boss = "MadreLiquen" },
 		{ Id = 3, Name = "Vetas Salinas",     Boss = "LeviatanDeSalmuera" },
-		-- 4 a 10: nombres en B3; jefes por diseñar
+		{ Id = 7, Name = "Minas Oscuras" },        -- nombre del GDD
+		-- resto: nombres en B3; jefes por diseñar
 	},
 	Events = { MinIntervalMinutes = 25, MaxIntervalMinutes = 40, OneAtATime = true },
 	ServerSize = 20,
@@ -370,15 +425,31 @@ return {
 
 ```lua
 return {
-	DamageMultiplier = 0.06,
+	DamageMultiplier = 0.062,
 	VitalityM = 1.0,
 	HitCapFraction = 0.35,
 	BurstCap = { Fraction = 0.60, WindowSeconds = 2 },
 	HealingMultiplier = 0.5,
 	EnergyConsumableSeconds = 30,
-	LevelSync = { LevelsPerZone = 100, GearCapRarity = "UltraRare", GearCapBonus = 1.0 },
+	LevelSync = { LevelsPerZone = 100, GearCapRarity = "UltraRare", GearCapBonus = 0.5 },
 	Arena = { Modes = { "1v1", "2v2", "3v3" }, BestOf = 3, RoundSeconds = 90, BracketLevels = 100,
 	          Elo = { Start = 1000, K = 32, SearchRange = 100, RangeGrowth = 50, GrowthSeconds = 15 } },
+}
+```
+
+### 2.13 `VFX`  (A_GDD, sección 2; módulo añadido por el GDD)
+
+```lua
+return {
+	Quality = {   -- GDD: 2.000 en Alto y 800 en Bajo; ajenos al 50 %
+		Low    = { ParticleCap = 800,  OthersFraction = 0.40, OthersCutoffStuds = 120 },   -- 0,40 propuesto: con 0,50 no cabe el peor caso
+		Medium = { ParticleCap = 1400, OthersFraction = 0.50, OthersCutoffStuds = 120 },
+		High   = { ParticleCap = 2000, OthersFraction = 0.50, OthersCutoffStuds = 120 },
+	},
+	PerAbility = { Particles = 60, Emitters = 3, DynamicLights = 2, Seconds = 2 },
+	PerPet = { Particles = 10 },
+	Accessibility = { Distortion = true, CameraShake = true, ChromaticAberration = true },   -- desactivables (GDD)
+	CritAberrationSeconds = 0.12,
 }
 ```
 
@@ -410,7 +481,7 @@ Todos son módulos con `Init()` y `Start()`. `init.server.luau` los carga en el 
 | PowerCoreService | Equipar Núcleos, habilidades, enfriamientos, maestría, Despertar y Transformación | CombatService, InventoryService | `Cast`, `Equip`, `Awaken`, `Transform` |
 | BossService | Instancias de jefe, fases, escalado, botín diario | CombatService, EnemyService | `Start`, `GetState` |
 | PetService | Equipar, posturas, XP de mascota, incubación y Nido | InventoryService | `Equip`, `SetStance`, `Hatch` |
-| PetEvolutionService | Evolución de fase: requisitos, costes y Vínculos | PetService, EconomyService | `Evolve`, `ReleaseDuplicate` |
+| PetEvolutionService | Evolución de fase: requisitos, fragmentos elementales, material de jefe y liberación de duplicados | PetService, EconomyService | `Evolve`, `ReleaseDuplicate` |
 | PetCombatService | Daño y utilidad de mascotas; tope de DPS | PetService, CombatService | `Tick` |
 | PvPService | Reglas PvP: multiplicador, topes de golpe y ráfaga, sincronización de nivel | CombatService | `IsPvPAllowed`, `ScaleDamage` |
 | FractureService | Zonas Fracturadas: entrada, carga, saqueo, cofres, extracción, racha, seguro, anti-acampada | PvPService, InventoryService, EconomyService, WorldService | `Enter`, `Extract`, `Exit`, `OnPlayerKilled` |
@@ -435,7 +506,7 @@ El cliente dibuja, reproduce y **pide**. Nunca decide un resultado.
 | Controlador | Qué hace | Qué puede pedir al servidor |
 |---|---|---|
 | InputController | Traduce teclado, táctil y mando a acciones (B4, sección 9) | Nada directamente |
-| CombatController | Animaciones y predicción visual de ataques, dash y esquiva | Atacar, lanzar habilidad, bloquear, dash, esquiva, parpadeo, transformarse |
+| CombatController | Animaciones y predicción visual de ataques y dash | Atacar, lanzar habilidad, elegir las 4 ranuras, bloquear, dash, parpadeo, Ruptura, transformarse |
 | MiningController | Animación de pico y barra del depósito | Golpear un depósito |
 | PetController | Posición visual de mascotas, postura | Equipar, cambiar postura, incubar, evolucionar, liberar |
 | FractureController | Interfaz de carga, minimapa, Puntos de Extracción | Entrar, extraer, salir, abrir cofre, contratar seguro |
@@ -487,26 +558,27 @@ Derivados de la velocidad máxima legítima de cada acción con un 25% de margen
 |---|---|---|---|
 | Atacar (Daga con Velocidad máxima) | 4,55/s | 5,7/s | 12 |
 | Picar | 2,00/s | 2,5/s | 5 |
-| Lanzar habilidad | 1,39/s | 1,8/s | 4 |
 | Bloqueo (pulsar y soltar) | 2,00/s | 2,5/s | 5 |
-| Esquiva | 0,83/s | 1,1/s | 3 |
-| Dash | 0,40/s | 0,5/s | 2 |
-| Cambiar postura | 0,33/s | 0,5/s | 2 |
+| Lanzar habilidad (4 ranuras) | 0,68/s | 0,9/s | 2 |
+| Dash (2 cargas, 3 s de recarga) | 0,33/s | 0,5/s | 2 |
+| Cambiar postura | 0,20/s | 0,3/s | 2 |
 | Parpadeo | 0,12/s | 0,2/s | 2 |
+| Ruptura | 0,07/s | 0,1/s | 2 |
 
-Un jugador genera como mucho 11,6 acciones de combate por segundo; un servidor de 20, unas 233 por segundo.
+Un jugador genera como mucho 10 acciones de combate por segundo; un servidor de 20, unas 199 por segundo.
 
 ### 5.3 Lista de Remotes del cliente al servidor
 
 | Remote | Tipo | Parámetros | Validación específica en el servidor | Límite |
 |---|---|---|---|---|
 | `Combat.Attack` | Evento | `targetIds: {number}` (máx. 3), `comboIndex: number` | Arma equipada; objetivos vivos y dentro del alcance del arma + 20%; tiempo desde el último golpe ≥ intervalo del arma; PvP permitido si el objetivo es un jugador | 5,7/s |
-| `Combat.Cast` | Evento | `slot: "Z"\|"X"\|"C"\|"V"`, `aim: Vector3` | Habilidad desbloqueada por maestría; enfriamiento cumplido; energía suficiente; `aim` normalizado y dentro del alcance | 1,8/s |
+| `Combat.Cast` | Evento | `slot: "Z"\|"X"\|"C"\|"V"`, `aim: Vector3` | La ranura tiene una habilidad del Núcleo o una técnica del arma equipados y desbloqueados; enfriamiento cumplido; energía suficiente; `aim` normalizado y dentro del alcance | 0,9/s |
+| `Combat.SetLoadout` | Función | `slots: {Z: string, X: string, C: string, V: string}` | Las 4 pertenecen al Núcleo o al arma equipados y están desbloqueadas; V solo admite la definitiva o la segunda técnica; fuera de combate | 1/s |
 | `Combat.Block` | Evento | `active: boolean` | Energía > 0; no aturdido | 2,5/s |
-| `Combat.Dodge` | Evento | `direction: Vector3` | Enfriamiento y energía; dirección unitaria; el servidor calcula el destino | 1,1/s |
-| `Combat.Dash` | Evento | `direction: Vector3` | Enfriamiento y energía (con recargo por carga); destino calculado por el servidor | 0,5/s |
-| `Combat.Blink` | Evento | `direction: Vector3` | Enfriamiento y energía; sin atravesar paredes (trazado de rayo en el servidor); distancia según carga | 0,2/s |
-| `Combat.Transform` | Función | — | Núcleo Despertado, maestría 100, barra llena, enfriamiento | 1 cada 5 s |
+| `Combat.Dash` | Evento | `direction: Vector3` | Carga disponible (2 cargas, 3 s de recarga) y energía (con recargo del 25% a partir de Carga 10); destino calculado por el servidor. Si llega en los 0,25 s previos a un golpe, el servidor concede la esquiva perfecta | 0,5/s |
+| `Combat.Break` | Evento | — | Ruptura: el jugador lleva al menos 0,8 s bajo control según el servidor; 50 de energía; enfriamiento de 15 s | 0,1/s |
+| `Combat.Blink` | Evento | `direction: Vector3` | Desbloqueado; enfriamiento y energía; 12 studs; sin atravesar paredes (trazado de rayo en el servidor) | 0,2/s |
+| `Combat.Transform` | Función | — | Núcleo Despertado, barra de Resonancia llena, enfriamiento de 120 s | 1 cada 5 s |
 | `Mining.Hit` | Evento | `depositId: number` | Depósito existente y a ≤ 10 studs; pico equipado; Minería ≥ requisito; tiempo desde el último golpe ≥ intervalo del pico | 2,5/s |
 | `Stats.Allocate` | Función | `stat: string`, `amount: number` | Puntos libres suficientes; tope de 1.000 por estadística; entero positivo | 5/s |
 | `Stats.Respec` | Función | `useTome: boolean` | Fuera de combate y de Zona Fracturada; monedas o Tomo suficientes | 1 cada 10 s |
@@ -516,28 +588,30 @@ Un jugador genera como mucho 11,6 acciones de combate por segundo; un servidor d
 | `Shop.Sell` | Función | `mineralId: string`, `amount: number` o `itemId: string` | A ≤ 15 studs de un mercader; existencias; el precio lo calcula el servidor | 3/s |
 | `Shop.BuyConsumable` | Función | `id: string`, `amount: number` (1–99) | Monedas; precio según la zona del jugador | 3/s |
 | `Shop.BuyBackpack` | Función | — | Zona desbloqueada; siguiente ampliación en orden; monedas | 1/s |
-| `Crafting.Craft` | Función | `kind: "Pickaxe"\|"Weapon"`, `type: string?`, `zone: number`, `rarity: string` | En la forja; zona desbloqueada; materiales y monedas; Celestial no se fabrica por esta vía | 2/s |
+| `Crafting.Craft` | Función | `kind: "Pickaxe"\|"Weapon"`, `type: string?`, `zone: number`, `rarity: string`, `passives: {string}?`, `combatStat: string?` | En la forja; zona desbloqueada; materiales y monedas; Celestial no se fabrica por esta vía Las pasivas del pico se eligen entre las de su categoría | 2/s |
 | `Crafting.Upgrade` | Función | `itemId: string`, `upgrade: "Level"\|"Slot"\|"Awaken"` | Propiedad; siguiente paso válido; materiales y monedas | 3/s |
 | `Crafting.Recycle` | Función | `itemId: string` | Propiedad; no equipado | 2/s |
-| `Crafting.ForgeCelestial` | Función | `kind: string`, `type: string?` | 60 fragmentos; monedas; zona de anclaje ≥ 6 | 1 cada 5 s |
+| `Crafting.CraftConsumable` | Función | `id: string`, `amount: number` (1–20) | En la forja; receta de la configuración; materiales suficientes (Seguro de carga, Sello de Reajuste) | 2/s |
+| `Crafting.ForgeCelestial` | Función | `kind: string`, `type: string?` | 50 fragmentos; monedas; zona de anclaje ≥ 6 | 1 cada 5 s |
 | `Box.Open` | Función | `boxType: string`, `count: 1\|10` | Monedas o fichas; hueco en inventario; `ComplianceService` si la caja fuese de pago | 2/s |
 | `Pet.Equip` | Función | `petId: string`, `slot: number` | Propiedad; espacio desbloqueado; fuera de combate | 2/s |
-| `Pet.SetStance` | Evento | `stance: "Attack"\|"Gather"\|"Protect"` | Enfriamiento de 3 s (6 s tras daño de jugador) | 0,5/s |
-| `Pet.StartHatch` | Función | `eggId: string`, `incubator: number` | Propiedad; incubadora libre y desbloqueada | 1/s |
-| `Pet.ClaimHatch` | Función | `incubator: number` | Tiempo de juego cumplido según el servidor | 1/s |
-| `Pet.Evolve` | Función | `petId: string` | Nivel 50 o 100; Vínculos, materiales y monedas | 1/s |
+| `Pet.SetStance` | Evento | `stance: "Gather"\|"Protect"` | Enfriamiento de 5 s | 0,3/s |
+| `Pet.StartHatch` | Función | `eggId: string`, `incubator: number` | Propiedad; incubadora libre y desbloqueada. El progreso lo cuenta el servidor en golpes de pico | 1/s |
+| `Pet.ClaimHatch` | Función | `incubator: number` | Golpes de pico requeridos cumplidos según el servidor | 1/s |
+| `Pet.Evolve` | Función | `petId: string` | Nivel 50 o 100; fragmentos de su elemento o material de jefe; monedas | 1/s |
 | `Pet.Release` | Función | `petIds: {string}` (máx. 50) | Propiedad; no equipadas | 1/s |
 | `Pet.SetNest` | Función | `petId: string`, `slot: number` | Propiedad; no equipada | 1/s |
-| `Core.Equip` | Función | `coreId: string` | Núcleo en propiedad; fuera de combate | 1/s |
-| `Core.Awaken` | Función | `coreId: string` | Maestría 75; misión completada; materiales | 1 cada 5 s |
+| `Core.Equip` | Función | `coreId: string` | Núcleo en propiedad; fuera de combate; fuera de la ciudad consume un Sello de Reajuste | 1/s |
+| `Core.Awaken` | Función | `coreId: string` | Maestría 100; materiales de jefe | 1 cada 5 s |
 | `Boss.Join` | Función | `zone: number` | Zona desbloqueada; a ≤ 20 studs de la puerta; instancia no iniciada o con hueco | 1/s |
-| `Fracture.Enter` | Función | `zone: number`, `insurance: boolean` | Zona desbloqueada; espera de reentrada cumplida; seguro: monedas, límite diario y sin marca de saqueador | 1 cada 2 s |
-| `Fracture.Extract` | Evento | `start: boolean` | A ≤ 8 studs del Punto de Extracción activo; el servidor cuenta los 8 s y los corta si hay daño | 1/s |
+| `Fracture.Enter` | Función | `zone: number`, `useInsurance: boolean`, `confirmed: boolean` | Requisitos de la zona (nivel, Minería y potencia de pico); confirmación mostrada; espera de reentrada cumplida; seguro: tener el consumible y no superar el límite diario | 1 cada 2 s |
+| `Fracture.Extract` | Evento | `start: boolean` | A ≤ 8 studs del Punto de Extracción activo; el servidor cuenta los 8 s (6 o 5 en escuadrón) y los reinicia si hay daño | 1/s |
 | `Fracture.Exit` | Evento | `start: boolean` | En la entrada; 3 s contados por el servidor, interrumpidos por daño | 1/s |
 | `Fracture.OpenChest` | Evento | `chestId: number`, `byPet: boolean` | Cofre existente; distancia; exclusividad; el servidor cuenta el tiempo y reparte según hueco | 1/s |
 | `Arena.Queue` | Función | `mode: string` | Fuera de combate y de Zona Fracturada; sin cola activa | 1 cada 2 s |
 | `Arena.Leave` | Evento | — | — | 1/s |
 | `Quest.Claim` | Función | `questId: string` | Misión completada según el servidor y no reclamada | 3/s |
+| `Quest.SwapContract` | Función | `contractId: string` | Contrato de derrotar portadores; un cambio al día | 1 cada 5 s |
 | `Season.Claim` | Función | `level: number`, `track: "Free"\|"Paid"` | Nivel alcanzado; vía de pago en propiedad; no reclamado | 3/s |
 | `Rebirth.Confirm` | Función | `token: string` | Nivel 1.000; fuera de combate; `token` emitido por el servidor en el paso previo (doble confirmación) | 1 cada 10 s |
 | `World.Teleport` | Función | `worldId: string` | Mundo desbloqueado; guardado completado antes de teletransportar | 1 cada 5 s |
@@ -580,21 +654,24 @@ Una clave por jugador en el DataStore `Perfiles`: `u_<UserId>`.
 	Wallet = { Coins = 0, Crystals = 0, EventTokens = 0, SeasonFragments = 0, CelestialFragments = 0, Bonds = 0 },
 	Items = { -- por identificador único
 		["a1b2c3d4"] = { Kind = "Weapon", Type = "Sword", Zone = 1, Rarity = "Rare", Level = 0, Slots = 0, Awakened = false },
+		["e5f6a7b8"] = { Kind = "Pickaxe", Zone = 1, Rarity = "Epic", Level = 0, Slots = 0, Awakened = false, Passives = { "RunicSonar" }, CombatStat = "Defense" },
 	},
-	Equipped = { Weapon = "", Pickaxe = "", Core = "Prismatic", Pets = { "", "", "" } },
+	Equipped = { Weapon = "", Pickaxe = "", Core = "Prismatic", Pets = { "", "", "" }, Stance = "Protect",
+	             Loadout = { Z = "PrismaticLance", X = "", C = "", V = "" } },
 	Minerals = { Carried = {}, Fractured = {}, Banked = {} },     -- por Id de mineral
-	Materials = { Boss = {}, AncientGems = 0 },
+	Materials = { Boss = {}, Element = {}, AncientGems = 0 },
+	Consumables = { CargoInsurance = 0, ReadjustSeal = 0 },
 	Backpack = { Tier = 0 },
 	Pets = { ["p1"] = { Species = "TopilloDePizarra", Level = 1, XP = 0, Phase = "Hatchling" } },
-	PetSlots = 3, PetStorage = 30, Incubators = { { Egg = "", PlaySeconds = 0 } }, Nest = { "", "" },
+	PetSlots = 3, PetStorage = 30, Incubators = { { Egg = "", PickHits = 0 } }, Nest = { "", "" },
 	Cores = { Prismatic = { Mastery = 1, XP = 0, Awakened = false } },
 	WeaponMastery = { Sword = { Level = 1, XP = 0 } },
 	Boxes = {
-		Pity = { Weapon = { A = 0, B = 0 }, Zone = { A = 0, B = 0 }, Pet = { A = 0, B = 0 }, Event = { A = 0, B = 0 } },
+		Pity = { Weapon = { A = 0, B = 0 }, Zone = { A = 0, B = 0 }, Pet = { A = 0, B = 0 }, Core = { A = 0, B = 0 }, Event = { A = 0, B = 0 } },
 		Log = {},      -- últimas 200: { T, Box, Zone, Rarity, Item, A, B }
-		Opened = { Weapon = 0, Zone = 0, Pet = 0, Event = 0 },
+		Opened = { Weapon = 0, Zone = 0, Pet = 0, Core = 0, Event = 0 },
 	},
-	Fracture = { Entries = 0, Streak = 0, InsuranceToday = 0, LastDeath = 0, WeeklyFragments = 0, Victims = {} },
+	Fracture = { Entries = 0, Streak = 0, InsuranceToday = 0, LastDeath = 0, Victims = {}, LastKiller = { UserId = 0, Time = 0 }, SeasonExtractedValue = 0 },
 	Bosses = { Daily = {}, WeeklyFirst = {}, EventKills = 0 },
 	Quests = { Daily = {}, Weekly = {}, Contracts = {}, DayKey = "", WeekKey = "" },
 	Season = { Id = 0, PassXP = 0, Paid = false, Claimed = {} },
@@ -689,8 +766,8 @@ Para cada apertura, el servidor hace en este orden y sin ceder el control:
 | Golpe de pico | Depósito existente; distancia ≤ 10 studs medida por el servidor; intervalo del pico; requisito de Minería; el daño lo calcula el servidor con F16 |
 | Ataque básico | Alcance del arma + 20%; intervalo del arma según Velocidad; línea de visión para Bastón y Arco; máximo 3 objetivos; daño con F19 |
 | Habilidad | Desbloqueo por maestría; enfriamiento y energía en el servidor; el área de efecto se resuelve en el servidor |
-| Movimiento | Cada 0,5 s se compara el desplazamiento con el máximo posible: 50 studs en 0,5 s, 65 en 1 s y 94 en 2 s, contando dash y parpadeo. Tres excesos seguidos devuelven al jugador a la última posición válida |
-| Dash, esquiva, parpadeo | El servidor calcula el destino con la dirección recibida; trazado de rayo para paredes |
+| Movimiento | Cada 0,5 s se compara el desplazamiento con el máximo posible: 65 studs en 0,5 s, 94 en 1 s y 122 en 2 s, contando las 2 cargas de dash, el parpadeo y el Paso de Relámpago. Tres excesos seguidos devuelven al jugador a la última posición válida |
+| Dash, parpadeo y Ruptura | El servidor calcula el destino con la dirección recibida y lleva las cargas de dash; trazado de rayo para paredes. La esquiva perfecta y la Ruptura las decide el servidor con sus propios tiempos de golpe y de control |
 | XP y nivel | Solo ProgressionService añade XP, y solo desde eventos del servidor (muerte de enemigo, depósito agotado) |
 | Puntos de estadística | Suma de asignados ≤ puntos del nivel; tope por estadística |
 | Monedas | Solo EconomyService; toda variación lleva motivo y queda registrada; alerta si un jugador gana más de 3 veces el ingreso de referencia de su zona en una hora |
@@ -707,35 +784,35 @@ Para cada apertura, el servidor hace en este orden y sin ceder el control:
 
 | Operación | Cómo se valida |
 |---|---|
-| Carga | La mochila vive en el servidor (`Minerals.Carried` y `Minerals.Fractured`). El debuff de velocidad lo fija el servidor en el `WalkSpeed` del personaje; la validación de movimiento usa ese valor |
+| Carga | La mochila vive en el servidor (`Minerals.Carried` y `Minerals.Fractured`). El servidor calcula la Carga a partir del valor base de lo transportado, fija el `WalkSpeed` con la fórmula del GDD y activa los avisos (partículas, minimapa, anuncio); la validación de movimiento usa ese valor |
 | Mineral fracturado | Se guarda aparte del normal. Solo pasa a valer ×2,0 al completar una extracción |
-| Entrada | Escudo de 5 s y escudo de novato aplicados por el servidor; espera de reentrada contada en el servidor |
-| Muerte contra jugador | `FractureService.OnPlayerKilled` se dispara desde CombatService, nunca desde el cliente. Calcula el 50%, elige las unidades más valiosas, destruye el 30% de lo soltado y crea el cofre con el 70% |
+| Entrada | Requisitos de la zona; 10 s de protección al entrar y al reaparecer, que se pierden al atacar; contador de las 5 entradas de novato en el perfil; espera de reentrada contada en el servidor |
+| Muerte contra jugador | `FractureService.OnPlayerKilled` se dispara desde CombatService, nunca desde el cliente. Calcula el 50% (25% con Seguro de carga activo; 0% en las entradas de novato o por debajo de Carga 1), elige las unidades más valiosas, destruye el 20% de lo soltado y crea el cofre con el 80% (100% si la víctima tenía recompensa por cabeza) |
 | Autoría de la muerte | Cuenta quien hizo más daño en los últimos 10 s. Una caída o un enemigo no cuentan como muerte PvP |
 | Misma víctima | Lista `Victims` con la hora; si se repite en menos de 10 minutos, no se suelta nada |
 | Desconexión en combate | Si el jugador sale habiendo recibido daño de otro jugador en los últimos 10 s, se trata como muerte contra ese jugador |
 | Cofre de Saqueo | Existe solo en el servidor. Exclusividad de 10 s para el autor y su escuadrón; apertura de 3 s (4,5 s por mascota) contada en el servidor; se entrega solo lo que cabe |
-| Extracción | Distancia ≤ 8 studs al punto **activo** según el servidor; 8 s contados por el servidor; cualquier daño recibido la cancela; al completarse, el mineral va al banco y se guarda de inmediato |
-| Racha | Se incrementa solo con carga ≥ 50% de la capacidad, medida por el servidor al extraer |
-| Seguro | Se cobra al entrar; el pago se calcula al morir con el valor base de lo soltado; contador diario |
-| Fragmentos Celestiales | Sorteo en el servidor al extraer; tope semanal en el perfil; van directos a la cuenta |
-| Anti-acampada | El servidor mide el tiempo de cada jugador a menos de 25 studs del punto activo sin canalizar |
-| Traspaso entre cuentas | No hace falta regla especial: rinde 1,20 frente a 2,00 (B7). Aun así, analítica marca parejas atacante–víctima repetidas |
+| Extracción | Distancia ≤ 8 studs al punto **activo** según el servidor; 8 s contados por el servidor (6 o 5 con compañeros de escuadrón a 10 studs); cualquier daño recibido la reinicia; al completarse, el mineral va al banco y se guarda de inmediato |
+| Racha | Sube un paso por extracción completada (hasta ×1,5) y se reinicia al morir en la grieta; con racha 5 o más el servidor marca al jugador (recompensa por cabeza) |
+| Seguro | Es un consumible fabricado; se consume al entrar si el jugador lo pide; reduce a la mitad lo soltado en esa carrera; contador diario |
+| Fragmentos Celestiales | Sorteo en el servidor al agotar cada depósito de grieta de zona 6 o más (0,25%; ×4 durante la Grieta Celestial); van directos a la cuenta |
+| Anti-acampada | Los puntos cambian de sitio cada 10 minutos; el servidor marca en el minimapa a quien pase 60 s a menos de 25 studs del punto activo sin canalizar |
+| Traspaso entre cuentas | No hace falta regla especial: rinde 1,10 frente a 1,50 (B7). Aun así, analítica marca parejas atacante–víctima repetidas |
 
 ### 7.4 Transformaciones y Despertar
 
 | Operación | Cómo se valida |
 |---|---|
-| Despertar | Maestría ≥ 75, misión propia completada y materiales, todo leído del perfil; no existe como producto de pago |
-| Barra de Sincronía | La llena el servidor con el daño que él mismo calcula; el cliente solo la muestra |
-| Activar Transformación | Núcleo Despertado, maestría 100, barra llena y enfriamiento de 120 s en el servidor |
-| Duración y bonos | Los aplica y retira el servidor (20 s en PvE, 12 s en PvP); al morir o cambiar de Núcleo se cancela |
-| Cambio de Núcleo | Prohibido en combate; reinicia la barra |
+| Despertar | Maestría 100 y materiales de jefe, leídos del perfil; no existe como producto de pago |
+| Barra de Resonancia | La llena el servidor con el daño que él mismo calcula; el cliente solo la muestra |
+| Activar Transformación | Núcleo Despertado, barra de Resonancia llena y enfriamiento de 120 s en el servidor |
+| Duración y bonos | Los aplica y retira el servidor (20 s; hasta +25% en PvE y tope del 10% en PvP); al morir o cambiar de Núcleo se cancela |
+| Cambio de Núcleo | Prohibido en combate; fuera de la ciudad consume un Sello de Reajuste; reinicia la barra |
 
 ### 7.5 Tope de DPS de mascotas
 
 1. **Las mascotas no existen como actores con autoridad en el cliente.** El cliente solo dibuja su posición; todo su daño lo genera `PetCombatService` en el servidor.
-2. `DPSref` se recalcula en el servidor cada vez que cambian estadísticas, arma, maestría o mascotas: `PotenciaArma × MultFuerza × 1,025 × MultMaestría × 1,75`.
+2. `DPSref` se recalcula en el servidor cada vez que cambian estadísticas, arma, maestría, mascotas o postura: `PotenciaArma × MultFuerza × 1,025 × MultMaestría × 1,39`.
 3. `Factor = mín(1, Tope × DPSref / Σ DPS teórico)`, con `Tope` = 0,40 en PvE y 0,25 en PvP y Zonas Fracturadas.
 4. Cada golpe de mascota se multiplica por `Factor` y después se recorta con la ventana deslizante de 5 s: lo acumulado nunca supera `Tope × DPSref × 5`.
 5. Las mascotas solo atacan si el jugador ha dado o recibido un golpe en los últimos 5 s.
@@ -744,7 +821,7 @@ Para cada apertura, el servidor hace en este orden y sin ceder el control:
 
 ### 7.6 Reglas PvP en el servidor
 
-- `PvPService.ScaleDamage` aplica, en este orden: sincronización de nivel, fórmula F19 con `MultModo = 0,06`, tope del 35% por golpe y tope de ráfaga (60% de la vida máxima en 2 s, con una ventana por víctima).
+- `PvPService.ScaleDamage` aplica, en este orden: sincronización de nivel, fórmula F19 con `MultModo = 0,062`, tope del 35% por golpe y tope de ráfaga (60% de la vida máxima en 2 s, con una ventana por víctima).
 - El daño entre jugadores solo se procesa si ambos están en una arena en curso o en la misma Zona Fracturada y ninguno tiene escudo.
 
 ### 7.7 Detección y respuesta
@@ -763,11 +840,14 @@ Para cada apertura, el servidor hace en este orden y sin ceder el control:
 
 ### 8.1 Presupuesto de VFX y partículas
 
-| Límite | Valor |
-|---|---|
-| Por habilidad | 60 partículas, 3 emisores, 2 luces dinámicas, 2 s (6 s las zonas persistentes) |
-| Por mascota | 10 partículas |
-| En pantalla | 300 (baja), 800 (media), 2.000 (alta) |
+| Límite | Valor | Origen |
+|---|---|---|
+| Tope de partículas por cliente | 2.000 en Alto y 800 en Bajo; 1.400 en Medio | GDD; el de Medio es propuesta |
+| Efectos de otros jugadores | Al 50% de partículas; apagados a más de 120 studs | GDD |
+| Efectos propios | Completos | GDD |
+| Por habilidad | 60 partículas, 3 emisores, 2 luces dinámicas, 2 s (6 s las zonas persistentes) | Propuesta |
+| Por mascota | 10 partículas | Propuesta |
+| Accesibilidad | Distorsión, vibración y aberración desactivables | GDD |
 
 `VFXController` lleva la cuenta de partículas activas. Antes de lanzar un efecto comprueba el presupuesto; si no cabe, usa la versión reducida o lo omite, por este orden de prioridad:
 
@@ -778,20 +858,23 @@ Para cada apertura, el servidor hace en este orden y sin ceder el control:
 5. Efectos de mascotas ajenas.
 6. Ambiente.
 
+Traducción de los efectos del GDD a herramientas nativas (A_GDD, sección 2.4): capas de `ParticleEmitter`, `Trail` y `Beam` con `BloomEffect` local, aberración simulada con tres imágenes de interfaz durante 0,12 s, pulso de campo de visión con `DepthOfField`, y `Highlight` solo en formas desatadas.
+
 ### 8.2 Niveles de calidad
 
-| Ajuste | Baja | Media | Alta |
+| Ajuste | Bajo | Medio | Alto |
 |---|---|---|---|
-| Efectos propios | 60% | 100% | 100% |
-| Efectos de otros jugadores | 10% | 40% | 100% |
-| Efectos de mascotas ajenas | Ninguno | 30% | 100% |
-| Efectos de jefe | 50% | 100% | 100% |
+| Tope de partículas | 800 | 1.400 | 2.000 |
+| Efectos de otros jugadores | 40% | 50% | 50% |
+| Distancia de efectos ajenos | 120 studs | 120 studs | 120 studs |
 | Luces dinámicas de habilidades | No | 1 por efecto | 2 por efecto |
 | Sombras | No | Solo personajes | Todas |
-| Distancia de efectos | 60 studs | 100 studs | 150 studs |
-| Peor caso (jefe con 8 jugadores) | 273 de 300 | 739 de 800 | 1.390 de 2.000 |
+| Bloom, profundidad de campo y aberración | Desactivados | Activos | Activos |
+| Peor caso (jefe con 8 jugadores) | 760 de 800 | 865 de 1.400 | 865 de 2.000 |
 
-- La calidad inicial se elige por dispositivo (táctil → baja) y se ajusta sola: si la media baja de 25 fotogramas por segundo durante 10 s, baja un nivel; el jugador puede fijarla a mano.
+- En calidad Baja los efectos ajenos van al 40% y no al 50% del GDD: con el 50% el peor caso son 865 partículas, por encima del tope de 800.
+- La calidad inicial se elige por dispositivo y se ajusta sola: si la media baja de 25 fotogramas por segundo durante 10 s, baja un nivel; el jugador puede fijarla a mano.
+- El presupuesto se mide con el MicroProfiler en un móvil de gama media (GDD).
 - Los efectos se reutilizan desde un fondo de instancias; no se crean y destruyen en cada uso.
 
 ### 8.3 Streaming de la mina
@@ -808,7 +891,7 @@ Para cada apertura, el servidor hace en este orden y sin ceder el control:
 | Aspecto | Presupuesto |
 |---|---|
 | Jugadores por servidor | 20 |
-| Remotes de combate entrantes | Hasta 233 por segundo en el peor caso |
+| Remotes de combate entrantes | Hasta 199 por segundo en el peor caso |
 | Replicación por zona | Enemigos 6,2 KB/s; mascotas 2,9 KB/s; depósitos 0,2 KB/s; barras de vida 0,5 KB/s |
 | IA de enemigos | Solo activa si hay un jugador a ≤ 120 studs; resto dormida |
 | Mascotas | Posición simulada en cada cliente a partir de la del dueño; el servidor solo replica postura, vida y objetivo |
@@ -831,14 +914,15 @@ Los scripts de Python de `calculos/` son la referencia. Cada uno exporta vectore
 | Protección contra mala suerte | 100.000 aperturas: Legendario+ en 4,449% ± 0,2; ninguna racha de más de 50; garantía de 100 | `b1_rarezas.py` |
 | XP y niveles | F6 para los 1.000 niveles contra el CSV | `b2_xp_niveles.csv` |
 | Estadísticas y Defensa | F10 y F12 en 0, 1, 100, 1.000 y 5.000; nunca por encima del tope | `b2_progresion.py` |
-| Energía | El dash encadenado vacía la barra; ningún caso con energía infinita | `b2_progresion.py` |
+| Energía y movilidad | 2 cargas de dash con 3 s de recarga; pausa de regeneración; factor de habilidades de referencia ×1,39 | `b2_progresion.py` |
 | Minería | Vida, valor y tiempo de extracción de los 66 minerales | `b3_minerales.csv` |
+| Debuff de carga | Carga 1, 5, 10 y 30 dan 8%, 22%, 29% y 40% (tabla del GDD); avisos en 5, 10 y 30 | `b3_mineria.py` |
 | Daño | F19 paso a paso con el ejemplo de B4; topes de crítico y estados | `b4_combate.py` |
-| Anti-combo | Escalado de combo, rendimientos del control, máximo 2,0 s de aturdimiento | `b4_combate.py` |
+| Anti-combo | Segundo control al 50%, Tenacidad de 5 s, máximo 2,5 s de aturdimiento, Ruptura a los 0,8 s por 50 de energía | `b4_combate.py` |
 | Tope de mascotas | Los 24 casos: ni la media ni ninguna ventana de 5 s superan el tope | `b5_mascotas.py` |
 | PvP | Tope del 35% por golpe y del 60% en 2 s con el combo del Núcleo Umbrío | `b7_simulaciones.py` |
 | Precios | Coste de fabricar y mejorar para 10 zonas × 7 rarezas | `b6_precios_equipo.csv` |
-| Saqueo | Con carga 100: conserva 50, cofre 35, destruye 15; misma víctima; carga mínima | B3 |
+| Saqueo | Con carga 100: conserva 50, cofre 40, destruye 10; con seguro, suelta 25; entradas de novato; por debajo de Carga 1; misma víctima | B3, B6 |
 | Migraciones | Cada migración con un perfil de la versión anterior; perfil de versión futura rechazado | — |
 | Sesión bloqueada | Con DataStore simulado: dos servidores no cargan a la vez; guardado sin bloqueo descartado | — |
 | Recibos | El mismo recibo dos veces entrega una sola vez | — |
@@ -852,7 +936,7 @@ Los scripts de Python de `calculos/` son la referencia. Cada uno exporta vectore
 
 | Prueba | Herramienta | Criterio |
 |---|---|---|
-| Carga de servidor | Bots que envían Remotes al ritmo máximo | 20 jugadores a 233 eventos por segundo sin bajar de 30 pasos de simulación por segundo |
+| Carga de servidor | Bots que envían Remotes al ritmo máximo | 20 jugadores a 199 eventos por segundo sin bajar de 30 pasos de simulación por segundo |
 | Rendimiento en móvil | Dispositivo de gama baja real | 30 fotogramas por segundo en el peor caso de la sección 8.2 |
 | Memoria del cliente | Consola de desarrollador en móvil | Por debajo del límite del dispositivo de referencia tras 60 minutos |
 | Economía | Volver a ejecutar `b6_economia.py` con los precios finales | Ahorro mediano entre 3 y 6 horas de ingreso |

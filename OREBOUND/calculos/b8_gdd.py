@@ -22,7 +22,9 @@ for r in range(0, MAX_REN + 1):
           f"{h:6.1f} h hasta nivel 1.000, acumulado {total:7.1f} h")
 sat = lambda S: 1 + 3 * S / (S + 1000)
 print(f"Efecto maximo de los puntos extra: 100 puntos en una estadistica ya a 1.000 no cuentan (tope); repartidos en una a 0: x{sat(100):.3f}")
-print(f"Monedas que se pierden al renacer con 10 h de ahorro en zona 10: {10*404434:,.0f} (sumidero)")
+import json
+I10 = json.load(open("calculos/_b6.json"))["I"][9]
+print(f"Monedas que se pierden al renacer con 10 h de ahorro en zona 10: {10*I10:,.0f} (sumidero)")
 
 print("\n== 3. Eventos aleatorios: efecto medio en los ingresos ==")
 for nombre, cada, dura, mult, part in [("Lluvia de meteoritos", 25, 4, 1.5, 0.8), ("Veta colosal", 40, 5, 1.6, 0.6), ("Oleada de la profundidad", 30, 5, 1.5, 0.7)]:
@@ -30,11 +32,11 @@ for nombre, cada, dura, mult, part in [("Lluvia de meteoritos", 25, 4, 1.5, 0.8)
 tot = sum(d / c * (m - 1) * p for c, d, m, p in [(25, 4, 1.5, 0.8), (40, 5, 1.6, 0.6), (30, 5, 1.5, 0.7)]) / 3 * 1.0
 print(f"Solo hay un evento activo a la vez (rotacion): efecto medio conjunto aprox. +{100*tot:.1f} %")
 
-print("\n== 4. Presupuesto de particulas en el peor caso (jefe con 8 jugadores) ==")
+print("\n== 4. Presupuesto de particulas en el peor caso (jefe con 8 jugadores), con los topes del GDD ==")
 HAB, MASC, JEFE, AMB = 60, 10, 150, 40
-for calidad, tope, propio, ajeno, masc_ajena, jefe in [("Baja (móvil de gama baja)", 300, 0.6, 0.10, 0.0, 0.5), ("Media", 800, 1.0, 0.4, 0.3, 1.0), ("Alta (PC)", 2000, 1.0, 1.0, 1.0, 1.0)]:
-    uso = 2 * HAB * propio + 7 * 2 * HAB * ajeno + 3 * MASC * propio + 21 * MASC * masc_ajena + JEFE * jefe + AMB * propio
-    print(f"{calidad:28s} tope {tope:5d} | uso en el peor caso {uso:6.0f} | {'cabe' if uso <= tope else 'NO CABE'} ({100*uso/tope:.0f} %)")
+for calidad, tope, ajeno in [("Bajo (GDD: 800)", 800, 0.5), ("Bajo con ajenos al 40 %", 800, 0.4), ("Medio (propuesta: 1.400)", 1400, 0.5), ("Alto (GDD: 2.000)", 2000, 0.5)]:
+    uso = 2 * HAB + 7 * 2 * HAB * ajeno + 3 * MASC + 21 * MASC * ajeno + JEFE + AMB
+    print(f"{calidad:28s} tope {tope:5d} | efectos ajenos al {int(100*ajeno)} % | uso en el peor caso {uso:6.0f} | {'cabe' if uso <= tope else 'NO CABE'} ({100*uso/tope:.0f} %)")
 
 print("\n== 5. Temporada: fragmentos para el sexto espacio por la via gratuita ==")
 SEM, NIV, XP_NIV = 8, 50, 1000

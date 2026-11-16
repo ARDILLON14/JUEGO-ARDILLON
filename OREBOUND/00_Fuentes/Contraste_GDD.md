@@ -277,6 +277,8 @@ Depende del prompt maestro, que no se ha recibido:
 
 ## 7. Plan para rehacer
 
+> **Hecho el 2026-11-16.** Las ocho filas de este plan están aplicadas. Los valores finales están en `DECISIONES.md`, serie R.
+
 Una etapa por respuesta, con el comando REPETIR del protocolo.
 
 | Orden | Etapa | Qué cambia |

@@ -9,9 +9,10 @@ vel_max = sat(5000, 0.8)                         # velocidad de ataque con 5.000
 acc = {
  "Atacar (Daga, la mas rapida)": 2.60 * vel_max * 1.05,     # +5 % de Sed de combate
  "Picar (tope de 2,0 golpes/s)": 2.0,
- "Habilidad (4 ranuras; enfriamiento minimo 4 s x 0,8 x 0,9)": 4 / (4 * 0.8 * 0.9) ,
- "Dash (2,5 s)": 1 / 2.5, "Esquiva (1,2 s)": 1 / 1.2, "Parpadeo (8 s)": 1 / 8,
- "Bloqueo (pulsar y soltar)": 2.0, "Cambiar postura (3 s)": 1 / 3,
+ "Habilidad (4 ranuras; la mas rapida, tecnica de arma de 5 s)": 1 / 5 + 1 / 5 + 1 / 6 + 1 / 9,
+ "Dash (2 cargas; 3 s de recarga por carga)": 1 / 3,
+ "Parpadeo (8 s)": 1 / 8, "Ruptura (15 s)": 1 / 15,
+ "Bloqueo (pulsar y soltar)": 2.0, "Cambiar postura (5 s)": 1 / 5,
 }
 for k, v in acc.items():
     print(f"{k:58s} maximo legitimo {v:5.2f}/s -> limite {math.ceil(v * MARGEN * 10) / 10:4.1f}/s, rafaga {max(2, math.ceil(v * MARGEN * 2))}")
@@ -22,9 +23,9 @@ print("\n== 2. Validacion de movimiento ==")
 ws = 16 * sat(5000, 0.5)
 print(f"WalkSpeed maximo: {ws:.2f} (tope de diseno 24)")
 for dt in (0.5, 1.0, 2.0):
-    andar = 24 * dt; dash = 12 * math.ceil(dt / 2.5); paso = 18 * (1 if dt < 8 else 2)
-    print(f"Ventana de {dt:.1f} s: andar {andar:.0f} + dash {dash} + parpadeo/Paso Relampago {paso} = {andar+dash+paso:.0f} studs; "
-          f"con tolerancia del 20 %: {1.2*(andar+dash+paso):.0f}")
+    andar = 24 * dt; dash = 12 * 2; paso = 18; parp = 12 if dt >= 1.0 else 0
+    print(f"Ventana de {dt:.1f} s: andar {andar:.0f} + 2 dash {dash} + Paso de Relampago {paso} + parpadeo {parp} = {andar+dash+paso+parp:.0f} studs; "
+          f"con tolerancia del 20 %: {1.2*(andar+dash+paso+parp):.0f}")
 
 print("\n== 3. Tamano estimado del perfil guardado ==")
 def b(o): return len(json.dumps(o, separators=(",", ":")))
