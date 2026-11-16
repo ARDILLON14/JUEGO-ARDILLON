@@ -1,6 +1,6 @@
 # OREBOUND — B4: Combate
 
-Etapa 4 · 2026-11-16 (corregido en la Etapa 6: monedas de jefe) · Script: `calculos/b4_combate.py` · Catálogo completo de armas: `calculos/b4_armas.csv` (450 armas).
+Etapa 4 · 2026-11-16 (corregido en las Etapas 6 y 7; ver B7, sección 6) · Script: `calculos/b4_combate.py` · Catálogo completo de armas: `calculos/b4_armas.csv` (450 armas).
 
 > **Aviso de fuentes.** No se dispone de las secciones 10, 15 y 17 del prompt maestro ni de la
 > sección de combate del GDD. El sexto tipo de arma, los valores del Núcleo Prismático y los
@@ -17,7 +17,7 @@ Etapa 4 · 2026-11-16 (corregido en la Etapa 6: monedas de jefe) · Script: `cal
 | Tipo | Golpes/s | Coef. por golpe | Alcance (studs) | Objetivos | DPS relativo (con críticos) | Frente a la media de los 5 | Qué lo diferencia |
 |---|---|---|---|---|---|---|---|
 | Espada | 1,60 | 0,625 | 8 | 2 | 1,025 | +0,8 % | Equilibrada; combo de 4 golpes; bloquear cuesta 20 % menos |
-| Hacha | 0,90 | 1,150 | 9 | 5 | 1,061 | +4,3 % | Arco de 180°; golpea hasta 5; daño a la guardia ×1,5 |
+| Hacha | 0,90 | 1,150 | 9 | 3 | 1,061 | +4,3 % | Arco de 180°; golpea hasta 3; daño a la guardia ×1,5 |
 | Daga | 2,60 | 0,365 | 6 | 1 | 1,020 | +0,3 % | +10 % de crítico; +25 % de daño por la espalda |
 | Lanza | 1,20 | 0,810 | 14 | 3 | 0,996 | -2,1 % | Largo alcance; atraviesa hasta 3 en línea |
 | Bastón | 1,00 | 0,960 | 35 | 1 | 0,984 | -3,3 % | Proyectil a media distancia; habilidades cuestan 10 % menos de energía |
@@ -27,7 +27,8 @@ Etapa 4 · 2026-11-16 (corregido en la Etapa 6: monedas de jefe) · Script: `cal
 - **DPS relativo:** `Golpes/s × Coef × (1 + ProbCrítico × 0,5)`. La Daga suma +10% de crítico.
 - **Resultado:** Espada, Hacha, Daga, Lanza y Bastón quedan entre −3,3% y +4,3% de su media. El requisito era ±10%.
 - **Arco (sexto tipo):** queda un 19,4% por debajo a propósito (decisión C-30). Lo compensa con 70 studs de alcance. El prompt no nombra el sexto tipo; el Arco es propuesta.
-- El Hacha tiene el DPS más alto de los cinco porque sus golpes lentos se fallan con más facilidad; además golpea a más objetivos, lo que solo importa contra grupos.
+- El Hacha tiene el DPS más alto de los cinco porque sus golpes lentos se fallan con más facilidad.
+- **Golpes en área (regla de la Etapa 7):** un golpe básico alcanza como máximo 3 objetivos; el primero recibe el 100% y los demás el 25%. Sin esta regla, el Hacha contra grupos multiplicaba por 3,7 los enemigos por hora.
 
 ### 1.2 Daño por golpe de un arma Común, por zona
 
@@ -83,8 +84,8 @@ Daño = PotenciaArma × Coef × MultFuerza × MultMaestría × MultCrítico
 | `MultMaestría` | `1 + 0,001 × nivel de maestría` | Máximo ×1,10 |
 | `MultCrítico` | ×1,5 con probabilidad 5% | Probabilidad máxima 30%; multiplicador máximo ×2,0 |
 | `EstadosDelObjetivo` | Suma de Vulnerable, Descarga y Ruptura | Máximo +40% |
-| `ReducciónDefensa` | `mín(D/(D + K), Tope)` | 75% en PvE, 60% en PvP (B2) |
-| `MultModo` | 1 en PvE; 0,07 en PvP y Zonas Fracturadas | — |
+| `ReducciónDefensa` | `mín(D/(D + K), Tope)` | 75% en PvE, 50% en PvP (B2, corregido en la Etapa 7) |
+| `MultModo` | 1 en PvE; 0,06 en PvP y Zonas Fracturadas | — |
 
 - **Unidad:** puntos de vida.
 - **Orden:** los términos se multiplican en ese orden; la Defensa va después de todos los bonos del atacante. El daño mínimo es 1.
@@ -299,6 +300,8 @@ A partir del 5.º golpe seguido sobre un objetivo aturdido, cada golpe hace meno
 - **F24 — Monedas:** `Monedas = 10 × 1,65^(z−1) × FactorMonedas`.
 - **Ejemplo:** Élite de zona 1 → vida `100 × 80 × 1,0 = 8.000`; golpe `500 × 6% = 30`.
 - **Tutorial:** hasta el nivel 10 los enemigos de la zona 1 tienen la mitad de vida.
+- **Regeneración en combate (Etapa 7):** en PvE el jugador recupera el 0,5% de su vida máxima por segundo durante el combate (5% fuera de combate). No se aplica en PvP.
+- **Grupos de enemigos (Etapa 7):** aparecen solos (70%), en parejas (25%) o en tríos (5%), separados al menos 20 studs.
 
 ### 6.2 Tabla de las 10 zonas
 
@@ -450,7 +453,7 @@ A partir del 5.º golpe seguido sobre un objetivo aturdido, cada golpe hace meno
 
 | Recompensa | Valor |
 |---|---|
-| Monedas | `60 × valor de zona` por jugador (tabla 7.3). Corregido en la Etapa 6: antes `250 ×`, que daba 1,6 horas de ingreso al día con 3 derrotas |
+| Monedas | `60 × valor de zona` por jugador (tabla 7.3). Corregido en la Etapa 6: antes `250 ×` |
 | XP | 60 veces la de un enemigo Común, por jugador |
 | Material de jefe | 3 garantizados por derrota; no depende de la Suerte |
 | Tirada extra | 1 tirada en la tabla de depósitos de la zona (admite Suerte, B1) |
@@ -466,10 +469,11 @@ A partir del 5.º golpe seguido sobre un objetivo aturdido, cada golpe hace meno
 
 | Regla | Valor |
 |---|---|
-| Multiplicador de daño entre jugadores | ×0,07 |
-| Defensa | `K = 3.000`, tope 60% (B2) |
-| Vitalidad | `M = 1,5` en lugar de 3 (confirma la recomendación de B2) |
+| Multiplicador de daño entre jugadores | ×0,06 (Etapa 7; antes ×0,07) |
+| Defensa | `K = 4.500`, tope 50% (Etapa 7; antes 3.000 y 60%) |
+| Vitalidad | `M = 1,0` en lugar de 3 (Etapa 7; antes 1,5) |
 | Tope por golpe | Ningún golpe quita más del 35% de la vida máxima del objetivo |
+| Tope de ráfaga (Etapa 7) | Un jugador no pierde más del 60% de su vida máxima en 2 s por daño de otros jugadores |
 | Tope de mascotas | 25% del DPS del jugador **[CONFIRMADO]** |
 | Curación | Reducida un 50% |
 | Control | Duraciones según la tabla 2.1; rendimientos decrecientes y Rompecadenas (sección 5) |
@@ -482,15 +486,15 @@ Segundos que tarda el atacante en derrotar al defensor.
 
 | Atacante ↓ / Defensor → | Cristal (Fue/Vel/Ene) | Tanque (Vit/Def/Fue) | Equilibrada (375 × 8) | Minero (Min/Sue/Vit) |
 |---|---|---|---|---|
-| Cristal (Fue/Vel/Ene) | 7,2 s | 16,9 s | 11,5 s | 12,7 s |
-| Tanque (Vit/Def/Fue) | 10,0 s | 23,3 s | 15,8 s | 17,5 s |
-| Equilibrada (375 × 8) | 11,7 s | 27,2 s | 18,5 s | 20,4 s |
-| Minero (Min/Sue/Vit) | 24,9 s | 58,2 s | 39,5 s | 43,6 s |
+| Cristal (Fue/Vel/Ene) | 8,4 s | 15,5 s | 11,7 s | 12,7 s |
+| Tanque (Vit/Def/Fue) | 11,6 s | 21,3 s | 16,0 s | 17,5 s |
+| Equilibrada (375 × 8) | 13,6 s | 25,0 s | 18,8 s | 20,4 s |
+| Minero (Min/Sue/Vit) | 29,1 s | 53,3 s | 40,1 s | 43,6 s |
 
-- Sin el multiplicador ×0,07, un duelo entre dos builds equilibradas duraría 1,3 s.
-- Con él, los duelos entre builds de combate duran entre 7 y 27 s.
-- La habilidad V de una build Cristal haría el 56% de la vida base de un golpe; el tope la deja en el 35%.
-- El Tanque sigue ganando al Cristal, con una ventaja de 1,69 veces. El Cristal lo compensa con movilidad y más usos de habilidad.
+- Sin el multiplicador ×0,06, un duelo entre dos builds equilibradas duraría 1,1 s.
+- Con él, los duelos entre builds de combate duran entre 8 y 25 s.
+- La habilidad V de una build Cristal haría el 48% de la vida base de un golpe; el tope la deja en el 35%.
+- El Tanque sigue ganando al Cristal, con una ventaja de 1,33 veces (era 1,69 antes de la corrección de la Etapa 7). El Cristal lo compensa con movilidad y más usos de habilidad.
 
 ### 8.3 Arenas
 
@@ -554,13 +558,13 @@ Segundos que tarda el atacante en derrotar al defensor.
 ### P2 — Sin multiplicador PvP los duelos duran 1,3 s
 
 - **Problema:** las armas y habilidades están calibradas contra enemigos con 20 veces la potencia de zona en vida; un jugador solo tiene 5.
-- **Corrección aplicada:** `MultModo = 0,07` y tope del 35% por golpe.
+- **Corrección aplicada:** `MultModo` (0,07 al principio; 0,06 desde la Etapa 7) y tope del 35% por golpe.
 - **Alternativa equivalente:** multiplicar la vida de los jugadores por 14 solo en PvP. Se descarta porque obliga a mostrar dos barras de vida distintas.
 
 ### P3 — El Tanque sigue por delante del Cristal en duelo
 
-- **Dato:** ventaja de 1,69 veces con la Vitalidad a la mitad.
-- **Alternativa si la beta lo confirma:** subir la velocidad de ataque de la estadística Velocidad de `M = 0,8` a `M = 1,2` (el Cristal pasaría de ×1,4 a ×1,6 en básicos). Se simula en la Etapa 7.
+- **Dato inicial:** ventaja de 1,69 veces con la Vitalidad a la mitad.
+- **Corregido en la Etapa 7:** Vitalidad con `M = 1,0` y Defensa con `K = 4.500` y tope 50% en PvP. La ventaja baja a 1,33 veces.
 
 ### P4 — El máximo teórico de daño es 36 veces el de un arma Común
 
@@ -584,7 +588,7 @@ Segundos que tarda el atacante en derrotar al defensor.
 |---|---|
 | Coeficientes de arma | Prueba de juego con cada tipo contra el mismo enemigo; diferencia de tiempo menor del 10% |
 | Vida y daño de enemigos | 6–7 s por enemigo Común y menos de 2 muertes por hora para un jugador típico |
-| `MultModo = 0,07` | Arenas de prueba: duelos de 10–25 s |
+| `MultModo = 0,06` | Arenas de prueba: duelos de 8–25 s |
 | Escalado de jefes | Tiempo real de derrota con 1, 4 y 8 jugadores |
 | Maestría | Telemetría: horas hasta maestría 50 y 100 |
 | Anti-combo | Prueba dirigida: intentar mantener a un jugador controlado; no debe superar 2,0 s |

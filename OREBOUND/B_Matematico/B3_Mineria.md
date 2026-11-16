@@ -1,6 +1,6 @@
 # OREBOUND — B3: Minería
 
-Etapa 3 · 2026-11-16 (ampliado en la Etapa 6: contenedor de grieta y racha) · Script: `calculos/b3_mineria.py` · Catálogos completos: `calculos/b3_minerales.csv` (66 minerales) y `calculos/b3_picos.csv` (75 picos).
+Etapa 3 · 2026-11-16 (ampliado en las Etapas 6 y 7; ver B7, sección 6) · Script: `calculos/b3_mineria.py` · Catálogos completos: `calculos/b3_minerales.csv` (66 minerales) y `calculos/b3_picos.csv` (75 picos).
 
 > **Aviso de fuentes.** No se dispone de las secciones 7, 8, 9 y 14 del prompt maestro ni de la
 > sección de Minería PvPvE del GDD. Los 30 minerales de referencia y los valores de las Zonas
@@ -42,6 +42,7 @@ Etapa 3 · 2026-11-16 (ampliado en la Etapa 6: contenedor de grieta y racha) · 
 - **FactorReq:** Común 1 · Poco común 1 · Raro 1,5 · Épico 2,5 · Legendario 3,5 · Mítico 5 · Ultra raro 7.
 - **Ejemplo:** depósito Mítico de zona 8 → `10 × 7 × 5 = 350` de Minería.
 - **Límites:** el máximo es 630 (Ultra raro de zona 10), por debajo del tope de 1.000 puntos.
+- **Zonas por encima de la 10 (Etapa 7):** el requisito se queda en el de la zona 10 (`10 × 9 × FactorReq`) y la dureza no pasa de 2,0. Sin estos topes, el Ultra raro de la zona 21 pediría Minería 1.400, imposible con el tope de 1.000.
 
 ### 1.1 Comprobación con tres builds
 
@@ -451,6 +452,7 @@ Al morir contra un jugador con 100 unidades de carga:
 | Canalización para extraer | 8 s; el daño recibido la interrumpe |
 | Carga mínima para contar en racha y fragmentos | 50% de la capacidad |
 | Al extraer | Toda la carga se asegura y va al banco; el jugador sale a la entrada PvE |
+| Salir sin extraer (Etapa 7) | Por la entrada, con 3 s de canalización que el daño interrumpe; el mineral sale a ×1,0 |
 
 ### 7.6 Protección de novato
 

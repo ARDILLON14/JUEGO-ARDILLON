@@ -1,6 +1,6 @@
 # OREBOUND — B2: Progresión y estadísticas
 
-Etapa 2 · 2026-11-16 (corregido en la Etapa 6: coste del reinicio) · Script: `calculos/b2_progresion.py` · Tabla completa de XP: `calculos/b2_xp_niveles.csv` (niveles 1 a 1.000).
+Etapa 2 · 2026-11-16 (corregido en las Etapas 6 y 7; ver B7, sección 6) · Script: `calculos/b2_progresion.py` · Tabla completa de XP: `calculos/b2_xp_niveles.csv` (niveles 1 a 1.000).
 
 > **Aviso de fuentes.** No se dispone de las secciones 5 y 6 del prompt maestro. La fórmula de XP
 > viene del prompt de trabajo. Todo lo demás es **[PROVISIONAL]**: las fórmulas originales de las
@@ -152,6 +152,7 @@ Sensibilidad de la curva base si la XP por hora real se desvía:
 - **Expresión:** `Puntos(L) = 3 + 3 × (L − 1)`
 - **Unidad:** puntos para repartir.
 - **Ejemplo:** nivel 500 → 1.500 puntos.
+- **Por encima del nivel 1.000 (Etapa 7):** 1 punto por nivel en lugar de 3, para que a nivel 2.000 solo se puedan llevar al máximo 4 de las 8 estadísticas (con 3 por nivel serían 6).
 - **Límites:** máximo 1.000 puntos asignados por estadística. Máximo 5.000 de valor total por estadística sumando equipo, mascotas y consumibles.
 - **Valores configurables:** 3 puntos por nivel, tope por puntos 1.000, tope total 5.000.
 
@@ -266,20 +267,20 @@ Comparación con una raíz cuadrada calibrada para dar lo mismo con 1.000 puntos
 
 - **Expresión:** `Reducción = mín(D / (D + K), Tope)` y `DañoRecibido = Daño × (1 − Reducción)`
 - **Variables:** `D` = Defensa total; `K` y `Tope` dependen del modo.
-- **Valores configurables:** PvE `K = 1.500`, `Tope = 75%`. PvP y Zonas Fracturadas `K = 3.000`, `Tope = 60%`.
+- **Valores configurables:** PvE `K = 1.500`, `Tope = 75%`. PvP y Zonas Fracturadas `K = 4.500`, `Tope = 50%` (corregido en la Etapa 7; antes 3.000 y 60%).
 - **Unidad:** porcentaje de daño evitado.
 - **Ejemplo:** Defensa 1.000 en PvE → `1.000/2.500 = 40%`.
-- **Límites:** el tope se alcanza con Defensa 4.500 en ambos modos. Siempre se recibe al menos el 25% del daño en PvE y el 40% en PvP.
+- **Límites:** el tope se alcanza con Defensa 4.500 en ambos modos. Siempre se recibe al menos el 25% del daño en PvE y el 50% en PvP.
 - **Posibles problemas:** el daño verdadero o la penetración de defensa, si se añaden en la Etapa 4, deben restarse de `D` antes de la fórmula, no de la reducción.
 
 | Defensa | PvE: reducción | PvE: daño recibido | PvE: vida efectiva | PvP: reducción | PvP: daño recibido | PvP: vida efectiva |
 |---|---|---|---|---|---|---|
-| 10 | 0,66% | 99,34% | ×1,01 | 0,33% | 99,67% | ×1,00 |
-| 100 | 6,25% | 93,75% | ×1,07 | 3,23% | 96,77% | ×1,03 |
-| 500 | 25,00% | 75,00% | ×1,33 | 14,29% | 85,71% | ×1,17 |
-| 1.000 | 40,00% | 60,00% | ×1,67 | 25,00% | 75,00% | ×1,33 |
-| 2.500 | 62,50% | 37,50% | ×2,67 | 45,45% | 54,55% | ×1,83 |
-| 5.000 | 75,00% | 25,00% | ×4,00 | 60,00% | 40,00% | ×2,50 |
+| 10 | 0,66% | 99,34% | ×1,01 | 0,22% | 99,78% | ×1,00 |
+| 100 | 6,25% | 93,75% | ×1,07 | 2,17% | 97,83% | ×1,02 |
+| 500 | 25,00% | 75,00% | ×1,33 | 10,00% | 90,00% | ×1,11 |
+| 1.000 | 40,00% | 60,00% | ×1,67 | 18,18% | 81,82% | ×1,22 |
+| 2.500 | 62,50% | 37,50% | ×2,67 | 35,71% | 64,29% | ×1,56 |
+| 5.000 | 75,00% | 25,00% | ×4,00 | 50,00% | 50,00% | ×2,00 |
 
 **Nunca hay inmunidad:** aunque la Defensa fuese infinita, la reducción se queda en el tope. Cada punto de Defensa añade la misma vida efectiva (1/K), así que no hay un punto a partir del cual la Defensa se dispare.
 
@@ -364,7 +365,8 @@ Comparación con una raíz cuadrada calibrada para dar lo mismo con 1.000 puntos
 | Actual (`M = 3`) | ×3,33 | 0,95 | 0,40 | 2,38 veces |
 | Vitalidad PvP con `M = 1,5` | ×2,33 | 0,67 | 0,40 | 1,67 veces |
 
-- **Recomendación:** adoptar `M = 1,5` en PvP. La ventaja restante la compensa el Cristal con un 35% más de usos de habilidad (75,4% frente a 55,7%) y más movimiento. La Etapa 4 lo cierra con las habilidades reales y la Etapa 7 lo simula.
+- **Decisión final (Etapa 7):** `M = 1,0` en PvP, junto con Defensa `K = 4.500` y tope 50%; la ventaja del Tanque queda en 1,33 veces (B7, sección 3). La tabla de arriba es el cálculo original.
+- **Recomendación original:** adoptar `M = 1,5` en PvP. La ventaja restante la compensa el Cristal con un 35% más de usos de habilidad (75,4% frente a 55,7%) y más movimiento. La Etapa 4 lo cierra con las habilidades reales y la Etapa 7 lo simula.
 
 ### P2 — La mitad final de la curva de XP es lenta
 

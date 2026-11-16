@@ -1,6 +1,6 @@
 # OREBOUND — DECISIONES.md
 
-Versión: Etapa 6 · 2026-11-16
+Versión: Etapa 7 · 2026-11-16
 
 > **Estado de las fuentes.** Este archivo se ha construido solo con el documento
 > «OREBOUND — Prompts por partes» (prompt único con continuidad + partes 0 a 10).
@@ -235,10 +235,10 @@ Estadísticas
 - E2-09. Curva común: `Mult(S) = 1 + M × S/(S + 1.000)`. Sustituye a la raíz cuadrada (P-06).
 - E2-10. `M` por efecto: Fuerza 3; Vitalidad 3; Minería 3; Suerte 3; Dominio (daño y vida de mascota) 3; Dominio (recolección) 1,5; Velocidad de ataque 0,8; Velocidad de movimiento 0,5 (WalkSpeed máximo 24); regeneración de Energía 1.
 - E2-11. `VidaBase(L) = 500 × 1,65^((L − 1)/100)`.
-- E2-12. En PvP y Zonas Fracturadas la Vitalidad usa `M = 1,5` (recomendación; la Etapa 4 la confirma).
+- E2-12. [SUSTITUIDO por E7-08: `M = 1,0`] En PvP y Zonas Fracturadas la Vitalidad usa `M = 1,5` (recomendación; la Etapa 4 la confirma).
 
 Defensa
-- E2-13. `Reducción = mín(D/(D + K), Tope)`. PvE: `K = 1.500`, tope 75%. PvP y Zonas Fracturadas: `K = 3.000`, tope 60%.
+- E2-13. `Reducción = mín(D/(D + K), Tope)`. PvE: `K = 1.500`, tope 75%. PvP y Zonas Fracturadas: `K = 4.500`, tope 50% (corregido por E7-09; antes 3.000 y 60%).
 
 Energía
 - E2-14. Energía máxima `100 + 300·E/(E + 1.000)`; regeneración 8/s en combate y 20/s fuera, por `(1 + E/(E + 1.000))`.
@@ -320,7 +320,7 @@ Fórmula de daño
 - E4-08. Crítico: 5% de probabilidad y ×1,5; topes 30% y ×2,0. Daga +10% de probabilidad.
 - E4-09. Maestría: +0,1% de daño por nivel, máximo +10%.
 - E4-10. Estados: Quemadura, Lento, Congelación, Descarga (+15%), Vulnerable (+10–15%) y Ruptura (+25%); aumento de daño recibido máximo +40%.
-- E4-11. `MultModo = 0,07` en PvP y Zonas Fracturadas.
+- E4-11. `MultModo = 0,06` en PvP y Zonas Fracturadas (corregido por E7-10; antes 0,07).
 
 Maestría
 - E4-12. `XPm(n) = techo(10 + 2·n + 0,04·n²)`; puntos por enemigo 1 / 4 / 12 / 80; nivel 100 en 67,9 horas.
@@ -356,7 +356,7 @@ Jefes
 - E4-34. Recompensas: `60 × valor de zona` en monedas (corregido por E6-10), 3 materiales de jefe garantizados, 1 tirada extra; 3 derrotas con botín completo por jefe y día.
 
 PvP
-- E4-35. Vitalidad con `M = 1,5` en PvP: confirmada (cierra E2-12).
+- E4-35. [SUSTITUIDO por E7-08] Vitalidad con `M = 1,5` en PvP.
 - E4-36. Tope del 35% de la vida máxima por golpe; curación −50%.
 - E4-37. Arenas 1v1, 2v2 y 3v3, igualadas por tramos de 100 niveles, con Elo (inicio 1.000, factor 32).
 - E4-38. Zonas Fracturadas: escuadrones de hasta 3, sin fuego amigo; potencia limitada a la de un Ultra raro de la zona al máximo.
@@ -463,7 +463,44 @@ Monetización
 
 ---
 
-## 11. Registro de cambios
+## 11. Valores de la Etapa 7 — B7_Simulaciones.md (todos [PROVISIONAL])
+
+Resultados
+- E7-01. Perfiles propuestos de los jugadores A a G (niveles 1, 50, 100, 300, 500, 800 y 1.000); resuelve P-F-12 de forma provisional.
+- E7-02. Ninguna build extrema rinde más de 1,17 veces la equilibrada en su mejor actividad.
+- E7-03. Equipo Celestial al máximo: +5,8% de monedas frente a Ultra raro al máximo; 2,34 veces el equipo Común.
+- E7-04. Saqueador profesional: 0,35–0,73 veces el minero PvE (0,48 en un servidor normal); confirma E6-23.
+- E7-05. Minero de grieta con un saqueador por minero: 1,45 veces el PvE.
+- E7-06. Traspaso de mineral entre cuentas: 1,20 (1,45 con seguro) frente a 2,00 extrayendo; no hay incentivo.
+- E7-07. Diseño de mapa: salida o Punto de Extracción a menos de 150 studs de cualquier depósito de una Zona Fracturada.
+
+Correcciones aplicadas a B2, B3 y B4
+- E7-08. Vitalidad en PvP: `M = 1,0` (antes 1,5).
+- E7-09. Defensa en PvP: `K = 4.500` y tope 50% (antes 3.000 y 60%).
+- E7-10. Daño entre jugadores: `MultModo = 0,06` (antes 0,07). Duelos de 8–25 s; ventaja del Tanque sobre el Cristal de 1,33 (antes 1,69).
+- E7-11. Tope de ráfaga en PvP: no más del 60% de la vida máxima en 2 s.
+- E7-12. Golpes en área del ataque básico: máximo 3 objetivos; los secundarios reciben el 25%.
+- E7-13. Grupos de enemigos: 70% solos, 25% parejas, 5% tríos; separación mínima de 20 studs.
+- E7-14. Regeneración de vida en combate PvE: 0,5% de la vida máxima por segundo; no se aplica en PvP.
+- E7-15. Desde el nivel 1.001: 1 punto de estadística por nivel (antes 3).
+- E7-16. Zonas mayores que la 10: Minería requerida congelada en la de la zona 10 y dureza máxima 2,0.
+- E7-17. Salir de una Zona Fracturada sin extraer: 3 s de canalización que el daño interrumpe; el mineral sale a ×1,0.
+
+Expansión
+- E7-18. La zona `z` se abre en el nivel `100 × (z − 1)`: los niveles 1.100, 1.200, 1.500 y 2.000 son las zonas 12, 13, 16 y 21.
+- E7-19. Con los topes de E7-15 y E7-16, los tiempos se mantienen (3,8 s por depósito Común; 4,3–4,8 s por enemigo) y los números caben en un entero exacto.
+
+Pendientes para la beta
+- E7-20. Combate frente a minería al llegar a una zona con el arma anterior: minar rinde 1,34 veces (transitorio).
+- E7-21. Los escuadrones de Tanques siguen ganando en 3 contra 3.
+- E7-22. El tope total de 5.000 por estadística es inalcanzable hoy; se conserva para contenido futuro.
+
+Índice
+- E7-23. Fórmulas finales F1 a F36 en B7, sección 7.
+
+---
+
+## 12. Registro de cambios
 - 2026-11-16 · Etapa 0 (1/2): creación del archivo a partir del documento de prompts. Faltan las dos fuentes.
 - 2026-11-16 · Etapa 0 cerrada: incongruencias del prompt resueltas (C-25 a C-34) y prompt corregido.
 - 2026-11-16 · Etapa 1: valores E1-01 a E1-19.
@@ -472,3 +509,4 @@ Monetización
 - 2026-11-16 · Etapa 4: valores E4-01 a E4-39. Confirma E2-12; B1, B2 y B3 no cambian.
 - 2026-11-16 · Etapa 5: valores E5-01 a E5-28. B1 a B4 no cambian.
 - 2026-11-16 · Etapa 6: valores E6-01 a E6-33. Corrige B4 (monedas de jefe), B2 (coste del reinicio) y amplía B3 (contenedor de grieta y racha).
+- 2026-11-16 · Etapa 7: valores E7-01 a E7-23. Corrige B2 (Defensa y Vitalidad en PvP, puntos desde 1.001), B3 (topes de zonas mayores que 10, salida sin extraer) y B4 (daño PvP, ráfaga, golpes en área, grupos, regeneración). Documento B cerrado.

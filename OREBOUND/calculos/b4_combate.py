@@ -27,7 +27,7 @@ def n(x, d=0): return f"{x:,.{d}f}".replace(",", "X").replace(".", ",").replace(
 CRIT_P, CRIT_M, CRIT_P_MAX, CRIT_M_MAX = 0.05, 1.5, 0.30, 2.0
 # tipo: (golpes/s, coef. por golpe, alcance studs, crit extra, objetivos, diferencia)
 ARMAS = {"Espada": (1.60, 0.625, 8, 0.00, 2, "Equilibrada; combo de 4 golpes; bloquear cuesta 20 % menos"),
-         "Hacha": (0.90, 1.150, 9, 0.00, 5, "Arco de 180°; golpea hasta 5; daño a la guardia ×1,5"),
+         "Hacha": (0.90, 1.150, 9, 0.00, 3, "Arco de 180°; golpea hasta 3; daño a la guardia ×1,5"),
          "Daga": (2.60, 0.365, 6, 0.10, 1, "+10 % de crítico; +25 % de daño por la espalda"),
          "Lanza": (1.20, 0.810, 14, 0.00, 3, "Largo alcance; atraviesa hasta 3 en línea"),
          "Bastón": (1.00, 0.960, 35, 0.00, 1, "Proyectil a media distancia; habilidades cuestan 10 % menos de energía"),
@@ -197,7 +197,7 @@ md("jefes_stats", ["Jefe", "Zona", "Vida (1 jugador)", "Vida (8 jugadores)", "Vi
      n(K_XP_ENEMIGO * xp_acc(nivel_medio(z)) * F_XP["Jefe"])] for nm, z in JEFES])
 
 # ---------- 8. PvP ----------
-MULT_PVP, TOPE_GOLPE, K_PVP, TOPE_DEF_PVP, M_VIT_PVP = 0.07, 0.35, 3000, 0.60, 1.5
+MULT_PVP, TOPE_GOLPE, K_PVP, TOPE_DEF_PVP, M_VIT_PVP = 0.06, 0.35, 4500, 0.50, 1.0   # Etapa 7 (antes 0,07; 3000; 0,60; 1,5)
 L = 1000; arma = pot_zona(10) * MULT[4] * 1.5
 B = {"Cristal (Fue/Vel/Ene)": dict(F=1000, Vel=1000, E=1000), "Tanque (Vit/Def/Fue)": dict(F=1000, V=1000, D=1000),
      "Equilibrada (375 × 8)": dict(F=375, V=375, D=375, Vel=375, E=375), "Minero (Min/Sue/Vit)": dict(V=1000)}
