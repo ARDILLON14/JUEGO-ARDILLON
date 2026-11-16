@@ -1,49 +1,51 @@
 # OREBOUND — B1: Rarezas y probabilidades
 
-Etapa 1 · 2026-11-16 · Script: `calculos/b1_rarezas.py` (todas las cifras de este documento salen de su ejecución).
+Etapa 1, rehecha con el GDD · 2026-11-16 · Script: `calculos/b1_rarezas.py` (genera este documento; todas las cifras salen de su ejecución).
 
-> **Aviso de fuentes.** No se dispone de las secciones 4, 6 y 12 del prompt maestro ni del GDD.
-> Todas las cifras de este documento son **[PROVISIONAL]** salvo las marcadas **[CONFIRMADO]**,
-> que son decisiones fijas del prompt. Si llegan las fuentes, mandan ellas y se rehace lo afectado.
+> **Fuentes.** Esta versión usa el GDD de combate, minería PvPvE y mascotas (`00_Fuentes/`).
+> De él vienen los nombres, colores y multiplicadores de las rarezas y los 50 fragmentos por
+> objeto Celestial. El GDD marca sus cifras como pendientes de simulación, así que son
+> **[PROVISIONAL]**. No se dispone del prompt maestro: las probabilidades de caja y de
+> depósitos y el sistema de Suerte siguen siendo propuestas **[PROVISIONAL]**.
+> Son **[CONFIRMADO]**: 7 rarezas más Celestial, y Celestial fuera de las cajas estándar.
 
 ---
 
 ## 1. Tabla oficial de las 8 rarezas
 
-| Índice | Rareza | Color | Hex | Multiplicador | Dónde aparece |
+| Índice | Rareza | Color | Tratamiento visual | Multiplicador | Dónde aparece |
 |---|---|---|---|---|---|
-| 1 | Común | Gris piedra | `#9AA0A6` | ×1,00 | Depósitos, cajas estándar, enemigos, tienda |
-| 2 | Poco común | Verde | `#4CAF50` | ×1,15 | Depósitos, cajas estándar, enemigos, tienda |
-| 3 | Raro | Azul | `#2F80ED` | ×1,32 | Depósitos, cajas estándar, enemigos, fabricación |
-| 4 | Épico | Morado | `#9B51E0` | ×1,52 | Depósitos, cajas estándar, élites, fabricación |
-| 5 | Legendario | Dorado | `#F2B01E` | ×1,75 | Depósitos, cajas estándar, guardianes y jefes |
-| 6 | Mítico | Carmesí | `#E5383B` | ×1,98 | Depósitos, cajas estándar, jefes |
-| 7 | Ultra raro | Turquesa prismático | `#19D3C5` | ×2,20 | Depósitos de algunas zonas, cajas estándar, jefes |
-| 8 | Celestial | Blanco estelar con halo dorado | `#FFF4D6` | ×2,60 | Solo eventos, jefes de evento y fragmentos (Zonas Fracturadas de zona 6+) |
+| 1 | Común | Gris | Sin aura; partículas de polvo | ×1,00 | Depósitos, cajas estándar, enemigos, tienda |
+| 2 | Poco común | Verde | Brillo suave en bordes | ×1,25 | Depósitos, cajas estándar, enemigos, tienda |
+| 3 | Raro | Azul | Destello al soltar el objeto | ×1,50 | Depósitos, cajas estándar, enemigos, fabricación |
+| 4 | Épico | Morado | Aura pulsante y estela corta | ×1,90 | Depósitos, cajas estándar, élites, fabricación |
+| 5 | Legendario | Dorado | Aura, estela y rayos de luz al aparecer | ×2,50 | Depósitos, cajas estándar, guardianes y jefes |
+| 6 | Mítico | Rojo | Todo lo anterior y vibración de cámara al obtenerlo | ×3,30 | Depósitos, cajas estándar, jefes |
+| 7 | Ultra raro | Arcoíris | Ciclo de color y anuncio en el servidor | ×4,50 | Depósitos de algunas zonas, cajas estándar, jefes |
+| 8 | Celestial | Blanco perla con núcleo cian | Halo orbital, partículas que suben y anuncio global | ×5,20 | Solo eventos, jefes de evento y fragmentos de Zonas Fracturadas de zona 6 o más |
 
-- Que sean 7 rarezas + Celestial y que Celestial no entre en cajas estándar es **[CONFIRMADO]**.
-- Nombres intermedios, colores y multiplicadores son **[PROVISIONAL]**. El prompt solo cita Común, Legendario, Ultra raro y Celestial.
-- Los saltos de multiplicador son de un 11–15% entre rarezas vecinas y un 18% hasta Celestial. Toda la escala cabe en ×2,60: la rareza importa, pero menos que la zona (sección 4).
+- Nombres, colores y tratamiento visual: los del GDD.
+- Multiplicadores: el GDD los da por pares (1,00 a 1,50; 1,90 a 2,50; 3,30 a 4,50; 5,20). El 1,25 de Poco común es un supuesto.
 - Accesibilidad: cada rareza lleva además un icono con su número de puntas (1 a 8), para no depender solo del color.
 
 ---
 
 ## 2. Probabilidades de referencia
 
-### 2.1 Caja estándar (mascotas, armas y zona)
+### 2.1 Caja estándar
 
 | Rareza | Probabilidad | 1 de cada |
 |---|---|---|
-| Común | 50,0% | 2 |
+| Común | 50,0% | 2,0 |
 | Poco común | 26,0% | 3,8 |
 | Raro | 14,0% | 7,1 |
 | Épico | 7,0% | 14,3 |
 | Legendario | 2,4% | 41,7 |
-| Mítico | 0,5% | 200 |
-| Ultra raro | 0,1% | 1.000 |
-| **Suma** | **100,0%** | |
+| Mítico | 0,5% | 200,0 |
+| Ultra raro | 0,1% | 1.000,0 |
+| **Suma** | **100,0%** |  |
 
-Legendario o superior: 3,0% antes de la protección contra mala suerte. Con la protección la tasa real es mayor (sección 6).
+Legendario o superior: 3,0% antes de la protección contra mala suerte; 4,449% con ella (sección 6).
 
 ### 2.2 Aparición de depósitos
 
@@ -58,23 +60,23 @@ Legendario o superior: 3,0% antes de la protección contra mala suerte. Con la p
 | Ultra raro | 0,05% | 0,00% |
 | **Suma** | **100,00%** | **100,00%** |
 
-- En las zonas sin Ultra raro, su 0,05% pasa a Mítico.
-- Qué zonas tienen Ultra raro se decide en la Etapa 3.
-- Las cuatro tablas (2.1, 2.2 y 3.1) se comprueban en el script con fracciones exactas: todas suman 100.
+- En las zonas sin Ultra raro, su 0,05% pasa a Mítico. Qué zonas tienen Ultra raro se decide en B3.
+- Las cuatro tablas de este documento se comprueban en el script con fracciones exactas: todas suman 100.
 
 ---
 
 ## 3. Distribución de Celestial
 
-Celestial no usa las tablas de la sección 2. Tiene tres fuentes propias y ninguna se compra.
+Celestial no usa las tablas de la sección 2 y ninguna de sus fuentes se compra.
 
 ### 3.1 Fuentes
 
 | Fuente | Qué da | Valor | Límite |
 |---|---|---|---|
+| Depósitos de Zonas Fracturadas, zonas 6 a 10 | 1 fragmento | 0,25% por depósito agotado | Sin límite; va directo a la cuenta |
+| Grieta Celestial (evento cada 2 horas) | 1 fragmento | ×4 durante el evento (1,0% por depósito) | Lo que dure el evento |
 | Jefe de evento | Fragmentos garantizados | 2 por derrota | 5 derrotas por semana |
 | Jefe de evento | Objeto Celestial completo | 0,5% por derrota | Sin límite |
-| Zona Fracturada, zonas 6 a 10 | 1 fragmento al extraer con éxito | 10 / 12,5 / 15 / 17,5 / 20% | 10 fragmentos por semana |
 | Caja de evento | Objeto Celestial completo | 0,5% por caja | Las que dé el evento |
 
 Caja de evento (no es estándar; solo se gana jugando el evento):
@@ -91,22 +93,35 @@ Caja de evento (no es estándar; solo se gana jugando el evento):
 
 ### 3.2 Sistema de fragmentos
 
-- 60 fragmentos Celestiales = 1 objeto Celestial a elegir en la forja de la ciudad.
-- Los fragmentos van directos a la cuenta al extraer: no se sueltan al morir y no se comercian. Así se respeta que en las Zonas Fracturadas solo se arriesga el mineral **[CONFIRMADO]**.
-- La extracción solo cuenta si la carga es de al menos el 50% de la capacidad, para que no se pueda entrar y salir sin riesgo.
+- **50 fragmentos Celestiales = 1 objeto Celestial** a elegir en la forja (valor del GDD).
+- Los fragmentos van directos a la cuenta: no ocupan mochila, no se sueltan al morir y no se comercian. Así se respeta que en las Zonas Fracturadas solo se arriesga el mineral **[CONFIRMADO]**.
 - La Suerte no afecta a ninguna fuente de Celestial.
-- Anclaje de potencia: un Celestial usa la `PotZona` de la zona que lo entrega, con mínimo zona 6. Los de jefe de evento y caja de evento se anclan a la zona más alta que el jugador tenga desbloqueada (mínimo 6).
+- **Ruta PvE:** los jefes de evento dan fragmentos sin entrar en ninguna Zona Fracturada, como pide el GDD.
+- **Anclaje de potencia:** un Celestial usa la `PotZona` de la zona que lo entrega, con mínimo zona 6. Los de jefe de evento y caja de evento se anclan a la zona más alta que el jugador tenga desbloqueada (mínimo 6).
 
-### 3.3 Ritmo previsto
+### 3.3 Problema del valor del GDD y valor adoptado
 
-| Perfil | Jefes/semana | Extracciones/semana | Fragmentos/semana | Semanas por Celestial | Celestial directo/semana |
+El GDD propone 0,02% de fragmento por depósito de grieta. A 260 depósitos por hora:
+
+| Probabilidad por depósito | Fragmentos por hora de grieta | Horas de grieta por objeto |
+|---|---|---|
+| 0,02% (GDD) | 0,052 | 960 |
+| 0,10% | 0,260 | 192 |
+| 0,25% (adoptada) | 0,651 | 77 |
+| 0,50% | 1,302 | 38 |
+
+- Con 0,02% harían falta 960 horas de grieta por objeto. La ruta de jefes de evento sería unas 20 veces más rápida y la grieta dejaría de contar.
+- **Valor adoptado: 0,25% por depósito** (77 horas de grieta por objeto).
+
+### 3.4 Ritmo previsto
+
+| Perfil | Jefes de evento/semana | Horas de grieta (zona 6+)/semana | Fragmentos/semana | Semanas por Celestial | Celestial directo/semana |
 |---|---|---|---|---|---|
-| Casual | 2 | 0 | 4,00 | 15,0 | 1,00% |
-| Regular | 4 | 10 (zona 7) | 9,25 | 6,5 | 1,99% |
-| Dedicado | 5 | 20 (zona 8) | 13,00 | 4,6 | 2,48% |
-| Máximo | 5 | 60 (zona 10) | 20,00 | 3,0 | 2,48% |
-
-El tope semanal es 20 fragmentos, así que nadie baja de 3 semanas por objeto salvo por el 0,5% directo.
+| Solo PvE, casual | 2 | 0 | 4,00 | 12,5 | 1,00% |
+| Solo PvE, constante | 5 | 0 | 10,00 | 5,0 | 2,48% |
+| Regular | 4 | 4 | 10,60 | 4,7 | 1,99% |
+| Dedicado | 5 | 10 | 16,51 | 3,0 | 2,48% |
+| Solo grieta | 0 | 10 | 6,51 | 7,7 | 0,00% |
 
 ---
 
@@ -114,57 +129,64 @@ El tope semanal es 20 fragmentos, así que nadie baja de 3 semanas por objeto sa
 
 ### F1 — Potencia de objeto
 
-- **Expresión:** `Potencia = PotZona(z) × MultRareza(r) × (1 + min(BonoNivel + BonoMejoras + BonoHabilidades, TopeBono))`
+- **Expresión:** `Potencia = PotZona(z) × MultRareza(r) × (1 + mín(BonoNivel + BonoMejoras + BonoHabilidades, TopeBono))`
 - **Con:** `PotZona(z) = PotBase × g^(z−1)`
 - **Variables:**
-  - `z`: zona del objeto (1 a 10; para Celestial, zona de anclaje).
+  - `z`: zona del objeto (para Celestial, zona de anclaje).
   - `r`: rareza (multiplicador de la sección 1).
-  - `BonoNivel`: 0 a 0,50 según el nivel del objeto.
-  - `BonoMejoras`: 0 a 0,30 según las mejoras aplicadas.
-  - `BonoHabilidades`: 0 a 0,20 según las habilidades pasivas del objeto.
-- **Unidad:** puntos de potencia. La Etapa 3 los convierte en potencia de pico y la Etapa 4 en daño de arma.
-- **Valores configurables recomendados:** `PotBase = 100`, `g = 1,65`, `TopeBono = 1,00`.
-- **Ejemplo:** pico Épico de zona 4 con nivel +0,25, mejoras +0,15 y habilidades +0,10 → `449 × 1,52 × 1,50 = 1.024`.
-- **Límites:** dentro de una zona, el objeto más fuerte posible (Celestial al máximo) vale 5,20 veces el más débil (Común sin mejoras). Ningún bono multiplica a otro: los tres se suman y tienen tope.
-- **Posibles problemas:** si en etapas posteriores se añade un bono que multiplique fuera del paréntesis, se rompe el límite de 5,20. Todo bono nuevo debe entrar en la suma.
+  - `BonoNivel`: 0 a 0,25 según el nivel del objeto.
+  - `BonoMejoras`: 0 a 0,15 según las mejoras aplicadas.
+  - `BonoHabilidades`: 0 a 0,10 según el Despertar de su habilidad.
+- **Unidad:** puntos de potencia. B3 los convierte en potencia de pico y B4 en daño de arma.
+- **Valores configurables recomendados:** `PotBase = 100`, `g = 2,00`, `TopeBono = 0,50`.
+- **Ejemplo:** pico Épico de zona 4 con +0,25 de bonos → `800 × 1,90 × 1,25 = 1.900`.
+- **Límites:** dentro de una zona, el objeto más fuerte posible (Celestial al máximo) vale 7,80 veces el más débil (Común sin mejoras). Los tres bonos se suman y tienen tope; ninguno multiplica a otro.
+- **Posibles problemas:** un bono nuevo que multiplique fuera del paréntesis rompería el límite. Todo bono futuro debe entrar en la suma.
 
-### 4.1 Potencia por zona
+### 4.1 Por qué cambian el crecimiento por zona y el tope de bonos
+
+En la primera versión (sin el GDD) los multiplicadores iban de ×1,00 a ×2,60, el crecimiento por zona era 1,65 y los bonos llegaban a +100%. Con los multiplicadores del GDD (hasta ×5,20) esos valores ya no sirven:
+
+- Con crecimiento 1,65 y bonos de +100%, un Común sin mejoras necesitaría 5 zonas de diferencia para superar a un Ultra raro al máximo.
+- Un Celestial anclado a la zona 6 y mejorado al máximo valdría ×10,4 la potencia de su zona, y un Común de la zona 10 solo ×7,4: el Celestial de zona baja ganaría, que es justo lo que el GDD pide evitar.
+- **Corrección:** crecimiento por zona `g = 2,00` y tope de bonos +50%. La zona 10 tiene 512 veces la potencia de la zona 1.
+
+### 4.2 Potencia por zona
 
 | Zona | PotZona | Común sin mejoras | Ultra raro al máximo | Celestial al máximo |
 |---|---|---|---|---|
-| 1 | 100 | 100 | 440 | — |
-| 2 | 165 | 165 | 726 | — |
-| 3 | 272 | 272 | 1.198 | — |
-| 4 | 449 | 449 | 1.977 | — |
-| 5 | 741 | 741 | 3.261 | — |
-| 6 | 1.223 | 1.223 | 5.381 | 6.360 |
-| 7 | 2.018 | 2.018 | 8.879 | 10.493 |
-| 8 | 3.330 | 3.330 | 14.650 | 17.314 |
-| 9 | 5.494 | 5.494 | 24.173 | 28.568 |
-| 10 | 9.065 | 9.065 | 39.885 | 47.137 |
+| 1 | 100 | 100 | 675 | — |
+| 2 | 200 | 200 | 1.350 | — |
+| 3 | 400 | 400 | 2.700 | — |
+| 4 | 800 | 800 | 5.400 | — |
+| 5 | 1.600 | 1.600 | 10.800 | — |
+| 6 | 3.200 | 3.200 | 21.600 | 24.960 |
+| 7 | 6.400 | 6.400 | 43.200 | 49.920 |
+| 8 | 12.800 | 12.800 | 86.400 | 99.840 |
+| 9 | 25.600 | 25.600 | 172.800 | 199.680 |
+| 10 | 51.200 | 51.200 | 345.600 | 399.360 |
 
-Celestial no existe por debajo de la zona 6 (anclaje mínimo).
+Celestial no existe por debajo de la zona 6.
 
-### 4.2 Demostración: un Común de zona alta supera a un objeto raro de zona baja
+### 4.3 Demostración: un Común de zona alta supera a un objeto raro de zona baja
 
 | Común sin mejoras | Rival | Potencias | Resultado |
 |---|---|---|---|
-| Zona 3 | Ultra raro de zona 1 sin mejoras | 272 frente a 220 | El Común es 1,24 veces mejor |
-| Zona 4 | Ultra raro de zona 1 al máximo | 449 frente a 440 | El Común es 1,02 veces mejor |
-| Zona 10 | Ultra raro de zona 6 al máximo | 9.065 frente a 5.381 | El Común es 1,68 veces mejor |
-| Zona 9 | Celestial de anclaje 6 sin mejoras | 5.494 frente a 3.180 | El Común es 1,73 veces mejor |
-| Zona 10 | Celestial de anclaje 6 al máximo | 9.065 frente a 6.360 | El Común es 1,43 veces mejor |
-
-Regla general que da el script:
+| Zona 4 | Ultra raro de zona 1 sin mejoras | 800 frente a 450 | El Común es 1,78 veces mejor |
+| Zona 5 | Ultra raro de zona 2 al máximo | 1.600 frente a 1.350 | El Común es 1,19 veces mejor |
+| Zona 10 | Ultra raro de zona 7 al máximo | 51.200 frente a 43.200 | El Común es 1,19 veces mejor |
+| Zona 9 | Celestial de zona 6 sin mejoras | 25.600 frente a 16.640 | El Común es 1,54 veces mejor |
+| Zona 10 | Celestial de zona 6 al máximo | 51.200 frente a 24.960 | El Común es 2,05 veces mejor |
+| Zona 9 | Celestial de zona 6 al máximo | 25.600 frente a 24.960 | El Común es 1,03 veces mejor |
 
 | Rival | Zonas de diferencia para que un Común sin mejoras lo supere |
 |---|---|
-| Ultra raro sin mejoras | 2 |
+| Ultra raro sin mejoras | 3 |
 | Ultra raro al máximo | 3 |
-| Celestial sin mejoras | 2 |
-| Celestial al máximo | 4 |
+| Celestial sin mejoras | 3 |
+| Celestial al máximo | 3 |
 
-Consecuencia de diseño: un objeto muy mejorado aguanta 2 o 3 zonas, no más. Avanzar de zona siempre acaba ganando a quedarse mejorando.
+Consecuencia de diseño: un objeto muy mejorado aguanta 2 o 3 zonas. Avanzar de zona siempre acaba ganando a quedarse mejorando.
 
 ---
 
@@ -173,24 +195,23 @@ Consecuencia de diseño: un objeto muy mejorado aguanta 2 o 3 zonas, no más. Av
 ### F2 — Factor de suerte
 
 - **Expresión:** `F(S) = 1 + Fmax × S / (S + K)`
-- **Variables:** `S` = Suerte total del jugador (estadística + equipo + consumibles).
+- **Variables:** `S` = Suerte total del jugador.
 - **Unidad:** multiplicador sin dimensión.
 - **Valores configurables recomendados:** `Fmax = 3`, `K = 1.000`.
 - **Ejemplo:** Suerte 500 → `1 + 3 × 500/1.500 = 2,000`.
 - **Límites:** `F` va de 1 a 4 y nunca llega a 4.
-- **Posibles problemas:** con `K = 1.000` la mitad del efecto llega en Suerte 1.000; si la Etapa 2 hace que la Suerte se consiga muy rápido, hay que subir `K`.
+- **Posibles problemas:** si la Suerte se consigue muy rápido, hay que subir `K`.
 
 ### F3 — Peso ajustado y normalización
 
 - **Expresión:** `Peso'(r) = Peso(r) × F(S)^e(r)` y `P(r) = Peso'(r) / Σ Peso'`
-- **Variables:** `Peso(r)` = probabilidad base de la tabla; `e(r)` = exponente de la rareza.
 - **Exponentes recomendados:** Común 0 · Poco común 0,2 · Raro 0,4 · Épico 0,6 · Legendario 0,8 · Mítico 1,0 · Ultra raro 1,0.
 - **Unidad:** probabilidad en %.
-- **Ejemplo:** Ultra raro en caja con Suerte 1.000 → `0,1 × 2,5^1 = 0,25`; tras normalizar, 0,208%.
-- **Límites:** con Suerte infinita, Ultra raro pasa de 0,100% a 0,297% y Legendario o superior de 3,0% a 7,197%.
+- **Ejemplo:** Ultra raro en caja con Suerte 1.000 → `0,1 × 2,5 = 0,25`; tras normalizar, 0,208%.
+- **Límites:** con Suerte infinita, Ultra raro pasa de 0,100% a 0,298% y Legendario o superior de 3,0% a 7,197%.
 - **Posibles problemas:** la normalización hace que el aumento real sea menor que `F`. Hay que enseñar al jugador la probabilidad final, no el factor.
 
-### 5.1 Simulación en caja estándar gratuita
+### 5.1 Simulación en caja estándar
 
 | Suerte | F | Común | Poco común | Raro | Épico | Legendario | Mítico | Ultra raro | Legendario+ |
 |---|---|---|---|---|---|---|---|---|---|
@@ -220,15 +241,15 @@ Todas las filas, en %, suman exactamente 100 (redondeo por mayor resto, comproba
 
 | Recompensa | ¿Admite Suerte? | Motivo |
 |---|---|---|
-| Rareza del depósito que aparece | Sí | Es el uso principal de la estadística |
+| Rareza del depósito que aparece en la mina PvE | Sí, con la Suerte media de los jugadores de la zona (B3) | El depósito es compartido |
 | Botín de enemigos comunes, élites y guardianes | Sí | Recompensa repetible de PvE |
 | Tiradas extra de jefes | Sí | Solo las tiradas extra |
 | Cajas compradas con monedas del juego | Sí | Recompensa gratuita |
-| Material garantizado de jefe | No | Es fijo; no puede depender del azar |
-| Cajas compradas con Robux | No | Sus probabilidades deben ser fijas y publicadas |
+| Material garantizado de jefe | No | Es fijo |
+| Cajas de pago, si llegaran a existir | No | Sus probabilidades deben ser fijas y publicadas |
 | Garantías de la protección contra mala suerte | No | Son deterministas |
 | Fragmentos y objetos Celestiales | No | Celestial se gana por constancia |
-| Botín y Cofres de Saqueo en Zonas Fracturadas | No | La Suerte no debe decidir el PvP |
+| Depósitos y Cofres de Saqueo en Zonas Fracturadas | No | La Suerte no debe decidir el PvP |
 | Recompensas de misiones, logros y temporada | No | Son fijas |
 
 ---
@@ -243,14 +264,14 @@ Cada tipo de caja lleva dos contadores propios por jugador. Los de una caja no a
   - `p(n) = p0` si `n ≤ 40`
   - `p(n) = p0 + (1 − p0) × ((n − 40) / 10)²` si `41 ≤ n ≤ 49`
   - `p(n) = 1` si `n = 50`
-- **Variables:** `p0` = probabilidad base de Legendario o superior de esa caja (3,0% en la estándar; con Suerte, la de la tabla 5.1).
+- **Variables:** `p0` = probabilidad base de Legendario o superior de esa caja (3,0% en la estándar).
 - **Unidad:** probabilidad por apertura.
 - **Valores configurables recomendados:** inicio de rampa 40, garantía 50, exponente 2.
 - **Ejemplo:** apertura 45 → `0,03 + 0,97 × 0,25 = 27,25%`.
 - **Límites:** nunca hay más de 50 aperturas seguidas sin Legendario o superior.
-- **Posibles problemas:** sube la tasa real por encima de la base (ver 6.2).
+- **Posibles problemas:** sube la tasa real por encima de la base (6.2).
 
-Cuando el contador A da premio, la rareza se sortea entre Legendario, Mítico y Ultra raro con sus pesos relativos (2,4 : 0,5 : 0,1). El contador vuelve a 0 con cualquier Legendario o superior.
+Cuando el contador A da premio, la rareza se sortea entre Legendario, Mítico y Ultra raro con sus pesos relativos (2,4 : 0,5 : 0,1).
 
 ### F5 — Contador B: Mítico o superior
 
@@ -263,7 +284,7 @@ Cuando el contador A da premio, la rareza se sortea entre Legendario, Mítico y 
 ### Reglas para que no haya contradicciones
 
 1. En cada apertura se comprueba primero B y después A.
-2. Si B se activa, su premio también pone A a 0 (un Mítico es «Legendario o superior»).
+2. Si B se activa, su premio también pone A a 0.
 3. Un Legendario pone A a 0 pero no toca B.
 4. Las garantías no admiten Suerte; la Suerte solo cambia `p0`.
 5. El servidor decide el premio y actualiza los contadores antes de enviar nada al cliente.
@@ -284,9 +305,9 @@ Cuando el contador A da premio, la rareza se sortea entre Legendario, Mítico y 
 | 49 | 81,57% | 1,48% |
 | 50 | 100,00% | 0,27% |
 
-Solo el 0,27% de las rachas llega a la garantía de la apertura 50; la rampa resuelve casi todas antes. Sin protección, el 21,81% de los jugadores pasaría 50 aperturas sin un Legendario.
+Sin protección, el 21,81% de los jugadores pasaría 50 aperturas sin un Legendario.
 
-### 6.2 Simulación de 100.000 aperturas (caja estándar)
+### 6.2 Simulación de 100.000 aperturas
 
 | Rareza | Base | Simulado, Suerte 0 | Simulado, Suerte 1.000 |
 |---|---|---|---|
@@ -306,58 +327,53 @@ Solo el 0,27% de las rachas llega a la garantía de la apertura 50; la rampa res
 | Garantías activadas en la apertura 100 | 643 | 460 |
 | Racha más larga sin Legendario+ | 50 | 50 |
 
-- **Tasa real de Legendario o superior: 4,449%** (base 3,0%). El cálculo analítico del contador A solo da 3,995%; el resto lo aporta el contador B.
+- **Tasa real de Legendario o superior: 4,449%** (base 3,0%). Mítico o superior: 1,399%. Ultra raro: 0,228%.
 - Semilla fija `20261116`, para que el resultado se pueda reproducir.
 
 ---
 
 ## 7. Problemas de balance detectados y alternativas
 
-### P1 — La garantía de la apertura 100 dobla con creces la tasa de Mítico y Ultra raro
+### P1 — Los multiplicadores del GDD rompían la regla de la zona
 
-- **Problema:** Mítico o superior pasa de 0,600% a 1,399% y Ultra raro de 0,100% a 0,228%. La base de Mítico+ es tan baja que casi todos los ciclos acaban en la garantía (643 de cada 100.000 aperturas).
-- **Alternativas:**
+- Resuelto en la sección 4.1 con `g = 2,00` y tope de bonos +50%.
+- **Efecto secundario:** dentro de una zona, el equipo Celestial al máximo vale 7,80 veces el Común (antes 5,2). La rareza pesa más que en la primera versión; B7 comprueba que no rompa los límites de ingresos.
+
+### P2 — Fragmentos Celestiales al 0,02% (valor del GDD)
+
+- 960 horas de grieta por objeto. **Valor adoptado:** 0,25% (77 horas).
+
+### P3 — La garantía de la apertura 100 dobla con creces la tasa de Mítico y Ultra raro
+
+- Mítico o superior pasa de 0,600% a 1,399% y Ultra raro de 0,100% a 0,228%: la garantía se activa 643 veces en 100.000 aperturas.
 
 | Garantía de Mítico+ en la apertura | Tasa aproximada de Mítico+ |
 |---|---|
-| 100 (actual) | 1,327% |
+| 100 | 1,327% |
 | 150 | 1,009% |
 | 200 | 0,857% |
 | 300 | 0,718% |
 
-- **Recomendación:** mantener 100, porque es la cifra pedida, y tratar 1,399% y 0,228% como las tasas oficiales. La Etapa 6 debe poner precio a las cajas con las tasas reales, no con las base. Si entonces Ultra raro resulta demasiado frecuente, bajar su peso base de 0,1 a 0,05 antes que mover la garantía.
+- **Recomendación:** mantener 100 y tratar las tasas reales como las oficiales. B6 pone precio a las cajas con las tasas reales.
 
-### P2 — La tasa publicada debe ser la real
+### P4 — La tasa publicada debe ser la real
 
-- **Problema:** si el juego muestra «Legendario 2,4%» pero entrega 3,05%, la información al jugador es inexacta.
-- **Alternativa:** mostrar las dos cosas: probabilidad base por apertura y texto de garantía («Legendario o superior garantizado en 50 aperturas; Mítico o superior en 100»). La Etapa 6 lo contrasta con la política de Roblox.
+- El juego debe mostrar la probabilidad base y el texto de las garantías («Legendario o superior garantizado en 50 aperturas; Mítico o superior en 100»).
 
-### P3 — La Suerte puede acumularse desde varias fuentes
+### P5 — La Suerte puede acumularse desde varias fuentes
 
-- **Problema:** estadística, equipo, mascotas y consumibles pueden sumar mucha Suerte.
-- **Alternativa ya aplicada:** todas las fuentes suman en `S` y pasan por `F(S)`, que no supera ×4. Ninguna fuente puede multiplicar `F` directamente. Con Suerte infinita, Legendario+ se queda en 7,197%.
-
-### P4 — La Suerte casi no se nota al principio
-
-- **Problema:** con Suerte 10, Legendario+ pasa de 3,000% a 3,059%. Un jugador nuevo no percibe el cambio.
-- **Alternativa:** si las pruebas lo confirman, bajar `K` de 1.000 a 500 (Suerte 100 daría `F = 1,5` en vez de 1,273). Se decide en la Etapa 2, cuando se sepa cuánta Suerte hay por nivel.
-
-### P5 — Celestial es solo un 18% mejor que Ultra raro
-
-- **Problema:** ×2,60 frente a ×2,20 puede parecer poco para 3–15 semanas de esfuerzo.
-- **Por qué se mantiene:** un salto mayor rompería el PvP de las Zonas Fracturadas. El atractivo extra de Celestial debe venir de una habilidad única y del aspecto, no de la potencia. Se concreta en las Etapas 3, 4 y 5.
+- Todas las fuentes suman en `S` y pasan por `F(S)`, que no supera ×4. Con Suerte infinita, Legendario o superior se queda en 7,197%.
 
 ### P6 — Un objeto muy mejorado deja de servir en 3 zonas
 
-- **Problema:** el jugador puede sentir que la inversión en mejoras se pierde.
-- **Alternativa:** en la Etapa 6, devolver parte de los materiales al reciclar el objeto, o permitir traspasar un porcentaje de las mejoras al objeto de la zona siguiente.
+- B6: reciclar un objeto devuelve parte de los materiales de sus mejoras.
 
 ### Cómo probar los valores provisionales
 
 | Valor | Prueba |
 |---|---|
-| Multiplicadores de rareza | Etapa 7: builds con equipo común, ultra raro y Celestial en la misma zona |
-| `g = 1,65` | Etapa 3 y 4: tiempos de extracción y de combate al cambiar de zona |
-| `Fmax` y `K` | Etapa 7: build con todo en Suerte frente a build equilibrada, en monedas por hora |
-| Rampa 40–50 y garantía 100 | Telemetría de beta: distribución real de rachas sin premio por tipo de caja |
-| Fragmentos Celestiales | Beta: semanas reales hasta el primer Celestial por perfil de jugador |
+| Multiplicadores de rareza del GDD | B7: equipo Común, Ultra raro y Celestial en la misma zona |
+| `g = 2,00` y tope de bonos +50% | B3 y B4: tiempos al cambiar de zona; B7: reglas de ingresos |
+| `Fmax` y `K` | B7: build de todo en Suerte frente a equilibrada |
+| Rampa 40–50 y garantía 100 | Telemetría de beta: rachas reales sin premio por tipo de caja |
+| 0,25% de fragmento por depósito | Beta: semanas reales hasta el primer Celestial |
