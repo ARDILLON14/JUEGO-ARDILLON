@@ -1,10 +1,12 @@
 # OREBOUND — DECISIONES.md
 
-Versión: Etapa 0 (1/2) · 2026-11-16
+Versión: Etapa 1 · 2026-11-16
 
 > **Estado de las fuentes.** Este archivo se ha construido solo con el documento
 > «OREBOUND — Prompts por partes» (prompt único con continuidad + partes 0 a 10).
 > **No se han recibido** `prompt_maestro.txt` ni `GDD_combate_mineria_mascotas.pdf`.
+> Por decisión del autor (2026-11-16) se trabaja sin ellas: lo que falte se propone
+> como [PROVISIONAL] y se contrasta si las fuentes llegan (ver C-25).
 > Por eso hay tres bloques en lugar de dos:
 >
 > - **CONFIRMADO**: decisiones fijas escritas literalmente en el prompt.
@@ -46,6 +48,18 @@ Versión: Etapa 0 (1/2) · 2026-11-16
 - C-22. Mascotas: fases huevo → cría → forma desatada.
 - C-23. Tope de DPS conjunto de mascotas: 40% del DPS del jugador en PvE.
 - C-24. Tope de DPS conjunto de mascotas: 25% del DPS del jugador en PvP y Zonas Fracturadas.
+
+### 1.4 Correcciones del prompt (Etapa 0, cerradas el 2026-11-16)
+- C-25. Si falta una fuente no se detiene el trabajo: se proponen valores [PROVISIONAL] (T-10).
+- C-26. Rige el prompt único corregido: `00_Fuentes/prompt_corregido.md` (T-09).
+- C-27. Protección contra mala suerte: base hasta la apertura 40, rampa de la 41 a la 49, garantía en la 50 y garantía de rango superior en la 100 (T-01).
+- C-28. Celestial no tiene versión por zona de la mina; su potencia se ancla a una zona según la fuente, con anclaje mínimo en la zona 6 (T-02).
+- C-29. Las cajas de mascotas, armas y zona son estándar y nunca dan Celestial. En las Zonas Fracturadas solo caen fragmentos Celestiales (T-03).
+- C-30. De los 6 tipos de arma, 5 quedan dentro de ±10% de DPS; el sexto queda fuera a propósito y se compensa con alcance o utilidad (T-04).
+- C-31. La «forma desatada máxima» es el grado final de la tercera fase, no una cuarta fase (T-05).
+- C-32. Dominio de mascotas da también valor fuera del daño (T-06).
+- C-33. Si el riesgo de las Zonas Fracturadas no compensa, se ajusta el 50% de carga soltada, no el techo de 2,5× (T-07).
+- C-34. Diseño completo: 10 Zonas Fracturadas. MVP: 1 de prueba (T-08).
 
 ---
 
@@ -147,23 +161,63 @@ Mundo, retención y producción
 
 ---
 
-## 4. Tensiones detectadas dentro del propio prompt
+## 4. Incongruencias del prompt y su resolución
 
-No son las contradicciones entre el prompt maestro y el GDD (esa lista necesita los dos archivos). Son puntos del prompt que conviene cerrar.
+Todas quedan resueltas y aplicadas en `00_Fuentes/prompt_corregido.md`.
 
-| # | Tensión | Propuesta |
-|---|---------|-----------|
-| T-01 | La protección contra mala suerte aparece como «entre las aperturas 40 y 100» y como «progresión entre 40 y 50, garantía en 50 y 100». | Usar la versión detallada: rampa de 40 a 50, garantía en 50, segunda garantía de rango superior en 100. Concretar en Etapa 1. |
-| T-02 | Celestial es «solo eventos y fin de juego», pero se pide comparar con un «Celestial de zona baja» y hay picos Celestial «donde aplique». | Celestial no tiene versión por zona de mina; su potencia se ancla a la zona del evento que lo entrega. La comparación de la Etapa 1 se hace con el Celestial de anclaje más bajo. |
-| T-03 | Celestial sale en Zonas Fracturadas de zona 6 o más, pero «no entra en cajas estándar» y hay cajas de zona. | Las cajas de zona cuentan como estándar: nunca dan Celestial. En Zonas Fracturadas solo caen fragmentos. |
-| T-04 | Hay 6 tipos de arma pero el margen de ±10% de DPS se pide solo para 5. | El sexto tipo queda fuera del margen a propósito (previsiblemente a distancia o de apoyo). Confirmar con la sección 10 del prompt maestro. |
-| T-05 | Mascotas con 3 fases fijas, pero la Etapa 5 cita una «forma desatada máxima». | Tratarla como grado final de la tercera fase, no como cuarta fase. |
-| T-06 | El tope de DPS de mascotas (40% / 25%) puede dejar sin valor la estadística Dominio de mascotas. | En Etapa 2 y 5, Dominio debe dar también valor fuera del DPS (vida, recolección, utilidad). |
-| T-07 | Perder el 20% en PvE y soltar el 50% en Zona Fracturada, con un techo de 2,5× de ingresos. | Validar en Etapa 6 que el riesgo compensa; si no, ajustar el 50% (P-01), no el techo. |
-| T-08 | «Una Zona Fracturada por cada zona» frente a «1 Zona Fracturada de prueba» en el MVP. | No es contradicción: 10 en el diseño completo, 1 en el MVP. |
-| T-09 | El prompt único cierra con «Etapa N terminada… escribe CONTINUAR»; las partes sueltas con «Parte N terminada… envíame la Parte N+1». | Rige el prompt único con continuidad. |
+| # | Incongruencia | Resolución | Decisión |
+|---|---------------|------------|----------|
+| T-01 | La protección contra mala suerte aparecía como «entre las aperturas 40 y 100» y como «progresión entre 40 y 50, garantía en 50 y 100». | Una sola regla: base hasta 40, rampa 41–49, garantía en 50, garantía superior en 100. | C-27 |
+| T-02 | Celestial era «solo eventos y fin de juego», pero se pedía comparar con un «Celestial de zona baja». | Celestial no tiene versión por zona; se ancla a una zona según la fuente, mínimo zona 6. | C-28 |
+| T-03 | Celestial sale en Zonas Fracturadas de zona 6 o más, pero «no entra en cajas estándar» y existen cajas de zona. | Las cajas de zona son estándar. En Zonas Fracturadas solo caen fragmentos. | C-29 |
+| T-04 | Había 6 tipos de arma pero el margen de ±10% de DPS se pedía solo para 5. | El sexto tipo queda fuera del margen a propósito. | C-30 |
+| T-05 | Mascotas con 3 fases fijas, pero se citaba una «forma desatada máxima». | Es el grado final de la tercera fase. | C-31 |
+| T-06 | El tope de DPS de mascotas podía dejar sin valor la estadística Dominio de mascotas. | Dominio da también vida, recolección y utilidad. | C-32 |
+| T-07 | 20% de pérdida en PvE y 50% en Zona Fracturada con un techo de 2,5× de ingresos. | Se valida en la Etapa 6; si no compensa se ajusta el 50%. | C-33 |
+| T-08 | «Una Zona Fracturada por cada zona» frente a «1 Zona Fracturada de prueba» en el MVP. | 10 en el diseño completo, 1 en el MVP. | C-34 |
+| T-09 | Dos frases de cierre distintas (CONTINUAR frente a «envíame la Parte N+1»). | Rige el prompt único con CONTINUAR. | C-26 |
+| T-10 | El prompt exigía las dos fuentes y a la vez prohibía preguntas innecesarias; sin fuentes el trabajo se bloqueaba. | Sin fuentes se proponen valores [PROVISIONAL]. | C-25 |
+
+Sigue pendiente la lista de contradicciones entre el prompt maestro y el GDD: solo puede hacerse si llegan los dos archivos.
 
 ---
 
-## 5. Registro de cambios
+## 5. Valores de la Etapa 1 — B1_Rarezas.md (todos [PROVISIONAL])
+
+Rarezas
+- E1-01. Orden y nombres: 1 Común, 2 Poco común, 3 Raro, 4 Épico, 5 Legendario, 6 Mítico, 7 Ultra raro, 8 Celestial. Resuelve P-F-03 de forma provisional.
+- E1-02. Multiplicadores de rareza: 1,00 / 1,15 / 1,32 / 1,52 / 1,75 / 1,98 / 2,20 / 2,60.
+
+Probabilidades
+- E1-03. Caja estándar: 50 / 26 / 14 / 7 / 2,4 / 0,5 / 0,1 % (Legendario o superior 3,0%).
+- E1-04. Depósitos en zona con Ultra raro: 55 / 25 / 12 / 5,5 / 2 / 0,45 / 0,05 %.
+- E1-05. Depósitos en zona sin Ultra raro: 55 / 25 / 12 / 5,5 / 2 / 0,50 / 0 %.
+- E1-06. Caja de evento (no estándar, no se vende): Raro 45, Épico 33, Legendario 15, Mítico 5, Ultra raro 1,5, Celestial 0,5 %.
+
+Potencia de objeto
+- E1-07. `Potencia = PotZona(z) × MultRareza(r) × (1 + min(BonoNivel + BonoMejoras + BonoHabilidades, 1,00))`.
+- E1-08. `PotZona(z) = 100 × 1,65^(z−1)`; crecimiento por zona 1,65.
+- E1-09. Topes de bono: nivel de objeto +50%, mejoras +30%, habilidades +20%; total +100%.
+
+Suerte
+- E1-10. `F(S) = 1 + 3 × S / (S + 1.000)`; máximo ×4.
+- E1-11. Exponentes por rareza: 0 / 0,2 / 0,4 / 0,6 / 0,8 / 1,0 / 1,0. Peso ajustado = peso × F^exponente, y se normaliza a 100%.
+- E1-12. La Suerte no afecta a Celestial, a las garantías, a las cajas de pago ni al botín de las Zonas Fracturadas.
+
+Protección contra mala suerte
+- E1-13. Contador A por tipo de caja: `p(n) = 3%` si n ≤ 40; `p(n) = 3% + 97% × ((n−40)/10)²` si 41 ≤ n ≤ 49; 100% en n = 50. Premio: Legendario o superior.
+- E1-14. Contador B por tipo de caja: garantía de Mítico o superior en la apertura 100. Si coincide con A, manda B.
+- E1-15. Tasas reales simuladas (100.000 aperturas): Legendario o superior 4,449%; Mítico o superior 1,399%; Ultra raro 0,228%. Son las que hay que publicar y usar en la Etapa 6.
+
+Celestial
+- E1-16. 60 fragmentos Celestiales = 1 objeto Celestial a elegir. Los fragmentos no se pueden soltar ni comerciar.
+- E1-17. Jefe de evento: 2 fragmentos por derrota (máximo 5 derrotas por semana) y 0,5% de objeto Celestial directo.
+- E1-18. Extracción con éxito en Zona Fracturada: 10 / 12,5 / 15 / 17,5 / 20 % de 1 fragmento en zonas 6 a 10; máximo 10 fragmentos por semana.
+- E1-19. Ritmo previsto: de 3,0 semanas (máximo) a 15,0 semanas (casual) por objeto Celestial.
+
+---
+
+## 6. Registro de cambios
 - 2026-11-16 · Etapa 0 (1/2): creación del archivo a partir del documento de prompts. Faltan las dos fuentes.
+- 2026-11-16 · Etapa 0 cerrada: incongruencias del prompt resueltas (C-25 a C-34) y prompt corregido.
+- 2026-11-16 · Etapa 1: valores E1-01 a E1-19.
