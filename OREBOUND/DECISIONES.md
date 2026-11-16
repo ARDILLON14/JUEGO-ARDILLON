@@ -1,6 +1,6 @@
 # OREBOUND — DECISIONES.md
 
-Versión: Etapa 8 · 2026-11-16
+Versión: Etapa 9 · 2026-11-16
 
 > **Estado de las fuentes.** Este archivo se ha construido solo con el documento
 > «OREBOUND — Prompts por partes» (prompt único con continuidad + partes 0 a 10).
@@ -533,7 +533,51 @@ MVP
 
 ---
 
-## 13. Registro de cambios
+## 13. Valores de la Etapa 9 — C_Tecnico.md (todos [PROVISIONAL] salvo los marcados)
+
+Proyecto
+- E9-01. Proyecto de Rojo sobre la estructura existente (`src/shared`, `src/server`, `src/client`); renombrar el proyecto de `ECLIPSE` a `OREBOUND`.
+- E9-02. Un lugar de Roblox por mundo más Puerto Veta, todos con el mismo código; mapas hechos en Studio.
+- E9-03. Doce módulos de configuración en `Shared/Config`: Stats, Rarity, Mining, Pickaxes, Weapons, PowerCores, Pets, Economy, Boxes, Fracture, Worlds y PvP. Solo datos; claves en inglés.
+- E9-04. Fórmulas F1 a F36 como funciones puras en `Shared/Formulas`.
+- E9-05. 29 servicios de servidor, entre ellos FractureService, PowerCoreService, PetEvolutionService y PetCombatService; 13 controladores de cliente.
+- E9-06. Una sola puerta por recurso: EconomyService para monedas e InventoryService para objetos y minerales.
+
+Remotes
+- E9-07. 43 Remotes del cliente al servidor y 13 del servidor al cliente; el cliente envía intenciones, nunca resultados.
+- E9-08. Validación común: tipos y rangos, frecuencia, estado, propiedad.
+- E9-09. Límites de frecuencia con un 25% de margen: atacar 5,7/s; picar 2,5/s; habilidad 1,8/s; bloqueo 2,5/s; esquiva 1,1/s; dash 0,5/s; postura 0,5/s; parpadeo 0,2/s.
+- E9-10. Validación de movimiento: máximo 50 studs en 0,5 s, 65 en 1 s y 94 en 2 s.
+
+Datos
+- E9-11. Perfil versión 1 en una clave por jugador; tamaño estimado de 51 KB en el peor caso.
+- E9-12. Migraciones encadenadas por número de versión; un perfil de versión futura no se carga.
+- E9-13. Sesión bloqueada con `UpdateAsync`: caduca a los 30 minutos; reintento cada 5 s hasta 30 s; liberar antes de teletransportar.
+- E9-14. Autoguardado cada 300 s; guardado inmediato tras compras con Robux, renacimiento, evolución, fabricación Legendaria o superior y extracción.
+- E9-15. Registro de las últimas 200 aperturas de caja en el perfil, con los contadores A y B resultantes.
+- E9-16. El servidor decide el premio y actualiza contadores antes de enviar el resultado al cliente [CONFIRMADO].
+- E9-17. `ProcessReceipt` idempotente con los últimos 100 recibos.
+
+Seguridad
+- E9-18. Muerte PvP: cuenta quien hizo más daño en los últimos 10 s; desconectarse en combate se trata como muerte.
+- E9-19. Las mascotas no tienen autoridad en el cliente; el tope de DPS se aplica en PetCombatService [CONFIRMADO el tope].
+- E9-20. Alerta de analítica si un jugador gana más de 3 veces el ingreso de referencia de su zona en una hora.
+
+Rendimiento
+- E9-21. Prioridad de efectos: avisos de ataque, propios, jefe, otros jugadores, mascotas ajenas, ambiente.
+- E9-22. Calidad automática: baja un nivel si la media cae por debajo de 25 fotogramas por segundo durante 10 s.
+- E9-23. `StreamingEnabled` en todos los lugares; radio objetivo de 256 studs en móvil y 512 en PC.
+- E9-24. IA de enemigos activa solo con un jugador a 120 studs o menos; un único bucle de mascotas a 10 Hz.
+
+Pruebas
+- E9-25. TestEZ con vectores de referencia exportados de los scripts de `calculos/`; ninguna fase se cierra con pruebas en rojo.
+
+Sin verificar
+- E9-26. Los límites de DataStore y MemoryStore citados no se han contrastado con la documentación de Roblox.
+
+---
+
+## 14. Registro de cambios
 - 2026-11-16 · Etapa 0 (1/2): creación del archivo a partir del documento de prompts. Faltan las dos fuentes.
 - 2026-11-16 · Etapa 0 cerrada: incongruencias del prompt resueltas (C-25 a C-34) y prompt corregido.
 - 2026-11-16 · Etapa 1: valores E1-01 a E1-19.
@@ -544,3 +588,4 @@ MVP
 - 2026-11-16 · Etapa 6: valores E6-01 a E6-33. Corrige B4 (monedas de jefe), B2 (coste del reinicio) y amplía B3 (contenedor de grieta y racha).
 - 2026-11-16 · Etapa 7: valores E7-01 a E7-23. Corrige B2 (Defensa y Vitalidad en PvP, puntos desde 1.001), B3 (topes de zonas mayores que 10, salida sin extraer) y B4 (daño PvP, ráfaga, golpes en área, grupos, regeneración). Documento B cerrado.
 - 2026-11-16 · Etapa 8: valores E8-01 a E8-17. Los archivos B no cambian.
+- 2026-11-16 · Etapa 9: valores E9-01 a E9-26. Los archivos A y B no cambian.
