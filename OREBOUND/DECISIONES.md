@@ -1,10 +1,11 @@
 # OREBOUND — DECISIONES.md
 
-Versión: Etapa 10 · 2026-11-16 · Diseño completo
+Versión: contraste con el GDD · 2026-11-16 · Diseño completo, pendiente de rehacer con el GDD
 
 > **Estado de las fuentes.** Este archivo se ha construido solo con el documento
 > «OREBOUND — Prompts por partes» (prompt único con continuidad + partes 0 a 10).
-> **No se han recibido** `prompt_maestro.txt` ni `GDD_combate_mineria_mascotas.pdf`.
+> **Actualización:** el GDD se recibió tras la Etapa 10 y está en `00_Fuentes/`. Sus valores están en la sección 15 y **mandan sobre las series E1 a E10** donde difieran. El prompt maestro sigue sin recibirse.
+> **Al crear este archivo no se habían recibido** `prompt_maestro.txt` ni `GDD_combate_mineria_mascotas.pdf`.
 > Por decisión del autor (2026-11-16) se trabaja sin ellas: lo que falte se propone
 > como [PROVISIONAL] y se contrasta si las fuentes llegan (ver C-25).
 > Por eso hay tres bloques en lugar de dos:
@@ -607,7 +608,91 @@ Coherencia
 
 ---
 
-## 15. Registro de cambios
+## 15. Valores del GDD de combate, minería PvPvE y mascotas
+
+Fuente: `00_Fuentes/GDD_combate_mineria_mascotas.pdf`. Contraste completo: `00_Fuentes/Contraste_GDD.md`. El GDD marca todas sus cifras como provisionales y pendientes de simulación. Estos valores mandan sobre las series E1 a E10; los archivos A, B, C y D aún no los reflejan (plan en G-60).
+
+Rarezas y arte
+- G-01. Nombres de las 7 rarezas confirmados: Común, Poco común, Raro, Épico, Legendario, Mítico y Ultra raro. Cierra P-F-03 en cuanto a nombres.
+- G-02. Multiplicadores: 1,00 a 1,50 (Común a Raro); 1,90 a 2,50 (Épico y Legendario); 3,30 a 4,50 (Mítico y Ultra raro); 5,20 (Celestial). Se toma 1,00 / 1,25 / 1,50 / 1,90 / 2,50 / 3,30 / 4,50 / 5,20 (el 1,25 es supuesto). Sustituye E1-02.
+- G-03. Colores: gris, verde, azul, morado, dorado, rojo, arcoíris (Ultra raro) y blanco perla con núcleo cian (Celestial).
+- G-04. Tratamiento visual por rareza, con anuncio en el servidor desde Ultra raro y anuncio global en Celestial.
+- G-05. Estilo: anime de alta gama con colores saturados; minas oscuras y desaturadas. Sustituye E8-03.
+- G-06. Partículas: 2.000 en Alto y 800 en Bajo; efectos ajenos al 50% y apagados a más de 120 studs; distorsión, vibración y aberración desactivables. Sustituye E8-04.
+- G-07. 50 fragmentos por objeto Celestial; caen en depósitos de Zonas Fracturadas de zona 6 o más (0,02% por depósito) y en jefes de evento. Sustituye E1-16 a E1-18.
+
+Zonas Fracturadas
+- G-08. Acceso con los mismos requisitos que la zona PvE; confirmación al entrar y borde rojo en la interfaz.
+- G-09. 10 s de protección al entrar y al reaparecer, mientras no se ataque. Sustituye parte de E3-30.
+- G-10. `Carga = valor transportado / (20 × valor base de la zona)`; `Ralentización = mín(0,40; 0,12 × ln(1 + Carga))`. Sustituye E3-25.
+- G-11. Dash y parpadeo no se ralentizan; cuestan 25% más de energía con Carga 10 o más.
+- G-12. Avisos: Carga 5, partículas visibles a 60 studs; Carga 10, minimapa de todos; Carga 30, anuncio en la zona.
+- G-13. Se suelta el 50% [PROVISIONAL]; del cofre, el 80% es recogible y el 20% se destruye. Sustituye E3-26.
+- G-14. Protección de novato: las 5 primeras entradas no sueltan carga al morir. Sustituye E3-30.
+- G-15. Carga mínima protegida: por debajo de Carga 1 no se suelta nada.
+- G-16. Puntos de Extracción: 8 s de canalización; el daño la reinicia; cambian de sitio cada 10 minutos. Sustituye E3-29.
+- G-17. La interfaz muestra siempre carga, debuff y cuánto se perdería al morir.
+
+Picos
+- G-18. Pasivas de recolección: 1 menor (Común a Raro), 1 mayor (Épico y Legendario), 1 mayor + 1 menor (Mítico y Ultra raro), 1 única (Celestial). Sustituye E3-16.
+- G-19. Estadística de combate: ninguna / +3% / +5% / +6% de defensa o velocidad de ataque, con tope PvP de +2% / +3% / +3%.
+- G-20. Pasivas de ejemplo: Eco del filo (10% de golpear un segundo depósito), Lastre ligero (la carga cuenta 15% menos) y Sonar rúnico (revela depósitos ocultos a 30 studs).
+- G-21. La zona 7 se llama «Minas oscuras».
+
+Combate
+- G-22. Las 4 ranuras mezclan habilidades del arma y del Núcleo. Sustituye E4-15 en ese punto.
+- G-23. Cada Núcleo: área, control, movilidad y definitiva, más 1 pasiva. Los Núcleos tienen rareza.
+- G-24. Núcleos: se obtienen en jefes, cajas de Núcleos, eventos y reliquias en depósitos profundos; cambiarlo fuera de la ciudad cuesta un consumible.
+- G-25. Despertar con maestría 100 y materiales de jefe; desbloquea la Transformación. Sustituye E4-13 y E4-18.
+- G-26. Transformación: 20 s, enfriamiento de 120 s, barra de Resonancia; bono de estadísticas de hasta 25% en PvE y 10% en PvP. Sustituye E4-19.
+- G-27. Dash: 2 cargas, 20 de energía cada una, 3 s de recarga por carga. Sustituye E2-17 para el dash.
+- G-28. Parpadeo: 12 studs, 30 de energía, 8 s; se desbloquea con Agilidad. Sustituye E4-20 para el parpadeo.
+- G-29. Control repetido: ventana de 6 s; el segundo dura 50% y el tercero da 2 s de inmunidad (Tenacidad). Sustituye E4-22.
+- G-30. Tope de aturdimiento de 2,5 s. Sustituye E4-23.
+- G-31. Ruptura: tras 0,8 s bajo control, 50 de energía para liberarse y empujar; enfriamiento de 15 s. Sustituye E4-24.
+- G-32. El dash cancela la recuperación de los ataques básicos, no la de las habilidades.
+- G-33. Controles: bloqueo en F (PC) y LT; habilidades en X, Y, B y RB en consola; dash en Q (PC) y LB. Sustituye E4-39.
+- G-34. Núcleo Prismático (Épico): Lanza Prismática (2,2× de daño, 20 de energía, 6 s), Campo de Refracción (14 studs, Refractado 6 s, 25, 12 s), Paso de Relámpago (18 o 10 studs, 25, 9 s), Prisma Total (cúpula de 6 s, 40, 60 s) y la pasiva Fragmentos de luz (los críticos devuelven 5 de energía). Transformación: Forma Prisma. Sustituye el conjunto de E4-17.
+
+Mascotas
+- G-35. Dos posturas: Recolectar (+50% de radio, −50% de daño) y Proteger (lo contrario); 5 s para cambiar. Sustituye E5-19 y E5-21.
+- G-36. Radio de recogida de 20 studs. Sustituye E5-20.
+- G-37. El huevo se incuba minando (por ejemplo, 500 golpes de pico). Sustituye E5-06.
+- G-38. Cría (niveles 1–49): pasiva de recolección. Forma desatada (nivel 50 + materiales de su elemento): habilidad activa; tamaño ×1,8. Forma máxima (nivel 100 + material de jefe): ataque coordinado con el dueño. Sustituye E5-08 y E5-09.
+- G-39. Roles: Defensa, Ofensiva, Control, Apoyo y Minería, con los ejemplos del GDD (escudo del 20% de la vida 5 s; ralentización del 30% 2 s; +15% de velocidad de ataque 6 s; +20% de velocidad de extracción 10 s). Sustituye E5-13 y E5-15.
+- G-40. Guiverno de Cuarzo (Legendario): +15% de velocidad de extracción; Escudo Facetado (20% de la vida máxima 5 s por debajo del 50%; 30 s); Haz de Cuarzo coordinado.
+
+Retención y riesgo
+- G-41. Racha de extracción: ×1,1, ×1,2… hasta ×1,5; morir la reinicia. Sustituye E6-25.
+- G-42. Contratos de grieta: extraer 3 cristales de una rareza o derrotar a 2 portadores con carga alta. Sustituye E6-27.
+- G-43. Recompensa por cabeza: con racha de 5 o más el jugador queda marcado.
+- G-44. Grieta Celestial: evento cada 2 horas, anunciado 5 minutos antes.
+- G-45. Seguro de carga: consumible fabricable con minerales que protege el 50% de una carga; nunca con Robux. Sustituye E6-26.
+- G-46. Escuadrones de hasta 3 con carga compartida y extracción más rápida.
+- G-47. Rastro de venganza: quien te derrotó queda marcado 3 minutos.
+- G-48. Temporadas de grieta de 8 semanas, con clasificación por valor extraído y premios cosméticos.
+- G-49. Jefes de grieta cuando muchos jugadores luchan en la misma zona.
+- G-50. Simulaciones pedidas en las zonas 2, 5 y 8.
+
+Problemas detectados al simular el GDD (recomendaciones, pendientes de aplicar al rehacer)
+- G-51. Multiplicadores de rareza: con crecimiento 1,65 y bonos de +100%, un Celestial de zona 6 al máximo supera a un Común de zona 10. Recomendación: crecimiento por zona 2,00 y tope de bonos +50%.
+- G-52. Racha de ×1,5: con multiplicador base ×2,0 el máximo teórico es 3,17. Recomendación: base ×1,5 (máximo 2,38).
+- G-53. Fragmentos al 0,02%: 960 horas por objeto. Recomendación: 0,25% (unas 77 horas).
+- G-54. Anti-combo: hasta el 53% del tiempo bajo control. Recomendación: Tenacidad de 5 s (31%).
+- G-55. Los requisitos de acceso no impiden que entre un nivel alto. Se mantiene la sincronización de nivel (E3-30).
+- G-56. Calidad Baja con efectos ajenos al 50%: 865 partículas de 800. Recomendación: 40% (760).
+
+Términos
+- G-57. «Ruptura» es la liberación de un control (GDD). La guardia rota del diseño pasa a llamarse «Guardia rota»; «Rompecadenas» se elimina.
+- G-58. La barra de la Transformación se llama Resonancia; se renombra la habilidad del pico Ultra raro que usaba ese nombre.
+- G-59. «Paso de Relámpago» es del Núcleo Prismático; se renombra la habilidad del Núcleo de Tormenta.
+
+Plan
+- G-60. Rehacer en este orden: Etapa 1, retoque de B2, Etapas 3, 4, 5, 6 y 7, y después actualizar A, C y D.
+
+---
+
+## 16. Registro de cambios
 - 2026-11-16 · Etapa 0 (1/2): creación del archivo a partir del documento de prompts. Faltan las dos fuentes.
 - 2026-11-16 · Etapa 0 cerrada: incongruencias del prompt resueltas (C-25 a C-34) y prompt corregido.
 - 2026-11-16 · Etapa 1: valores E1-01 a E1-19.
@@ -620,3 +705,4 @@ Coherencia
 - 2026-11-16 · Etapa 8: valores E8-01 a E8-17. Los archivos B no cambian.
 - 2026-11-16 · Etapa 9: valores E9-01 a E9-26. Los archivos A y B no cambian.
 - 2026-11-16 · Etapa 10: valores E10-01 a E10-16. Correcciones de coherencia en B2 (nota en 9.1), B5 (×0,06 en F27), A_GDD (pilar 3) y E2-03. Diseño completo.
+- 2026-11-16 · Recibido el GDD. Contraste en `00_Fuentes/Contraste_GDD.md`; valores G-01 a G-60. Los archivos A, B, C y D están pendientes de rehacer.
