@@ -1,6 +1,6 @@
 # OREBOUND — B2: Progresión y estadísticas
 
-Etapa 2 · 2026-11-16 (corregido en las Etapas 6 y 7; ver B7, sección 6) · Script: `calculos/b2_progresion.py` · Tabla completa de XP: `calculos/b2_xp_niveles.csv` (niveles 1 a 1.000).
+Etapa 2 · 2026-11-16 (corregido en las Etapas 6 y 7; energía y vida base rehechas con el GDD) · Script: `calculos/b2_progresion.py` · Tabla completa de XP: `calculos/b2_xp_niveles.csv` (niveles 1 a 1.000).
 
 > **Aviso de fuentes.** No se dispone de las secciones 5 y 6 del prompt maestro. La fórmula de XP
 > viene del prompt de trabajo. Todo lo demás es **[PROVISIONAL]**: las fórmulas originales de las
@@ -227,8 +227,8 @@ Efectos que no son multiplicadores:
 
 Vida base por nivel (para que la Vitalidad tenga algo que multiplicar):
 
-- **F11:** `VidaBase(L) = 500 × 1,65^((L − 1)/100)`. Crece al mismo ritmo que la potencia de zona de B1 (×1,65 cada 100 niveles).
-- Valores: nivel 1 → 500; 100 → 821; 300 → 2.235; 500 → 6.084; 800 → 27.332; 1.000 → 74.411.
+- **F11:** `VidaBase(L) = 500 × 2,00^((L − 1)/100)`. Crece al mismo ritmo que la potencia de zona de B1 (×2,00 cada 100 niveles; era 1,65 antes de rehacer B1 con el GDD).
+- Valores: nivel 1 → 500; 100 → 993; 300 → 3.972; 500 → 15.889; 800 → 127.116; 1.000 → 508.463.
 - La Etapa 4 debe confirmarla contra el daño de los enemigos.
 
 ### 6.1 Revisión: ¿escalan poco Fuerza, Velocidad y Dominio con raíz cuadrada?
@@ -288,6 +288,8 @@ Comparación con una raíz cuadrada calibrada para dar lo mismo con 1.000 puntos
 
 ## 8. Energía
 
+> Sección rehecha con el GDD: dash de 2 cargas con 3 s de recarga, parpadeo de 12 studs, Ruptura de 50 de energía y las habilidades del Núcleo Prismático como referencia. La esquiva deja de ser una acción aparte: es un dash hecho en los 0,25 s anteriores a un golpe («esquiva perfecta»).
+
 ### 8.1 Capacidad y regeneración
 
 | Concepto | Fórmula o valor | Con Energía 0 | Con 1.000 | Con 5.000 |
@@ -302,43 +304,59 @@ Comparación con una raíz cuadrada calibrada para dar lo mismo con 1.000 puntos
 
 ### 8.2 Consumos
 
-| Acción | Coste | Enfriamiento | Notas |
-|---|---|---|---|
-| Esquiva | 20 | 1,2 s | Su enfriamiento es menor que la pausa: encadenarlas no deja regenerar |
-| Bloqueo sostenido | 8 por segundo | — | No se regenera mientras se bloquea |
-| Golpe bloqueado | 10 por golpe | — | Con energía 0 se rompe la guardia (Ruptura, Etapa 4) |
-| Dash | 20 | 2,5 s | |
-| Doble salto | 0 | 1 por salto | Sin coste: es movimiento básico |
-| Parpadeo | 30 | 8 s | |
-| Habilidad Z | 15 | 4 s | Valores de referencia; la Etapa 4 fija los de cada Núcleo |
-| Habilidad X | 25 | 8 s | |
-| Habilidad C | 35 | 14 s | |
-| Habilidad V | 50 | 30 s | |
+| Acción | Coste | Enfriamiento | Notas | Origen |
+|---|---|---|---|---|
+| Dash | 20 | 2 cargas; 3 s de recarga por carga | Aéreo o terrestre; hecho justo antes de un golpe es una esquiva perfecta | GDD |
+| Doble salto | 0 | 1 por salto | — | GDD |
+| Parpadeo | 30 | 8 s | 12 studs; no atraviesa paredes; se desbloquea con Agilidad (propuesta: Velocidad 50) | GDD |
+| Ruptura | 50 | 15 s | Tras 0,8 s bajo control, libera y empuja al atacante | GDD |
+| Bloqueo sostenido | 8 por segundo | — | No se regenera mientras se bloquea | Propuesta |
+| Golpe bloqueado | 10 por golpe | — | Con energía 0 se rompe la guardia (B4) | Propuesta |
+| Habilidad Z (área) | 20 | 6 s | Valores del Núcleo Prismático | GDD |
+| Habilidad X (control) | 25 | 12 s | | GDD |
+| Habilidad C (movilidad) | 25 | 9 s | | GDD |
+| Habilidad V (definitiva) | 40 | 60 s | | GDD |
+
+- Con Carga 10 o más en una Zona Fracturada, dash y parpadeo cuestan un 25% más (B3).
 
 ### 8.3 Simulación: 120 s de combate usando todo en cuanto se puede
 
 | Qué se usa | Energía | Usos conseguidos | Usos posibles por enfriamiento | Porcentaje | Se vacía a los |
 |---|---|---|---|---|---|
-| Solo Dash | 0 | 33 | 49 | 67,3% | 15,5 s |
-| Solo Dash | 1.000 | 44 | 49 | 89,8% | 68,2 s |
-| Solo Dash | 5.000 | 47 | 49 | 95,9% | No en 120 s |
-| Habilidades Z, X, C, V | 0 | 34 | 61 | 55,7% | Primera ráfaga |
-| Habilidades Z, X, C, V | 1.000 | 46 | 61 | 75,4% | 30,0 s |
-| Habilidades Z, X, C, V | 5.000 | 54 | 61 | 88,5% | 72,5 s |
-| Todo a la vez | 0 | 35 | 126 | 27,8% | Primera ráfaga |
-| Todo a la vez | 1.000 | 48 | 126 | 38,1% | 8,1 s |
-| Todo a la vez | 5.000 | 55 | 126 | 43,7% | 15,5 s |
+| Solo Dash | 0 | 33 | 41 | 80,5% | 24,4 s |
+| Solo Dash | 1.000 | 40 | 41 | 97,6% | No en 120 s |
+| Solo Dash | 5.000 | 40 | 41 | 97,6% | No en 120 s |
+| Habilidades Z, X, C, V | 0 | 30 | 49 | 61,2% | Primera ráfaga |
+| Habilidades Z, X, C, V | 1.000 | 46 | 49 | 93,9% | No en 120 s |
+| Habilidades Z, X, C, V | 5.000 | 46 | 49 | 93,9% | No en 120 s |
+| Todo a la vez | 0 | 32 | 106 | 30,2% | Primera ráfaga |
+| Todo a la vez | 1.000 | 45 | 106 | 42,5% | 9,1 s |
+| Todo a la vez | 5.000 | 53 | 106 | 50,0% | 18,1 s |
 
-- Usarlo todo pide 22,79 de energía por segundo; la regeneración máxima posible es 16/s. Nadie puede usarlo todo siempre.
-- La estadística Energía sube el uso de habilidades de 55,7% a 75,4% con 1.000 puntos: tiene valor real para una build ofensiva.
+- Usarlo todo pide 19,28 de energía por segundo; la regeneración máxima posible es 16/s.
+- Las habilidades del GDD tienen enfriamientos largos, así que la energía limita menos que la combinación con dash y parpadeo: lo que el jugador decide es cuánta energía reservar para moverse y para la Ruptura.
 
-### 8.4 Límites contra la energía infinita
+### 8.4 Factor de habilidades de referencia
 
-1. **Pausa de 1,5 s** tras cada gasto. Entre dos Dash seguidos solo se regenera 1 s: 8,0 con Energía 0, 12,0 con 1.000 y 14,7 con 5.000, siempre menos que los 20 que cuesta. Encadenar Dash siempre acaba vaciando la barra.
+Con los ataques básicos al 92% (el resto del tiempo se gasta en lanzar habilidades) y las cuatro habilidades del Núcleo Prismático:
+
+| Energía | Daño de habilidades (% de la potencia del arma por segundo) | Factor total sobre el ataque básico |
+|---|---|---|
+| 0 | 47,4% | ×1,394 |
+| 375 | 64,2% | ×1,562 |
+| 1.000 | 73,2% | ×1,652 |
+| 5.000 | 73,2% | ×1,652 |
+
+- **Factor de referencia: ×1,39.** Es el que usan B4, B5 y B7 para el «jugador típico» y para el tope de DPS de mascotas. En la primera versión era ×1,75, con habilidades propuestas más frecuentes.
+- La estadística Energía sube el factor de ×1,39 a ×1,65 con 1.000 puntos, y además deja margen para dash, parpadeo, bloqueo y Ruptura.
+
+### 8.5 Límites contra la energía infinita
+
+1. **Pausa de 1,5 s** tras cada gasto. Entre dos dash seguidos solo se regenera 1,5 s: 12,0 con Energía 0, 18,0 con 1.000 y 22,0 con 5.000, frente a los 20 que cuesta. Con Energía muy alta el dash deja de estar limitado por la energía y lo limitan sus 2 cargas.
 2. **Topes de la estadística:** energía máxima 400 y regeneración ×2.
 3. **Reducción de costes:** el equipo y las pasivas pueden abaratar las acciones un 30% como máximo en total.
-4. **Los enfriamientos no dependen de la energía:** tener energía de sobra no permite usar antes una habilidad.
-5. **Bloqueo:** con 8/s y sin regenerar, aguanta 12,5 s (Energía 0), 31,2 s (1.000) o 43,8 s (5.000) sin recibir golpes; cada golpe bloqueado lo acorta.
+4. **Los enfriamientos no dependen de la energía.**
+5. **Bloqueo:** con 8/s y sin regenerar, aguanta 12,5 s (Energía 0), 31,2 s (1.000) o 43,8 s (5.000) sin recibir golpes.
 6. **Consumibles de energía:** un uso cada 30 s en PvP y Zonas Fracturadas.
 
 ---

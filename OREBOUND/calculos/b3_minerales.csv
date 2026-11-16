@@ -1,67 +1,67 @@
 mineral,zona,rareza,vida,valor_deposito,unidades,valor_unidad,xp,pico_requerido,mineria_requerida,material,uso,probabilidad
-Pizarra Clara,1,Común,600,10,4,2.5,159,60,0,Lingote de Pizarra Clara,Fabricar picos y armas Común y Poco común,55
-Cobre Rosado,1,Poco común,900,18,4,4.5,222,60,0,Lingote de Cobre Rosado,Subir el nivel de objeto (1-5),25
-Estaño Lunar,1,Raro,1400,32,3,10.7,318,60,0,Placa de Estaño Lunar,Fabricar picos y armas Raro y Épico; nivel de objeto (6-10),12
-Cuarzo Meloso,1,Épico,2200,60,3,20.0,476,60,0,Gema tallada de Cuarzo Meloso,Ranuras de mejora (+10 % cada una),5.5
-Ámbar de Aurora,1,Legendario,3500,120,2,60.0,714,60,0,Núcleo de Ámbar de Aurora,Fabricar picos y armas Legendario,2
-Ópalo Naciente,1,Mítico,5500,250,2,125.0,1111,60,0,Catalizador de Ópalo Naciente,Fabricar picos y armas Mítico; Despertar de habilidad,0.5
-Piedra Verdín,2,Común,1089,16,4,4.1,462,99,10,Lingote de Piedra Verdín,Fabricar picos y armas Común y Poco común,55
-Hierro Musgoso,2,Poco común,1634,30,4,7.4,646,99,10,Lingote de Hierro Musgoso,Subir el nivel de objeto (1-5),25
-Malaquita Viva,2,Raro,2541,53,3,17.6,923,99,15,Placa de Malaquita Viva,Fabricar picos y armas Raro y Épico; nivel de objeto (6-10),12
-Jade de Raíz,2,Épico,3993,99,3,33.0,1385,99,25,Gema tallada de Jade de Raíz,Ranuras de mejora (+10 % cada una),5.5
-Esmeralda Húmeda,2,Legendario,6353,198,2,99.0,2078,99,35,Núcleo de Esmeralda Húmeda,Fabricar picos y armas Legendario,2
-Corazón de Liquen,2,Mítico,9982,412,2,206.2,3232,99,50,Catalizador de Corazón de Liquen,Fabricar picos y armas Mítico; Despertar de habilidad,0.5
-Sal Gema,3,Común,1960,27,4,6.8,794,163,20,Lingote de Sal Gema,Fabricar picos y armas Común y Poco común,55
-Yeso Nacarado,3,Poco común,2940,49,4,12.3,1111,163,20,Lingote de Yeso Nacarado,Subir el nivel de objeto (1-5),25
-Plata Salobre,3,Raro,4574,87,3,29.0,1588,163,30,Placa de Plata Salobre,Fabricar picos y armas Raro y Épico; nivel de objeto (6-10),12
-Aguamarina Seca,3,Épico,7187,163,3,54.4,2382,163,50,Gema tallada de Aguamarina Seca,Ranuras de mejora (+10 % cada una),5.5
-Perla de Veta,3,Legendario,11434,327,2,163.3,3572,163,70,Núcleo de Perla de Veta,Fabricar picos y armas Legendario,2
-Zafiro de Marea,3,Mítico,17968,681,2,340.3,5557,163,100,Catalizador de Zafiro de Marea,Fabricar picos y armas Mítico; Despertar de habilidad,0.45
-Lágrima de Salmuera,3,Ultra raro,29403,1633,1,1633.5,8733,163,140,Esencia de Lágrima de Salmuera,Fabricar picos y armas Ultra raro,0.05
-Carbón Tibio,4,Común,3504,45,4,11.2,1155,270,30,Lingote de Carbón Tibio,Fabricar picos y armas Común y Poco común,55
-Azufre Dorado,4,Poco común,5256,81,4,20.2,1617,270,30,Lingote de Azufre Dorado,Subir el nivel de objeto (1-5),25
-Bronce Ardiente,4,Raro,8176,144,3,47.9,2310,270,45,Placa de Bronce Ardiente,Fabricar picos y armas Raro y Épico; nivel de objeto (6-10),12
-Granate de Ascua,4,Épico,12847,270,3,89.8,3466,270,75,Gema tallada de Granate de Ascua,Ranuras de mejora (+10 % cada una),5.5
-Rubí de Fragua,4,Legendario,20439,539,2,269.5,5199,270,105,Núcleo de Rubí de Fragua,Fabricar picos y armas Legendario,2
-Topacio Incandescente,4,Mítico,32119,1123,2,561.5,8087,270,150,Catalizador de Topacio Incandescente,Fabricar picos y armas Mítico; Despertar de habilidad,0.5
-Hielo Gris,5,Común,6226,74,4,18.5,1546,445,40,Lingote de Hielo Gris,Fabricar picos y armas Común y Poco común,55
-Cobalto Escarchado,5,Poco común,9339,133,4,33.4,2164,445,40,Lingote de Cobalto Escarchado,Subir el nivel de objeto (1-5),25
-Platino Glacial,5,Raro,14528,237,3,79.1,3092,445,60,Placa de Platino Glacial,Fabricar picos y armas Raro y Épico; nivel de objeto (6-10),12
-Celestina Invernal,5,Épico,22829,445,3,148.2,4637,445,100,Gema tallada de Celestina Invernal,Ranuras de mejora (+10 % cada una),5.5
-Diamante de Escarcha,5,Legendario,36319,889,2,444.7,6956,445,140,Núcleo de Diamante de Escarcha,Fabricar picos y armas Legendario,2
-Zafiro Boreal,5,Mítico,57072,1853,2,926.5,10820,445,200,Catalizador de Zafiro Boreal,Fabricar picos y armas Mítico; Despertar de habilidad,0.45
-Copo Eterno,5,Ultra raro,93391,4447,1,4447.2,17004,445,280,Esencia de Copo Eterno,Fabricar picos y armas Ultra raro,0.05
-Basalto Sonoro,6,Común,11007,122,4,30.6,1966,734,50,Lingote de Basalto Sonoro,Fabricar picos y armas Común y Poco común,55
-Níquel Vibrante,6,Poco común,16510,220,4,55.0,2752,734,50,Lingote de Níquel Vibrante,Subir el nivel de objeto (1-5),25
-Electro Resonante,6,Raro,25683,391,3,130.5,3931,734,75,Placa de Electro Resonante,Fabricar picos y armas Raro y Épico; nivel de objeto (6-10),12
-Amatista de Eco,6,Épico,40358,734,3,244.6,5897,734,125,Gema tallada de Amatista de Eco,Ranuras de mejora (+10 % cada una),5.5
-Oro Armónico,6,Legendario,64207,1468,2,733.8,8845,734,175,Núcleo de Oro Armónico,Fabricar picos y armas Legendario,2
-Cristal Diapasón,6,Mítico,100896,3057,2,1528.7,13759,734,250,Catalizador de Cristal Diapasón,Fabricar picos y armas Mítico; Despertar de habilidad,0.5
-Obsidiana Mate,7,Común,19372,202,4,50.4,2414,1211,60,Lingote de Obsidiana Mate,Fabricar picos y armas Común y Poco común,55
-Titanio Sombrío,7,Poco común,29058,363,4,90.8,3380,1211,60,Lingote de Titanio Sombrío,Subir el nivel de objeto (1-5),25
-Ónice Veteado,7,Raro,45201,646,3,215.2,4829,1211,90,Placa de Ónice Veteado,Fabricar picos y armas Raro y Épico; nivel de objeto (6-10),12
-Espinela Nocturna,7,Épico,71031,1211,3,403.6,7243,1211,150,Gema tallada de Espinela Nocturna,Ranuras de mejora (+10 % cada una),5.5
-Iridio Umbrío,7,Legendario,113003,2422,2,1210.8,10865,1211,210,Núcleo de Iridio Umbrío,Fabricar picos y armas Legendario,2
-Diamante de Raíz Negra,7,Mítico,177577,5045,2,2522.4,16901,1211,300,Catalizador de Diamante de Raíz Negra,Fabricar picos y armas Mítico; Despertar de habilidad,0.45
-Semilla de Vacío,7,Ultra raro,290580,12108,1,12107.5,26559,1211,420,Esencia de Semilla de Vacío,Fabricar picos y armas Ultra raro,0.05
-Escoria Roja,8,Común,33962,333,4,83.2,2893,1998,70,Lingote de Escoria Roja,Fabricar picos y armas Común y Poco común,55
-Wolframio Fundido,8,Poco común,50942,599,4,149.8,4050,1998,70,Lingote de Wolframio Fundido,Subir el nivel de objeto (1-5),25
-Cinabrio Líquido,8,Raro,79244,1065,3,355.2,5785,1998,105,Placa de Cinabrio Líquido,Fabricar picos y armas Raro y Épico; nivel de objeto (6-10),12
-Ópalo de Fuego,8,Épico,124526,1998,3,665.9,8678,1998,175,Gema tallada de Ópalo de Fuego,Ranuras de mejora (+10 % cada una),5.5
-Paladio Solar,8,Legendario,198109,3995,2,1997.7,13017,1998,245,Núcleo de Paladio Solar,Fabricar picos y armas Legendario,2
-Corindón Volcánico,8,Mítico,311314,8324,2,4162.0,20248,1998,350,Catalizador de Corindón Volcánico,Fabricar picos y armas Mítico; Despertar de habilidad,0.45
-Corazón de Caldera,8,Ultra raro,509424,19977,1,19977.4,31819,1998,490,Esencia de Corazón de Caldera,Fabricar picos y armas Ultra raro,0.05
-Vidrio de Roca,9,Común,59333,549,4,137.3,3400,3296,80,Lingote de Vidrio de Roca,Fabricar picos y armas Común y Poco común,55
-Berilo Translúcido,9,Poco común,88999,989,4,247.2,4760,3296,80,Lingote de Berilo Translúcido,Subir el nivel de objeto (1-5),25
-Turmalina Vitral,9,Raro,138443,1758,3,586.0,6800,3296,120,Placa de Turmalina Vitral,Fabricar picos y armas Raro y Épico; nivel de objeto (6-10),12
-Kunzita Coral,9,Épico,217554,3296,3,1098.8,10200,3296,200,Gema tallada de Kunzita Coral,Ranuras de mejora (+10 % cada una),5.5
-Alejandrita Prisma,9,Legendario,346108,6593,2,3296.3,15300,3296,280,Núcleo de Alejandrita Prisma,Fabricar picos y armas Legendario,2
-Diamante Catedral,9,Mítico,543885,13734,2,6867.2,23800,3296,400,Catalizador de Diamante Catedral,Fabricar picos y armas Mítico; Despertar de habilidad,0.45
-Rosetón Luminoso,9,Ultra raro,889993,32963,1,32962.7,37400,3296,560,Esencia de Rosetón Luminoso,Fabricar picos y armas Ultra raro,0.05
-Polvo Estelar,10,Común,103338,906,4,226.6,3937,5439,90,Lingote de Polvo Estelar,Fabricar picos y armas Común y Poco común,55
-Meteorito Férreo,10,Poco común,155007,1632,4,407.9,5511,5439,90,Lingote de Meteorito Férreo,Subir el nivel de objeto (1-5),25
-Moldavita Astral,10,Raro,241122,2901,3,966.9,7873,5439,135,Placa de Moldavita Astral,Fabricar picos y armas Raro y Épico; nivel de objeto (6-10),12
-Tanzanita Cósmica,10,Épico,378906,5439,3,1812.9,11810,5439,225,Gema tallada de Tanzanita Cósmica,Ranuras de mejora (+10 % cada una),5.5
-Oricalco Sideral,10,Legendario,602805,10878,2,5438.8,17714,5439,315,Núcleo de Oricalco Sideral,Fabricar picos y armas Legendario,2
-Estelita Pura,10,Mítico,947266,22662,2,11330.9,27556,5439,450,Catalizador de Estelita Pura,Fabricar picos y armas Mítico; Despertar de habilidad,0.45
-Fragmento de Nova,10,Ultra raro,1550071,54388,1,54388.5,43302,5439,630,Esencia de Fragmento de Nova,Fabricar picos y armas Ultra raro,0.05
+Pizarra Clara,1,Común,600,10,4,2.5,150,50,0,Lingote de Pizarra Clara,Fabricar picos y armas Común y Poco común,55
+Cobre Rosado,1,Poco común,900,18,4,4.5,210,50,0,Lingote de Cobre Rosado,Subir el nivel de objeto (1-5),25
+Estaño Lunar,1,Raro,1400,32,3,10.7,300,50,0,Placa de Estaño Lunar,Fabricar picos y armas Raro y Épico; nivel de objeto (6-10),12
+Cuarzo Meloso,1,Épico,2200,60,3,20.0,450,50,0,Gema tallada de Cuarzo Meloso,Ranuras de mejora,5.5
+Ámbar de Aurora,1,Legendario,3500,120,2,60.0,675,50,0,Núcleo de mena de Ámbar de Aurora,Fabricar picos y armas Legendario,2
+Ópalo Naciente,1,Mítico,5500,250,2,125.0,1051,50,0,Catalizador de Ópalo Naciente,Fabricar picos y armas Mítico; Despertar de habilidad,0.5
+Piedra Verdín,2,Común,1320,20,4,5.0,436,100,10,Lingote de Piedra Verdín,Fabricar picos y armas Común y Poco común,55
+Hierro Musgoso,2,Poco común,1980,36,4,9.0,611,100,10,Lingote de Hierro Musgoso,Subir el nivel de objeto (1-5),25
+Malaquita Viva,2,Raro,3080,64,3,21.3,873,100,15,Placa de Malaquita Viva,Fabricar picos y armas Raro y Épico; nivel de objeto (6-10),12
+Jade de Raíz,2,Épico,4840,120,3,40.0,1309,100,25,Gema tallada de Jade de Raíz,Ranuras de mejora,5.5
+Esmeralda Húmeda,2,Legendario,7700,240,2,120.0,1964,100,35,Núcleo de mena de Esmeralda Húmeda,Fabricar picos y armas Legendario,2
+Corazón de Liquen,2,Mítico,12100,500,2,250.0,3055,100,50,Catalizador de Corazón de Liquen,Fabricar picos y armas Mítico; Despertar de habilidad,0.5
+Sal Gema,3,Común,2880,40,4,10.0,750,200,20,Lingote de Sal Gema,Fabricar picos y armas Común y Poco común,55
+Yeso Nacarado,3,Poco común,4320,72,4,18.0,1051,200,20,Lingote de Yeso Nacarado,Subir el nivel de objeto (1-5),25
+Plata Salobre,3,Raro,6720,128,3,42.7,1501,200,30,Placa de Plata Salobre,Fabricar picos y armas Raro y Épico; nivel de objeto (6-10),12
+Aguamarina Seca,3,Épico,10560,240,3,80.0,2251,200,50,Gema tallada de Aguamarina Seca,Ranuras de mejora,5.5
+Perla de Veta,3,Legendario,16800,480,2,240.0,3377,200,70,Núcleo de mena de Perla de Veta,Fabricar picos y armas Legendario,2
+Zafiro de Marea,3,Mítico,26400,1000,2,500.0,5253,200,100,Catalizador de Zafiro de Marea,Fabricar picos y armas Mítico; Despertar de habilidad,0.45
+Lágrima de Salmuera,3,Ultra raro,43200,2400,1,2400.0,8254,200,140,Esencia de Lágrima de Salmuera,Fabricar picos y armas Ultra raro,0.05
+Carbón Tibio,4,Común,6240,80,4,20.0,1092,400,30,Lingote de Carbón Tibio,Fabricar picos y armas Común y Poco común,55
+Azufre Dorado,4,Poco común,9360,144,4,36.0,1529,400,30,Lingote de Azufre Dorado,Subir el nivel de objeto (1-5),25
+Bronce Ardiente,4,Raro,14560,256,3,85.3,2184,400,45,Placa de Bronce Ardiente,Fabricar picos y armas Raro y Épico; nivel de objeto (6-10),12
+Granate de Ascua,4,Épico,22880,480,3,160.0,3276,400,75,Gema tallada de Granate de Ascua,Ranuras de mejora,5.5
+Rubí de Fragua,4,Legendario,36400,960,2,480.0,4914,400,105,Núcleo de mena de Rubí de Fragua,Fabricar picos y armas Legendario,2
+Topacio Incandescente,4,Mítico,57200,2000,2,1000.0,7643,400,150,Catalizador de Topacio Incandescente,Fabricar picos y armas Mítico; Despertar de habilidad,0.5
+Hielo Gris,5,Común,13440,160,4,40.0,1461,800,40,Lingote de Hielo Gris,Fabricar picos y armas Común y Poco común,55
+Cobalto Escarchado,5,Poco común,20160,288,4,72.0,2046,800,40,Lingote de Cobalto Escarchado,Subir el nivel de objeto (1-5),25
+Platino Glacial,5,Raro,31360,512,3,170.7,2922,800,60,Placa de Platino Glacial,Fabricar picos y armas Raro y Épico; nivel de objeto (6-10),12
+Celestina Invernal,5,Épico,49280,960,3,320.0,4383,800,100,Gema tallada de Celestina Invernal,Ranuras de mejora,5.5
+Diamante de Escarcha,5,Legendario,78400,1920,2,960.0,6575,800,140,Núcleo de mena de Diamante de Escarcha,Fabricar picos y armas Legendario,2
+Zafiro Boreal,5,Mítico,123200,4000,2,2000.0,10228,800,200,Catalizador de Zafiro Boreal,Fabricar picos y armas Mítico; Despertar de habilidad,0.45
+Copo Eterno,5,Ultra raro,201600,9600,1,9600.0,16072,800,280,Esencia de Copo Eterno,Fabricar picos y armas Ultra raro,0.05
+Basalto Sonoro,6,Común,28800,320,4,80.0,1858,1600,50,Lingote de Basalto Sonoro,Fabricar picos y armas Común y Poco común,55
+Níquel Vibrante,6,Poco común,43200,576,4,144.0,2601,1600,50,Lingote de Níquel Vibrante,Subir el nivel de objeto (1-5),25
+Electro Resonante,6,Raro,67200,1024,3,341.3,3716,1600,75,Placa de Electro Resonante,Fabricar picos y armas Raro y Épico; nivel de objeto (6-10),12
+Amatista de Eco,6,Épico,105600,1920,3,640.0,5573,1600,125,Gema tallada de Amatista de Eco,Ranuras de mejora,5.5
+Oro Armónico,6,Legendario,168000,3840,2,1920.0,8360,1600,175,Núcleo de mena de Oro Armónico,Fabricar picos y armas Legendario,2
+Cristal Diapasón,6,Mítico,264000,8000,2,4000.0,13005,1600,250,Catalizador de Cristal Diapasón,Fabricar picos y armas Mítico; Despertar de habilidad,0.5
+Obsidiana Mate,7,Común,61440,640,4,160.0,2282,3200,60,Lingote de Obsidiana Mate,Fabricar picos y armas Común y Poco común,55
+Titanio Sombrío,7,Poco común,92160,1152,4,288.0,3195,3200,60,Lingote de Titanio Sombrío,Subir el nivel de objeto (1-5),25
+Ónice Veteado,7,Raro,143360,2048,3,682.7,4564,3200,90,Placa de Ónice Veteado,Fabricar picos y armas Raro y Épico; nivel de objeto (6-10),12
+Espinela Nocturna,7,Épico,225280,3840,3,1280.0,6847,3200,150,Gema tallada de Espinela Nocturna,Ranuras de mejora,5.5
+Iridio Umbrío,7,Legendario,358400,7680,2,3840.0,10270,3200,210,Núcleo de mena de Iridio Umbrío,Fabricar picos y armas Legendario,2
+Diamante de Raíz Negra,7,Mítico,563200,16000,2,8000.0,15975,3200,300,Catalizador de Diamante de Raíz Negra,Fabricar picos y armas Mítico; Despertar de habilidad,0.45
+Semilla de Vacío,7,Ultra raro,921600,38400,1,38400.0,25104,3200,420,Esencia de Semilla de Vacío,Fabricar picos y armas Ultra raro,0.05
+Escoria Roja,8,Común,130560,1280,4,320.0,2734,6400,70,Lingote de Escoria Roja,Fabricar picos y armas Común y Poco común,55
+Wolframio Fundido,8,Poco común,195840,2304,4,576.0,3828,6400,70,Lingote de Wolframio Fundido,Subir el nivel de objeto (1-5),25
+Cinabrio Líquido,8,Raro,304640,4096,3,1365.3,5468,6400,105,Placa de Cinabrio Líquido,Fabricar picos y armas Raro y Épico; nivel de objeto (6-10),12
+Ópalo de Fuego,8,Épico,478720,7680,3,2560.0,8202,6400,175,Gema tallada de Ópalo de Fuego,Ranuras de mejora,5.5
+Paladio Solar,8,Legendario,761600,15360,2,7680.0,12304,6400,245,Núcleo de mena de Paladio Solar,Fabricar picos y armas Legendario,2
+Corindón Volcánico,8,Mítico,1196800,32000,2,16000.0,19139,6400,350,Catalizador de Corindón Volcánico,Fabricar picos y armas Mítico; Despertar de habilidad,0.45
+Corazón de Caldera,8,Ultra raro,1958400,76800,1,76800.0,30075,6400,490,Esencia de Corazón de Caldera,Fabricar picos y armas Ultra raro,0.05
+Vidrio de Roca,9,Común,276480,2560,4,640.0,3214,12800,80,Lingote de Vidrio de Roca,Fabricar picos y armas Común y Poco común,55
+Berilo Translúcido,9,Poco común,414720,4608,4,1152.0,4499,12800,80,Lingote de Berilo Translúcido,Subir el nivel de objeto (1-5),25
+Turmalina Vitral,9,Raro,645120,8192,3,2730.7,6427,12800,120,Placa de Turmalina Vitral,Fabricar picos y armas Raro y Épico; nivel de objeto (6-10),12
+Kunzita Coral,9,Épico,1013760,15360,3,5120.0,9641,12800,200,Gema tallada de Kunzita Coral,Ranuras de mejora,5.5
+Alejandrita Prisma,9,Legendario,1612800,30720,2,15360.0,14462,12800,280,Núcleo de mena de Alejandrita Prisma,Fabricar picos y armas Legendario,2
+Diamante Catedral,9,Mítico,2534400,64000,2,32000.0,22496,12800,400,Catalizador de Diamante Catedral,Fabricar picos y armas Mítico; Despertar de habilidad,0.45
+Rosetón Luminoso,9,Ultra raro,4147200,153600,1,153600.0,35350,12800,560,Esencia de Rosetón Luminoso,Fabricar picos y armas Ultra raro,0.05
+Polvo Estelar,10,Común,583680,5120,4,1280.0,3721,25600,90,Lingote de Polvo Estelar,Fabricar picos y armas Común y Poco común,55
+Meteorito Férreo,10,Poco común,875520,9216,4,2304.0,5209,25600,90,Lingote de Meteorito Férreo,Subir el nivel de objeto (1-5),25
+Moldavita Astral,10,Raro,1361920,16384,3,5461.3,7442,25600,135,Placa de Moldavita Astral,Fabricar picos y armas Raro y Épico; nivel de objeto (6-10),12
+Tanzanita Cósmica,10,Épico,2140160,30720,3,10240.0,11162,25600,225,Gema tallada de Tanzanita Cósmica,Ranuras de mejora,5.5
+Oricalco Sideral,10,Legendario,3404800,61440,2,30720.0,16744,25600,315,Núcleo de mena de Oricalco Sideral,Fabricar picos y armas Legendario,2
+Estelita Pura,10,Mítico,5350400,128000,2,64000.0,26046,25600,450,Catalizador de Estelita Pura,Fabricar picos y armas Mítico; Despertar de habilidad,0.45
+Fragmento de Nova,10,Ultra raro,8755200,307200,1,307200.0,40929,25600,630,Esencia de Fragmento de Nova,Fabricar picos y armas Ultra raro,0.05

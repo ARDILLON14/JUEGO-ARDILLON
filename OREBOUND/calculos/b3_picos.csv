@@ -1,76 +1,76 @@
-pico,zona,rareza,potencia,potencia_maxima,velocidad,nivel,mineria,habilidad
-Pico de Pizarra (Común),1,Común,100,200,1.0,1,0,Ninguna
-Pico de Pizarra (Poco común),1,Poco común,115,230,1.02,1,0,Golpe certero: cada 10.º golpe hace daño doble
-Pico de Pizarra (Raro),1,Raro,132,264,1.04,1,0,Veta abierta: 10 % de sacar +1 unidad
-Pico de Pizarra (Épico),1,Épico,152,304,1.06,1,0,Onda sísmica: cada 12 s el golpe daña al 50 % a depósitos a 8 studs
-Pico de Pizarra (Legendario),1,Legendario,175,350,1.08,1,0,Prospector: marca depósitos Legendario o superior a 60 studs
-Pico de Pizarra (Mítico),1,Mítico,198,396,1.1,1,0,"Fractura en cadena: al agotar un depósito, el siguiente empieza con 25 % menos de vida"
-Pico de Pizarra (Ultra raro),1,Ultra raro,220,440,1.12,1,0,"Resonancia: tras 5 s en el mismo depósito, +15 % de velocidad de golpe"
-Pico de Verdín (Común),2,Común,165,330,1.0,100,10,Ninguna
-Pico de Verdín (Poco común),2,Poco común,190,379,1.02,100,10,Golpe certero: cada 10.º golpe hace daño doble
-Pico de Verdín (Raro),2,Raro,218,436,1.04,100,12,Veta abierta: 10 % de sacar +1 unidad
-Pico de Verdín (Épico),2,Épico,251,502,1.06,100,15,Onda sísmica: cada 12 s el golpe daña al 50 % a depósitos a 8 studs
-Pico de Verdín (Legendario),2,Legendario,289,578,1.08,100,20,Prospector: marca depósitos Legendario o superior a 60 studs
-Pico de Verdín (Mítico),2,Mítico,327,653,1.1,100,25,"Fractura en cadena: al agotar un depósito, el siguiente empieza con 25 % menos de vida"
-Pico de Verdín (Ultra raro),2,Ultra raro,363,726,1.12,100,30,"Resonancia: tras 5 s en el mismo depósito, +15 % de velocidad de golpe"
-Pico de Sal (Común),3,Común,272,544,1.0,200,20,Ninguna
-Pico de Sal (Poco común),3,Poco común,313,626,1.02,200,20,Golpe certero: cada 10.º golpe hace daño doble
-Pico de Sal (Raro),3,Raro,359,719,1.04,200,24,Veta abierta: 10 % de sacar +1 unidad
-Pico de Sal (Épico),3,Épico,414,828,1.06,200,30,Onda sísmica: cada 12 s el golpe daña al 50 % a depósitos a 8 studs
-Pico de Sal (Legendario),3,Legendario,476,953,1.08,200,40,Prospector: marca depósitos Legendario o superior a 60 studs
-Pico de Sal (Mítico),3,Mítico,539,1078,1.1,200,50,"Fractura en cadena: al agotar un depósito, el siguiente empieza con 25 % menos de vida"
-Pico de Sal (Ultra raro),3,Ultra raro,599,1198,1.12,200,60,"Resonancia: tras 5 s en el mismo depósito, +15 % de velocidad de golpe"
-Pico de Brasa (Común),4,Común,449,898,1.0,300,30,Ninguna
-Pico de Brasa (Poco común),4,Poco común,517,1033,1.02,300,30,Golpe certero: cada 10.º golpe hace daño doble
-Pico de Brasa (Raro),4,Raro,593,1186,1.04,300,36,Veta abierta: 10 % de sacar +1 unidad
-Pico de Brasa (Épico),4,Épico,683,1366,1.06,300,45,Onda sísmica: cada 12 s el golpe daña al 50 % a depósitos a 8 studs
-Pico de Brasa (Legendario),4,Legendario,786,1572,1.08,300,60,Prospector: marca depósitos Legendario o superior a 60 studs
-Pico de Brasa (Mítico),4,Mítico,889,1779,1.1,300,75,"Fractura en cadena: al agotar un depósito, el siguiente empieza con 25 % menos de vida"
-Pico de Brasa (Ultra raro),4,Ultra raro,988,1977,1.12,300,90,"Resonancia: tras 5 s en el mismo depósito, +15 % de velocidad de golpe"
-Pico de Escarcha (Común),5,Común,741,1482,1.0,400,40,Ninguna
-Pico de Escarcha (Poco común),5,Poco común,852,1705,1.02,400,40,Golpe certero: cada 10.º golpe hace daño doble
-Pico de Escarcha (Raro),5,Raro,978,1957,1.04,400,48,Veta abierta: 10 % de sacar +1 unidad
-Pico de Escarcha (Épico),5,Épico,1127,2253,1.06,400,60,Onda sísmica: cada 12 s el golpe daña al 50 % a depósitos a 8 studs
-Pico de Escarcha (Legendario),5,Legendario,1297,2594,1.08,400,80,Prospector: marca depósitos Legendario o superior a 60 studs
-Pico de Escarcha (Mítico),5,Mítico,1468,2935,1.1,400,100,"Fractura en cadena: al agotar un depósito, el siguiente empieza con 25 % menos de vida"
-Pico de Escarcha (Ultra raro),5,Ultra raro,1631,3261,1.12,400,120,"Resonancia: tras 5 s en el mismo depósito, +15 % de velocidad de golpe"
-Pico de Eco (Común),6,Común,1223,2446,1.0,500,50,Ninguna
-Pico de Eco (Poco común),6,Poco común,1406,2813,1.02,500,50,Golpe certero: cada 10.º golpe hace daño doble
-Pico de Eco (Raro),6,Raro,1614,3229,1.04,500,60,Veta abierta: 10 % de sacar +1 unidad
-Pico de Eco (Épico),6,Épico,1859,3718,1.06,500,75,Onda sísmica: cada 12 s el golpe daña al 50 % a depósitos a 8 studs
-Pico de Eco (Legendario),6,Legendario,2140,4280,1.08,500,100,Prospector: marca depósitos Legendario o superior a 60 studs
-Pico de Eco (Mítico),6,Mítico,2422,4843,1.1,500,125,"Fractura en cadena: al agotar un depósito, el siguiente empieza con 25 % menos de vida"
-Pico de Eco (Ultra raro),6,Ultra raro,2691,5381,1.12,500,150,"Resonancia: tras 5 s en el mismo depósito, +15 % de velocidad de golpe"
-Pico Celestial de Eco,6,Celestial,3180,6360,1.15,500,150,Eco estelar: 5 % de que el depósito agotado reaparezca al instante (1 vez cada 60 s)
-Pico de Obsidiana (Común),7,Común,2018,4036,1.0,600,60,Ninguna
-Pico de Obsidiana (Poco común),7,Poco común,2321,4641,1.02,600,60,Golpe certero: cada 10.º golpe hace daño doble
-Pico de Obsidiana (Raro),7,Raro,2664,5327,1.04,600,72,Veta abierta: 10 % de sacar +1 unidad
-Pico de Obsidiana (Épico),7,Épico,3067,6134,1.06,600,90,Onda sísmica: cada 12 s el golpe daña al 50 % a depósitos a 8 studs
-Pico de Obsidiana (Legendario),7,Legendario,3531,7063,1.08,600,120,Prospector: marca depósitos Legendario o superior a 60 studs
-Pico de Obsidiana (Mítico),7,Mítico,3995,7991,1.1,600,150,"Fractura en cadena: al agotar un depósito, el siguiente empieza con 25 % menos de vida"
-Pico de Obsidiana (Ultra raro),7,Ultra raro,4439,8879,1.12,600,180,"Resonancia: tras 5 s en el mismo depósito, +15 % de velocidad de golpe"
-Pico Celestial de Obsidiana,7,Celestial,5247,10493,1.15,600,180,Eco estelar: 5 % de que el depósito agotado reaparezca al instante (1 vez cada 60 s)
-Pico de Magma (Común),8,Común,3330,6659,1.0,700,70,Ninguna
-Pico de Magma (Poco común),8,Poco común,3829,7658,1.02,700,70,Golpe certero: cada 10.º golpe hace daño doble
-Pico de Magma (Raro),8,Raro,4395,8790,1.04,700,84,Veta abierta: 10 % de sacar +1 unidad
-Pico de Magma (Épico),8,Épico,5061,10122,1.06,700,105,Onda sísmica: cada 12 s el golpe daña al 50 % a depósitos a 8 studs
-Pico de Magma (Legendario),8,Legendario,5827,11653,1.08,700,140,Prospector: marca depósitos Legendario o superior a 60 studs
-Pico de Magma (Mítico),8,Mítico,6593,13185,1.1,700,175,"Fractura en cadena: al agotar un depósito, el siguiente empieza con 25 % menos de vida"
-Pico de Magma (Ultra raro),8,Ultra raro,7325,14650,1.12,700,210,"Resonancia: tras 5 s en el mismo depósito, +15 % de velocidad de golpe"
-Pico Celestial de Magma,8,Celestial,8657,17314,1.15,700,210,Eco estelar: 5 % de que el depósito agotado reaparezca al instante (1 vez cada 60 s)
-Pico de Vitral (Común),9,Común,5494,10988,1.0,800,80,Ninguna
-Pico de Vitral (Poco común),9,Poco común,6318,12636,1.02,800,80,Golpe certero: cada 10.º golpe hace daño doble
-Pico de Vitral (Raro),9,Raro,7252,14504,1.04,800,96,Veta abierta: 10 % de sacar +1 unidad
-Pico de Vitral (Épico),9,Épico,8351,16701,1.06,800,120,Onda sísmica: cada 12 s el golpe daña al 50 % a depósitos a 8 studs
-Pico de Vitral (Legendario),9,Legendario,9614,19228,1.08,800,160,Prospector: marca depósitos Legendario o superior a 60 studs
-Pico de Vitral (Mítico),9,Mítico,10878,21755,1.1,800,200,"Fractura en cadena: al agotar un depósito, el siguiente empieza con 25 % menos de vida"
-Pico de Vitral (Ultra raro),9,Ultra raro,12086,24173,1.12,800,240,"Resonancia: tras 5 s en el mismo depósito, +15 % de velocidad de golpe"
-Pico Celestial de Vitral,9,Celestial,14284,28568,1.15,800,240,Eco estelar: 5 % de que el depósito agotado reaparezca al instante (1 vez cada 60 s)
-Pico de Astral (Común),10,Común,9065,18129,1.0,900,90,Ninguna
-Pico de Astral (Poco común),10,Poco común,10424,20849,1.02,900,90,Golpe certero: cada 10.º golpe hace daño doble
-Pico de Astral (Raro),10,Raro,11965,23931,1.04,900,108,Veta abierta: 10 % de sacar +1 unidad
-Pico de Astral (Épico),10,Épico,13778,27557,1.06,900,135,Onda sísmica: cada 12 s el golpe daña al 50 % a depósitos a 8 studs
-Pico de Astral (Legendario),10,Legendario,15863,31727,1.08,900,180,Prospector: marca depósitos Legendario o superior a 60 studs
-Pico de Astral (Mítico),10,Mítico,17948,35896,1.1,900,225,"Fractura en cadena: al agotar un depósito, el siguiente empieza con 25 % menos de vida"
-Pico de Astral (Ultra raro),10,Ultra raro,19942,39885,1.12,900,270,"Resonancia: tras 5 s en el mismo depósito, +15 % de velocidad de golpe"
-Pico Celestial de Astral,10,Celestial,23568,47137,1.15,900,270,Eco estelar: 5 % de que el depósito agotado reaparezca al instante (1 vez cada 60 s)
+pico,zona,rareza,potencia,potencia_maxima,golpes_s,nivel,mineria,pasivas,estadistica_combate
+Pico de Pizarra (Común),1,Común,100,150,1.0,1,0,1 menor,Ninguna
+Pico de Pizarra (Poco común),1,Poco común,125,188,1.02,1,0,1 menor,Ninguna
+Pico de Pizarra (Raro),1,Raro,150,225,1.04,1,0,1 menor,Ninguna
+Pico de Pizarra (Épico),1,Épico,190,285,1.06,1,0,1 mayor,+3% (tope PvP +2%)
+Pico de Pizarra (Legendario),1,Legendario,250,375,1.08,1,0,1 mayor,+3% (tope PvP +2%)
+Pico de Pizarra (Mítico),1,Mítico,330,495,1.1,1,0,1 mayor + 1 menor,+5% (tope PvP +3%)
+Pico de Pizarra (Ultra raro),1,Ultra raro,450,675,1.12,1,0,1 mayor + 1 menor,+5% (tope PvP +3%)
+Pico de Verdín (Común),2,Común,200,300,1.0,100,10,1 menor,Ninguna
+Pico de Verdín (Poco común),2,Poco común,250,375,1.02,100,10,1 menor,Ninguna
+Pico de Verdín (Raro),2,Raro,300,450,1.04,100,12,1 menor,Ninguna
+Pico de Verdín (Épico),2,Épico,380,570,1.06,100,15,1 mayor,+3% (tope PvP +2%)
+Pico de Verdín (Legendario),2,Legendario,500,750,1.08,100,20,1 mayor,+3% (tope PvP +2%)
+Pico de Verdín (Mítico),2,Mítico,660,990,1.1,100,25,1 mayor + 1 menor,+5% (tope PvP +3%)
+Pico de Verdín (Ultra raro),2,Ultra raro,900,1350,1.12,100,30,1 mayor + 1 menor,+5% (tope PvP +3%)
+Pico de Sal (Común),3,Común,400,600,1.0,200,20,1 menor,Ninguna
+Pico de Sal (Poco común),3,Poco común,500,750,1.02,200,20,1 menor,Ninguna
+Pico de Sal (Raro),3,Raro,600,900,1.04,200,24,1 menor,Ninguna
+Pico de Sal (Épico),3,Épico,760,1140,1.06,200,30,1 mayor,+3% (tope PvP +2%)
+Pico de Sal (Legendario),3,Legendario,1000,1500,1.08,200,40,1 mayor,+3% (tope PvP +2%)
+Pico de Sal (Mítico),3,Mítico,1320,1980,1.1,200,50,1 mayor + 1 menor,+5% (tope PvP +3%)
+Pico de Sal (Ultra raro),3,Ultra raro,1800,2700,1.12,200,60,1 mayor + 1 menor,+5% (tope PvP +3%)
+Pico de Brasa (Común),4,Común,800,1200,1.0,300,30,1 menor,Ninguna
+Pico de Brasa (Poco común),4,Poco común,1000,1500,1.02,300,30,1 menor,Ninguna
+Pico de Brasa (Raro),4,Raro,1200,1800,1.04,300,36,1 menor,Ninguna
+Pico de Brasa (Épico),4,Épico,1520,2280,1.06,300,45,1 mayor,+3% (tope PvP +2%)
+Pico de Brasa (Legendario),4,Legendario,2000,3000,1.08,300,60,1 mayor,+3% (tope PvP +2%)
+Pico de Brasa (Mítico),4,Mítico,2640,3960,1.1,300,75,1 mayor + 1 menor,+5% (tope PvP +3%)
+Pico de Brasa (Ultra raro),4,Ultra raro,3600,5400,1.12,300,90,1 mayor + 1 menor,+5% (tope PvP +3%)
+Pico de Escarcha (Común),5,Común,1600,2400,1.0,400,40,1 menor,Ninguna
+Pico de Escarcha (Poco común),5,Poco común,2000,3000,1.02,400,40,1 menor,Ninguna
+Pico de Escarcha (Raro),5,Raro,2400,3600,1.04,400,48,1 menor,Ninguna
+Pico de Escarcha (Épico),5,Épico,3040,4560,1.06,400,60,1 mayor,+3% (tope PvP +2%)
+Pico de Escarcha (Legendario),5,Legendario,4000,6000,1.08,400,80,1 mayor,+3% (tope PvP +2%)
+Pico de Escarcha (Mítico),5,Mítico,5280,7920,1.1,400,100,1 mayor + 1 menor,+5% (tope PvP +3%)
+Pico de Escarcha (Ultra raro),5,Ultra raro,7200,10800,1.12,400,120,1 mayor + 1 menor,+5% (tope PvP +3%)
+Pico de Eco (Común),6,Común,3200,4800,1.0,500,50,1 menor,Ninguna
+Pico de Eco (Poco común),6,Poco común,4000,6000,1.02,500,50,1 menor,Ninguna
+Pico de Eco (Raro),6,Raro,4800,7200,1.04,500,60,1 menor,Ninguna
+Pico de Eco (Épico),6,Épico,6080,9120,1.06,500,75,1 mayor,+3% (tope PvP +2%)
+Pico de Eco (Legendario),6,Legendario,8000,12000,1.08,500,100,1 mayor,+3% (tope PvP +2%)
+Pico de Eco (Mítico),6,Mítico,10560,15840,1.1,500,125,1 mayor + 1 menor,+5% (tope PvP +3%)
+Pico de Eco (Ultra raro),6,Ultra raro,14400,21600,1.12,500,150,1 mayor + 1 menor,+5% (tope PvP +3%)
+Pico Celestial de Eco,6,Celestial,16640,24960,1.15,500,150,1 única,+6% (tope PvP +3%)
+Pico de Obsidiana (Común),7,Común,6400,9600,1.0,600,60,1 menor,Ninguna
+Pico de Obsidiana (Poco común),7,Poco común,8000,12000,1.02,600,60,1 menor,Ninguna
+Pico de Obsidiana (Raro),7,Raro,9600,14400,1.04,600,72,1 menor,Ninguna
+Pico de Obsidiana (Épico),7,Épico,12160,18240,1.06,600,90,1 mayor,+3% (tope PvP +2%)
+Pico de Obsidiana (Legendario),7,Legendario,16000,24000,1.08,600,120,1 mayor,+3% (tope PvP +2%)
+Pico de Obsidiana (Mítico),7,Mítico,21120,31680,1.1,600,150,1 mayor + 1 menor,+5% (tope PvP +3%)
+Pico de Obsidiana (Ultra raro),7,Ultra raro,28800,43200,1.12,600,180,1 mayor + 1 menor,+5% (tope PvP +3%)
+Pico Celestial de Obsidiana,7,Celestial,33280,49920,1.15,600,180,1 única,+6% (tope PvP +3%)
+Pico de Magma (Común),8,Común,12800,19200,1.0,700,70,1 menor,Ninguna
+Pico de Magma (Poco común),8,Poco común,16000,24000,1.02,700,70,1 menor,Ninguna
+Pico de Magma (Raro),8,Raro,19200,28800,1.04,700,84,1 menor,Ninguna
+Pico de Magma (Épico),8,Épico,24320,36480,1.06,700,105,1 mayor,+3% (tope PvP +2%)
+Pico de Magma (Legendario),8,Legendario,32000,48000,1.08,700,140,1 mayor,+3% (tope PvP +2%)
+Pico de Magma (Mítico),8,Mítico,42240,63360,1.1,700,175,1 mayor + 1 menor,+5% (tope PvP +3%)
+Pico de Magma (Ultra raro),8,Ultra raro,57600,86400,1.12,700,210,1 mayor + 1 menor,+5% (tope PvP +3%)
+Pico Celestial de Magma,8,Celestial,66560,99840,1.15,700,210,1 única,+6% (tope PvP +3%)
+Pico de Vitral (Común),9,Común,25600,38400,1.0,800,80,1 menor,Ninguna
+Pico de Vitral (Poco común),9,Poco común,32000,48000,1.02,800,80,1 menor,Ninguna
+Pico de Vitral (Raro),9,Raro,38400,57600,1.04,800,96,1 menor,Ninguna
+Pico de Vitral (Épico),9,Épico,48640,72960,1.06,800,120,1 mayor,+3% (tope PvP +2%)
+Pico de Vitral (Legendario),9,Legendario,64000,96000,1.08,800,160,1 mayor,+3% (tope PvP +2%)
+Pico de Vitral (Mítico),9,Mítico,84480,126720,1.1,800,200,1 mayor + 1 menor,+5% (tope PvP +3%)
+Pico de Vitral (Ultra raro),9,Ultra raro,115200,172800,1.12,800,240,1 mayor + 1 menor,+5% (tope PvP +3%)
+Pico Celestial de Vitral,9,Celestial,133120,199680,1.15,800,240,1 única,+6% (tope PvP +3%)
+Pico de Astral (Común),10,Común,51200,76800,1.0,900,90,1 menor,Ninguna
+Pico de Astral (Poco común),10,Poco común,64000,96000,1.02,900,90,1 menor,Ninguna
+Pico de Astral (Raro),10,Raro,76800,115200,1.04,900,108,1 menor,Ninguna
+Pico de Astral (Épico),10,Épico,97280,145920,1.06,900,135,1 mayor,+3% (tope PvP +2%)
+Pico de Astral (Legendario),10,Legendario,128000,192000,1.08,900,180,1 mayor,+3% (tope PvP +2%)
+Pico de Astral (Mítico),10,Mítico,168960,253440,1.1,900,225,1 mayor + 1 menor,+5% (tope PvP +3%)
+Pico de Astral (Ultra raro),10,Ultra raro,230400,345600,1.12,900,270,1 mayor + 1 menor,+5% (tope PvP +3%)
+Pico Celestial de Astral,10,Celestial,266240,399360,1.15,900,270,1 única,+6% (tope PvP +3%)

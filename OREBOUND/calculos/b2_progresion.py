@@ -78,7 +78,7 @@ for S in (1, 100, 1000, 5000):
 print(f"  Punto 1 / punto 1000: raiz {(rq(1)-rq(0))/(rq(1000)-rq(999)):.0f} veces | saturacion {marg(1,3)/marg(1000,3):.1f} veces")
 print("Vitalidad lineal ilustrativa (1 + 0,01*V) frente a saturacion:")
 for V in (100, 1000, 5000): print(f"  V={V}: lineal x{1+0.01*V:.1f} | saturacion x{sat(V,3):.3f}")
-def hp_base(L): return 500 * 1.65 ** ((L - 1) / 100)
+def hp_base(L): return 500 * 2.0 ** ((L - 1) / 100)        # crecimiento 2,00 por zona (B1 rehecho)
 print("Vida base por nivel: " + " | ".join(f"L{L}: {hp_base(L):,.0f}" for L in (1, 100, 300, 500, 800, 1000)))
 print("Velocidad de movimiento (WalkSpeed base 16): " + " | ".join(f"S={s}: {16*sat(s,0.5):.2f}" for s in (0, 100, 1000, 5000)))
 
@@ -113,7 +113,9 @@ print(f"Duelo Cristal vs Tanque (tiempo relativo para matar): Cristal mata en {t
 
 # ---------- 5. Energia ----------
 REG_COMB, REG_FUERA, PAUSA = 8.0, 20.0, 1.5
-ACC = {"V": (30, 50), "C": (14, 35), "X": (8, 25), "Z": (4, 15), "Parpadeo": (8, 30), "Dash": (2.5, 20)}
+# GDD: Nucleo Prismatico (Z 6 s/20, X 12 s/25, C 9 s/25, V 60 s/40); dash 2 cargas con 3 s de recarga; parpadeo 8 s/30
+ACC = {"V": (60, 40), "X": (12, 25), "C": (9, 25), "Z": (6, 20), "Parpadeo": (8, 30), "Dash": (3.0, 20)}
+COEF = {"V": 6.0, "X": 1.5, "C": 1.2, "Z": 2.2}
 def simular(E, usar, dur=120.0, dt=0.1):
     cap = emax(E); en = cap; reg = REG_COMB * sat(E, 1.0)
     listo = {k: 0.0 for k in usar}; usos = {k: 0 for k in usar}; t = 0.0; ult = -99; vacio = None
@@ -126,6 +128,7 @@ def simular(E, usar, dur=120.0, dt=0.1):
         if t - ult >= PAUSA: en = min(cap, en + reg * dt)
         t += dt
     posibles = sum(int(dur / ACC[k][0]) + 1 for k in usar)
+    simular.usos = dict(usos)
     return cap, reg, sum(usos.values()), posibles, vacio
 print("\n== 7. Energia: 120 s de combate usando todo en cuanto se puede ==")
 for nombre, usar in [("Solo Dash", ["Dash"]), ("Habilidades ZXCV", ["V", "C", "X", "Z"]),
@@ -156,3 +159,100 @@ for nombre, mv in [("Actual (M=3)", 3.0), ("Vitalidad PvP M=1,5", 1.5)]:
     dps_c, dps_t = sat(1000, 3) * sat(1000, 0.8), sat(1000, 3)
     print(f"  {nombre:20s}: vida ef. Tanque x{ehp_t:.2f} | Cristal mata en {ehp_t/dps_c:.2f} | Tanque mata en {1/dps_t:.2f} | "
           f"ventaja del Tanque {(ehp_t/dps_c)/(1/dps_t):.2f} veces")
+
+
+# ---------- 7. Factor de habilidades de referencia y seccion 8 de B2 (rehecha con el GDD) ----------
+import sys, os
+sys.path.insert(0, os.path.dirname(__file__))
+from montar import tabla, n
+def dano_hab(E, dur=120.0):
+    simular(E, ["V", "X", "C", "Z"], dur); u = simular.usos
+    return sum(u[k] * COEF[k] for k in u) / dur, sum(u.values())
+teor = sum(COEF[k] / ACC[k][0] for k in COEF)
+F_HAB = {E: 0.92 + dano_hab(E)[0] for E in (0, 375, 1000, 5000)}
+print("\n== 10. Factor de habilidades (basicos 92 % + habilidades del Nucleo Prismatico) ==")
+print(f"Dano teorico de las 4 habilidades sin limite de energia: {100*teor:.1f} % de la potencia del arma por segundo")
+for E, f in F_HAB.items(): print(f"  Energia {E:4d}: habilidades {100*(f-0.92):5.1f} %/s -> factor {f:.3f}")
+filas = []
+for nombre, usar in [("Solo Dash", ["Dash"]), ("Habilidades Z, X, C, V", ["V", "X", "C", "Z"]), ("Todo a la vez", list(ACC))]:
+    for E in (0, 1000, 5000):
+        cap, reg, u, p, vac = simular(E, usar)
+        filas.append([nombre, n(E), u, p, n(100 * u / p, 1) + "%", "No en 120 s" if vac is None else ("Primera ráfaga" if vac < 1 else n(vac, 1) + " s")])
+t_sim = tabla(["Qué se usa", "Energía", "Usos conseguidos", "Usos posibles por enfriamiento", "Porcentaje", "Se vacía a los"], filas)
+demanda = sum(c / cd for cd, c in ACC.values())
+seccion = f"""## 8. Energía
+
+> Sección rehecha con el GDD: dash de 2 cargas con 3 s de recarga, parpadeo de 12 studs, Ruptura de 50 de energía y las habilidades del Núcleo Prismático como referencia. La esquiva deja de ser una acción aparte: es un dash hecho en los 0,25 s anteriores a un golpe («esquiva perfecta»).
+
+### 8.1 Capacidad y regeneración
+
+| Concepto | Fórmula o valor | Con Energía 0 | Con 1.000 | Con 5.000 |
+|---|---|---|---|---|
+| Energía máxima | `100 + 300·E/(E + 1.000)` | {n(emax(0))} | {n(emax(1000))} | {n(emax(5000))} |
+| Regeneración en combate | `8/s × (1 + E/(E + 1.000))` | {n(REG_COMB*sat(0,1),1)}/s | {n(REG_COMB*sat(1000,1),1)}/s | {n(REG_COMB*sat(5000,1),1)}/s |
+| Regeneración fuera de combate | `20/s × (1 + E/(E + 1.000))` | {n(REG_FUERA*sat(0,1),1)}/s | {n(REG_FUERA*sat(1000,1),1)}/s | {n(REG_FUERA*sat(5000,1),1)}/s |
+| Recarga completa fuera de combate | — | {n(emax(0)/(REG_FUERA*sat(0,1)),1)} s | {n(emax(1000)/(REG_FUERA*sat(1000,1)),1)} s | {n(emax(5000)/(REG_FUERA*sat(5000,1)),1)} s |
+
+- «En combate» = menos de 5 s desde el último golpe dado o recibido.
+- **Pausa de regeneración:** tras gastar energía, no se regenera durante 1,5 s.
+
+### 8.2 Consumos
+
+| Acción | Coste | Enfriamiento | Notas | Origen |
+|---|---|---|---|---|
+| Dash | 20 | 2 cargas; 3 s de recarga por carga | Aéreo o terrestre; hecho justo antes de un golpe es una esquiva perfecta | GDD |
+| Doble salto | 0 | 1 por salto | — | GDD |
+| Parpadeo | 30 | 8 s | 12 studs; no atraviesa paredes; se desbloquea con Agilidad (propuesta: Velocidad 50) | GDD |
+| Ruptura | 50 | 15 s | Tras 0,8 s bajo control, libera y empuja al atacante | GDD |
+| Bloqueo sostenido | 8 por segundo | — | No se regenera mientras se bloquea | Propuesta |
+| Golpe bloqueado | 10 por golpe | — | Con energía 0 se rompe la guardia (B4) | Propuesta |
+| Habilidad Z (área) | 20 | 6 s | Valores del Núcleo Prismático | GDD |
+| Habilidad X (control) | 25 | 12 s | | GDD |
+| Habilidad C (movilidad) | 25 | 9 s | | GDD |
+| Habilidad V (definitiva) | 40 | 60 s | | GDD |
+
+- Con Carga 10 o más en una Zona Fracturada, dash y parpadeo cuestan un 25% más (B3).
+
+### 8.3 Simulación: 120 s de combate usando todo en cuanto se puede
+
+{t_sim}
+
+- Usarlo todo pide {n(demanda, 2)} de energía por segundo; la regeneración máxima posible es 16/s.
+- Las habilidades del GDD tienen enfriamientos largos, así que la energía limita menos que la combinación con dash y parpadeo: lo que el jugador decide es cuánta energía reservar para moverse y para la Ruptura.
+
+### 8.4 Factor de habilidades de referencia
+
+Con los ataques básicos al 92% (el resto del tiempo se gasta en lanzar habilidades) y las cuatro habilidades del Núcleo Prismático:
+
+| Energía | Daño de habilidades (% de la potencia del arma por segundo) | Factor total sobre el ataque básico |
+|---|---|---|
+| 0 | {n(100*(F_HAB[0]-0.92),1)}% | ×{n(F_HAB[0],3)} |
+| 375 | {n(100*(F_HAB[375]-0.92),1)}% | ×{n(F_HAB[375],3)} |
+| 1.000 | {n(100*(F_HAB[1000]-0.92),1)}% | ×{n(F_HAB[1000],3)} |
+| 5.000 | {n(100*(F_HAB[5000]-0.92),1)}% | ×{n(F_HAB[5000],3)} |
+
+- **Factor de referencia: ×{n(F_HAB[0],2)}.** Es el que usan B4, B5 y B7 para el «jugador típico» y para el tope de DPS de mascotas. En la primera versión era ×1,75, con habilidades propuestas más frecuentes.
+- La estadística Energía sube el factor de ×{n(F_HAB[0],2)} a ×{n(F_HAB[1000],2)} con 1.000 puntos, y además deja margen para dash, parpadeo, bloqueo y Ruptura.
+
+### 8.5 Límites contra la energía infinita
+
+1. **Pausa de 1,5 s** tras cada gasto. Entre dos dash seguidos solo se regenera 1,5 s: {n(REG_COMB*sat(0,1)*1.5,1)} con Energía 0, {n(REG_COMB*sat(1000,1)*1.5,1)} con 1.000 y {n(REG_COMB*sat(5000,1)*1.5,1)} con 5.000, frente a los 20 que cuesta. Con Energía muy alta el dash deja de estar limitado por la energía y lo limitan sus 2 cargas.
+2. **Topes de la estadística:** energía máxima 400 y regeneración ×2.
+3. **Reducción de costes:** el equipo y las pasivas pueden abaratar las acciones un 30% como máximo en total.
+4. **Los enfriamientos no dependen de la energía.**
+5. **Bloqueo:** con 8/s y sin regenerar, aguanta {n(emax(0)/8,1)} s (Energía 0), {n(emax(1000)/8,1)} s (1.000) o {n(emax(5000)/8,1)} s (5.000) sin recibir golpes.
+6. **Consumibles de energía:** un uso cada 30 s en PvP y Zonas Fracturadas.
+
+---
+
+"""
+p = "B_Matematico/B2_Progresion.md"; d = open(p, encoding="utf-8").read()
+i, j = d.index("## 8. Energía"), d.index("## 9. Problemas de balance")
+d = d[:i] + seccion + d[j:]
+import re
+d = re.sub(r"- \*\*F11:\*\* .*\n- Valores: .*\n", f"- **F11:** `VidaBase(L) = 500 × 2,00^((L − 1)/100)`. Crece al mismo ritmo que la potencia de zona de B1 (×2,00 cada 100 niveles; era 1,65 antes de rehacer B1 con el GDD).\n- Valores: nivel 1 → {n(hp_base(1))}; 100 → {n(hp_base(100))}; 300 → {n(hp_base(300))}; 500 → {n(hp_base(500))}; 800 → {n(hp_base(800))}; 1.000 → {n(hp_base(1000))}.\n", d)
+d = re.sub(r"Etapa 2 · 2026-11-16[^·]*·", "Etapa 2 · 2026-11-16 (corregido en las Etapas 6 y 7; energía y vida base rehechas con el GDD) ·", d, count=1)
+open(p, "w", encoding="utf-8").write(d)
+import json
+json.dump({"F_HAB": F_HAB[0], "F_HAB_E": {str(k): v for k, v in F_HAB.items()}}, open("calculos/_b2.json", "w"))
+print("B2 actualizado; factor de referencia", round(F_HAB[0], 3))
