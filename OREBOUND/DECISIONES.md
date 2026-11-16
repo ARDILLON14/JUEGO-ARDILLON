@@ -1,6 +1,6 @@
 # OREBOUND — DECISIONES.md
 
-Versión: Etapa 4 · 2026-11-16
+Versión: Etapa 5 · 2026-11-16
 
 > **Estado de las fuentes.** Este archivo se ha construido solo con el documento
 > «OREBOUND — Prompts por partes» (prompt único con continuidad + partes 0 a 10).
@@ -366,10 +366,57 @@ Controles
 
 ---
 
-## 9. Registro de cambios
+## 9. Valores de la Etapa 5 — B5_Mascotas.md (todos [PROVISIONAL] salvo los marcados)
+
+Nivel
+- E5-01. `XPp(n) = techo(15 + 3·n + 0,09·n²)`; nivel máximo 100; 45.936 de XP en total.
+- E5-02. Multiplicadores por nivel: daño `1 + 0,015 × (n − 1)`; velocidad de ataque `1 + 0,002 × (n − 1)`; utilidad `1 + 0,005 × (n − 1)`.
+- E5-03. XP de mascota: enemigos 2 / 8 / 24 / 160; depósitos 2 / 3 / 4 / 6 / 9 / 14 / 22; Nido al 15% con 2 huecos.
+- E5-04. Ritmo: nivel 50 en 11–12 horas; nivel 100 en 65–68 horas.
+
+Evolución
+- E5-05. Factor de fase: Cría ×1,00; Forma desatada ×1,25 (nivel 50); Forma desatada máxima ×1,50 (nivel 100).
+- E5-06. Incubación por rareza: 10 / 20 / 40 / 90 / 180 / 360 / 720 minutos de juego.
+- E5-07. Vínculos al liberar un duplicado: 1 / 2 / 4 / 8 / 16 / 32 / 64.
+- E5-08. Coste de Desatada: Vínculos 5 / 8 / 12 / 20 / 32 / 50 / 80 y material de jefe 3 / 3 / 5 / 5 / 8 / 8 / 10.
+- E5-09. Coste de Máxima: Vínculos 15 / 24 / 36 / 60 / 96 / 150 / 240; Catalizadores Míticos 1 / 1 / 2 / 2 / 4 / 4 / 6; gemas antiguas 0 / 0 / 1 / 1 / 2 / 3 / 5.
+
+Fórmulas
+- E5-10. `DPS = PotenciaArma × b × MultRareza × MultNivel × FactorFase × MultDominio × MultVelocidadNivel`.
+- E5-11. `Vida = VidaBase(jugador) × h × MultRareza × (1 + 0,01 × (n − 1)) × FactorFase × MultDominio`; reaparece a los 20 s (30 s en Zona Fracturada).
+- E5-12. Velocidad de ataque: 0,6–1,6 golpes por segundo según especie, máximo 2,0.
+- E5-13. Roles (`b` / `h`): Atacante 0,030 / 0,40; Control 0,018 / 0,50; Tanque 0,015 / 1,00; Apoyo 0,010 / 0,50; Recolector 0,008 / 0,40.
+- E5-14. Utilidad: `ValorBase × FactorFase × (1 + 0,005 × (n − 1)) × (1 + 1,5·D/(D + 1.000))`; no cuenta para el tope de DPS.
+- E5-15. Valores base de utilidad: Tanque desvía 5% y da escudo del 2% cada 20 s (tope de desvío 30%); Apoyo cura 0,15% por segundo (tope 1%; 0,5% en PvP); Control reduce un 8% el daño enemigo (tope 25%); Recolector +4% de daño de pico (tope +20%).
+
+Mascotas
+- E5-16. Las 12 de lanzamiento: Topillo de Pizarra, Luciérnaga de Veta, Zorro de Ascua, Tortuga Geoda, Murciélago de Eco, Nutria Salina, Búho Boreal, Carnero de Magma, Mantis Vitral, Guiverno de Cuarzo, Ciervo Astral y Sierpe de Nova (resuelve P-F-08 de forma provisional).
+- E5-17. Sin mascota Celestial de lanzamiento; se reserva para eventos.
+- E5-18. Límites de recolección conjuntos: +20% de unidad extra, +30% de mochila, +12 studs de recogida.
+
+Posturas
+- E5-19. Tres posturas: Atacar (100% de daño), Recolectar (0%) y Proteger (60%).
+- E5-20. Recogida automática a 12 studs; una mascota abre un Cofre de Saqueo en 4,5 s con el jugador a menos de 15 studs.
+- E5-21. Cambio de postura cada 3 s; 6 s si hubo daño de otro jugador en los últimos 5 s.
+
+Topes de DPS
+- E5-22. Topes del 40% (PvE) y 25% (PvP y Zonas Fracturadas) [CONFIRMADO].
+- E5-23. `DPSref = PotenciaArma × MultFuerza × 1,025 × MultMaestría × 1,75`, calculado por el servidor a partir de las estadísticas.
+- E5-24. Aplicación: factor de escala + ventana deslizante de 5 s; las mascotas solo atacan con el jugador en combate; máximo 3 mascotas activas en PvP y Zonas Fracturadas.
+
+Valor y espacios
+- E5-25. Aporte de las mascotas a las monedas por hora: +9,1% (3 Atacantes) a +22,8% (Tanque + Apoyo + Control) en combate; +16,2% (3 Recolectores) en minería.
+- E5-26. Espacios: 3 iniciales [CONFIRMADO]; el 4.º por misión a nivel 300; el 5.º a nivel 700; el 6.º de pago o por 60 Fragmentos de temporada.
+- E5-27. El sexto espacio añade un 4,8% de monedas por hora en PvE y nada en PvP.
+- E5-28. Almacén de 30 mascotas; incubadoras: 1 inicial, la 2.ª a nivel 200 y la 3.ª de pago.
+
+---
+
+## 10. Registro de cambios
 - 2026-11-16 · Etapa 0 (1/2): creación del archivo a partir del documento de prompts. Faltan las dos fuentes.
 - 2026-11-16 · Etapa 0 cerrada: incongruencias del prompt resueltas (C-25 a C-34) y prompt corregido.
 - 2026-11-16 · Etapa 1: valores E1-01 a E1-19.
 - 2026-11-16 · Etapa 2: valores E2-01 a E2-18. B1 no cambia.
 - 2026-11-16 · Etapa 3: valores E3-01 a E3-36. Precisa B1 (Suerte de depósitos de grupo); B2 no cambia todavía.
 - 2026-11-16 · Etapa 4: valores E4-01 a E4-39. Confirma E2-12; B1, B2 y B3 no cambian.
+- 2026-11-16 · Etapa 5: valores E5-01 a E5-28. B1 a B4 no cambian.
