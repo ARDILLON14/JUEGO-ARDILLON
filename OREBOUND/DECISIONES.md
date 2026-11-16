@@ -1,6 +1,6 @@
 # OREBOUND — DECISIONES.md
 
-Versión: Etapa 7 · 2026-11-16
+Versión: Etapa 8 · 2026-11-16
 
 > **Estado de las fuentes.** Este archivo se ha construido solo con el documento
 > «OREBOUND — Prompts por partes» (prompt único con continuidad + partes 0 a 10).
@@ -500,7 +500,40 @@ Pendientes para la beta
 
 ---
 
-## 12. Registro de cambios
+## 12. Valores de la Etapa 8 — A_GDD.md (todos [PROVISIONAL])
+
+Concepto y arte
+- E8-01. Público: 10 a 16 años; móvil prioritario; sesiones de 20–40 minutos.
+- E8-02. Seis pilares de diseño (A_GDD, sección 1.3).
+- E8-03. Arte estilizado de pocos polígonos; mina oscura con minerales luminosos; paleta propia por zona; Zonas Fracturadas en tonos fríos con grietas violetas.
+- E8-04. Límites de VFX: 60 partículas, 3 emisores y 2 luces por habilidad; 10 por mascota; tope en pantalla de 300 / 800 / 2.000 según calidad; 30 fotogramas por segundo en móvil de gama baja.
+- E8-05. Los avisos de ataque nunca se reducen por calidad gráfica.
+
+Mundo
+- E8-06. Ciudad principal: Puerto Veta (zona segura).
+- E8-07. Cuatro mundos: Superficie Quebrada (zonas 1–3), Hondonada de los Extremos (4–6), Abismo Negro (7–8) y Corazón Celeste (9–10); 40,7 / 100,4 / 93,1 / 110,4 horas.
+- E8-08. Cada mundo es un lugar de Roblox distinto.
+
+Eventos
+- E8-09. Un evento aleatorio cada 25–40 minutos por servidor, uno activo a la vez: Lluvia de meteoritos, Veta colosal, Oleada de la profundidad y Grieta inestable; jefe de evento semanal.
+- E8-10. Efecto medio de los eventos en los ingresos: +5,6%.
+
+Cajas
+- E8-11. Animación de apertura «la Geoda»: 3 golpes de pico, 2,5 s, se puede saltar, apertura de 10; el color es el de la rareza real desde el principio (sin falsos «casi»).
+
+Retención
+- E8-12. 3 misiones diarias (10% extra de monedas en total) y 5 semanales; sin castigo por no conectarse.
+- E8-13. Temporadas de 8 semanas con pase de 50 niveles; 2 Fragmentos de temporada por nivel gratuito en los niveles 1–30 (60 en total); no caducan.
+- E8-14. Logros y códice dan títulos, cosméticos y Cristales; nunca poder.
+- E8-15. Renacimiento a nivel 1.000, máximo 10: +5% de XP y +10 puntos de estadística por renacimiento; se pierden nivel, puntos asignados y todas las monedas; se conserva todo lo demás.
+- E8-16. Salvaguardas: sin ofertas con cuenta atrás de menos de 24 horas; aviso de descanso opcional a los 60 minutos.
+
+MVP
+- E8-17. MVP: Puerto Veta, mundo 1 (zonas 1–3), 19 minerales, 21 picos, 63 armas (Espada, Daga y Bastón), Núcleo Prismático, 6 mascotas, 3 jefes, 3 cajas, 1 arena de 1 contra 1 y la Zona Fracturada de la zona 3; 40,7 horas de contenido.
+
+---
+
+## 13. Registro de cambios
 - 2026-11-16 · Etapa 0 (1/2): creación del archivo a partir del documento de prompts. Faltan las dos fuentes.
 - 2026-11-16 · Etapa 0 cerrada: incongruencias del prompt resueltas (C-25 a C-34) y prompt corregido.
 - 2026-11-16 · Etapa 1: valores E1-01 a E1-19.
@@ -510,3 +543,4 @@ Pendientes para la beta
 - 2026-11-16 · Etapa 5: valores E5-01 a E5-28. B1 a B4 no cambian.
 - 2026-11-16 · Etapa 6: valores E6-01 a E6-33. Corrige B4 (monedas de jefe), B2 (coste del reinicio) y amplía B3 (contenedor de grieta y racha).
 - 2026-11-16 · Etapa 7: valores E7-01 a E7-23. Corrige B2 (Defensa y Vitalidad en PvP, puntos desde 1.001), B3 (topes de zonas mayores que 10, salida sin extraer) y B4 (daño PvP, ráfaga, golpes en área, grupos, regeneración). Documento B cerrado.
+- 2026-11-16 · Etapa 8: valores E8-01 a E8-17. Los archivos B no cambian.
