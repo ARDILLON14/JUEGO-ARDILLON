@@ -1,0 +1,65 @@
+-- Config/Pets: datos de mascotas. Solo datos, sin lógica.
+-- Origen de las cifras: OREBOUND/B_Matematico (B5). Etiquetas [CONFIRMADO]/[PROVISIONAL] en DECISIONES.md.
+-- El cliente puede leerlo; el servidor calcula siempre con su propia copia.
+
+return {
+	Level = { Max = 100, XPBase = 15, XPLinear = 3, XPQuad = 0.09,
+	          DamagePerLevel = 0.015, AttackSpeedPerLevel = 0.002, UtilityPerLevel = 0.005, HealthPerLevel = 0.01 },
+	XPSource = { Enemy = { Common = 2, Elite = 8, Guardian = 24, Boss = 160 },
+	             Deposit = { Common = 2, Uncommon = 3, Rare = 4, Epic = 6, Legendary = 9, Mythic = 14, UltraRare = 22 },
+	             NestFraction = 0.15, NestSlots = 2 },
+	Phase = {   -- GDD
+		Hatchling    = { Factor = 1.00, Unlocks = "GatherPassive" },
+		Unleashed    = { Factor = 1.25, Level = 50,  Unlocks = "ActiveAbility", Scale = 1.8 },
+		UnleashedMax = { Factor = 1.50, Level = 100, Unlocks = "CoordinatedAttack" },
+	},
+	Role = { Offense = { b = 0.016, h = 0.40 }, Control = { b = 0.010, h = 0.50 }, Defense = { b = 0.008, h = 1.00 },
+	         Support = { b = 0.005, h = 0.50 }, Mining = { b = 0.004, h = 0.40 } },
+	Stance = { Gather = { Radius = 1.5, Damage = 0.5 }, Protect = { Radius = 0.5, Damage = 1.5 }, SwitchCooldown = 5 },   -- GDD
+	PickupRadius = 20,                                                                                                     -- GDD
+	Utility = {   -- valores del GDD para forma desatada de nivel 50 sin Dominio
+		DefenseShield = { Fraction = 0.20, Seconds = 5, Cooldown = 30, OwnerHealthBelow = 0.5 },
+		SupportHaste = { AttackSpeed = 0.15, Seconds = 6, Cooldown = 20 }, SupportHealOnPerfectDodge = 0.08,
+		ControlSlow = { Slow = 0.30, Seconds = 2, Cooldown = 10 },
+		MiningHaste = { ExtractSpeed = 0.20, Seconds = 10, Cooldown = 30 },
+		MiningPassive = { Common = 0.05, Uncommon = 0.06, Rare = 0.08, Epic = 0.10, Legendary = 0.15, Mythic = 0.18, UltraRare = 0.22 },
+		ExtractSpeedCap = 0.40, ControlCap = 0.25, RefFactor = 1.556,
+	},
+	DPSCap = { PvE = 0.40, PvP = 0.25, WindowSeconds = 5, RefAbilityFactor = 1.39, RefCritFactor = 1.025,
+	           MaxActivePvP = 3, CombatTimeout = 5 },
+	ChestOpenSeconds = 4.5,
+	Respawn = { PvE = 20, Fracture = 30 },
+	Slots = { Start = 3, Unlock = { [4] = { Level = 300 }, [5] = { Level = 700 }, [6] = { SeasonFragments = 60, GamePass = true } } },
+	Hatch = { PickHits = { Common = 500, Uncommon = 1000, Rare = 2000, Epic = 4000, Legendary = 8000, Mythic = 15000, UltraRare = 30000 },
+	          HitsPerEnemy = 5 },                                                                                          -- GDD: se incuba minando
+	Evolve = { ElementFragments = { Common = 10, Uncommon = 15, Rare = 25, Epic = 40, Legendary = 60, Mythic = 90, UltraRare = 130 },
+	           BossMaterials = { Common = 5, Uncommon = 5, Rare = 8, Epic = 8, Legendary = 12, Mythic = 12, UltraRare = 16 },
+	           FragmentsFromDuplicate = { Common = 1, Uncommon = 2, Rare = 4, Epic = 8, Legendary = 16, Mythic = 32, UltraRare = 64 } },
+	Species = {   -- B5, sección 5
+		TopilloDePizarra = { Name = "Topillo de Pizarra", Rarity = "Common", Element = "Earth", Role = "Mining", HitsPerSecond = 1.2,
+			GatherPassive = { Kind = "ExtractSpeed", Value = 0.05 }, ActiveAbility = "Dig", CoordinatedAttack = "SharedDeposit" },
+		LuciernagaDeVeta = { Name = "Luciérnaga de Veta", Rarity = "Common", Element = "Light", Role = "Support", HitsPerSecond = 1.0,
+			GatherPassive = { Kind = "RevealDeposits", MinRarity = "Epic", Studs = 40 }, ActiveAbility = "Flash", CoordinatedAttack = "HealOnPerfectDodge" },
+		ZorroDeAscua = { Name = "Zorro de Ascua", Rarity = "Uncommon", Element = "Fire", Role = "Offense", HitsPerSecond = 1.6,
+			GatherPassive = { Kind = "PickupRadius", Value = 0.10 }, ActiveAbility = "BurningBite", CoordinatedAttack = "Execute" },
+		TortugaGeoda = { Name = "Tortuga Geoda", Rarity = "Uncommon", Element = "Earth", Role = "Defense", HitsPerSecond = 0.6,
+			GatherPassive = { Kind = "BackpackUnits", Value = 6 }, ActiveAbility = "Shell", CoordinatedAttack = "BlockProjectile" },
+		MurcielagoDeEco = { Name = "Murciélago de Eco", Rarity = "Rare", Element = "Sound", Role = "Control", HitsPerSecond = 1.4,
+			GatherPassive = { Kind = "DetectChests", Studs = 50 }, ActiveAbility = "Screech", CoordinatedAttack = "StunAfterControl" },
+		NutriaSalina = { Name = "Nutria Salina", Rarity = "Rare", Element = "Water", Role = "Mining", HitsPerSecond = 1.2,
+			GatherPassive = { Kind = "ExtractSpeed", Value = 0.08 }, ActiveAbility = "Current", CoordinatedAttack = "SharedDeposit" },
+		BuhoBoreal = { Name = "Búho Boreal", Rarity = "Epic", Element = "Ice", Role = "Control", HitsPerSecond = 0.8,
+			GatherPassive = { Kind = "PickupRadius", Value = 0.15 }, ActiveAbility = "FrozenFeather", CoordinatedAttack = "FreezeAfterUltimate" },
+		CarneroDeMagma = { Name = "Carnero de Magma", Rarity = "Epic", Element = "Fire", Role = "Defense", HitsPerSecond = 0.7,
+			GatherPassive = { Kind = "BackpackUnits", Value = 8 }, ActiveAbility = "LavaCrust", CoordinatedAttack = "ChargeAttacker" },
+		MantisVitral = { Name = "Mantis Vitral", Rarity = "Legendary", Element = "Light", Role = "Offense", HitsPerSecond = 1.6,
+			GatherPassive = { Kind = "ExtraUnitChance", Value = 0.03 }, ActiveAbility = "BladeDance", CoordinatedAttack = "Execute" },
+		GuivernoDeCuarzo = { Name = "Guiverno de Cuarzo", Rarity = "Legendary", Element = "Crystal", Role = "Defense", HitsPerSecond = 1.0,
+			GatherPassive = { Kind = "ExtractSpeed", Value = 0.15 }, ActiveAbility = "FacetedShield", CoordinatedAttack = "QuartzBeam" },
+		CiervoAstral = { Name = "Ciervo Astral", Rarity = "Mythic", Element = "Astral", Role = "Support", HitsPerSecond = 0.8,
+			GatherPassive = { Kind = "BackpackUnits", Value = 10 }, ActiveAbility = "StarGlade", CoordinatedAttack = "HealOnPerfectDodge" },
+		SierpeDeNova = { Name = "Sierpe de Nova", Rarity = "UltraRare", Element = "Astral", Role = "Offense", HitsPerSecond = 1.0,
+			GatherPassive = { Kind = "PickupRadius", Value = 0.20 }, ActiveAbility = "MinorSupernova", CoordinatedAttack = "ExplosiveExecute" },
+	},
+	GatherCaps = { ExtractSpeed = 0.40, ExtraUnitChance = 0.20, Backpack = 0.30, PickupRadius = 0.50 },
+}

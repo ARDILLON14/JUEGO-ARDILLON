@@ -1,9 +1,10 @@
-# Project place file
-/ECLIPSE.rbxlx
+# Archivos de lugar generados
+/*.rbxlx
+/*.rbxl
 
-# Roblox Studio lock files
+# Bloqueos de Roblox Studio
 /*.rbxlx.lock
 /*.rbxl.lock
 
 sourcemap.json
-ECLIPSE.rbxl
+__pycache__/

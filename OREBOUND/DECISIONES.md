@@ -781,3 +781,22 @@ Pendiente de decisión del autor
 - 2026-11-16 · Etapa 10: valores E10-01 a E10-16. Correcciones de coherencia en B2 (nota en 9.1), B5 (×0,06 en F27), A_GDD (pilar 3) y E2-03. Diseño completo.
 - 2026-11-16 · Recibido el GDD. Contraste en `00_Fuentes/Contraste_GDD.md`; valores G-01 a G-60. Los archivos A, B, C y D están pendientes de rehacer.
 - 2026-11-16 · Rehecho con el GDD: B1, B3, B4, B5, B6 y B7 regenerados; B2 retocado; A, C y D actualizados. Valores R-01 a R-48.
+- 2026-11-16 · Código, fase 1 (Cimientos): valores P1-01 a P1-09. Los archivos A, B, C y D no cambian.
+
+---
+
+## 18. Serie P1 — decisiones tomadas al programar la fase 1 (Cimientos)
+
+No cambian ninguna cifra de diseño. Donde difieren de `C_Tecnico.md`, manda esta lista.
+
+| # | Decisión | Estado | Cómo probarla o revisarla |
+|---|---|---|---|
+| P1-01 | Las pruebas usan un ejecutor propio (`tests/Ejecutor.luau`) en lugar de TestEZ: no añade dependencias y el mismo archivo corre en Studio y fuera | [PROVISIONAL] | Si se adopta Wally más adelante, pasar a TestEZ es cambiar `t.equal` por `expect` |
+| P1-02 | El código que se prueba fuera de Roblox (Config, Formulas, Net, Datos) se escribe en el subconjunto común de Lua 5.1 y Luau, sin anotaciones de tipo | [PROVISIONAL] | Cuando haya un intérprete de Luau en la máquina de pruebas se pueden añadir tipos y `--!strict` |
+| P1-03 | Los precios en monedas se redondean al entero más cercano y los empates hacia arriba. Python redondea los empates al par, así que 6 de los 70 precios de fabricación de `b6_precios_equipo.csv` difieren en 1 moneda | [CONFIRMADO] | Prueba «los 70 precios de equipo» con tolerancia de 1 moneda |
+| P1-04 | `Economy.ZoneIncome` guarda el ingreso exacto `I(z)` de B6 por zona; `490 × V(z)` queda solo como aproximación para zonas sin dato | [CONFIRMADO] | `tests/Formulas.spec.luau`, Economía |
+| P1-05 | Reintentos del almacén: hasta 4 llamadas con esperas de 2, 4 y 8 s entre ellas (14 s en total) | [PROVISIONAL] | `tests/Datos.spec.luau`; ajustar con datos reales de errores de DataStore |
+| P1-06 | Al guardar, si la clave ya no existe o la sesión no es la propia, no se escribe y se expulsa al jugador («sesión perdida») | [CONFIRMADO] | Prueba «quien pierde el bloqueo no puede escribir» |
+| P1-07 | En Studio sin acceso a la API de DataStore, `DataService` usa un almacén en memoria y avisa; en un servidor publicado, falla en lugar de jugar sin guardado | [CONFIRMADO] | Abrir en Studio con y sin «API Services» |
+| P1-08 | El mínimo de 3 golpes por depósito se aplica limitando cada golpe a un tercio de la vida del depósito | [CONFIRMADO] | `Mineria.hitDamage` y su prueba |
+| P1-09 | El catálogo de 66 minerales es un archivo generado (`Config/Catalogo/Minerales.luau`) que `Config/Mining` carga; la vida, el valor y la XP se calculan con las fórmulas, no se guardan | [CONFIRMADO] | `python3 calculos/c1_exportar_luau.py` y prueba de los 66 depósitos |
