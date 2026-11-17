@@ -109,6 +109,29 @@ local function objetivos(tipo)
 		end
 		return a.D < b.D
 	end)
+	-- En PvP (grieta o arena): también los jugadores hostiles de la misma área (el servidor lo vuelve a comprobar).
+	local mio = jugador.Character and jugador.Character:GetAttribute("PvP")
+	if mio then
+		for _, otro in ipairs(Players:GetPlayers()) do
+			local c = otro.Character
+			local p = c and c:FindFirstChild("HumanoidRootPart")
+			if otro ~= jugador and p and c:GetAttribute("PvP") == mio
+				and (c:GetAttribute("Equipo") == nil or c:GetAttribute("Equipo") ~= jugador.Character:GetAttribute("Equipo")) then
+				local rel = p.Position - r.Position
+				local d = rel.Magnitude - 1
+				if d <= alcance then
+					local plano = Vector3.new(rel.X, 0, rel.Z)
+					table.insert(lista, { Id = 1e11 + otro.UserId, D = d, Delante = plano.Magnitude < 0.1 or plano.Unit:Dot(frente) > 0.2 })
+				end
+			end
+		end
+		table.sort(lista, function(a, b)
+			if a.Delante ~= b.Delante then
+				return a.Delante
+			end
+			return a.D < b.D
+		end)
+	end
 	local ids = {}
 	for i = 1, math.min(#lista, Weapons.Types[tipo].MaxTargets) do
 		ids[i] = lista[i].Id

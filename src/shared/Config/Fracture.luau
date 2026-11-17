@@ -26,5 +26,9 @@ return {
 	CelestialRift = { EveryMinutes = 120, AnnounceMinutes = 5, DurationMinutes = 10, FragmentMultiplier = 4 },   -- GDD
 	RiftBoss = { FightersRequired = 6, WindowMinutes = 5, BossMaterials = 2 },
 	Season = { Weeks = 8, RankBy = "ExtractedValue" },                                                -- GDD
-	Squad = { MaxSize = 3, FriendlyFire = false, SharedLoad = true },                                 -- GDD
+	Squad = { MaxSize = 3, FriendlyFire = false, SharedLoad = true },
+	ContractTargets = { ExtractRarity = { Count = 3, MinRarity = "Rare" }, DefeatCarriers = { Count = 2 } },   -- propuesta (B6 7.3)
+	KillCreditSeconds = 5,     -- una muerte cuenta como PvP si otro jugador le golpeó en los últimos 5 s [PROVISIONAL]
+	ExtractRadius = 8,
+	EnabledZones = { 3 },      -- roadmap fase 8: la grieta de la zona 3                                 -- GDD
 }

@@ -26,7 +26,8 @@ local DepositService = {}
 local S = Mining.Blocks.Size
 local ID_POR_ZONA = 10000000
 local azar = Random.new()
-local minas = {}          -- [zona] = { Modelo (Reglas/Mina), Ancla, Origen (esquina de arriba), Carpeta, Partes = { [clave] = parte } }
+local minas = {}          -- [n.º de mina] = { Indice, Modelo (Reglas/Mina), Ancla, Origen, Carpeta, Partes, Grieta }
+local porZona = {}        -- [zona] = n.º de la mina normal de esa zona (no la de la grieta)
 local entradas = {}       -- [id] = { Regla, Parte, Zona, Tipo, Clave }
 local alAgotar = {}
 
@@ -38,8 +39,8 @@ local function centro(mina, x, y, z)
 	return mina.Origen + Vector3.new((x - 0.5) * S, -(y - 0.5) * S, (z - 0.5) * S)
 end
 
-local function idDe(zona, clave)
-	return zona * ID_POR_ZONA + clave
+local function idDe(indice, clave)
+	return indice * ID_POR_ZONA + clave
 end
 
 local function crearRocaMadre(mina, x, y, z)
@@ -56,7 +57,7 @@ end
 
 local function crearBloque(mina, clave, x, y, z, bloque)
 	local zona = mina.Modelo.Zona
-	local id = idDe(zona, clave)
+	local id = idDe(mina.Indice, clave)
 	local regla
 	local p = Instance.new("Part")
 	p.Anchored = true
@@ -96,14 +97,14 @@ local function crearBloque(mina, clave, x, y, z, bloque)
 	CollectionService:AddTag(p, Lugares.Etiqueta.Deposito)
 	p.Parent = mina.Carpeta
 	mina.Partes[clave] = p
-	entradas[id] = { Regla = regla, Parte = p, Zona = zona, Tipo = bloque.Tipo, Clave = clave }
+	entradas[id] = { Regla = regla, Parte = p, Zona = zona, Tipo = bloque.Tipo, Clave = clave, Mina = mina.Indice, Grieta = mina.Grieta }
 end
 
 local function quitarParte(mina, clave)
 	local p = mina.Partes[clave]
 	if p then
 		mina.Partes[clave] = nil
-		entradas[idDe(mina.Modelo.Zona, clave)] = nil
+		entradas[idDe(mina.Indice, clave)] = nil
 		p:Destroy()
 	end
 end
@@ -147,7 +148,11 @@ end
 
 local function prepararMina(ancla)
 	local zona = ancla:GetAttribute("Zona")
-	if type(zona) ~= "number" or zona < 1 or zona > 10 or zona ~= math.floor(zona) or minas[zona] then
+	if type(zona) ~= "number" or zona < 1 or zona > 10 or zona ~= math.floor(zona) then
+		return
+	end
+	local grieta = ancla:GetAttribute("Grieta") == true
+	if not grieta and porZona[zona] then
 		return
 	end
 	local B = Mining.Blocks
@@ -155,18 +160,24 @@ local function prepararMina(ancla)
 	local largo = ancla:GetAttribute("Largo") or B.DefaultLength
 	local profundidad = ancla:GetAttribute("Profundidad") or B.DefaultDepth
 	local carpeta = Instance.new("Folder")
-	carpeta.Name = "Mina" .. zona
+	carpeta.Name = (grieta and "Grieta" or "Mina") .. zona
 	carpeta.Parent = workspace
+	local indice = #minas + 1
 	local mina = {
+		Indice = indice,
+		Grieta = grieta,
 		Modelo = Mina.nueva({ Zona = zona, Ancho = ancho, Largo = largo, Profundidad = profundidad }),
 		Ancla = ancla,
 		Origen = ancla.Position - Vector3.new(ancho * S / 2, 0, largo * S / 2),
 		Carpeta = carpeta,
 		Partes = {},
 	}
-	minas[zona] = mina
+	minas[indice] = mina
+	if not grieta then
+		porZona[zona] = indice
+	end
 	aplicarNovedades(mina, Mina.iniciar(mina.Modelo, aleatorio))
-	print(string.format("OREBOUND: mina de la zona %d con %d x %d x %d bloques", zona, ancho, largo, profundidad))
+	print(string.format("OREBOUND: %s de la zona %d con %d x %d x %d bloques", grieta and "grieta" or "mina", zona, ancho, largo, profundidad))
 end
 
 function DepositService.Iniciar()
@@ -214,12 +225,13 @@ function DepositService.Danar(id, userId, cantidad, suerte)
 			end
 		end
 	end
-	local mina = minas[e.Zona]
+	local mina = minas[e.Mina]
 	local m = mina.Modelo
 	local x, y, z = Mina.coords(m, e.Clave)
 	local bloque = m.Bloques[e.Clave]
 	quitarParte(mina, e.Clave)
-	local _, novedades = Mina.picar(m, x, y, z, os.clock(), aleatorio, suerte or 0)
+	-- En la grieta los depósitos no usan Suerte (B3 7.2).
+	local _, novedades = Mina.picar(m, x, y, z, os.clock(), aleatorio, mina.Grieta and 0 or (suerte or 0))
 	aplicarNovedades(mina, novedades)
 	if reaparece and bloque then
 		-- Eco estelar: el mismo mineral vuelve a estar ahí.
@@ -238,7 +250,7 @@ function DepositService.Cercanos(id, radio)
 	if not e then
 		return lista
 	end
-	local mina = minas[e.Zona]
+	local mina = minas[e.Mina]
 	local m = mina.Modelo
 	local x0, y0, z0 = Mina.coords(m, e.Clave)
 	local r = math.ceil(radio / S)
@@ -248,7 +260,7 @@ function DepositService.Cercanos(id, radio)
 			for dz = -r, r do
 				local x, y, z = x0 + dx, y0 + dy, z0 + dz
 				if (dx ~= 0 or dy ~= 0 or dz ~= 0) and Mina.dentro(m, x, y, z) then
-					local otro = entradas[idDe(e.Zona, Mina.clave(m, x, y, z))]
+					local otro = entradas[idDe(e.Mina, Mina.clave(m, x, y, z))]
 					if otro and otro.Tipo == "Mineral" and (otro.Parte.Position - origen).Magnitude <= radio then
 						table.insert(lista, otro.Regla.Id)
 					end
@@ -264,7 +276,8 @@ end
 
 -- Zona de la mina en la que está esa posición (dentro del volumen o hasta 6 studs por encima), o nil.
 function DepositService.MinaEn(posicion)
-	for zona, mina in pairs(minas) do
+	for _, mina in pairs(minas) do
+		local zona = mina.Modelo.Zona
 		local m = mina.Modelo
 		local rel = posicion - mina.Origen
 		if rel.X >= 0 and rel.X <= m.Ancho * S and rel.Z >= 0 and rel.Z <= m.Largo * S and rel.Y <= 6 and rel.Y >= -(m.Profundidad + 1) * S then
@@ -275,8 +288,7 @@ function DepositService.MinaEn(posicion)
 end
 
 -- Adónde lleva «Subir a la superficie»: el atributo Salida de la mina o el borde de la cara de arriba.
-function DepositService.Salida(zona)
-	local mina = minas[zona]
+function DepositService.Salida(mina)
 	if not mina then
 		return nil
 	end

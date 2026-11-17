@@ -70,7 +70,7 @@ local EFECTOS = {}
 -- Núcleo Prismático (GDD) ------------------------------------------------
 EFECTOS.PrismaticLance = function(jugador, raiz, dir, h)
 	local alcance = PowerCores.ProjectileRange
-	local objetivo = Enemigos.EnLinea(raiz.Position, dir, alcance, 2)[1]
+	local objetivo = Enemigos.EnLinea(raiz.Position, dir, alcance, 2, jugador)[1]
 	rayo(raiz.Position, dir, objetivo and (objetivo.Raiz.Position - raiz.Position).Magnitude or alcance, 0.8, LUZ)
 	if objetivo then
 		golpear(jugador, objetivo, h.Coef)
@@ -81,7 +81,7 @@ end
 
 EFECTOS.RefractionField = function(jugador, raiz, _dir, h)
 	efecto(CFrame.new(raiz.Position), Vector3.new(h.Radius * 2, h.Radius * 2, h.Radius * 2), LUZ, Enum.PartType.Ball, 0.4, 0.75)
-	for _, e in ipairs(Enemigos.EnRadio(raiz.Position, h.Radius)) do
+	for _, e in ipairs(Enemigos.EnRadio(raiz.Position, h.Radius, jugador)) do
 		golpear(jugador, e, h.Coef)
 		Enemigos.PonerEstado(e.Id, "Refracted", h.RefractedSeconds, { DanoRecibido = h.RefractedBonus })
 	end
@@ -91,7 +91,7 @@ end
 EFECTOS.LightningStep = function(jugador, raiz, dir, h)
 	local ahora = os.clock()
 	local objetivo
-	for _, e in ipairs(Enemigos.EnRadio(raiz.Position, h.Distance)) do
+	for _, e in ipairs(Enemigos.EnRadio(raiz.Position, h.Distance, jugador)) do
 		if Combate.tieneEstado(e.Estados, "Refracted", ahora) then
 			objetivo = e
 			break
@@ -104,7 +104,7 @@ EFECTOS.LightningStep = function(jugador, raiz, dir, h)
 		golpear(jugador, objetivo, h.Coef)
 	else
 		Combat.Mover(jugador, dir, h.DistanceNoTarget)
-		for _, e in ipairs(Enemigos.EnRadio(raiz.Position, 5)) do
+		for _, e in ipairs(Enemigos.EnRadio(raiz.Position, 5, jugador)) do
 			golpear(jugador, e, h.Coef)
 		end
 	end
@@ -118,7 +118,7 @@ EFECTOS.TotalPrism = function(jugador, raiz, _dir, h)
 	efecto(CFrame.new(centro), Vector3.new(radio * 2, radio * 2, radio * 2), LUZ, Enum.PartType.Ball, h.Seconds, 0.8)
 	task.spawn(function()
 		for _ = 1, h.Rays do
-			for _, e in ipairs(Enemigos.EnRadio(centro, radio)) do
+			for _, e in ipairs(Enemigos.EnRadio(centro, radio, jugador)) do
 				Enemigos.PonerEstado(e.Id, "Lento", 1.2, { Lento = h.Slow })
 				if e.Raiz then
 					efecto(CFrame.new(e.Raiz.Position + Vector3.new(0, 6, 0)), Vector3.new(0.6, 12, 0.6), LUZ, Enum.PartType.Block, 0.2)
@@ -132,13 +132,13 @@ EFECTOS.TotalPrism = function(jugador, raiz, _dir, h)
 end
 
 -- Técnicas de arma (B4, 1.4) ---------------------------------------------
-local function masCercanoDelante(raiz, dir, alcance)
-	return Enemigos.EnLinea(raiz.Position, dir, alcance, 4)[1] or Enemigos.EnRadio(raiz.Position, alcance)[1]
+local function masCercanoDelante(raiz, dir, alcance, jugador)
+	return Enemigos.EnLinea(raiz.Position, dir, alcance, 4, jugador)[1] or Enemigos.EnRadio(raiz.Position, alcance, jugador)[1]
 end
 
 EFECTOS.SpinningSlash = function(jugador, raiz, _dir, h)
 	efecto(CFrame.new(raiz.Position) * CFrame.Angles(0, 0, math.pi / 2), Vector3.new(1, 16, 16), Color3.fromRGB(230, 230, 255), Enum.PartType.Cylinder, 0.25, 0.6)
-	for _, e in ipairs(Enemigos.EnRadio(raiz.Position, 8)) do
+	for _, e in ipairs(Enemigos.EnRadio(raiz.Position, 8, jugador)) do
 		golpear(jugador, e, h.Coef)
 	end
 	return true
@@ -149,19 +149,19 @@ EFECTOS.Riposte = function(jugador, raiz, dir, h)
 		avisar(jugador, "Contragolpe: bloquea un golpe justo antes", "Warning")
 		return false
 	end
-	local e = masCercanoDelante(raiz, dir, 8)
+	local e = masCercanoDelante(raiz, dir, 8, jugador)
 	if e then
-		golpear(jugador, e, h.Coef)
+		golpear(jugador, e, h.Coef, jugador)
 	end
 	return true
 end
 
 EFECTOS.DoubleStab = function(jugador, raiz, dir, h)
-	local e = masCercanoDelante(raiz, dir, Weapons.Types.Dagger.Range * Weapons.RangeTolerance)
+	local e = masCercanoDelante(raiz, dir, Weapons.Types.Dagger.Range * Weapons.RangeTolerance, jugador)
 	if not e then
 		return true
 	end
-	golpear(jugador, e, h.Coef / 2)
+	golpear(jugador, e, h.Coef / 2, jugador)
 	task.delay(0.15, function()
 		if e.Vida > 0 then
 			golpear(jugador, e, h.Coef / 2)
@@ -171,7 +171,7 @@ EFECTOS.DoubleStab = function(jugador, raiz, dir, h)
 end
 
 EFECTOS.FleetingShadow = function(jugador, raiz, dir, h)
-	local e = masCercanoDelante(raiz, dir, 15)
+	local e = masCercanoDelante(raiz, dir, 15, jugador)
 	if not e then
 		return true
 	end
@@ -183,7 +183,7 @@ end
 
 EFECTOS.ChargedOrb = function(jugador, raiz, dir, h)
 	rayo(raiz.Position, dir, Weapons.Types.Staff.Range, 1.2, Color3.fromRGB(170, 120, 255))
-	for _, e in ipairs(Enemigos.EnLinea(raiz.Position, dir, Weapons.Types.Staff.Range, 2)) do
+	for _, e in ipairs(Enemigos.EnLinea(raiz.Position, dir, Weapons.Types.Staff.Range, 2, jugador)) do
 		golpear(jugador, e, h.Coef)
 	end
 	return true
@@ -191,7 +191,7 @@ end
 
 EFECTOS.ArcanePulse = function(jugador, raiz, _dir, h)
 	efecto(CFrame.new(raiz.Position), Vector3.new(20, 20, 20), Color3.fromRGB(170, 120, 255), Enum.PartType.Ball, 0.35, 0.7)
-	for _, e in ipairs(Enemigos.EnRadio(raiz.Position, 10)) do
+	for _, e in ipairs(Enemigos.EnRadio(raiz.Position, 10, jugador)) do
 		golpear(jugador, e, h.Coef)
 		Enemigos.PonerEstado(e.Id, "Lento", 2, { Lento = 0.2 })
 	end
@@ -201,7 +201,7 @@ end
 -- Efecto genérico por tipo de ranura (Núcleos sin implementar todavía) ---
 local GENERICO = {
 	Z = function(jugador, raiz, dir, h)
-		local e = Enemigos.EnLinea(raiz.Position, dir, PowerCores.ProjectileRange, 2)[1]
+		local e = Enemigos.EnLinea(raiz.Position, dir, PowerCores.ProjectileRange, 2, jugador)[1]
 		rayo(raiz.Position, dir, PowerCores.ProjectileRange, 0.8, Color3.fromRGB(255, 160, 80))
 		if e then
 			golpear(jugador, e, h.Coef)
@@ -209,7 +209,7 @@ local GENERICO = {
 		return true
 	end,
 	X = function(jugador, raiz, _dir, h)
-		for _, e in ipairs(Enemigos.EnRadio(raiz.Position, 12)) do
+		for _, e in ipairs(Enemigos.EnRadio(raiz.Position, 12, jugador)) do
 			golpear(jugador, e, h.Coef)
 			Enemigos.PonerEstado(e.Id, "Lento", 2, { Lento = 0.3 })
 		end
@@ -217,13 +217,13 @@ local GENERICO = {
 	end,
 	C = function(jugador, raiz, dir, h)
 		Combat.Mover(jugador, dir, 14)
-		for _, e in ipairs(Enemigos.EnRadio(raiz.Position, 5)) do
+		for _, e in ipairs(Enemigos.EnRadio(raiz.Position, 5, jugador)) do
 			golpear(jugador, e, h.Coef)
 		end
 		return true
 	end,
 	V = function(jugador, raiz, _dir, h)
-		for _, e in ipairs(Enemigos.EnRadio(raiz.Position, PowerCores.AreaRadius)) do
+		for _, e in ipairs(Enemigos.EnRadio(raiz.Position, PowerCores.AreaRadius, jugador)) do
 			golpear(jugador, e, h.Coef)
 		end
 		return true

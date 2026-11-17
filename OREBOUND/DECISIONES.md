@@ -791,6 +791,7 @@ Pendiente de decisión del autor
 - 2026-11-17 · Combate más frenético a petición del usuario: valores P4b-01 a P4b-05. Sustituye P4-04 en lo que contradiga.
 - 2026-11-17 · Código, fase 6 (Mascotas): valores P6-01 a P6-11. Los archivos A, B, C y D no cambian.
 - 2026-11-17 · Código, fase 7 (Jefes y mundo 1): valores P7-01 a P7-14. Los archivos A, B, C y D no cambian.
+- 2026-11-17 · Código, fase 8 (PvP y Zonas Fracturadas): valores P8-01 a P8-14. Los archivos A, B, C y D no cambian.
 
 ---
 
@@ -950,4 +951,23 @@ Los archivos B siguen en sus unidades originales; el juego aplica `CurrencyScale
 | P7-12 | Las misiones semanales y los contratos de grieta llegan con la fase 8 | [CONFIRMADO] | — |
 | P7-13 | Dos módulos de configuración nuevos: `Bosses` y `Quests` (15 en total) | [CONFIRMADO] | `tests/Config.spec.luau` |
 | P7-14 | Medidas del roadmap: jefe en solitario 7,9 min (4 jugadores 5,5; 8 jugadores 5,1); niveles 200 y 300 en 19,7 y 40,8 h; 11.180 y 21.851 monedas/h picando en las zonas 2 y 3 (objetivo 10.301 y 20.040, ± 25 %) | [CONFIRMADO] | `tests/Mundo.spec.luau` |
+
+## 28. Serie P8 — decisiones tomadas al programar la fase 8 (PvP y Zonas Fracturadas)
+
+| # | Decisión | Estado | Cómo probarla o revisarla |
+|---|---|---|---|
+| P8-01 | Solo hay PvP dentro de un área PvP (la grieta o una partida de arena). Fuera, los jugadores no se pueden dañar | [CONFIRMADO] | — |
+| P8-02 | Daño entre jugadores: F19 en modo PvP (×0,062, Defensa con K = 4.500 y tope del 50 %), potencia de arma limitada a la de un Ultra raro de la zona al máximo, vida con Vitalidad M = 1 y nivel sincronizado (100 × zona en la grieta, máximo del tramo en la arena); topes de golpe (35 %) y de ráfaga (60 % en 2 s) | [CONFIRMADO] | — |
+| P8-03 | La sincronización de nivel solo limita el nivel usado para la vida base y la potencia de arma; los puntos de estadística no se recortan | [PROVISIONAL] | Revisar con la tasa de victoria por build (roadmap: ninguna > 60 %) |
+| P8-04 | Una muerte cuenta como PvP si un jugador hostil golpeó a la víctima en los últimos 5 s; si no, cuenta como muerte contra el entorno (se pierde el 20 %, destruido) | [PROVISIONAL] | `Fracture.KillCreditSeconds` |
+| P8-05 | Al extraer, el mineral va al banco en unidades normales y el valor extra (×1,5 × racha − 1) se paga en monedas, para no inflar los materiales de fabricación | [PROVISIONAL] | `tests/PvP.spec.luau` |
+| P8-06 | Se suelta primero el mineral más valioso; del soltado, el 80 % va al Cofre de Saqueo (100 % si la víctima tenía racha 5 o más: recompensa por cabeza) y el resto se destruye | [CONFIRMADO] | `tests/PvP.spec.luau` |
+| P8-07 | Cofre: 90 s, 10 s exclusivo para quien derrotó a la víctima, 3 s manteniendo R (se cancela si te golpean); lo saqueado sigue siendo mineral fracturado. Las mascotas aún no abren cofres | [PROVISIONAL] | — |
+| P8-08 | Desconectarse dentro de la grieta: si estaba en combate cuenta como muerte contra el entorno; si no, como salir sin extraer | [PROVISIONAL] | — |
+| P8-09 | La grieta de prueba es un recinto aparte con su propia cantera de bloques (24 × 24 × 24, sin Suerte), 6 puntos de enemigos de la zona 3 y 3 Puntos de Extracción que rotan cada 10 min con aviso a los 30 s | [PROVISIONAL] | — |
+| P8-10 | Contratos de grieta: 2 de extraer 3 minerales Raros o mejores y 1 de derrotar 2 portadores con carga 5 o más; se pagan solos al cumplirse (0,20 h de ingreso entre los tres); el de portadores se puede cambiar una vez al día. El contrato semanal llega con las temporadas | [PROVISIONAL] | `Fracture.ContractTargets` |
+| P8-11 | Rastro de venganza: quien te derrota queda resaltado para ti 3 minutos; los portadores con carga 10 o más se resaltan para todos (en lugar del minimapa, que aún no existe); con carga 5, brillo | [PROVISIONAL] | — |
+| P8-12 | Arena: solo 1 contra 1 y una arena por servidor; cola local del servidor (sin MemoryStore). 2v2, 3v3 y la cola entre servidores, en la fase 9 | [PROVISIONAL] | — |
+| P8-13 | No se incluyen todavía escuadrones, jefes de grieta, Grieta Celestial ni temporadas de grieta | [CONFIRMADO] | Expansiones |
+| P8-14 | Medidas del roadmap: duelo entre builds equilibradas de 20,7 s (objetivo 17,9, aceptable 13,4–22,4); ingresos de la grieta 1,92 y 1,58 veces el PvE con 15 % y 30 % de muertes y máximo teórico 2,38 (nunca más de 2,5); al morir solo se pierde mineral | [CONFIRMADO] | `tests/PvP.spec.luau` |
 

@@ -75,6 +75,7 @@ local ZONAS = {
 	[3] = { Mina = Vector3.new(288, 0, 100), Lado = 1, Suelo = Color3.fromRGB(210, 205, 195), Llanura = Color3.fromRGB(190, 185, 175) },
 }
 local REGION = { XMin = 200, XMax = 420, ZMin = -80, ZMax = 280 }   -- zonas 2 y 3 (a cada lado), cerradas por barreras
+local GRIETA = { XMin = -140, XMax = 140, ZMin = 320, ZMax = 560, Mina = Vector3.new(0, 0, 388) }   -- Zona Fracturada de la zona 3
 
 local function enRegion(x, z)
 	local ax = math.abs(x)
@@ -137,13 +138,15 @@ function ConstructorPrueba.construirSiFalta()
 	for _, z in pairs(ZONAS) do
 		huecos[z.Mina.X .. "," .. z.Mina.Z] = true
 	end
+	huecos[GRIETA.Mina.X .. "," .. GRIETA.Mina.Z] = true
 	for i = -5, 4 do
 		for j = -6, 5 do
 			local cx, cz = -48 + lado * i + lado / 2, 52 + lado * j + lado / 2
 			if not huecos[cx .. "," .. cz] then
 				local zona = enRegion(cx, cz)
-				parte({ Name = "Baldosa", Size = Vector3.new(lado, 4, lado), Position = Vector3.new(cx, -2, cz), Material = Enum.Material.Grass,
-					Color = zona and ZONAS[zona].Suelo or ZONAS[1].Suelo }, suelo)
+				local enGrieta = cx > GRIETA.XMin and cx < GRIETA.XMax and cz > GRIETA.ZMin and cz < GRIETA.ZMax
+				parte({ Name = "Baldosa", Size = Vector3.new(lado, 4, lado), Position = Vector3.new(cx, -2, cz), Material = enGrieta and Enum.Material.CrackedLava or Enum.Material.Grass,
+					Color = enGrieta and Color3.fromRGB(70, 40, 80) or (zona and ZONAS[zona].Suelo or ZONAS[1].Suelo) }, suelo)
 			end
 		end
 	end
@@ -220,6 +223,55 @@ function ConstructorPrueba.construirSiFalta()
 			muro(Vector3.new(xb, alto / 2 - 4, (REGION.ZMin + REGION.ZMax) / 2), Vector3.new(2, alto, REGION.ZMax - REGION.ZMin))
 		end
 	end
+	-- Zona Fracturada de la zona 3 (fase 8): entrada desde las Vetas Salinas, recinto cerrado al norte.
+	local grieta = Instance.new("Folder")
+	grieta.Name = "ZonaFracturada3"
+	grieta.Parent = mapa
+	local entrada = parte({ Name = "EntradaGrieta", Size = Vector3.new(7, 10, 1), Position = Vector3.new(390, 5, -60), Material = Enum.Material.Neon,
+		Color = Color3.fromRGB(200, 60, 200), Transparency = 0.2, CanCollide = false }, grieta)
+	etiqueta(entrada, "EntradaGrieta", { Zona = 3 })
+	cartel(entrada, "Zona Fracturada (PvP)", 7, Color3.fromRGB(255, 120, 255))
+	local ancla = invisible("Mina", GRIETA.Mina, grieta)
+	etiqueta(ancla, Lugares.Etiqueta.Mina, { Zona = 3, Grieta = true, Ancho = 24, Largo = 24, Profundidad = 24, Salida = Vector3.new(0, 1, 330) })
+	etiqueta(invisible("LlegadaGrieta", Vector3.new(0, 1, 330), grieta), "LlegadaGrieta", { Zona = 3 })
+	local salida = parte({ Name = "SalidaGrieta", Size = Vector3.new(6, 9, 1), Position = Vector3.new(-16, 4.5, 328), Material = Enum.Material.Neon,
+		Color = Color3.fromRGB(255, 220, 120), Transparency = 0.3, CanCollide = false }, grieta)
+	etiqueta(salida, "SalidaGrieta", { Zona = 3 })
+	cartel(salida, "Salir sin extraer", 6)
+	for i, pos in ipairs({ Vector3.new(-110, 0.4, 500), Vector3.new(110, 0.4, 500), Vector3.new(0, 0.4, 540) }) do
+		local p = parte({ Name = "PuntoExtraccion" .. i, Shape = Enum.PartType.Cylinder, Size = Vector3.new(0.6, 14, 14),
+			CFrame = CFrame.new(pos) * CFrame.Angles(0, 0, math.rad(90)), Material = Enum.Material.Neon, Color = Color3.fromRGB(80, 200, 255), Transparency = 0.5 }, grieta)
+		etiqueta(p, "PuntoExtraccion", { Zona = 3 })
+		cartel(p, "Punto de Extracción", 5, Color3.fromRGB(150, 230, 255))
+	end
+	local azarG = Random.new(33)
+	for _ = 1, 6 do
+		etiqueta(invisible("PuntoEnemigo", Vector3.new(azarG:NextNumber(-120, 120), 0.5, azarG:NextNumber(450, 545)), grieta), "PuntoEnemigo", { Zona = 3 })
+	end
+	local function muroGrieta(pos, tam)
+		parte({ Name = "Barrera", Size = tam, Position = pos, Material = Enum.Material.ForceField, Color = Color3.fromRGB(200, 60, 200), Transparency = 0.5 }, grieta)
+	end
+	local ancho, fondo = GRIETA.XMax - GRIETA.XMin, GRIETA.ZMax - GRIETA.ZMin
+	muroGrieta(Vector3.new(0, 36, GRIETA.ZMin), Vector3.new(ancho, 80, 2))
+	muroGrieta(Vector3.new(0, 36, GRIETA.ZMax), Vector3.new(ancho, 80, 2))
+	muroGrieta(Vector3.new(GRIETA.XMin, 36, (GRIETA.ZMin + GRIETA.ZMax) / 2), Vector3.new(2, 80, fondo))
+	muroGrieta(Vector3.new(GRIETA.XMax, 36, (GRIETA.ZMin + GRIETA.ZMax) / 2), Vector3.new(2, 80, fondo))
+
+	-- Arena PvP 1 contra 1 junto a la ciudad.
+	local arena = Instance.new("Folder")
+	arena.Name = "ArenaPvP"
+	arena.Parent = mapa
+	local centro = Vector3.new(-100, 0, -110)
+	parte({ Name = "SueloArena", Shape = Enum.PartType.Cylinder, Size = Vector3.new(0.4, 64, 64), CFrame = CFrame.new(centro + Vector3.new(0, 0.2, 0)) * CFrame.Angles(0, 0, math.rad(90)),
+		Material = Enum.Material.Marble, Color = Color3.fromRGB(200, 190, 170) }, arena)
+	etiqueta(invisible("ArenaPvP", centro + Vector3.new(0, 1, 0), arena), "ArenaPvP")
+	etiqueta(invisible("Inicio1", centro + Vector3.new(-20, 1, 0), arena), "ArenaInicio", { Lado = 1 })
+	etiqueta(invisible("Inicio2", centro + Vector3.new(20, 1, 0), arena), "ArenaInicio", { Lado = 2 })
+	local colaArena = parte({ Name = "ColaArena", Size = Vector3.new(6, 6, 2), Position = Vector3.new(0, 3, 19), Material = Enum.Material.Neon,
+		Color = Color3.fromRGB(255, 80, 80), Transparency = 0.2 }, ciudad)
+	etiqueta(colaArena, "ColaArena")
+	cartel(colaArena, "Arena 1 contra 1", 5, Color3.fromRGB(255, 140, 140))
+
 	mapa.Parent = workspace
 	return true
 end

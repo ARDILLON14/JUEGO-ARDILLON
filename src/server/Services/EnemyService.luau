@@ -34,6 +34,11 @@ local enemigos = {}           -- [id] = { Id, Tipo, Zona, Vida, VidaMax, Modelo,
 local zonas = {}              -- [zona] = { Puntos = { parte }, Vivos = n, Pendientes = n }
 local siguienteId = 0
 local alMorir = {}
+local objetivosPvP = nil   -- { Radio = fn(atacante, pos, r), Linea = fn(atacante, origen, dir, alcance, ancho) } (PvPService)
+
+function EnemyService.FijarObjetivosPvP(proveedor)
+	objetivosPvP = proveedor
+end
 local atacar = function() end
 local carpeta
 
@@ -376,8 +381,14 @@ function EnemyService.Danar(id, jugador, cantidad)
 end
 
 -- Enemigos vivos a menos de radio studs de pos, del más cercano al más lejano.
-function EnemyService.EnRadio(pos, radio)
+-- Con atacante, incluye también a los jugadores hostiles (Zona Fracturada o arena).
+function EnemyService.EnRadio(pos, radio, atacante)
 	local lista = {}
+	if atacante and objetivosPvP then
+		for _, e in ipairs(objetivosPvP.Radio(atacante, pos, radio)) do
+			table.insert(lista, e)
+		end
+	end
 	for _, e in pairs(enemigos) do
 		if e.Raiz and (e.Raiz.Position - pos).Magnitude <= radio + e.Raiz.Size.X / 2 then
 			table.insert(lista, e)
@@ -390,8 +401,13 @@ function EnemyService.EnRadio(pos, radio)
 end
 
 -- Enemigos en una franja recta (proyectiles y estocadas), del más cercano al más lejano.
-function EnemyService.EnLinea(origen, direccion, alcance, ancho)
+function EnemyService.EnLinea(origen, direccion, alcance, ancho, atacante)
 	local lista = {}
+	if atacante and objetivosPvP then
+		for _, e in ipairs(objetivosPvP.Linea(atacante, origen, direccion, alcance, ancho)) do
+			table.insert(lista, { Enemigo = e, Distancia = (e.Raiz.Position - origen):Dot(direccion) })
+		end
+	end
 	for _, e in pairs(enemigos) do
 		if e.Raiz then
 			local rel = e.Raiz.Position - origen

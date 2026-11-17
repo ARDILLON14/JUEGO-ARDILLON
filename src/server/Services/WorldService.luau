@@ -96,6 +96,15 @@ function WorldService.Viajar(jugador, destino)
 	return true
 end
 
+-- Llevar sin comprobaciones (al terminar una partida de arena o salir de la grieta).
+function WorldService.Llevar(jugador, destino)
+	local llegada = llegadas[destino]
+	if llegada and jugador.Character then
+		jugador.Character:PivotTo(CFrame.new(llegada + Vector3.new(0, 3, 0)))
+		ultimaZona[jugador] = destino
+	end
+end
+
 local function conectarPortal(parte)
 	local destino = parte:GetAttribute("Destino")
 	if destino == nil then

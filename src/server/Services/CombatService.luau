@@ -22,7 +22,10 @@ local Eventos = require(Server.Util.Eventos)
 
 local CombatService = {}
 
-local Datos, StatsSvc, Enemigos, Progression, Economia, Analitica, Red
+local Datos, StatsSvc, Enemigos, Progression, Economia, Analitica, Red, PvP
+local recargoMovilidad = function()
+	return 1
+end
 local estados = {}
 local azar = Random.new()
 
@@ -67,6 +70,9 @@ end
 -- opciones = { Secundario, Golpe, Extra }
 function CombatService.DanarEnemigo(jugador, enemigo, coef, opciones)
 	opciones = opciones or {}
+	if enemigo and enemigo.Jugador then
+		return CombatService.DanarJugadorPvP(jugador, enemigo.Jugador, coef, opciones)
+	end
 	local perfil = Datos.GetProfile(jugador)
 	local arma = CombatService.Arma(jugador)
 	local d = StatsSvc.GetStats(jugador)
@@ -113,7 +119,7 @@ local function atacar(jugador, ids, _comboIndex)
 	local alcance = tipo.Range * Weapons.RangeTolerance
 	local usados, n = {}, 0
 	for _, id in ipairs(ids) do
-		local enemigo = Enemigos.Obtener(id)
+		local enemigo = Enemigos.Obtener(id) or (PvP and PvP.ObjetivoPorId(jugador, id))
 		if enemigo and not usados[id] and n < tipo.MaxTargets and enemigo.Raiz
 			and (enemigo.Raiz.Position - raiz.Position).Magnitude <= alcance + enemigo.Raiz.Size.X / 2 then
 			usados[id] = true
@@ -162,7 +168,7 @@ local function dash(jugador, direccion)
 	if Combate.cargasDash(e.Dash, ahora) < 1 then
 		return
 	end
-	if not StatsSvc.GastarEnergia(jugador, Stats.Energy.Cost.Dash) then
+	if not StatsSvc.GastarEnergia(jugador, Stats.Energy.Cost.Dash * recargoMovilidad(jugador)) then
 		avisar(jugador, "Sin energía", "Warning")
 		return
 	end
@@ -181,7 +187,7 @@ local function parpadeo(jugador, direccion)
 	if Combate.controlado(e.Control, ahora) or not Combate.listo(e.Enfriamientos, "Blink", ahora) then
 		return
 	end
-	if not StatsSvc.GastarEnergia(jugador, Stats.Energy.Cost.Blink) then
+	if not StatsSvc.GastarEnergia(jugador, Stats.Energy.Cost.Blink * recargoMovilidad(jugador)) then
 		avisar(jugador, "Sin energía", "Warning")
 		return
 	end
@@ -273,8 +279,45 @@ function CombatService.UltimoBloqueo(jugador)
 	return estado(jugador).UltimoBloqueo
 end
 
--- Daño de un enemigo a un jugador: esquiva perfecta, invulnerabilidad, defensa y bloqueo frontal.
-function CombatService.DanarJugador(jugador, dano, enemigo)
+-- Daño de un jugador a otro (B4 9.1): F19 en modo PvP (×0,062, Defensa PvP), potencia limitada por la
+-- sincronización del área, y los topes de golpe y ráfaga en DanarJugador.
+function CombatService.DanarJugadorPvP(atacante, victima, coef, opciones)
+	opciones = opciones or {}
+	if not PvP or not PvP.Hostiles(atacante, victima) then
+		return 0
+	end
+	PvP.QuitarProteccion(atacante)
+	local perfil = Datos.GetProfile(atacante)
+	local arma = CombatService.Arma(atacante)
+	local d, dv = StatsSvc.GetStats(atacante), StatsSvc.GetStats(victima)
+	local raiz = Lugares.raiz(atacante)
+	if not perfil or not arma or not d or not dv or not raiz then
+		return 0
+	end
+	local area = PvP.Area(atacante)
+	local tipo = Weapons.Types[arma.Type]
+	local critico = aleatorio() < Dano.critChance(tipo.CritBonus)
+	local extra = (opciones.Extra or 1) * Combate.factorCombo(opciones.Golpe or 1)
+	if opciones.Secundario then
+		extra = extra * Weapons.SecondaryTargetDamage
+	end
+	local dano = Dano.final({
+		WeaponPower = math.min(Inventario.potencia(arma), area and area.PotenciaMax or math.huge), Coef = coef,
+		Strength = d.Effective.Strength, Mastery = Habilidades.maestriaArma(perfil, arma.Type), Crit = critico,
+		Status = 0, TargetDefense = dv.Effective.Defense, Mode = "PvP", Extra = extra,
+	})
+	estado(atacante).UltimoObjetivo = nil
+	return CombatService.DanarJugador(victima, dano, { Raiz = raiz }, { PvP = true, Atacante = atacante, Critico = critico })
+end
+
+function CombatService.FijarRecargoMovilidad(fn)
+	recargoMovilidad = fn
+end
+
+-- Daño de un enemigo (o de otro jugador, con opciones.PvP) a un jugador: esquiva perfecta, invulnerabilidad,
+-- defensa (solo PvE: en PvP ya va en el daño), bloqueo frontal, escudo y topes PvP.
+function CombatService.DanarJugador(jugador, dano, enemigo, opciones)
+	opciones = opciones or {}
 	local personaje = jugador.Character
 	local h = personaje and personaje:FindFirstChildOfClass("Humanoid")
 	local raiz = Lugares.raiz(jugador)
@@ -283,7 +326,11 @@ function CombatService.DanarJugador(jugador, dano, enemigo)
 	end
 	local e = estado(jugador)
 	local ahora = os.clock()
-	StatsSvc.MarcarCombate(jugador, "PvE")
+	local modo = opciones.PvP and "PvP" or "PvE"
+	StatsSvc.MarcarCombate(jugador, modo)
+	if opciones.Atacante then
+		StatsSvc.MarcarCombate(opciones.Atacante, "PvP")
+	end
 	if ahora < e.InvulnHasta then
 		return 0
 	end
@@ -310,14 +357,20 @@ function CombatService.DanarJugador(jugador, dano, enemigo)
 		end
 	end
 	local d = StatsSvc.GetStats(jugador)
-	local final = Combate.danoRecibido(dano, d and d.DefensePvE or 0, bloqueado, true)
+	local final = Combate.danoRecibido(dano, opciones.PvP and 0 or (d and d.DefensePvE or 0), bloqueado, true)
 	if e.Escudo > 0 and ahora < e.EscudoHasta then   -- escudo de mascotas: absorbe primero
 		local absorbe = math.min(e.Escudo, final)
 		e.Escudo = e.Escudo - absorbe
 		final = final - absorbe
 	end
+	if opciones.PvP and PvP then
+		final = PvP.TopeGolpe(jugador, opciones.Atacante, final, h.MaxHealth)
+	end
 	h.Health = math.max(0, h.Health - final)
-	CombatService.Hit(nil, raiz.Position, final, false)
+	if final > 0 and personaje then
+		personaje:SetAttribute("UltimoDano", ahora)   -- interrumpe extracciones y canalizaciones
+	end
+	CombatService.Hit(opciones.Atacante, raiz.Position, final, opciones.Critico == true)
 	return final
 end
 
@@ -405,6 +458,7 @@ end
 function CombatService.Iniciar(deps)
 	Datos, StatsSvc, Enemigos, Progression = deps.Datos, deps.Stats, deps.Enemigos, deps.Progression
 	Economia, Analitica, Red = deps.Economia, deps.Analitica, deps.Red
+	PvP = deps.PvP
 	Red:conectar("Combat.Attack", atacar)
 	Red:conectar("Combat.Block", bloquear)
 	Red:conectar("Combat.Dash", dash)

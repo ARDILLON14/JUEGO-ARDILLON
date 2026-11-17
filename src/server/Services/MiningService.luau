@@ -27,6 +27,15 @@ local bonos = function()
 	return { ExtractSpeed = 0, ExtraUnitChance = 0 }
 end
 
+local multXP = function()
+	return 1
+end
+
+-- FractureService: ×1,25 de XP al picar en la grieta (B3 7.2).
+function MiningService.FijarMultXP(fn)
+	multXP = fn
+end
+
 -- Bonos de recolección de las mascotas (los fija PetService).
 function MiningService.FijarBonos(fn)
 	bonos = fn
@@ -156,8 +165,8 @@ local function subir(jugador)
 	if not raiz then
 		return
 	end
-	local zona = Deposits.MinaEn(raiz.Position)
-	local salida = zona and Deposits.Salida(zona)
+	local zona, mina = Deposits.MinaEn(raiz.Position)
+	local salida = zona and Deposits.Salida(mina)
 	if not salida then
 		Red:obtener("Notify"):FireClient(jugador, { Text = "Solo puedes subir desde dentro de una mina.", Kind = "Warning", Short = true })
 		return
@@ -203,7 +212,7 @@ local function alAgotar(entrada, azarDep)
 			if unidades > 0 then
 				entraron = Inventory.AddMineral(jugador, regla.Mineral, unidades)
 			end
-			local xp = math.floor(parte.XP)
+			local xp = math.floor(parte.XP * multXP(jugador))
 			if xp > 0 then
 				Progression.AddXP(jugador, xp, "Mineria")
 			end

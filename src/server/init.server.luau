@@ -5,6 +5,7 @@
 -- Fase 5: forja (fabricar, mejorar, reciclar) y cajas con Suerte, protección contra mala suerte y registro.
 -- Fase 6: mascotas (incubación, posturas, Nido, XP, evolución) y su combate con el tope de daño.
 -- Fase 7: zonas 2 y 3, portales y ciudad (WorldService), los 3 jefes, misiones diarias y tutorial.
+-- Fase 8: reglas PvP, Zona Fracturada de la zona 3 y arena 1 contra 1.
 -- Los servicios de las fases siguientes conectan sus Remotes con Red:conectar(nombre, manejador).
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -31,6 +32,9 @@ local PetCombatService = require(Services.PetCombatService)
 local WorldService = require(Services.WorldService)
 local BossService = require(Services.BossService)
 local QuestService = require(Services.QuestService)
+local PvPService = require(Services.PvPService)
+local FractureService = require(Services.FractureService)
+local ArenaService = require(Services.ArenaService)
 local ConstructorPrueba = require(script.Mundo.ConstructorPrueba)
 local LimiteFrecuencia = require(script.Net.LimiteFrecuencia)
 local Validador = require(script.Net.Validador)
@@ -83,9 +87,11 @@ MiningService.Iniciar({
 	Progression = ProgressionService, Analitica = AnalyticsService, Red = Red,
 })
 EnemyService.Iniciar()
+PvPService.Iniciar()
+EnemyService.FijarObjetivosPvP({ Radio = PvPService.Objetivos, Linea = PvPService.EnLinea })
 CombatService.Iniciar({
 	Datos = DataService, Stats = StatsService, Enemigos = EnemyService, Progression = ProgressionService,
-	Economia = EconomyService, Analitica = AnalyticsService, Red = Red,
+	Economia = EconomyService, Analitica = AnalyticsService, Red = Red, PvP = PvPService,
 })
 CraftingService.Iniciar({ Datos = DataService, Economia = EconomyService, Inventory = InventoryService, Analitica = AnalyticsService, Red = Red })
 BoxService.Iniciar({
@@ -104,6 +110,15 @@ BossService.Iniciar({
 	Progression = ProgressionService, Analitica = AnalyticsService, Red = Red,
 })
 QuestService.Iniciar({ Datos = DataService, Economia = EconomyService, Progression = ProgressionService, Analitica = AnalyticsService, Red = Red })
+FractureService.Iniciar({
+	Datos = DataService, Stats = StatsService, PvP = PvPService, Inventory = InventoryService, Mining = MiningService,
+	Combat = CombatService, Economia = EconomyService, Analitica = AnalyticsService, Red = Red,
+})
+ArenaService.Iniciar({ Datos = DataService, Stats = StatsService, PvP = PvPService, World = WorldService, Analitica = AnalyticsService, Red = Red })
+-- En la grieta y en la arena no se aplica la pérdida de muerte PvE de la mochila normal.
+InventoryService.FijarSinPerdida(function(jugador)
+	return FractureService.EnGrieta(jugador) or ArenaService.EnPartida(jugador)
+end)
 PowerCoreService.Iniciar({
 	Datos = DataService, Stats = StatsService, Combat = CombatService, Enemigos = EnemyService,
 	Analitica = AnalyticsService, Red = Red,
@@ -131,4 +146,4 @@ DataService.Iniciar({ Analitica = AnalyticsService })
 
 PowerCoreService.FijarCiudad(WorldService.EnCiudad)
 
-print("OREBOUND: servidor iniciado (fase 7)")
+print("OREBOUND: servidor iniciado (fase 8)")

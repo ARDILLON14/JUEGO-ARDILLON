@@ -16,12 +16,19 @@ local Nombres = require(Shared.Visual.Nombres)
 local Mining = require(Shared.Config.Mining)
 local Mochila = require(Shared.Reglas.Mochila)
 local Inventario = require(Shared.Reglas.Inventario)
+local Fractura = require(Shared.Reglas.Fractura)
 local Rarezas = require(Shared.Visual.Rarezas)
 
 local InventoryService = {}
 
 local Datos, Stats, Analitica, Red
 local extrasMochila = {}
+local enGrieta = function()
+	return false
+end
+local sinPerdida = function()
+	return false
+end
 local sacos = {}   -- [saco] = { Jugador, Contenido, Recoger = fn }
 local alEquipar = {}
 
@@ -47,7 +54,22 @@ end
 
 function InventoryService.Espacio(jugador)
 	local perfil = Datos.GetProfile(jugador)
-	return perfil and Mochila.espacio(perfil, extra(jugador)) or 0
+	if not perfil then
+		return 0
+	end
+	if enGrieta(jugador) then
+		return math.max(0, Fractura.capacidad(perfil, extra(jugador)) - Fractura.unidades(perfil))
+	end
+	return Mochila.espacio(perfil, extra(jugador))
+end
+
+-- FractureService: en la grieta el mineral va a Minerals.Fractured; ArenaService/FractureService: muertes sin pérdida PvE.
+function InventoryService.FijarGrieta(fn)
+	enGrieta = fn
+end
+
+function InventoryService.FijarSinPerdida(fn)
+	sinPerdida = fn
 end
 
 function InventoryService.ExtraMochila(jugador)
@@ -83,6 +105,9 @@ function InventoryService.AddMineral(jugador, mineral, n)
 	local perfil = Datos.GetProfile(jugador)
 	if not perfil then
 		return 0
+	end
+	if enGrieta(jugador) then
+		return Fractura.anadir(perfil, mineral, n, extra(jugador))
 	end
 	return Mochila.anadir(perfil, mineral, n, extra(jugador))
 end
@@ -237,7 +262,7 @@ end
 
 local function alMorir(jugador, posicion)
 	local perfil = Datos.GetProfile(jugador)
-	if not perfil then
+	if not perfil or sinPerdida(jugador) then
 		return
 	end
 	local perdido = Mochila.perdidaMuertePvE(perfil)

@@ -5,6 +5,7 @@
 -- Fase 5: forja y puesto de geodas (cajas) con sus paneles.
 -- Fase 6: mascotas que siguen al jugador (todas las de todos los jugadores), panel de mascotas (M) y postura (T).
 -- Fase 7: barra del jefe, misiones diarias (J), tutorial y Núcleos en el panel de habilidades.
+-- Fase 8: Zona Fracturada (diálogo, panel, extracción, avisos visuales), PvP y marcador de la arena.
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local UserInputService = game:GetService("UserInputService")
@@ -24,6 +25,7 @@ local PanelCajas = require(UI:WaitForChild("PanelCajas"))
 local PanelMascotas = require(UI:WaitForChild("PanelMascotas"))
 local PetsController = require(Controllers:WaitForChild("PetsController"))
 local BossController = require(Controllers:WaitForChild("BossController"))
+local FractureController = require(Controllers:WaitForChild("FractureController"))
 local PanelMisiones = require(UI:WaitForChild("PanelMisiones"))
 local PanelEstadisticas = require(UI:WaitForChild("PanelEstadisticas"))
 local PanelInventario = require(UI:WaitForChild("PanelInventario"))
@@ -55,6 +57,7 @@ MiningController.Iniciar(Estado, carpeta, HUDController.Avisar)
 HUDController.BotonSubir(MiningController.BajoTierra, MiningController.Subir)
 CombatController.Iniciar(Estado, carpeta, HUDController.Avisar)
 PetsController.Iniciar(Estado, carpeta, HUDController.Avisar)
+FractureController.Iniciar(Estado, carpeta, HUDController.Avisar, HUDController.AlAviso)
 
 UserInputService.InputBegan:Connect(function(entrada, procesado)
 	if procesado then

@@ -16,6 +16,8 @@ local Players = game:GetService("Players")
 
 local Shared = game:GetService("ReplicatedStorage").Shared
 local Stats = require(Shared.Config.Stats)
+local PvPConfig = require(Shared.Config.PvP)
+local Progresion = require(Shared.Formulas.Progresion)
 local Estadisticas = require(Shared.Reglas.Estadisticas)
 local Recursos = require(script.Parent.Parent.Reglas.Recursos)
 local Eventos = require(script.Parent.Parent.Util.Eventos)
@@ -69,8 +71,13 @@ local function aplicarPersonaje(jugador, rellenar)
 	if h.Health <= 0 then
 		return   -- muerto: se aplica al reaparecer
 	end
-	h.MaxHealth = d.MaxHealth
-	h.Health = math.max(1, d.MaxHealth * proporcion)
+	local maxima = d.MaxHealth
+	if estado.NivelPvP then
+		-- PvP: Vitalidad con M = 1 y nivel sincronizado (B4 9.1 y 9.4).
+		maxima = Progresion.maxHealth(math.min(d.Level, estado.NivelPvP), d.Effective.Vitality, PvPConfig.VitalityM)
+	end
+	h.MaxHealth = maxima
+	h.Health = math.max(1, maxima * proporcion)
 	if estado.Aturdido then
 		h.WalkSpeed = 0
 		h.JumpHeight = 0
@@ -230,6 +237,15 @@ function StatsService.FijarMultiplicadorVelocidad(jugador, multiplicador)
 	local estado = estados[jugador]
 	if estado then
 		estado.MultiplicadorVelocidad = math.clamp(multiplicador, 0, 1)
+		aplicarPersonaje(jugador, false)
+	end
+end
+
+-- Modo PvP: vida con Vitalidad M = 1 y nivel máximo sincronizado; nil para volver a PvE.
+function StatsService.FijarModoPvP(jugador, nivelMaximo)
+	local estado = estados[jugador]
+	if estado then
+		estado.NivelPvP = nivelMaximo
 		aplicarPersonaje(jugador, false)
 	end
 end
