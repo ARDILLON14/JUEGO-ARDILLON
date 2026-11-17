@@ -172,6 +172,7 @@ function ConstructorPrueba.construirSiFalta()
 	interactuable("Mercader", Lugares.Etiqueta.Mercader, Vector3.new(20, 4, 12), Color3.fromRGB(70, 130, 90), "Abrir tienda", 0, ciudad)
 	interactuable("Forja", "Forja", Vector3.new(-24, 4, -14), Color3.fromRGB(150, 70, 40), "Abrir forja", 0, ciudad)
 	interactuable("Geodas", "Cajas", Vector3.new(24, 4, -14), Color3.fromRGB(110, 90, 160), "Ver cajas", 0, ciudad)
+	interactuable("Cosméticos", "Cosmeticos", Vector3.new(0, 4, -28), Color3.fromRGB(190, 120, 220), "Ver estelas y auras", 0, ciudad)
 	portal("Galerías de Musgo (nivel 100)", Vector3.new(-31, 4.5, -2), 2, ciudad, Color3.fromRGB(90, 200, 110))
 	portal("Vetas Salinas (nivel 200)", Vector3.new(31, 4.5, -2), 3, ciudad, Color3.fromRGB(230, 230, 255))
 

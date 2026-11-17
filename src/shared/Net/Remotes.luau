@@ -14,6 +14,7 @@ local Worlds = require(Config.Worlds)
 local PvP = require(Config.PvP)
 local Economy = require(Config.Economy)
 local Mining = require(Config.Mining)
+local Monetization = require(Config.Monetization)
 
 local function claves(t)
 	local lista = {}
@@ -30,6 +31,10 @@ local RARITIES = Rarity.Order
 local WEAPON_TYPES = claves(Weapons.Types)
 local BOX_TYPES = claves(Boxes.Boxes)
 local ZONES = #Worlds.Zones
+local COSMETICS = {}
+for _, c in ipairs(Monetization.Cosmetics) do
+	table.insert(COSMETICS, c.Id)
+end
 local WORLD_IDS = { Worlds.Hub.Id }
 for _, mundo in ipairs(Worlds.Worlds) do
 	table.insert(WORLD_IDS, mundo.Id)
@@ -138,6 +143,10 @@ Remotes.ClientToServer = {
 	["Rebirth.Confirm"] = { Kind = "Function", Rate = every(10), Params = { id("token") } },
 	["World.ReturnToSurface"] = { Kind = "Event", Rate = every(5), Params = {} },   -- minería por bloques (P3b)
 	["World.Teleport"] = { Kind = "Function", Rate = every(5), Params = { enum("worldId", WORLD_IDS) } },
+	-- Fase 9: tienda de cosméticos y servicios con Cristales (Config/Monetization)
+	["Cosmetic.Buy"] = { Kind = "Function", Rate = rate(1), Params = { enum("id", COSMETICS) } },
+	["Cosmetic.Equip"] = { Kind = "Function", Rate = rate(2), Params = { enum("slot", { "Trail", "Aura" }), opt(id("id")) } },
+	["Shop.CrystalService"] = { Kind = "Function", Rate = rate(1), Params = { enum("id", claves(Monetization.Services)) } },
 	["Settings.Save"] = { Kind = "Event", Rate = every(5), Params = { { Name = "settings", Type = "table", MaxSize = 2048 } } },
 	["Tutorial.Step"] = { Kind = "Event", Rate = rate(2), Params = { int("step", 0, 100) } },
 }

@@ -6,6 +6,7 @@
 -- Fase 6: mascotas (incubación, posturas, Nido, XP, evolución) y su combate con el tope de daño.
 -- Fase 7: zonas 2 y 3, portales y ciudad (WorldService), los 3 jefes, misiones diarias y tutorial.
 -- Fase 8: reglas PvP, Zona Fracturada de la zona 3 y arena 1 contra 1.
+-- Fase 9: antitrampas, normas por país (PolicyService), Cristales y cosméticos, ajustes y acceso a la beta.
 -- Los servicios de las fases siguientes conectan sus Remotes con Red:conectar(nombre, manejador).
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -35,6 +36,10 @@ local QuestService = require(Services.QuestService)
 local PvPService = require(Services.PvPService)
 local FractureService = require(Services.FractureService)
 local ArenaService = require(Services.ArenaService)
+local AntiCheatService = require(Services.AntiCheatService)
+local ComplianceService = require(Services.ComplianceService)
+local MonetizationService = require(Services.MonetizationService)
+local Security = require(ReplicatedStorage.Shared.Config.Security)
 local ConstructorPrueba = require(script.Mundo.ConstructorPrueba)
 local LimiteFrecuencia = require(script.Net.LimiteFrecuencia)
 local Validador = require(script.Net.Validador)
@@ -44,6 +49,33 @@ local enStudio = RunService:IsStudio()
 
 AnalyticsService.Iniciar()
 
+-- Beta cerrada (Config/Security.Beta): solo entran los UserId de la lista o los miembros del grupo.
+local function puedeEntrarBeta(jugador)
+	local beta = Security.Beta
+	if not beta.Enabled or enStudio then
+		return true
+	end
+	if table.find(beta.AllowedUserIds, jugador.UserId) then
+		return true
+	end
+	if beta.AllowGroupId ~= 0 then
+		local ok, dentro = pcall(function()
+			return jugador:IsInGroup(beta.AllowGroupId)
+		end)
+		return ok and dentro
+	end
+	return false
+end
+local function revisarBeta(jugador)
+	if not puedeEntrarBeta(jugador) then
+		jugador:Kick("OREBOUND está en beta cerrada. ¡Pronto abriremos para todos!")
+	end
+end
+Players.PlayerAdded:Connect(revisarBeta)
+for _, j in ipairs(Players:GetPlayers()) do
+	task.spawn(revisarBeta, j)
+end
+
 local Red = Validador.nuevo({
 	Limite = LimiteFrecuencia.nuevo(os.clock),
 	PerfilCargado = function(jugador)
@@ -51,10 +83,7 @@ local Red = Validador.nuevo({
 	end,
 	Marcar = function(jugador, motivo, remote)
 		AnalyticsService.Registrar(jugador, "EsquemaRechazado", nil, remote)
-		local datos = DataService.GetProfile(jugador)
-		if datos then
-			datos.Flags.Suspicion = datos.Flags.Suspicion + 1
-		end
+		AntiCheatService.Marcar(jugador, motivo == "frecuencia" and "Rate" or "Schema", remote)
 	end,
 	Studio = enStudio,
 })
@@ -124,6 +153,11 @@ PowerCoreService.Iniciar({
 	Analitica = AnalyticsService, Red = Red,
 })
 
+AntiCheatService.Iniciar({ Datos = DataService, Analitica = AnalyticsService })
+EconomyService.AlGanar(AntiCheatService.Ingreso)
+ComplianceService.Iniciar()
+MonetizationService.Iniciar({ Datos = DataService, Economia = EconomyService, Analitica = AnalyticsService, Red = Red })
+
 -- Ayudas para probar en Studio. Estos Remotes no existen en un servidor publicado.
 if enStudio then
 	Red:conectar("Dev.GiveXP", function(jugador, cantidad)
@@ -146,4 +180,4 @@ DataService.Iniciar({ Analitica = AnalyticsService })
 
 PowerCoreService.FijarCiudad(WorldService.EnCiudad)
 
-print("OREBOUND: servidor iniciado (fase 8)")
+print("OREBOUND: servidor iniciado (fase 9)")

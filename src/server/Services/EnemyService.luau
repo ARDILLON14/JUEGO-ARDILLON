@@ -180,11 +180,24 @@ local function jugadorMasCercano(pos, radio)
 	return mejor, dist
 end
 
-local function pensar(e, ahora)
+-- Rendimiento (C_Tecnico 8.1): un enemigo en casa sin ningún jugador a SleepRadius studs "duerme" y no piensa.
+local function hayJugadorCerca(posiciones, pos, radio)
+	for _, p in ipairs(posiciones) do
+		if (p - pos).Magnitude <= radio then
+			return true
+		end
+	end
+	return false
+end
+
+local function pensar(e, ahora, posiciones)
 	if e.Jefe or not e.Raiz or not e.Raiz.Parent then
 		return   -- los jefes los mueve BossService
 	end
 	local pos = e.Raiz.Position
+	if posiciones and not e.Objetivo and (pos - e.Origen).Magnitude <= 3 and not hayJugadorCerca(posiciones, pos, AI.SleepRadius) then
+		return
+	end
 	if Combate.controlado(e.Control, ahora) then
 		e.Humanoide.WalkSpeed = 0
 		return
@@ -267,8 +280,15 @@ function EnemyService.Iniciar()
 	task.spawn(function()
 		while true do
 			local ahora = os.clock()
+			local posiciones = {}
+			for _, jugador in ipairs(Players:GetPlayers()) do
+				local p = Lugares.posicion(jugador)
+				if p then
+					table.insert(posiciones, p)
+				end
+			end
 			for _, e in pairs(enemigos) do
-				pensar(e, ahora)
+				pensar(e, ahora, posiciones)
 			end
 			task.wait(0.2)
 		end

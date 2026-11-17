@@ -10,6 +10,7 @@ local Weapons = require(Shared.Config.Weapons)
 local Habilidades = require(Shared.Reglas.Habilidades)
 local Nombres = require(Shared.Visual.Nombres)
 local Server = script.Parent.Parent
+local Mover = require(Server.Util.Mover)
 local Combate = require(Server.Reglas.Combate)
 local Lugares = require(Server.Util.Lugares)
 local Eventos = require(Server.Util.Eventos)
@@ -176,7 +177,7 @@ EFECTOS.FleetingShadow = function(jugador, raiz, dir, h)
 		return true
 	end
 	local detras = e.Raiz.Position + horizontal(e.Raiz.Position - raiz.Position, raiz) * 4
-	jugador.Character:PivotTo(CFrame.lookAt(detras, Vector3.new(e.Raiz.Position.X, detras.Y, e.Raiz.Position.Z)))
+	Mover.personaje(jugador.Character, CFrame.lookAt(detras, Vector3.new(e.Raiz.Position.X, detras.Y, e.Raiz.Position.Z)))
 	golpear(jugador, e, h.Coef)
 	return true
 end

@@ -104,7 +104,13 @@ function EfectosCombate.ataque(indice, color, alcance)
 	end
 end
 
+-- Se puede desactivar en Ajustes (accesibilidad, VFX.Accessibility.CameraShake).
+EfectosCombate.TemblorActivo = true
+
 function EfectosCombate.temblar(fuerza)
+	if not EfectosCombate.TemblorActivo then
+		return
+	end
 	temblor = math.max(temblor, fuerza)
 end
 

@@ -12,6 +12,7 @@ local Pickaxes = require(Shared.Config.Pickaxes)
 local Mineria = require(Shared.Formulas.Mineria)
 local Inventario = require(Shared.Reglas.Inventario)
 local Server = script.Parent.Parent
+local Mover = require(Server.Util.Mover)
 local Deposito = require(Server.Reglas.Deposito)
 local Pasivas = require(Server.Reglas.Pasivas)
 local Lugares = require(Server.Util.Lugares)
@@ -183,7 +184,7 @@ local function subir(jugador)
 		Red:obtener("Notify"):FireClient(jugador, { Text = "Te has movido: subida cancelada", Kind = "Warning", Short = true })
 		return
 	end
-	personaje:PivotTo(CFrame.new(salida + Vector3.new(0, 3, 0)))
+	Mover.personaje(personaje, CFrame.new(salida + Vector3.new(0, 3, 0)))
 end
 
 -- Reparto al agotarse un depósito. Devuelve true si debe reaparecer al instante (Eco estelar).

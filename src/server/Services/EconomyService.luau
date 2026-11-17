@@ -124,6 +124,8 @@ function EconomyService.GetCoins(jugador, moneda)
 end
 
 -- motivo: texto corto para analítica ("Reinicio", "Venta", ...). Devuelve true, o false y el motivo del rechazo.
+local oyentesIngreso = {}
+
 function EconomyService.AddCoins(jugador, cantidad, motivo, moneda)
 	local perfil = Datos.GetProfile(jugador)
 	if not perfil then
@@ -135,7 +137,17 @@ function EconomyService.AddCoins(jugador, cantidad, motivo, moneda)
 	end
 	Analitica.Registrar(jugador, "MonedasGanadas", cantidad, (moneda or "Coins") .. ":" .. tostring(motivo))
 	Datos.Replicar(jugador, "Wallet")
+	if (moneda == nil or moneda == "Coins") then
+		for _, fn in ipairs(oyentesIngreso) do
+			fn(jugador, cantidad, motivo)
+		end
+	end
 	return true
+end
+
+-- Avisa de cada ingreso de monedas (lo usa AntiCheatService para la alerta de ingresos anómalos).
+function EconomyService.AlGanar(fn)
+	table.insert(oyentesIngreso, fn)
 end
 
 function EconomyService.SpendCoins(jugador, cantidad, motivo, moneda)

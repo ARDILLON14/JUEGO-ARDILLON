@@ -15,6 +15,7 @@ local TeleportService = game:GetService("TeleportService")
 local Shared = game:GetService("ReplicatedStorage").Shared
 local Worlds = require(Shared.Config.Worlds)
 local Server = script.Parent.Parent
+local Mover = require(Server.Util.Mover)
 local Lugares = require(Server.Util.Lugares)
 
 local WorldService = {}
@@ -88,7 +89,7 @@ function WorldService.Viajar(jugador, destino)
 	if not llegada then
 		return false, "destino"
 	end
-	jugador.Character:PivotTo(CFrame.new(llegada + Vector3.new(0, 3, 0)))
+	Mover.personaje(jugador.Character, CFrame.new(llegada + Vector3.new(0, 3, 0)))
 	ultimaZona[jugador] = destino
 	Analitica.Registrar(jugador, "Viaje", nil, tostring(destino))
 	local texto = destino == "Ciudad" and "Puerto Veta" or nombreZona(destino)
@@ -100,7 +101,7 @@ end
 function WorldService.Llevar(jugador, destino)
 	local llegada = llegadas[destino]
 	if llegada and jugador.Character then
-		jugador.Character:PivotTo(CFrame.new(llegada + Vector3.new(0, 3, 0)))
+		Mover.personaje(jugador.Character, CFrame.new(llegada + Vector3.new(0, 3, 0)))
 		ultimaZona[jugador] = destino
 	end
 end
@@ -162,7 +163,7 @@ function WorldService.Iniciar(deps)
 			local z = ultimaZona[jugador]
 			if type(z) == "number" and llegadas[z] then
 				task.wait(0.2)
-				personaje:PivotTo(CFrame.new(llegadas[z] + Vector3.new(0, 3, 0)))
+				Mover.personaje(personaje, CFrame.new(llegadas[z] + Vector3.new(0, 3, 0)))
 			end
 		end)
 	end)

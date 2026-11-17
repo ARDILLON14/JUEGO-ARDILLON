@@ -13,7 +13,7 @@ local Economy = require(Config.Economy)
 local Worlds = require(Config.Worlds)
 local Stats = require(Config.Stats)
 
-local MODULOS = { "Stats", "Rarity", "Mining", "Pickaxes", "Weapons", "PowerCores", "Pets", "Economy", "Boxes", "Fracture", "Worlds", "PvP", "VFX", "Bosses", "Quests" }
+local MODULOS = { "Stats", "Rarity", "Mining", "Pickaxes", "Weapons", "PowerCores", "Pets", "Economy", "Boxes", "Fracture", "Worlds", "PvP", "VFX", "Bosses", "Quests", "Security", "Monetization" }
 
 local function suma(t)
 	local total = 0

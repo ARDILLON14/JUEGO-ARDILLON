@@ -11,6 +11,7 @@ local PvPConfig = require(Shared.Config.PvP)
 local Potencia = require(Shared.Formulas.Potencia)
 local Arena = require(Shared.Reglas.Arena)
 local Server = script.Parent.Parent
+local Mover = require(Server.Util.Mover)
 
 local ArenaService = {}
 
@@ -51,7 +52,7 @@ end
 
 local function colocar(jugador, lado)
 	if jugador.Character and inicios[lado] then
-		jugador.Character:PivotTo(CFrame.lookAt(inicios[lado] + Vector3.new(0, 3, 0), inicios[3 - lado] + Vector3.new(0, 3, 0)))
+		Mover.personaje(jugador.Character, CFrame.lookAt(inicios[lado] + Vector3.new(0, 3, 0), inicios[3 - lado] + Vector3.new(0, 3, 0)))
 	end
 end
 

@@ -48,7 +48,7 @@ return {
 		Guardian = { Health = 240,  Damage = 0.10, Interval = 2.2, XP = 10,  Coins = 16.80, Share = 0.02 },
 		Boss     = { Health = 1200, Damage = 0.15, Interval = 2.5, XP = 60,  Coins = 60 },
 		XPScale = 0.71, TutorialHealthFactor = 0.5, TutorialMaxLevel = 10,
-		AI = { AggroRadius = 40, LeashRadius = 70, AttackRange = 6, WalkSpeed = 14, AlivePerZone = 16, RespawnSeconds = 5,   -- propuesta (P4b)
+		AI = { AggroRadius = 40, SleepRadius = 120, LeashRadius = 70, AttackRange = 6, WalkSpeed = 14, AlivePerZone = 16, RespawnSeconds = 5,   -- propuesta (P4b)
 		       TelegraphSeconds = 0.45 },   -- se ponen rojos antes de golpear: da tiempo a esquivar
 		PackWeights = { [1] = 70, [2] = 25, [3] = 5 }, PackSpacing = 20,
 	},

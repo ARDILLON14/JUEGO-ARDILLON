@@ -3,7 +3,7 @@
 RPG de minería y acción para Roblox. Proyecto de [Rojo](https://rojo.space/docs) 7.7.1 (gestionado con Rokit).
 
 - **Diseño:** carpeta `OREBOUND/` (`A_GDD.md`, `B_Matematico/`, `C_Tecnico.md`, `D_Roadmap.md`, `DECISIONES.md`).
-- **Código:** `src/` (fases 1 a 8 del roadmap: Cimientos, Progresión, Minería y economía base, Combate y Núcleos, Fabricación y cajas, Mascotas, Jefes y mundo 1, PvP y Zonas Fracturadas).
+- **Código:** `src/` (fases 1 a 9 del roadmap: Cimientos, Progresión, Minería y economía base, Combate y Núcleos, Fabricación y cajas, Mascotas, Jefes y mundo 1, PvP y Zonas Fracturadas, Optimización y lanzamiento).
 - **Pruebas:** `tests/`.
 
 ## Estructura del código
@@ -42,6 +42,16 @@ de bloques que se excava hacia abajo. Para usar un mapa propio, etiqueta con Col
 de la cara de arriba de la cantera (atributos `Zona`, `Ancho`, `Largo`, `Profundidad` y `Salida`) y las partes `Banco` y `Mercader`.
 
 En Studio aparecen arriba a la derecha dos botones de prueba («+1 nivel» y «+10.000 $») que no existen en el juego publicado.
+
+## Antes de publicar (fase 9)
+
+1. Crear en el Creator Dashboard los 3 productos de Cristales y los pases (sexto espacio de mascota, pase de temporada) y
+   copiar sus números en `src/shared/Config/Monetization.luau` (mientras estén a 0, la tienda muestra «Próximamente»).
+2. Para la beta cerrada: en `src/shared/Config/Security.luau` poner `Beta.Enabled = true` y rellenar `AllowedUserIds`
+   o `AllowGroupId`. En Studio la beta nunca bloquea.
+3. Activar *Enable Studio Access to API Services* y publicar el lugar.
+
+Teclas: P estadísticas, B inventario, K habilidades, M mascotas, J misiones, O ajustes, L cosméticos; R interactuar.
 
 ## Pruebas
 

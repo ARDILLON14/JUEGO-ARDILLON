@@ -16,6 +16,7 @@ local Dano = require(Shared.Formulas.Dano)
 local Inventario = require(Shared.Reglas.Inventario)
 local Habilidades = require(Shared.Reglas.Habilidades)
 local Server = script.Parent.Parent
+local Mover = require(Server.Util.Mover)
 local Combate = require(Server.Reglas.Combate)
 local Lugares = require(Server.Util.Lugares)
 local Eventos = require(Server.Util.Eventos)
@@ -155,7 +156,7 @@ function CombatService.Mover(jugador, direccion, studs)
 	if choque then
 		distancia = math.max(0, (choque.Position - raiz.Position).Magnitude - 2)
 	end
-	jugador.Character:PivotTo(jugador.Character:GetPivot() + dir * distancia)
+	Mover.personaje(jugador.Character, jugador.Character:GetPivot() + dir * distancia)
 	return true
 end
 

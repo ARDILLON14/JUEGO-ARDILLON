@@ -18,6 +18,7 @@ local Misiones = require(Shared.Reglas.Misiones)
 local Rarezas = require(Shared.Visual.Rarezas)
 local Nombres = require(Shared.Visual.Nombres)
 local Server = script.Parent.Parent
+local Mover = require(Server.Util.Mover)
 local Combate = require(Server.Reglas.Combate)
 local Lugares = require(Server.Util.Lugares)
 local Eventos = require(Server.Util.Eventos)
@@ -507,7 +508,7 @@ local function unirse(jugador, zona)
 			sala.N = #lista
 			for i, j in ipairs(lista) do
 				local ang = (i / #lista) * math.pi * 2
-				j.Character:PivotTo(CFrame.new(sala.Centro + Vector3.new(math.cos(ang) * 22, 4, math.sin(ang) * 22), sala.Centro + Vector3.new(0, 4, 0)))
+				Mover.personaje(j.Character, CFrame.new(sala.Centro + Vector3.new(math.cos(ang) * 22, 4, math.sin(ang) * 22), sala.Centro + Vector3.new(0, 4, 0)))
 			end
 			sala.Estado = "Combate"
 			combate(sala)

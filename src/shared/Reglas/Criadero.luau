@@ -45,6 +45,9 @@ function Criadero.asegurarIncubadoras(perfil)
 	if perfil.Progress.Level >= Pets.Incubators.SecondAtLevel then
 		quiere = 2
 	end
+	if perfil.Purchases and perfil.Purchases.ThirdIncubator then
+		quiere = quiere + 1   -- tercera incubadora comprada con Cristales (fase 9)
+	end
 	while #perfil.Incubators < quiere do
 		table.insert(perfil.Incubators, { Egg = "", Species = "", PickHits = 0 })
 		cambio = true
@@ -96,7 +99,7 @@ function Criadero.eclosionar(perfil, n, id)
 	if not Criadero.lista(inc) then
 		return nil, "no_lista"
 	end
-	if contar(perfil.Pets) >= Pets.Storage.Pets then
+	if contar(perfil.Pets) >= (perfil.PetStorage or Pets.Storage.Pets) then
 		return nil, "almacen"
 	end
 	local mascota = { Species = inc.Species, Level = 1, XP = 0, Phase = "Hatchling" }

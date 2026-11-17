@@ -971,3 +971,21 @@ Los archivos B siguen en sus unidades originales; el juego aplica `CurrencyScale
 | P8-13 | No se incluyen todavía escuadrones, jefes de grieta, Grieta Celestial ni temporadas de grieta | [CONFIRMADO] | Expansiones |
 | P8-14 | Medidas del roadmap: duelo entre builds equilibradas de 20,7 s (objetivo 17,9, aceptable 13,4–22,4); ingresos de la grieta 1,92 y 1,58 veces el PvE con 15 % y 30 % de muertes y máximo teórico 2,38 (nunca más de 2,5); al morir solo se pierde mineral | [CONFIRMADO] | `tests/PvP.spec.luau` |
 
+
+## 29. Serie P9 — decisiones tomadas al programar la fase 9 (Optimización, beta y lanzamiento)
+
+| # | Decisión | Estado | Cómo probarla o revisarla |
+|---|---|---|---|
+| P9-01 | Antitrampas de movimiento: muestra cada 0,25 s; límites horizontales de 75 / 100 / 130 studs en 0,5 / 1 / 2 s (caer no cuenta). Se subieron desde 65 / 94 / 122 porque andar + 2 dash + parpadeo + Paso de Relámpago suman 66 en 0,5 s. 3 faltas seguidas devuelven a la última posición válida | [PROVISIONAL] | `tests/Lanzamiento.spec.luau`; revisar con falsos positivos en la beta |
+| P9-02 | Todos los movimientos del servidor (portales, dash, parpadeo, extracción, jefes, arena, respawn) pasan por `Util/Mover`, que reinicia la vigilancia | [CONFIRMADO] | — |
+| P9-03 | Sospecha: +1 por esquema rechazado y por falta de movimiento; el límite de frecuencia descarta sin sumar. Con 30 se expulsa (queda en 15); en Studio solo se avisa | [PROVISIONAL] | `Config/Security.Suspicion` |
+| P9-04 | Alerta de ingresos: si alguien gana más de 3 h de ingreso en menos de 1 h se registra en analítica; no se castiga | [PROVISIONAL] | Revisar las alertas de la beta |
+| P9-05 | PolicyService: se guarda por jugador si tiene restringidos los objetos aleatorios de pago y los enlaces externos (atributos del Player). OREBOUND no vende nada aleatorio con Robux: las cajas solo con monedas del juego | [CONFIRMADO] | — |
+| P9-06 | Compras con Robux idempotentes: el recibo se apunta y el perfil se guarda antes de confirmar a Roblox; un recibo repetido no da nada; se guardan los últimos 100 | [CONFIRMADO] | `tests/Lanzamiento.spec.luau` |
+| P9-07 | Tienda de cosméticos: 3 estelas (150 Cristales), 2 auras (400) y el Aura de Prestigio por 20 h de ingreso en monedas (sumidero de B6). Servicios: almacén de mascotas +10 (200 Cristales, hasta 100) y tercera incubadora (300) | [PROVISIONAL] | `Config/Monetization` |
+| P9-08 | Los ProductId y GamePassId están a 0 hasta crearlos en el Creator Dashboard; mientras tanto el panel muestra «Próximamente» | [CONFIRMADO] | — |
+| P9-09 | Calidad automática: baja un nivel tras 10 s por debajo de 25 FPS y nunca sube sola. Baja = sin sombras y sin estelas/auras de otros jugadores. El temblor de cámara y los efectos ajenos se pueden quitar; los ajustes se guardan | [PROVISIONAL] | Medir en móviles de gama baja |
+| P9-10 | Enemigos dormidos: en casa y sin jugadores a 120 studs no piensan (ahorro de servidor) | [CONFIRMADO] | — |
+| P9-11 | Beta cerrada con lista de UserId o un grupo de Roblox (`Config/Security.Beta`), desactivada por defecto | [CONFIRMADO] | — |
+| P9-12 | Quedan fuera de esta fase: renacimiento, arena 2v2/3v3 y cola entre servidores, pase de temporada y tope global de partículas por nivel (los valores existen en `VFX.Quality`, pero solo se aplica sombras y efectos ajenos) | [CONFIRMADO] | Expansiones |
+| P9-13 | Medidas que solo se pueden tomar con jugadores reales y Studio: FPS en móviles, memoria del servidor, falsos positivos del antitrampas, conversión de compras | [PENDIENTE] | Beta cerrada |

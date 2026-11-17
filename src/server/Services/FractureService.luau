@@ -21,6 +21,7 @@ local Misiones = require(Shared.Reglas.Misiones)
 local Inventario = require(Shared.Reglas.Inventario)
 local Rarezas = require(Shared.Visual.Rarezas)
 local Server = script.Parent.Parent
+local Mover = require(Server.Util.Mover)
 local Lugares = require(Server.Util.Lugares)
 local Eventos = require(Server.Util.Eventos)
 
@@ -66,7 +67,7 @@ local function sacar(jugador, zona)
 	local g = grietas[zona]
 	salirEstado(jugador)
 	if g and jugador.Character then
-		jugador.Character:PivotTo(CFrame.new(g.Fuera + Vector3.new(0, 3, 0)))
+		Mover.personaje(jugador.Character, CFrame.new(g.Fuera + Vector3.new(0, 3, 0)))
 	end
 end
 
@@ -113,7 +114,7 @@ local function entrar(jugador, zona, asegurar, confirmado)
 		PotenciaMax = Potencia.itemPower(zona, PvPConfig.LevelSync.GearCapRarity, PvPConfig.LevelSync.GearCapBonus),
 	})
 	StatsSvc.FijarModoPvP(jugador, PvPConfig.LevelSync.LevelsPerZone * zona)
-	jugador.Character:PivotTo(CFrame.new(g.Llegada + Vector3.new(0, 3, 0)))
+	Mover.personaje(jugador.Character, CFrame.new(g.Llegada + Vector3.new(0, 3, 0)))
 	Datos.Replicar(jugador, "Fracture", "Consumables", "Quests")
 	local textos = { "Zona Fracturada: PvP siempre activo. Solo arriesgas el mineral que picas aquí." }
 	if perfil.Fracture.Entries <= Fracture.Entry.NoviceEntriesWithoutLoss then
