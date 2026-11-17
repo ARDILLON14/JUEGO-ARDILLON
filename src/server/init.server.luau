@@ -6,6 +6,7 @@
 -- Fase 6: mascotas (incubación, posturas, Nido, XP, evolución) y su combate con el tope de daño.
 -- Fase 7: zonas 2 y 3, portales y ciudad (WorldService), los 3 jefes, misiones diarias y tutorial.
 -- Fase 8: reglas PvP, Zona Fracturada de la zona 3 y arena 1 contra 1.
+-- Después del roadmap: renacimiento (altar de la plaza).
 -- Fase 9: antitrampas, normas por país (PolicyService), Cristales y cosméticos, ajustes y acceso a la beta.
 -- Los servicios de las fases siguientes conectan sus Remotes con Red:conectar(nombre, manejador).
 
@@ -39,6 +40,7 @@ local ArenaService = require(Services.ArenaService)
 local AntiCheatService = require(Services.AntiCheatService)
 local ComplianceService = require(Services.ComplianceService)
 local MonetizationService = require(Services.MonetizationService)
+local RebirthService = require(Services.RebirthService)
 local Security = require(ReplicatedStorage.Shared.Config.Security)
 local ConstructorPrueba = require(script.Mundo.ConstructorPrueba)
 local LimiteFrecuencia = require(script.Net.LimiteFrecuencia)
@@ -157,6 +159,7 @@ AntiCheatService.Iniciar({ Datos = DataService, Analitica = AnalyticsService })
 EconomyService.AlGanar(AntiCheatService.Ingreso)
 ComplianceService.Iniciar()
 MonetizationService.Iniciar({ Datos = DataService, Economia = EconomyService, Analitica = AnalyticsService, Red = Red })
+RebirthService.Iniciar({ Datos = DataService, Stats = StatsService, Analitica = AnalyticsService, Red = Red })
 
 -- Ayudas para probar en Studio. Estos Remotes no existen en un servidor publicado.
 if enStudio then
@@ -170,6 +173,16 @@ if enStudio then
 	end)
 	Red:conectar("Dev.PetBoost", function(jugador)
 		return PetService.Impulso(jugador)
+	end)
+	Red:conectar("Dev.MaxLevel", function(jugador)
+		local perfil = DataService.GetProfile(jugador)
+		local Niveles = require(ReplicatedStorage.Shared.Reglas.Niveles)
+		perfil.Progress.Level = require(ReplicatedStorage.Shared.Config.Stats).XP.MaxLevel
+		perfil.Progress.XP = 0
+		perfil.Progress.UnlockedZone = math.max(perfil.Progress.UnlockedZone, Niveles.zonaPorNivel(perfil.Progress.Level))
+		StatsService.Recalcular(jugador)
+		DataService.Replicar(jugador, "Progress", "Stats")
+		return true
 	end)
 	Red:conectar("Dev.GiveCoins", function(jugador, cantidad)
 		return EconomyService.AddCoins(jugador, cantidad, "Studio")

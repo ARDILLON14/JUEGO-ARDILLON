@@ -6,6 +6,7 @@
 -- Fase 6: mascotas que siguen al jugador (todas las de todos los jugadores), panel de mascotas (M) y postura (T).
 -- Fase 7: barra del jefe, misiones diarias (J), tutorial y Núcleos en el panel de habilidades.
 -- Fase 8: Zona Fracturada (diálogo, panel, extracción, avisos visuales), PvP y marcador de la arena.
+-- Después del roadmap: panel del Altar de renacimiento.
 -- Fase 9: ajustes (O) con calidad automática y tienda de cosméticos y Cristales (puesto de la plaza o L).
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -33,6 +34,7 @@ local PanelInventario = require(UI:WaitForChild("PanelInventario"))
 local PanelTienda = require(UI:WaitForChild("PanelTienda"))
 local PanelAjustes = require(UI:WaitForChild("PanelAjustes"))
 local PanelCosmeticos = require(UI:WaitForChild("PanelCosmeticos"))
+local PanelRenacer = require(UI:WaitForChild("PanelRenacer"))
 local AjustesController = require(Controllers:WaitForChild("AjustesController"))
 local EfectosCombate = require(Controllers:WaitForChild("EfectosCombate"))
 
@@ -48,6 +50,7 @@ PanelMisiones.Iniciar(Estado)
 AjustesController.Iniciar(Estado, carpeta, EfectosCombate)
 PanelAjustes.Iniciar(AjustesController)
 PanelCosmeticos.Iniciar(Estado)
+PanelRenacer.Iniciar(Estado)
 BossController.Iniciar(carpeta)
 HUDController.Iniciar(Estado, function()
 	PanelEstadisticas.Alternar()
@@ -63,6 +66,9 @@ HUDController.AlAviso("OpenBoxes", function()
 end)
 HUDController.AlAviso("OpenCosmetics", function()
 	PanelCosmeticos.Abrir()
+end)
+HUDController.AlAviso("OpenRebirth", function()
+	PanelRenacer.Abrir()
 end)
 MiningController.Iniciar(Estado, carpeta, HUDController.Avisar)
 HUDController.BotonSubir(MiningController.BajoTierra, MiningController.Subir)

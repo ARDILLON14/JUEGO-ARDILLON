@@ -998,3 +998,15 @@ Los archivos B siguen en sus unidades originales; el juego aplica `CurrencyScale
 | PP-02 | Grietas estilo Minecraft en 4 etapas según la vida que le queda al bloque; al romperse, trozos que saltan y rebotan | [PROVISIONAL] | — |
 | PP-03 | Combate: giro de torso y brazo izquierdo en cada golpe del combo, postura de guardia con F, escudo de luz y chispas azules al bloquear un golpe, y enemigos que estallan en trozos de luz al morir | [PROVISIONAL] | — |
 | PP-04 | Siguen siendo animaciones por código y solo locales (los demás jugadores no ven tu brazo); las animaciones subidas a Roblox quedan para cuando haya animador | [CONFIRMADO] | P4b-04 |
+
+## 31. Serie PX — después del roadmap: renacimiento y arenas por equipos
+
+| # | Decisión | Estado | Cómo probarla o revisarla |
+|---|---|---|---|
+| PX-01 | Renacimiento en el Altar de la plaza, a nivel 1.000 y hasta 10 veces: +5 % de XP y +10 puntos de estadística (en `Stats.BonusPoints`) por vuelta; se pierden nivel, XP, puntos asignados y monedas; se conservan objetos, mascotas, Núcleos, banco, Cristales, cosméticos y zonas desbloqueadas | [CONFIRMADO] | `tests/Renacer.spec.luau` |
+| PX-02 | Doble confirmación: `Rebirth.Prepare` da el resumen y una ficha de 60 s; `Rebirth.Confirm(ficha)` renace fuera de combate y guarda al momento. Remote nuevo (51 en total) | [CONFIRMADO] | `tests/Red.spec.luau` |
+| PX-03 | Se conservan las zonas desbloqueadas: tras renacer se puede volver a cualquier zona ya abierta, con nivel 1 | [PROVISIONAL] | Revisar con jugadores (puede hacer el segundo recorrido demasiado fácil) |
+| PX-04 | Arenas 2v2 y 3v3 en la misma arena (una partida a la vez por servidor) con una cola por modo; se buscan 2 × n jugadores del mismo tramo dentro del menor de sus márgenes de Elo; reparto en serpiente (1-4-5 contra 2-3-6) | [PROVISIONAL] | `tests/ArenaEquipos.spec.luau` |
+| PX-05 | Elo por equipos: cada jugador gana o pierde K × (resultado − esperado) con el esperado calculado entre las medias de los equipos (en 1v1 da lo mismo que antes) | [CONFIRMADO] | `tests/ArenaEquipos.spec.luau` |
+| PX-06 | Gana la ronda el equipo que deja sin nadie en pie al otro; quien cae espera en la grada hasta la siguiente ronda; al acabar el tiempo gana el que conserve más vida (suma de proporciones de los que siguen en pie). Si un jugador abandona, su equipo sigue; si no queda nadie, pierde la partida | [PROVISIONAL] | — |
+| PX-07 | La cola entre servidores (MemoryStore) sigue pendiente: hacen falta 4 o 6 jugadores en el mismo servidor | [PENDIENTE] | — |

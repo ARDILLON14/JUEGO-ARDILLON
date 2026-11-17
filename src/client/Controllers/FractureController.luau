@@ -185,7 +185,7 @@ function FractureController.Iniciar(estado, carpeta, funcionAviso, alAviso)
 		end
 		marcador.Visible = true
 		arenaFin = d.Ends
-		marcador:SetAttribute("Base", "Arena · ronda " .. d.Round .. " · " .. d.Score[1] .. " - " .. d.Score[2])
+		marcador:SetAttribute("Base", "Arena · ronda " .. d.Round .. " · azul " .. d.Score[1] .. " - " .. d.Score[2] .. " rojo")
 	end)
 	RunService.RenderStepped:Connect(function()
 		if ultimo and ultimo.Inside and ultimo.Channel then

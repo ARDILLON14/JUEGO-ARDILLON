@@ -172,7 +172,8 @@ function ConstructorPrueba.construirSiFalta()
 	interactuable("Mercader", Lugares.Etiqueta.Mercader, Vector3.new(20, 4, 12), Color3.fromRGB(70, 130, 90), "Abrir tienda", 0, ciudad)
 	interactuable("Forja", "Forja", Vector3.new(-24, 4, -14), Color3.fromRGB(150, 70, 40), "Abrir forja", 0, ciudad)
 	interactuable("Geodas", "Cajas", Vector3.new(24, 4, -14), Color3.fromRGB(110, 90, 160), "Ver cajas", 0, ciudad)
-	interactuable("Cosméticos", "Cosmeticos", Vector3.new(0, 4, -28), Color3.fromRGB(190, 120, 220), "Ver estelas y auras", 0, ciudad)
+	interactuable("Altar de renacimiento", "Renacimiento", Vector3.new(-25, 4, 19), Color3.fromRGB(255, 200, 90), "Renacer", 0, ciudad)
+	interactuable("Cosméticos", "Cosmeticos", Vector3.new(0, 4, -19), Color3.fromRGB(190, 120, 220), "Ver estelas y auras", 0, ciudad)
 	portal("Galerías de Musgo (nivel 100)", Vector3.new(-31, 4.5, -2), 2, ciudad, Color3.fromRGB(90, 200, 110))
 	portal("Vetas Salinas (nivel 200)", Vector3.new(31, 4.5, -2), 3, ciudad, Color3.fromRGB(230, 230, 255))
 
@@ -258,7 +259,7 @@ function ConstructorPrueba.construirSiFalta()
 	muroGrieta(Vector3.new(GRIETA.XMin, 36, (GRIETA.ZMin + GRIETA.ZMax) / 2), Vector3.new(2, 80, fondo))
 	muroGrieta(Vector3.new(GRIETA.XMax, 36, (GRIETA.ZMin + GRIETA.ZMax) / 2), Vector3.new(2, 80, fondo))
 
-	-- Arena PvP 1 contra 1 junto a la ciudad.
+	-- Arena PvP (1v1, 2v2 y 3v3) junto a la ciudad.
 	local arena = Instance.new("Folder")
 	arena.Name = "ArenaPvP"
 	arena.Parent = mapa
@@ -268,10 +269,15 @@ function ConstructorPrueba.construirSiFalta()
 	etiqueta(invisible("ArenaPvP", centro + Vector3.new(0, 1, 0), arena), "ArenaPvP")
 	etiqueta(invisible("Inicio1", centro + Vector3.new(-20, 1, 0), arena), "ArenaInicio", { Lado = 1 })
 	etiqueta(invisible("Inicio2", centro + Vector3.new(20, 1, 0), arena), "ArenaInicio", { Lado = 2 })
-	local colaArena = parte({ Name = "ColaArena", Size = Vector3.new(6, 6, 2), Position = Vector3.new(0, 3, 19), Material = Enum.Material.Neon,
-		Color = Color3.fromRGB(255, 80, 80), Transparency = 0.2 }, ciudad)
-	etiqueta(colaArena, "ColaArena")
-	cartel(colaArena, "Arena 1 contra 1", 5, Color3.fromRGB(255, 140, 140))
+	-- Grada: donde esperan los que caen en una ronda por equipos.
+	parte({ Name = "Grada", Size = Vector3.new(30, 6, 8), Position = centro + Vector3.new(0, 3, 40), Material = Enum.Material.Slate, Color = Color3.fromRGB(120, 110, 100) }, arena)
+	etiqueta(invisible("GradaArena", centro + Vector3.new(0, 7, 40), arena), "GradaArena")
+	for i, modo in ipairs({ "1v1", "2v2", "3v3" }) do
+		local colaArena = parte({ Name = "ColaArena" .. modo, Size = Vector3.new(6, 6, 2), Position = Vector3.new((i - 2) * 9, 3, 19), Material = Enum.Material.Neon,
+			Color = Color3.fromRGB(255, 80 + i * 30, 80), Transparency = 0.2 }, ciudad)
+		etiqueta(colaArena, "ColaArena", { Modo = modo })
+		cartel(colaArena, "Arena " .. string.sub(modo, 1, 1) .. " contra " .. string.sub(modo, 1, 1), 5, Color3.fromRGB(255, 140, 140))
+	end
 
 	mapa.Parent = workspace
 	return true
