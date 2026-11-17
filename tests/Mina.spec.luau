@@ -81,7 +81,7 @@ return function(t)
 	end)
 
 	t.describe("Sorteo", function()
-		t.it("un 4 % de los bloques son mineral, con la tabla de la zona 1", function()
+		t.it("un 10 % de los bloques son mineral, con la tabla de la zona 1", function()
 			local rng, minerales, comunes, n = generador(5), 0, 0, 200000
 			for _ = 1, n do
 				local b = Mina.sortear(1, 0, rng(), rng())
@@ -93,7 +93,7 @@ return function(t)
 					end
 				end
 			end
-			t.near(minerales / n, Mining.Blocks.OreChance, 0.003)
+			t.near(minerales / n, Mining.Blocks.OreChance, 0.004)
 			t.near(comunes / minerales, 0.55, 0.02)
 		end)
 	end)
@@ -230,7 +230,7 @@ return function(t)
 			local h = t / 3600
 			return monedas / h, menas / h, 60 * h / math.max(cargas, 1)
 		end
-		t.it("monedas por hora en la zona 1 dentro de 3.864–6.441 y minutos por carga en 2,6–4,4", function()
+		t.it("monedas por hora en la zona 1 dentro de 3.864–6.441 (x escala de dinero) y minutos por carga en 2,6–4,4", function()
 			local totalM, totalC = 0, 0
 			for s = 1, 3 do
 				local monedas, _, minutos = simular(s * 101, 2)
@@ -238,7 +238,8 @@ return function(t)
 				totalC = totalC + minutos
 			end
 			local monedas, minutos = totalM / 3, totalC / 3
-			t.ok(monedas >= 3864 and monedas <= 6441, "monedas/h " .. tostring(monedas))
+			local escala = require(Shared.Config.Economy).CurrencyScale
+			t.ok(monedas >= 3864 * escala and monedas <= 6441 * escala, "monedas/h " .. tostring(monedas))
 			t.ok(minutos >= 2.6 and minutos <= 4.4, "min/carga " .. tostring(minutos))
 		end)
 	end)

@@ -3,14 +3,15 @@
 -- El cliente puede leerlo; el servidor calcula siempre con su propia copia.
 
 return {
+	CurrencyScale = 1000,           -- todo el dinero del juego x 1.000 respecto a B6 (P3c). Las horas de ingreso no cambian
 	IncomePerZoneValue = 490,       -- aproximación: I(z) ~ 490 x V(z)
 	ZoneIncome = { 5152.5, 10301.0, 20040.5, 39784.5, 79219.0, 157536.0, 305461.0, 606246.0, 1204210.5, 2393058.0 },   -- I(z) exacto, monedas por hora (B6)
 	GearCostHours = { Common = 0.3, Uncommon = 0.6, Rare = 1.2, Epic = 2.5, Legendary = 5, Mythic = 10, UltraRare = 20 },
 	Upgrade = { LevelCostFactor = 0.05, SlotCostFactor = 0.5, SlotGems = 6, AwakenCostFactor = 1.5, AwakenCatalysts = 4 },
 	Sell = { GearFraction = 0.10, RecycleFraction = 0.30 },
-	Backpack = { { Capacity = 80, Zone = 2, Hours = 0.5 }, { Capacity = 100, Zone = 3, Hours = 1 }, { Capacity = 120, Zone = 4, Hours = 2 },
-	             { Capacity = 140, Zone = 5, Hours = 3 }, { Capacity = 160, Zone = 6, Hours = 5 }, { Capacity = 180, Zone = 8, Hours = 8 },
-	             { Capacity = 200, Zone = 10, Hours = 12 } },
+	Backpack = { { Capacity = 120, Zone = 2, Hours = 0.5 }, { Capacity = 150, Zone = 3, Hours = 1 }, { Capacity = 180, Zone = 4, Hours = 2 },
+	             { Capacity = 210, Zone = 5, Hours = 3 }, { Capacity = 240, Zone = 6, Hours = 5 }, { Capacity = 270, Zone = 8, Hours = 8 },
+	             { Capacity = 300, Zone = 10, Hours = 12 } },   -- capacidades de B6 x 1,5 (P3c)
 	Consumable = { HealthPotion = 0.01, EnergyTonic = 0.01, LuckElixir = 0.10, XPScroll = 0.15, ReadjustSeal = 0.05 },
 	PetEvolveHours = { Unleashed = 2, UnleashedMax = 8 },
 	CelestialForgeHours = 10, PrestigeSkinHours = 20,

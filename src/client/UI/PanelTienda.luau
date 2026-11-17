@@ -67,7 +67,7 @@ local function vender(id, cantidad)
 	task.spawn(function()
 		local ok, r = Estado.Invocar("Shop.Sell", id, cantidad)
 		if ok then
-			avisar("Vendido por " .. Formato.entero(r.Coins) .. " monedas")
+			avisar("Vendido por " .. Formato.abreviado(r.Coins) .. " monedas")
 		else
 			avisar(MOTIVOS[r] or ("No se pudo: " .. tostring(r)))
 		end
@@ -92,9 +92,9 @@ function PanelTienda.Refrescar()
 		Componentes.texto({ Size = UDim2.new(0, 190, 1, 0), Position = UDim2.new(0, 8, 0, 0), Text = f.Name, TextColor3 = Rarezas.color(f.Rarity), Font = Enum.Font.GothamBold, Parent = fila })
 		Componentes.texto({ Size = UDim2.new(0, 150, 1, 0), Position = UDim2.new(0, 200, 0, 0), TextSize = 12, TextColor3 = C.TextoSuave,
 			Text = Formato.entero(f.Carried) .. " en mochila · " .. Formato.entero(f.Banked) .. " en banco", Parent = fila })
-		Componentes.texto({ Size = UDim2.new(0, 90, 1, 0), Position = UDim2.new(0, 352, 0, 0), TextSize = 12, Text = Formato.decimal(f.Price, 1) .. " c/u", Parent = fila })
+		Componentes.texto({ Size = UDim2.new(0, 90, 1, 0), Position = UDim2.new(0, 352, 0, 0), TextSize = 12, Text = Formato.abreviado(f.Price) .. " c/u", Parent = fila })
 		local b = Componentes.boton({ Size = UDim2.new(0, 110, 0, 26), Position = UDim2.new(1, -116, 0.5, -13), TextSize = 12,
-			Text = "Vender " .. Formato.entero(valor), Parent = fila })
+			Text = "Vender " .. Formato.abreviado(valor), Parent = fila })
 		b.Activated:Connect(function()
 			vender(f.Id, unidades)
 		end)
@@ -104,8 +104,8 @@ function PanelTienda.Refrescar()
 		Componentes.texto({ Size = UDim2.fromScale(1, 1), Text = "No tienes minerales. Ve a picar a la Cantera del Alba.", TextColor3 = C.TextoSuave, Parent = vacia })
 	end
 	lista.CanvasSize = UDim2.new(0, 0, 0, #filas * 38)
-	resumen.Text = "Valor total: " .. Formato.entero(total) .. " monedas   ·   Tienes " .. Formato.entero(Estado.Perfil and Estado.Perfil.Wallet.Coins or 0)
-	botonTodo.Text = "Vender todo (" .. Formato.entero(total) .. ")"
+	resumen.Text = "Valor total: " .. Formato.abreviado(total) .. " monedas   ·   Tienes " .. Formato.abreviado(Estado.Perfil and Estado.Perfil.Wallet.Coins or 0)
+	botonTodo.Text = "Vender todo (" .. Formato.abreviado(total) .. ")"
 	local perfil = Estado.Perfil
 	local s = perfil and Mochila.siguienteAmpliacion(perfil)
 	if not s then
@@ -115,7 +115,7 @@ function PanelTienda.Refrescar()
 		botonMochila.Text = "Mochila de " .. s.Capacity .. ": desbloquea la zona " .. s.Zone
 		botonMochila.BackgroundColor3 = C.BotonApagado
 	else
-		botonMochila.Text = "Ampliar mochila a " .. s.Capacity .. " (" .. Formato.entero(s.Price) .. ")"
+		botonMochila.Text = "Ampliar mochila a " .. s.Capacity .. " (" .. Formato.abreviado(s.Price) .. ")"
 		botonMochila.BackgroundColor3 = C.Boton
 	end
 end

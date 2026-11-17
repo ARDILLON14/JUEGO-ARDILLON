@@ -32,7 +32,7 @@ local function actualizarPerfil()
 	local necesaria = Progresion.xpForLevel(nivel)
 	etiquetaNivel.Text = "Nivel " .. Formato.entero(nivel)
 	fijarXP(perfil.Progress.XP / necesaria, Formato.entero(perfil.Progress.XP) .. " / " .. Formato.entero(necesaria) .. " XP")
-	etiquetaMonedas.Text = Formato.entero(perfil.Wallet.Coins) .. " monedas"
+	etiquetaMonedas.Text = Formato.abreviado(perfil.Wallet.Coins) .. " monedas"
 	local carga, capacidad = Mochila.carga(perfil), Mochila.capacidad(perfil)
 	etiquetaMochila.Text = "Mochila " .. Formato.entero(carga) .. " / " .. Formato.entero(capacidad)
 		.. "   ·   Banco " .. Formato.entero(Mochila.enBanco(perfil))
@@ -143,7 +143,7 @@ local function crearBotonesStudio(pantalla)
 		end)
 	end
 	boton("+1 nivel", "Dev.GiveXP")
-	boton("+10.000 $", "Dev.GiveCoins", 10000)
+	boton("+10 M $", "Dev.GiveCoins", 10000000)
 	crear("TextLabel", {
 		BackgroundColor3 = C.Panel, BackgroundTransparency = 0.2, Size = UDim2.new(0, 80, 1, 0), Text = "solo Studio",
 		TextColor3 = C.Texto, TextSize = 12, Font = Enum.Font.GothamBold, Parent = fila,

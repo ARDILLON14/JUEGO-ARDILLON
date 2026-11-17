@@ -145,7 +145,7 @@ Remotes.ClientToServer = {
 -- Solo se crean en Roblox Studio (nunca en un servidor publicado): ayudas para probar.
 Remotes.SoloStudio = {
 	["Dev.GiveXP"] = { Kind = "Function", Rate = rate(2), Params = { int("amount", 1, 100000000) } },
-	["Dev.GiveCoins"] = { Kind = "Function", Rate = rate(2), Params = { int("amount", 1, 1000000000) } },
+	["Dev.GiveCoins"] = { Kind = "Function", Rate = rate(2), Params = { int("amount", 1, 1000000000000) } },
 }
 
 -- Del servidor al cliente: todos son RemoteEvent.

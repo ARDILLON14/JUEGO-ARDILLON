@@ -17,7 +17,7 @@ end
 function Economia.income(zone)
 	local exact = Economy.ZoneIncome[zone]
 	if exact then
-		return exact
+		return exact * Economy.CurrencyScale
 	end
 	return Economy.IncomePerZoneValue * Mineria.zoneValue(zone)
 end

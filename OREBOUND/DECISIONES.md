@@ -785,6 +785,7 @@ Pendiente de decisión del autor
 - 2026-11-17 · Código, fase 2 (Progresión): valores P2-01 a P2-10. Corrige un fallo de la fase 1 (P2-01). Los archivos A, B, C y D no cambian.
 - 2026-11-17 · Código, fase 3 (Minería y economía base): valores P3-01 a P3-11. Los archivos A, B, C y D no cambian.
 - 2026-11-17 · Minería por bloques a petición del usuario: valores P3b-01 a P3b-10. Sustituye P3-01, P3-02 y P3-10 en lo que contradigan. B3 sigue fijando vida, valor, unidades y XP de cada mineral.
+- 2026-11-17 · Más minerales y dinero x 1.000 a petición del usuario: valores P3c-01 a P3c-06. Sustituyen P3b-02 y P3b-04 y la mochila de 60 de B3.
 
 ---
 
@@ -851,4 +852,19 @@ El usuario pidió que la cantera no tuviera rocas sueltas, sino que se excavara 
 | P3b-08 | Sin rocas sueltas dejan de usarse los depósitos activos, la regeneración de 45 s y el escalado por mineros de B3 (sección 5). La Suerte ya no es la media de la zona: cuenta la de quien destapa cada bloque | [CONFIRMADO] | — |
 | P3b-09 | Un mapa propio de Studio solo necesita una parte con la etiqueta `Mina` en el centro de la cara de arriba (atributos `Zona`, `Ancho`, `Largo`, `Profundidad` y `Salida`) y nada debajo. El mapa de prueba quita el suelo de la plantilla y pone uno con el hueco de la cantera | [CONFIRMADO] | — |
 | P3b-10 | Eco del filo y Onda sísmica solo afectan a bloques de mineral; Eco estelar vuelve a poner el mismo mineral en su sitio | [PROVISIONAL] | `Pickaxes.PassiveValues` |
+
+## 22. Serie P3c — más minerales y cantidades de dinero más altas (petición del usuario)
+
+El usuario encontró pocos minerales al picar y pidió precios más altos, al estilo de los juegos de Roblox actuales. Cálculo: `calculos/c3_mina_bloques.py` (sección P3c).
+
+| # | Decisión | Estado | Cómo probarla o revisarla |
+|---|---|---|---|
+| P3c-01 | **Un 10 % de los bloques es mineral** (antes 4 %): unos 382 minerales por hora en lugar de 249, 1,54 veces más | [PROVISIONAL] | `Mining.Blocks.OreChance` |
+| P3c-02 | Para que el progreso no se acelere, cada mineral da el **65 %** del valor y de la XP de B3 | [PROVISIONAL] | `Mining.Blocks.OreValueScale` y `OreXPScale` |
+| P3c-03 | Mochila base de **90** unidades (antes 60) y ampliaciones de B6 × 1,5 (120 a 300), para seguir en unos 3,5–4 min por carga | [PROVISIONAL] | `Mining.Backpack.Base` y `Economy.Backpack` |
+| P3c-04 | **Todo el dinero del juego × 1.000** (`Economy.CurrencyScale`): valor de minerales, monedas de enemigos, ingreso de referencia y, con él, todos los precios (equipo, mejoras, cajas, mochilas, reinicio). Las proporciones de B6 no cambian: un objeto cuesta las mismas horas de juego. Ejemplos: Pizarra Clara a 1.625 la unidad; ingreso de la zona 1, 5,15 M por hora; zona 10, 2,39 B por hora | [PROVISIONAL] | `tests/Formulas.spec.luau` compara con los CSV multiplicados por la escala |
+| P3c-05 | Resultado con el minero de referencia: 5.306 × 1.000 monedas/h (objetivo 5.152 × 1.000), 55.512 XP/h (+4 % sobre la referencia con bloques), 3,63 min por carga. La simulación con el código del juego da 5.400 × 1.000 monedas/h y 3,64 min | [CONFIRMADO] | `python3 calculos/c3_mina_bloques.py`, `tests/Mina.spec.luau` |
+| P3c-06 | La interfaz abrevia las cantidades grandes: 12,5 K, 5,15 M, 2,39 B, 1,2 T | [CONFIRMADO] | En Studio |
+
+Los archivos B siguen en sus unidades originales; el juego aplica `CurrencyScale`, `OreValueScale` y `OreXPScale` encima.
 

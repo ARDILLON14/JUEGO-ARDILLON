@@ -180,7 +180,7 @@ function PanelEstadisticas.Iniciar(Estado)
 		end
 		if not confirmando then
 			local coste = Estadisticas.costeReinicio(perfil)
-			reiniciar.Text = coste == 0 and "Reiniciar puntos (gratis)" or ("Reiniciar puntos (" .. Formato.entero(coste) .. " monedas)")
+			reiniciar.Text = coste == 0 and "Reiniciar puntos (gratis)" or ("Reiniciar puntos (" .. Formato.abreviado(coste) .. " monedas)")
 		end
 		local tomos = (perfil.Consumables and perfil.Consumables.RespecTome) or 0
 		tomo.Text = "Usar Tomo de Reajuste (" .. tostring(tomos) .. ")"

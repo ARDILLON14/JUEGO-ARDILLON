@@ -15,6 +15,8 @@ local Deposito = require(Server.Reglas.Deposito)
 local Generador = require(Server.Reglas.Generador)
 local Pasivas = require(Server.Reglas.Pasivas)
 local PlantillaPerfil = require(Server.Datos.PlantillaPerfil)
+local Economy = require(Shared.Config.Economy)
+local VALOR_MINERAL = Economy.CurrencyScale * Mining.Blocks.OreValueScale
 
 local function perfil(nivel)
 	local p = PlantillaPerfil.nuevo(0)
@@ -38,18 +40,18 @@ end
 
 return function(t)
 	t.describe("Mochila", function()
-		t.it("60 de base; las ampliaciones fijan la capacidad; las mascotas suman", function()
+		t.it("90 de base; las ampliaciones fijan la capacidad; las mascotas suman", function()
 			local p = perfil(1)
-			t.equal(Mochila.capacidad(p), 60)
+			t.equal(Mochila.capacidad(p), 90)
 			p.Backpack.Tier = 1
-			t.equal(Mochila.capacidad(p), 80)
-			t.equal(Mochila.capacidad(p, 6), 86)
+			t.equal(Mochila.capacidad(p), 120)
+			t.equal(Mochila.capacidad(p, 6), 126)
 		end)
 		t.it("no entra más de lo que cabe", function()
 			local p = perfil(1)
-			t.equal(Mochila.anadir(p, "PizarraClara", 50), 50)
+			t.equal(Mochila.anadir(p, "PizarraClara", 80), 80)
 			t.equal(Mochila.anadir(p, "CobreRosado", 30), 10)
-			t.equal(Mochila.carga(p), 60)
+			t.equal(Mochila.carga(p), 90)
 			t.equal(Mochila.anadir(p, "PizarraClara", 5), 0)
 			t.throws(function()
 				Mochila.anadir(p, "Inventado", 1)
@@ -68,17 +70,17 @@ return function(t)
 		end)
 		t.it("retirar del banco respeta existencias y hueco", function()
 			local p = perfil(1)
-			p.Minerals.Banked.PizarraClara = 100
-			t.deepEqual({ Mochila.retirar(p, "PizarraClara", 70) }, { true, 60 })
-			t.equal(p.Minerals.Banked.PizarraClara, 40)
+			p.Minerals.Banked.PizarraClara = 200
+			t.deepEqual({ Mochila.retirar(p, "PizarraClara", 150) }, { true, 90 })
+			t.equal(p.Minerals.Banked.PizarraClara, 110)
 			t.equal(select(2, Mochila.retirar(p, "PizarraClara", 1)), "mochila_llena")
 			t.equal(select(2, Mochila.retirar(p, "CobreRosado", 1)), "sin_existencias")
 		end)
 	end)
 
 	t.describe("Venta de minerales", function()
-		t.it("precio de B3 y B6: Pizarra Clara a 2,5 la unidad", function()
-			t.near(Mochila.precioUnidad("PizarraClara"), 2.5)
+		t.it("precio de B3 y B6 con las escalas de P3c: Pizarra Clara a 2,5 x 1.000 x 0,65 la unidad", function()
+			t.near(Mochila.precioUnidad("PizarraClara"), 2.5 * VALOR_MINERAL)
 		end)
 		t.it("vende primero de la mochila y después del banco, todo junto", function()
 			local p = perfil(1)
@@ -86,7 +88,7 @@ return function(t)
 			p.Minerals.Banked.PizarraClara = 10
 			local ok, monedas, vendidas = Mochila.vender(p, "PizarraClara", 5)
 			t.ok(ok)
-			t.equal(monedas, 12)
+			t.equal(monedas, math.floor(5 * 2.5 * VALOR_MINERAL + 1e-6))
 			t.equal(vendidas, 5)
 			t.equal(p.Minerals.Carried.PizarraClara, nil)
 			t.equal(p.Minerals.Banked.PizarraClara, 8)
@@ -109,7 +111,7 @@ return function(t)
 			t.equal(select(2, Mochila.puedeAmpliar(p)), "zona")
 			p.Progress.UnlockedZone = 2
 			local s = Mochila.puedeAmpliar(p)
-			t.equal(s.Capacity, 80)
+			t.equal(s.Capacity, 120)
 			t.equal(s.Price, Economia.backpackPrice(1))
 			p.Backpack.Tier = 7
 			t.equal(select(2, Mochila.puedeAmpliar(p)), "maxima")
@@ -135,7 +137,7 @@ return function(t)
 		end)
 		t.it("el saco se recoge hasta llenar la mochila", function()
 			local p = perfil(30)
-			p.Minerals.Carried.PizarraClara = 55
+			p.Minerals.Carried.PizarraClara = 85
 			local saco = { PizarraClara = 10 }
 			t.equal(Mochila.recogerSaco(p, saco), 5)
 			t.deepEqual(saco, { PizarraClara = 5 })
@@ -330,7 +332,7 @@ return function(t)
 				end
 			end
 			tm, uds, valor = tm / total, uds / total, valor / total
-			local porHora = 3600 / (tm + VIAJE + BANCO * uds / Mining.Backpack.Base)
+			local porHora = 3600 / (tm + VIAJE + BANCO * uds / 60)   -- mochila de 60 de B3
 			return { Segundos = tm, Unidades = uds, DepositosHora = porHora, Monedas = porHora * valor }
 		end
 		local equilibrado = ritmo(1, math.floor(Progresion.statPoints(50) * 0.125), Potencia.itemPower(1, "Rare"), Pickaxes.HitsPerSecond.Rare)
@@ -340,12 +342,14 @@ return function(t)
 			t.near(s, 6.0, 1e-9)
 		end)
 		t.it("minutos por carga de mochila: 3,5 (aceptable 2,6–4,4)", function()
-			local minutos = Mining.Backpack.Base / equilibrado.Unidades / equilibrado.DepositosHora * 60
+			local minutos = 60 / equilibrado.Unidades / equilibrado.DepositosHora * 60
 			t.ok(minutos >= 2.6 and minutos <= 4.4, tostring(minutos))
 		end)
 		t.it("monedas por hora en la zona 1: 5.152 (aceptable 3.864–6.441) y cerca de B3", function()
-			t.ok(equilibrado.Monedas >= 3864 and equilibrado.Monedas <= 6441, tostring(equilibrado.Monedas))
-			t.near(equilibrado.Monedas, 5175, 5175 * 0.02, "B3, sección 6")
+			-- En las unidades de B3: sin la escala de dinero ni la del valor por mineral (P3c).
+			local base = equilibrado.Monedas / VALOR_MINERAL
+			t.ok(base >= 3864 and base <= 6441, tostring(base))
+			t.near(base, 5175, 5175 * 0.02, "B3, sección 6")
 		end)
 	end)
 end

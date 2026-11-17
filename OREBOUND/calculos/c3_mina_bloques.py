@@ -1,4 +1,4 @@
-"""OREBOUND - Código, fase 3 (revisión): minería por bloques al estilo de Minecraft.
+"""OREBOUND - Código, fase 3 (revisión): minería por bloques al estilo de Minecraft (P3b y P3c).
 Ejecutar desde OREBOUND/:  python3 calculos/c3_mina_bloques.py
 
 La cantera deja de tener rocas sueltas: es un volumen de bloques de piedra que se excava. Cada bloque que queda
@@ -36,7 +36,8 @@ def t_mineral(r):
     return golpes / HPS
 T_PIEDRA = max(1, math.ceil(POT_ZONA * DUREZA * FACTOR_PIEDRA / (PICO * MULT_MIN))) / HPS
 
-def simular(d, horas=3.0, semilla=1):
+def simular(d, horas=3.0, semilla=1, mochila=None, escala_valor=1.0, escala_xp=1.0):
+    mochila = mochila or MOCHILA
     rng = random.Random(semilla)
     aire, contenido = {}, {}                                 # aire[(x,y,z)] = momento en que se picó                              # contenido[(x,y,z)] = rareza o -1 (piedra) al quedar a la vista
     def dentro(c): return 1 <= c[0] <= W and 1 <= c[1] <= D and 1 <= c[2] <= L
@@ -60,8 +61,8 @@ def simular(d, horas=3.0, semilla=1):
             t += T_PIEDRA
         else:
             t += t_mineral(r); menas += 1
-            monedas += V * F_VALOR[r]; xp += K_XP * XP_ACC * F_XP[r]; unidades += UNIDADES[r]
-            if unidades >= MOCHILA:
+            monedas += V * F_VALOR[r] * escala_valor; xp += K_XP * XP_ACC * F_XP[r] * escala_xp; unidades += UNIDADES[r]
+            if unidades >= mochila:
                 t += T_BANCO; unidades = 0; cargas += 1
         for v in vecinos(c):
             destapar(v)
@@ -131,4 +132,19 @@ if __name__ == "__main__":
         filas.append((d, m))
         print(f"{d:>6.3f} {m['monedas']:>10.0f} {m['menas']:>8.0f} {m['xp']:>8.0f} {m['bloques']:>9.0f} {m['min_carga']:>9.2f} {m['piedra_por_mena']:>11.1f}")
     mejor = min(filas, key=lambda f: abs(f[1]["monedas"] - OBJETIVO))
-    print(f"Elegida d = {mejor[0]:.3f}: {mejor[1]['monedas']:.0f} monedas/h (objetivo {OBJETIVO}, aceptable {MIN_OK}-{MAX_OK})")
+    print(f"Calibración P3b: d = {mejor[0]:.3f}: {mejor[1]['monedas']:.0f} monedas/h (objetivo {OBJETIVO}, aceptable {MIN_OK}-{MAX_OK})")
+
+    # P3c: el usuario pide más minerales. Se sube d a 0,10 y se compensa el valor y la XP de cada mineral
+    # para que monedas/h y XP/h sigan en el objetivo; la mochila crece para mantener ~3,5-4 min por carga.
+    D_NUEVA = 0.10
+    ref = {k: statistics.mean(r[k] for r in [simular(mejor[0], semilla=s) for s in range(6)]) for k in ("monedas", "xp", "menas")}
+    sin = [simular(D_NUEVA, semilla=s) for s in range(6)]
+    m_sin = {k: statistics.mean(r[k] for r in sin) for k in ("monedas", "xp", "menas", "min_carga")}
+    esc_valor = round(OBJETIVO / m_sin["monedas"], 2); esc_xp = round(ref["xp"] / m_sin["xp"], 2)
+    unidades_min = MOCHILA / m_sin["min_carga"]
+    mochila = int(round(unidades_min * 3.75 / 10) * 10)
+    fin = [simular(D_NUEVA, semilla=s, mochila=mochila, escala_valor=esc_valor, escala_xp=esc_xp) for s in range(6)]
+    m_fin = {k: statistics.mean(r[k] for r in fin) for k in ("monedas", "xp", "menas", "min_carga")}
+    print(f"P3c: d = {D_NUEVA}: {m_sin['menas']:.0f} minerales/h ({m_sin['menas']/ref['menas']:.2f} veces más que con d = {mejor[0]})")
+    print(f"     escala de valor {esc_valor}, escala de XP {esc_xp}, mochila {mochila}")
+    print(f"     resultado: {m_fin['monedas']:.0f} monedas/h, {m_fin['xp']:.0f} XP/h, {m_fin['min_carga']:.2f} min por carga")

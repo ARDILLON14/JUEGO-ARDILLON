@@ -6,6 +6,7 @@ local Mining = require(Config.Mining)
 local Pickaxes = require(Config.Pickaxes)
 local Fracture = require(Config.Fracture)
 local Stats = require(Config.Stats)
+local Economy = require(Config.Economy)
 local Potencia = require(script.Parent.Potencia)
 local Progresion = require(script.Parent.Progresion)
 
@@ -33,9 +34,9 @@ function Mineria.hardness(zone)
 	return math.min(Mining.Zone.HardnessMax, Mining.Zone.HardnessBase + Mining.Zone.HardnessPerZone * (zone - 1))
 end
 
--- V(z) = 10 x 2,00^(z-1): la unidad de valor de la zona.
+-- V(z) = 10 x 2,00^(z-1) x escala de dinero: la unidad de valor de la zona.
 function Mineria.zoneValue(zone)
-	return Mining.Deposit.ValueBase * Mining.Deposit.ValueGrowth ^ (zone - 1)
+	return Mining.Deposit.ValueBase * Mining.Deposit.ValueGrowth ^ (zone - 1) * Economy.CurrencyScale
 end
 
 function Mineria.zoneHasUltraRare(zone)
@@ -59,7 +60,7 @@ function Mineria.depositHealth(zone, rarity)
 end
 
 function Mineria.depositValue(zone, rarity)
-	return Mineria.zoneValue(zone) * Mining.Deposit.ValueFactor[rarity]
+	return Mineria.zoneValue(zone) * Mining.Deposit.ValueFactor[rarity] * Mining.Blocks.OreValueScale
 end
 
 function Mineria.depositUnits(rarity)
@@ -71,7 +72,7 @@ function Mineria.unitValue(zone, rarity)
 end
 
 function Mineria.depositXP(zone, rarity)
-	return Mining.Deposit.XPScale * Progresion.xpPerAction(Mineria.zoneMidLevel(zone)) * Mining.Deposit.XPFactor[rarity]
+	return Mining.Deposit.XPScale * Progresion.xpPerAction(Mineria.zoneMidLevel(zone)) * Mining.Deposit.XPFactor[rarity] * Mining.Blocks.OreXPScale
 end
 
 -- F16 ------------------------------------------------------------------

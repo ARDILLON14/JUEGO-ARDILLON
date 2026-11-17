@@ -11,6 +11,14 @@ local Dano = require(F.Dano)
 local Mascotas = require(F.Mascotas)
 local Economia = require(F.Economia)
 local Boxes = require(Shared.Config.Boxes)
+local Economy = require(Shared.Config.Economy)
+local Mining = require(Shared.Config.Mining)
+
+-- Los CSV de calculos/ están en las unidades de B3 y B6. El juego multiplica todo el dinero por CurrencyScale
+-- y el valor y la XP de cada mineral por OreValueScale y OreXPScale (DECISIONES P3c).
+local DINERO = Economy.CurrencyScale
+local VALOR_MINERAL = Economy.CurrencyScale * Mining.Blocks.OreValueScale
+local XP_MINERAL = Mining.Blocks.OreXPScale
 
 local V = script.Parent.Vectores
 
@@ -174,9 +182,9 @@ return function(t)
 		t.it("los 66 depósitos coinciden con b3_minerales.csv", function()
 			for _, m in ipairs(require(V.Minerales)) do
 				t.near(Mineria.depositHealth(m.Zone, m.Rarity), m.Health, 0.5, m.Id .. " vida")
-				t.near(Mineria.depositValue(m.Zone, m.Rarity), m.Value, 0.5, m.Id .. " valor")
+				t.near(Mineria.depositValue(m.Zone, m.Rarity), m.Value * VALOR_MINERAL, 0.5 * VALOR_MINERAL, m.Id .. " valor")
 				t.equal(Mineria.depositUnits(m.Rarity), m.Units)
-				t.near(Mineria.depositXP(m.Zone, m.Rarity), m.XP, 0.5, m.Id .. " XP")
+				t.near(Mineria.depositXP(m.Zone, m.Rarity), m.XP * XP_MINERAL, 0.5, m.Id .. " XP")
 				t.near(Mineria.pickPowerReq(m.Zone), m.PickReq, 0.5)
 				t.near(Mineria.depositMiningReq(m.Zone, m.Rarity), m.MiningReq, 0.5, m.Id .. " Minería")
 				t.near(Mineria.spawnWeights(m.Zone)[m.Rarity], m.Chance, 1e-9, m.Id .. " probabilidad")
@@ -211,7 +219,7 @@ return function(t)
 			t.equal(Mineria.activeDeposits(20), 80)
 		end)
 		t.it("carga y ralentización", function()
-			t.near(Mineria.load(200, 1), 1)
+			t.near(Mineria.load(200 * DINERO, 1), 1)
 			t.near(Mineria.loadSlow(1), 0.12 * math.log(2))
 			t.equal(Mineria.loadSlow(1000), 0.40)
 			t.equal(Mineria.loadSlow(0), 0)
@@ -266,8 +274,8 @@ return function(t)
 			t.near(Dano.enemyHealth(3, "Boss"), 400 * 1.2 * 1200)
 			t.near(Dano.enemyDamage(1, "Common"), 15)
 			t.near(Dano.enemyDamage(2, "Boss"), 500 * 2 ^ (99 / 100) * 0.15)
-			t.near(Dano.enemyCoins(1, "Common"), 14)
-			t.near(Dano.enemyCoins(2, "Boss"), 1200)
+			t.near(Dano.enemyCoins(1, "Common"), 14 * DINERO)
+			t.near(Dano.enemyCoins(2, "Boss"), 1200 * DINERO)
 			t.near(Dano.enemyXP(1, "Common"), 0.71 * 217.5)
 			t.near(Dano.bossScale(8).Health, 5.2)
 			t.near(Dano.bossScale(99).Damage, 1.35)
@@ -307,11 +315,11 @@ return function(t)
 		t.it("los 70 precios de equipo coinciden con b6_precios_equipo.csv", function()
 			for _, e in ipairs(require(V.PreciosEquipo)) do
 				-- tolerancia de 1 moneda: Python redondea los empates (x,5) al par y el juego, hacia arriba
-				t.near(Economia.gearCost(e.Zone, e.Rarity), e.Craft, 1)
-				t.near(Economia.upgradeAllLevelsCost(e.Zone, e.Rarity), e.Levels, 1)
-				t.near(3 * Economia.slotCost(e.Zone, e.Rarity), e.Slots, 2)
-				t.near(Economia.awakenCost(e.Zone, e.Rarity), e.Awaken, 1)
-				t.near(Economia.gearSellPrice(e.Zone, e.Rarity), e.Sell, 1)
+				t.near(Economia.gearCost(e.Zone, e.Rarity), e.Craft * DINERO, DINERO)
+				t.near(Economia.upgradeAllLevelsCost(e.Zone, e.Rarity), e.Levels * DINERO, DINERO)
+				t.near(3 * Economia.slotCost(e.Zone, e.Rarity), e.Slots * DINERO, 2 * DINERO)
+				t.near(Economia.awakenCost(e.Zone, e.Rarity), e.Awaken * DINERO, DINERO)
+				t.near(Economia.gearSellPrice(e.Zone, e.Rarity), e.Sell * DINERO, DINERO)
 			end
 		end)
 		t.it("precio de venta de los 66 minerales", function()
@@ -319,17 +327,17 @@ return function(t)
 			for _, m in ipairs(require(V.PreciosMinerales)) do
 				local c = catalogo[m.Id]
 				t.ok(c, m.Id)
-				t.near(Economia.mineralSellPrice(c.Zone, c.Rarity, 1), m.Sell, 0.051)
-				t.near(Economia.mineralSellPrice(c.Zone, c.Rarity, 1, Mineria.fracturedMultiplier(0, true)), m.Fractured, 0.13)
+				t.near(Economia.mineralSellPrice(c.Zone, c.Rarity, 1), m.Sell * VALOR_MINERAL, 0.051 * VALOR_MINERAL)
+				t.near(Economia.mineralSellPrice(c.Zone, c.Rarity, 1, Mineria.fracturedMultiplier(0, true)), m.Fractured * VALOR_MINERAL, 0.13 * VALOR_MINERAL)
 			end
 		end)
 		t.it("cajas y mochila", function()
-			t.equal(Economia.boxPrice("Weapon", 1), 5153)
-			t.equal(Economia.boxPrice("Zone", 2), math.floor(0.6 * 10301 + 0.5))
+			t.equal(Economia.boxPrice("Weapon", 1), math.floor(5152.5 * DINERO + 0.5))
+			t.equal(Economia.boxPrice("Zone", 2), math.floor(0.6 * 10301 * DINERO + 0.5))
 			t.throws(function()
 				Economia.boxPrice("Event", 1)
 			end)
-			t.equal(Economia.backpackPrice(1), math.floor(0.5 * 10301 + 0.5))
+			t.equal(Economia.backpackPrice(1), math.floor(0.5 * 10301 * DINERO + 0.5))
 		end)
 	end)
 end
