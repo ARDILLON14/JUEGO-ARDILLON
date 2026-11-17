@@ -788,6 +788,7 @@ Pendiente de decisión del autor
 - 2026-11-17 · Más minerales y dinero x 1.000 a petición del usuario: valores P3c-01 a P3c-06. Sustituyen P3b-02 y P3b-04 y la mochila de 60 de B3.
 - 2026-11-17 · Código, fase 4 (Combate y Núcleos): valores P4-01 a P4-12. Los archivos A, B, C y D no cambian.
 - 2026-11-17 · Código, fase 5 (Fabricación, rarezas y cajas): valores P5-01 a P5-11. Los archivos A, B, C y D no cambian.
+- 2026-11-17 · Combate más frenético a petición del usuario: valores P4b-01 a P4b-05. Sustituye P4-04 en lo que contradiga.
 
 ---
 
@@ -902,4 +903,14 @@ Los archivos B siguen en sus unidades originales; el juego aplica `CurrencyScale
 | P5-09 | La caja de evento existe en las reglas pero no se vende: se ganará con fichas cuando lleguen los eventos | [CONFIRMADO] | — |
 | P5-10 | Máximo de 120 objetos en el inventario | [PROVISIONAL] | `Economy.MaxItems` |
 | P5-11 | Medidas del roadmap: 100.000 aperturas con Legendario o superior en 4,449 % ± 0,2 y ninguna racha de más de 50; el arma Rara de la zona cuesta 1,2 horas de ingreso y sus minerales se juntan en menos tiempo | [CONFIRMADO] | `tests/Forja.spec.luau` |
+
+## 25. Serie P4b — combate más frenético (petición del usuario)
+
+| # | Decisión | Estado | Cómo probarla o revisarla |
+|---|---|---|---|
+| P4b-01 | Más enemigos y más agresivos: 16 vivos por zona (antes 12), reaparecen a los 5 s (antes 8), detectan a 40 studs (antes 32) y andan a 14 (antes 12). No cambia lo que se gana por enemigo: el ritmo lo marca el daño del jugador | [PROVISIONAL] | `Weapons.Enemies.AI` |
+| P4b-02 | Los enemigos avisan 0,45 s antes de golpear (se ponen rojos). Si el jugador se aleja o hace un dash a tiempo (esquiva perfecta), el golpe falla | [PROVISIONAL] | `AI.TelegraphSeconds` |
+| P4b-03 | Cada golpe empuja 0,6 studs y retrasa 0,15 s el siguiente ataque del enemigo; el 4.º golpe del combo (remate) empuja 4 studs | [PROVISIONAL] | `Weapons.Feel` |
+| P4b-04 | Animaciones por código (no hay archivos de animación subidos a Roblox): brazo que golpea alternando lados y remate por arriba, tajo de luz, paso adelante, temblor de cámara, destello y chispas, estela del dash, contador de combo. Solo las ve el propio jugador; las de todos (números de daño, efectos de habilidades, enemigos que revientan) siguen en el servidor | [PROVISIONAL] | Sustituir por animaciones de verdad cuando haya un animador (fase 9) |
+| P4b-05 | Los enemigos derrotados revientan en 8 pedazos que salen despedidos | [CONFIRMADO] | — |
 

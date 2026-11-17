@@ -214,9 +214,23 @@ local function pensar(e, ahora)
 	else
 		e.Humanoide:MoveTo(pos)
 		e.Raiz.CFrame = CFrame.lookAt(pos, Vector3.new(posObjetivo.X, pos.Y, posObjetivo.Z))
-		if ahora >= e.ProximoAtaque then
+		if ahora >= e.ProximoAtaque and not e.Preparando then
+			-- Aviso: se pone rojo TelegraphSeconds antes de golpear; si el objetivo se aleja o esquiva, falla.
 			e.ProximoAtaque = ahora + E[e.Tipo].Interval
-			task.spawn(atacar, objetivo, Dano.enemyDamage(e.Zona, e.Tipo), e)
+			e.Preparando = true
+			e.Modelo:SetAttribute("Preparando", true)
+			task.delay(AI.TelegraphSeconds, function()
+				e.Preparando = false
+				if e.Modelo.Parent then
+					e.Modelo:SetAttribute("Preparando", false)
+				end
+				local p = Lugares.posicion(objetivo)
+				if e.Vida > 0 and e.Raiz and p and not Combate.controlado(e.Control, os.clock())
+					and (p - e.Raiz.Position).Magnitude <= AI.AttackRange + 1.5 then
+					e.Raiz.CFrame = e.Raiz.CFrame + e.Raiz.CFrame.LookVector * 0.8
+					atacar(objetivo, Dano.enemyDamage(e.Zona, e.Tipo), e)
+				end
+			end)
 		end
 	end
 end
@@ -280,6 +294,7 @@ function EnemyService.Danar(id, jugador, cantidad)
 	e.Modelo:SetAttribute("Vida", e.Vida)
 	e.Barra.Size = UDim2.fromScale(math.clamp(e.Vida / e.VidaMax, 0, 1), 1)
 	if e.Vida > 0 then
+		e.ProximoAtaque = math.max(e.ProximoAtaque, os.clock() + Weapons.Feel.StaggerSeconds)   -- titubea al recibir golpes
 		return aplicado, false
 	end
 	enemigos[id] = nil
@@ -292,16 +307,22 @@ function EnemyService.Danar(id, jugador, cantidad)
 			warn("EnemyService: " .. tostring(err))
 		end
 	end
-	for _, p in ipairs(e.Modelo:GetDescendants()) do
-		if p:IsA("BasePart") then
-			p.Anchored = true
-			p.CanCollide = false
-			p.Transparency = 0.6
-		end
+	-- Revienta en pedazos que salen despedidos (lo ven todos).
+	local centro = e.Raiz and e.Raiz.Position or e.Origen
+	local color = e.Raiz and e.Raiz.Color or Color3.new(0.5, 0.5, 0.5)
+	e.Modelo:Destroy()
+	for _ = 1, 8 do
+		local trozo = Instance.new("Part")
+		trozo.Size = Vector3.new(azar:NextNumber(0.5, 1.2), azar:NextNumber(0.5, 1.2), azar:NextNumber(0.5, 1.2))
+		trozo.Color = color
+		trozo.Material = Enum.Material.Slate
+		trozo.CanCollide = false
+		trozo.CanQuery = false
+		trozo.CFrame = CFrame.new(centro + Vector3.new(azar:NextNumber(-1, 1), azar:NextNumber(0, 2), azar:NextNumber(-1, 1)))
+		trozo.AssemblyLinearVelocity = Vector3.new(azar:NextNumber(-25, 25), azar:NextNumber(20, 40), azar:NextNumber(-25, 25))
+		trozo.Parent = workspace
+		game:GetService("Debris"):AddItem(trozo, 1.2)
 	end
-	task.delay(0.6, function()
-		e.Modelo:Destroy()
-	end)
 	task.delay(AI.RespawnSeconds, function()
 		z.Pendientes = z.Pendientes - 1
 	end)

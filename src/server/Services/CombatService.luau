@@ -115,9 +115,11 @@ local function atacar(jugador, ids, _comboIndex)
 			and (enemigo.Raiz.Position - raiz.Position).Magnitude <= alcance + enemigo.Raiz.Size.X / 2 then
 			usados[id] = true
 			n = n + 1
-			CombatService.DanarEnemigo(jugador, enemigo, tipo.Coef, {
-				Secundario = n > 1, Golpe = Combate.contarGolpe(e.Combo, id, ahora),
-			})
+			local golpe = Combate.contarGolpe(e.Combo, id, ahora)
+			CombatService.DanarEnemigo(jugador, enemigo, tipo.Coef, { Secundario = n > 1, Golpe = golpe })
+			-- Empuje: un poco en cada golpe y más en el remate del combo (cada 4.º golpe).
+			local empuje = golpe % Weapons.ComboHits == 0 and Weapons.Feel.FinisherPushback or Weapons.Feel.HitPushback
+			Enemigos.Empujar(id, raiz.Position, empuje)
 		end
 	end
 end

@@ -16,6 +16,8 @@ local Inventario = require(Shared:WaitForChild("Reglas"):WaitForChild("Inventari
 local Habilidades = require(Shared.Reglas:WaitForChild("Habilidades"))
 local Estadisticas = require(Shared.Reglas:WaitForChild("Estadisticas"))
 local Nombres = require(Shared:WaitForChild("Visual"):WaitForChild("Nombres"))
+local Rarezas = require(Shared.Visual:WaitForChild("Rarezas"))
+local Efectos = require(script.Parent:WaitForChild("EfectosCombate"))
 
 local UI = script.Parent.Parent:WaitForChild("UI")
 local Componentes = require(UI:WaitForChild("Componentes"))
@@ -141,8 +143,9 @@ local function paso()
 	siguienteAtaque = ahora + 1 / (Weapons.Types[arma.Type].HitsPerSecond * d.AttackSpeed) + 0.02
 	balancear(herramienta)
 	local ids = objetivos(arma.Type)
+	comboIndice = comboIndice % Weapons.ComboHits + 1
+	Efectos.ataque(comboIndice, Rarezas.color(arma.Rarity), Weapons.Types[arma.Type].Range)
 	if #ids > 0 then
-		comboIndice = comboIndice % Weapons.ComboHits + 1
 		R["Combat.Attack"]:FireServer(ids, comboIndice)
 	end
 end
@@ -171,6 +174,7 @@ local function lanzar(ranura)
 	end
 	enfriamientos[id] = ahora + h.Datos.Cooldown
 	R["Combat.Cast"]:FireServer(ranura, apuntado())
+	Efectos.temblar(ranura == "V" and 0.6 or 0.15)
 end
 
 local function dash()
@@ -194,6 +198,7 @@ local function dash()
 		dir = Vector3.new(cam.X, 0, cam.Z)
 	end
 	R["Combat.Dash"]:FireServer(dir.Magnitude > 0 and dir.Unit or Vector3.new(0, 0, -1))
+	Efectos.estela()
 end
 
 -- Números de daño flotantes.
@@ -295,7 +300,11 @@ function CombatController.Iniciar(estado, carpeta, funcionAviso)
 		R[nombre] = carpeta:WaitForChild(nombre)
 	end
 	crearBarra()
-	R["Combat.Hit"].OnClientEvent:Connect(numero)
+	R["Combat.Hit"].OnClientEvent:Connect(function(datos)
+		numero(datos)
+		Efectos.impacto(datos)
+	end)
+	Efectos.Iniciar()
 	R["Combat.Rejected"].OnClientEvent:Connect(function(datos)
 		local perfil = Estado.Perfil
 		local id = perfil and datos.Slot and perfil.Equipped.Loadout[datos.Slot]
@@ -340,6 +349,7 @@ function CombatController.Iniciar(estado, carpeta, funcionAviso)
 			R["Combat.Block"]:FireServer(true)
 		elseif entrada.KeyCode == Enum.KeyCode.E then
 			R["Combat.Blink"]:FireServer(apuntado())
+			Efectos.estela()
 		elseif entrada.KeyCode == Enum.KeyCode.Space and controlado() then
 			R["Combat.Break"]:FireServer()
 		end

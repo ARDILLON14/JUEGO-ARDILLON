@@ -17,6 +17,7 @@ return {
 	ComboResetSeconds = 2.0,                         -- el escalado del combo se reinicia tras 2 s sin golpear a ese objetivo
 	RangeTolerance = 1.2,                            -- C_Tecnico 5.3: alcance del arma + 20 %
 	AttackTimingTolerance = 0.85,                    -- margen por latencia en el ritmo de golpes
+	Feel = { HitPushback = 0.6, FinisherPushback = 4, StaggerSeconds = 0.15 },   -- sensación de golpe (P4b): empuje y titubeo
 	ComboHits = 4,                                   -- GDD
 	SecondaryTargetDamage = 0.25,
 	Techniques = {   -- 2 por arma; se equipan en Z, X, C o V junto a las del Núcleo (GDD)
@@ -47,7 +48,8 @@ return {
 		Guardian = { Health = 240,  Damage = 0.10, Interval = 2.2, XP = 10,  Coins = 16.80, Share = 0.02 },
 		Boss     = { Health = 1200, Damage = 0.15, Interval = 2.5, XP = 60,  Coins = 60 },
 		XPScale = 0.71, TutorialHealthFactor = 0.5, TutorialMaxLevel = 10,
-		AI = { AggroRadius = 32, LeashRadius = 70, AttackRange = 6, WalkSpeed = 12, AlivePerZone = 12, RespawnSeconds = 8 },   -- propuesta
+		AI = { AggroRadius = 40, LeashRadius = 70, AttackRange = 6, WalkSpeed = 14, AlivePerZone = 16, RespawnSeconds = 5,   -- propuesta (P4b)
+		       TelegraphSeconds = 0.45 },   -- se ponen rojos antes de golpear: da tiempo a esquivar
 		PackWeights = { [1] = 70, [2] = 25, [3] = 5 }, PackSpacing = 20,
 	},
 	Boss = { PhaseThresholds = { 0.60, 0.30 }, HealthPerExtraPlayer = 0.6, DamagePerExtraPlayer = 0.05, MaxPlayers = 8,
