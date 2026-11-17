@@ -2,6 +2,7 @@
 -- El cliente solo elige el bloque que tiene bajo el cursor y respeta el ritmo del pico; el servidor lo valida todo.
 -- Muestra el bloque apuntado (nombre y vida), el botín (Mining.Loot), una luz para ver bajo tierra,
 -- la tecla H para subir a la superficie y, con Sonar rúnico, resalta los minerales Épicos o mejores cercanos.
+-- La animación del pico, las grietas y los trozos están en EfectosMineria.
 
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
@@ -17,6 +18,8 @@ local Inventario = require(Shared:WaitForChild("Reglas"):WaitForChild("Inventari
 local Criadero = require(Shared.Reglas:WaitForChild("Criadero"))
 local Rarezas = require(Shared:WaitForChild("Visual"):WaitForChild("Rarezas"))
 local UserInputService = game:GetService("UserInputService")
+local EfectosMineria = require(script.Parent:WaitForChild("EfectosMineria"))
+local EfectosCombate = require(script.Parent:WaitForChild("EfectosCombate"))
 
 local MiningController = {}
 
@@ -57,20 +60,6 @@ local function enAlcance(parte)
 	return (raiz.Position - parte.Position).Magnitude <= Mining.Deposit.MaxReach + parte.Size.X / 2
 end
 
-local function balancear(herramienta)
-	local mango = herramienta:FindFirstChild("Handle")
-	if not mango then
-		return
-	end
-	local agarre = herramienta.Grip
-	herramienta.Grip = agarre * CFrame.Angles(math.rad(-50), 0, 0)
-	task.delay(0.12, function()
-		if herramienta.Parent then
-			herramienta.Grip = agarre
-		end
-	end)
-end
-
 local function conectarHerramienta(herramienta)
 	if not herramienta:IsA("Tool") or herramienta.Name ~= "Pico" then
 		return
@@ -80,9 +69,11 @@ local function conectarHerramienta(herramienta)
 	end)
 	herramienta.Deactivated:Connect(function()
 		pulsando = false
+		EfectosMineria.reposo()
 	end)
 	herramienta.Unequipped:Connect(function()
 		pulsando = false
+		EfectosMineria.reposo()
 	end)
 end
 
@@ -120,8 +111,10 @@ local function paso()
 		siguiente = ahora + 0.2
 		return
 	end
-	siguiente = ahora + 1 / Mineria.pickHitsPerSecond(pico.Rarity, Criadero.bonos(Estado.Perfil).ExtractSpeed) + 0.02
-	balancear(herramienta)
+	local intervalo = 1 / Mineria.pickHitsPerSecond(pico.Rarity, Criadero.bonos(Estado.Perfil).ExtractSpeed) + 0.02
+	siguiente = ahora + intervalo
+	EfectosMineria.golpe(herramienta, intervalo)
+	EfectosMineria.impacto(parte)
 	remoteGolpe:FireServer(parte:GetAttribute("DepositoId"))
 end
 
@@ -242,6 +235,7 @@ function MiningController.Iniciar(estado, carpeta, funcionAviso)
 	avisar = funcionAviso
 	remoteGolpe = carpeta:WaitForChild("Mining.Hit")
 	remoteSubir = carpeta:WaitForChild("World.ReturnToSurface")
+	EfectosMineria.Iniciar(EfectosCombate)
 	crearInterfaz()
 	RunService.RenderStepped:Connect(mostrarObjetivo)
 	UserInputService.InputBegan:Connect(function(entrada, procesado)

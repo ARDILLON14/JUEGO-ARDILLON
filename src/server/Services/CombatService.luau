@@ -57,12 +57,19 @@ function CombatService.Arma(jugador)
 end
 
 -- Número de daño flotante para los jugadores cercanos.
-function CombatService.Hit(jugador, posicion, dano, critico)
+-- extra (opcional): campos que se añaden al aviso, p. ej. { Blocked = true, Victim = userId }.
+function CombatService.Hit(jugador, posicion, dano, critico, extra)
 	local remote = Red:obtener("Combat.Hit")
 	for _, otro in ipairs(Players:GetPlayers()) do
 		local p = Lugares.posicion(otro)
 		if p and (p - posicion).Magnitude <= 150 then
-			remote:FireClient(otro, { Pos = posicion, Damage = math.floor(dano + 0.5), Crit = critico, Own = otro == jugador })
+			local datos = { Pos = posicion, Damage = math.floor(dano + 0.5), Crit = critico, Own = otro == jugador }
+			if extra then
+				for k, v in pairs(extra) do
+					datos[k] = v
+				end
+			end
+			remote:FireClient(otro, datos)
 		end
 	end
 end
@@ -371,7 +378,7 @@ function CombatService.DanarJugador(jugador, dano, enemigo, opciones)
 	if final > 0 and personaje then
 		personaje:SetAttribute("UltimoDano", ahora)   -- interrumpe extracciones y canalizaciones
 	end
-	CombatService.Hit(opciones.Atacante, raiz.Position, final, opciones.Critico == true)
+	CombatService.Hit(opciones.Atacante, raiz.Position, final, opciones.Critico == true, { Blocked = bloqueado, Victim = jugador.UserId })
 	return final
 end
 

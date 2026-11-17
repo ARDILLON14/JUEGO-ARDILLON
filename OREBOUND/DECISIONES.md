@@ -989,3 +989,12 @@ Los archivos B siguen en sus unidades originales; el juego aplica `CurrencyScale
 | P9-11 | Beta cerrada con lista de UserId o un grupo de Roblox (`Config/Security.Beta`), desactivada por defecto | [CONFIRMADO] | — |
 | P9-12 | Quedan fuera de esta fase: renacimiento, arena 2v2/3v3 y cola entre servidores, pase de temporada y tope global de partículas por nivel (los valores existen en `VFX.Quality`, pero solo se aplica sombras y efectos ajenos) | [CONFIRMADO] | Expansiones |
 | P9-13 | Medidas que solo se pueden tomar con jugadores reales y Studio: FPS en móviles, memoria del servidor, falsos positivos del antitrampas, conversión de compras | [PENDIENTE] | Beta cerrada |
+
+## 30. Serie PP — pulido de animaciones (petición del usuario)
+
+| # | Decisión | Estado | Cómo probarla o revisarla |
+|---|---|---|---|
+| PP-01 | Picar: el brazo carga el pico por encima del hombro y baja de golpe al ritmo real del pico, con el torso inclinándose; destello, polvo y esquirlas del color del bloque (brillo de la rareza si es mineral) y pequeño temblor | [PROVISIONAL] | Probar en Studio |
+| PP-02 | Grietas estilo Minecraft en 4 etapas según la vida que le queda al bloque; al romperse, trozos que saltan y rebotan | [PROVISIONAL] | — |
+| PP-03 | Combate: giro de torso y brazo izquierdo en cada golpe del combo, postura de guardia con F, escudo de luz y chispas azules al bloquear un golpe, y enemigos que estallan en trozos de luz al morir | [PROVISIONAL] | — |
+| PP-04 | Siguen siendo animaciones por código y solo locales (los demás jugadores no ven tu brazo); las animaciones subidas a Roblox quedan para cuando haya animador | [CONFIRMADO] | P4b-04 |

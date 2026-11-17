@@ -325,6 +325,9 @@ function CombatController.Iniciar(estado, carpeta, funcionAviso)
 	crearBarra()
 	R["Combat.Hit"].OnClientEvent:Connect(function(datos)
 		numero(datos)
+		if datos.Blocked and datos.Victim == jugador.UserId then
+			Efectos.bloqueado()
+		end
 		Efectos.impacto(datos)
 	end)
 	Efectos.Iniciar()
@@ -370,6 +373,7 @@ function CombatController.Iniciar(estado, carpeta, funcionAviso)
 			dash()
 		elseif entrada.KeyCode == Enum.KeyCode.F then
 			R["Combat.Block"]:FireServer(true)
+			Efectos.guardia(true)
 		elseif entrada.KeyCode == Enum.KeyCode.E then
 			R["Combat.Blink"]:FireServer(apuntado())
 			Efectos.estela()
@@ -380,6 +384,7 @@ function CombatController.Iniciar(estado, carpeta, funcionAviso)
 	UserInputService.InputEnded:Connect(function(entrada)
 		if entrada.KeyCode == Enum.KeyCode.F then
 			R["Combat.Block"]:FireServer(false)
+			Efectos.guardia(false)
 		end
 	end)
 	RunService.Heartbeat:Connect(paso)

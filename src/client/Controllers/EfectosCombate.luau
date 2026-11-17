@@ -67,6 +67,68 @@ local function neon(tam, cf, color, transparencia, vida)
 	return p
 end
 
+local function cintura()
+	local p = personaje()
+	if not p then
+		return nil
+	end
+	local t = p:FindFirstChild("UpperTorso")
+	return t and t:FindFirstChild("Waist")
+end
+
+-- Giro del torso que acompaña al golpe (solo R15).
+local function girarTorso(angulos, ida, vuelta)
+	local m = cintura()
+	if not m then
+		return
+	end
+	originales[m] = originales[m] or m.C0
+	local base = originales[m]
+	TweenService:Create(m, TweenInfo.new(ida, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), { C0 = base * angulos }):Play()
+	task.delay(ida, function()
+		TweenService:Create(m, TweenInfo.new(vuelta, Enum.EasingStyle.Quad, Enum.EasingDirection.In), { C0 = base }):Play()
+	end)
+end
+
+-- Postura de guardia mientras se mantiene F: los dos brazos delante de la cara.
+local enGuardia = false
+function EfectosCombate.guardia(activa)
+	enGuardia = activa
+	for _, lado in ipairs({ "R", "L" }) do
+		local m = hombro(lado)
+		if m then
+			originales[m] = originales[m] or m.C0
+			local base = originales[m]
+			local destino = activa and base * CFrame.Angles(math.rad(-95), math.rad(lado == "R" and 35 or -35), math.rad(lado == "R" and 25 or -25)) or base
+			TweenService:Create(m, TweenInfo.new(activa and 0.08 or 0.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), { C0 = destino }):Play()
+		end
+	end
+	local p = personaje()
+	local raiz = p and p:FindFirstChild("HumanoidRootPart")
+	if activa and raiz then
+		-- escudo de luz breve delante del personaje
+		local cf = raiz.CFrame * CFrame.new(0, 0.5, -2.2)
+		neon(Vector3.new(4, 4.5, 0.15), cf, Color3.fromRGB(140, 200, 255), 0.6, 0.25)
+	end
+end
+
+-- Golpe bloqueado: chispas azules en el escudo.
+function EfectosCombate.bloqueado()
+	local p = personaje()
+	local raiz = p and p:FindFirstChild("HumanoidRootPart")
+	if not raiz then
+		return
+	end
+	local centro = raiz.Position + raiz.CFrame.LookVector * 2.2 + Vector3.new(0, 0.5, 0)
+	neon(Vector3.new(4, 4.5, 0.15), raiz.CFrame * CFrame.new(0, 0.5, -2.2), Color3.fromRGB(170, 220, 255), 0.3, 0.2)
+	for _ = 1, 6 do
+		local dir = (raiz.CFrame.LookVector + Vector3.new(math.random() - 0.5, math.random() - 0.3, math.random() - 0.5)).Unit
+		local c = neon(Vector3.new(0.15, 0.15, 0.8), CFrame.lookAt(centro, centro + dir), Color3.fromRGB(170, 220, 255), 0, 0.2)
+		TweenService:Create(c, TweenInfo.new(0.2), { CFrame = c.CFrame + dir * 3 }):Play()
+	end
+	EfectosCombate.temblar(0.1)
+end
+
 -- Golpe básico n.º «indice» del combo (1 a 4). color = color de la rareza del arma; alcance en studs.
 function EfectosCombate.ataque(indice, color, alcance)
 	local p = personaje()
@@ -75,12 +137,21 @@ function EfectosCombate.ataque(indice, color, alcance)
 		return
 	end
 	local remate = indice % 4 == 0
+	if enGuardia then
+		return
+	end
 	if remate then
 		moverBrazo("R", CFrame.Angles(math.rad(-150), 0, 0), 0.08, 0.18)
+		moverBrazo("L", CFrame.Angles(math.rad(-120), 0, math.rad(-20)), 0.08, 0.18)
+		girarTorso(CFrame.Angles(math.rad(-18), 0, 0), 0.08, 0.2)
 	elseif indice % 2 == 1 then
 		moverBrazo("R", CFrame.Angles(math.rad(-60), math.rad(-70), 0), 0.06, 0.12)
+		moverBrazo("L", CFrame.Angles(math.rad(-30), 0, math.rad(-30)), 0.06, 0.12)
+		girarTorso(CFrame.Angles(0, math.rad(-28), 0), 0.06, 0.14)
 	else
 		moverBrazo("R", CFrame.Angles(math.rad(-60), math.rad(70), 0), 0.06, 0.12)
+		moverBrazo("L", CFrame.Angles(math.rad(-40), 0, math.rad(-45)), 0.06, 0.12)
+		girarTorso(CFrame.Angles(0, math.rad(28), 0), 0.06, 0.14)
 	end
 	-- Tajo: varias láminas finas en arco delante del personaje.
 	local frente = raiz.CFrame
@@ -201,8 +272,28 @@ function EfectosCombate.Iniciar()
 		vigilarEnemigo(m)
 	end
 	CollectionService:GetInstanceAddedSignal("Enemigo"):Connect(vigilarEnemigo)
+	-- Enemigo derrotado: se rompe en trozos de luz (solo si está cerca).
+	CollectionService:GetInstanceRemovedSignal("Enemigo"):Connect(function(modelo)
+		local raizEnemigo = modelo.PrimaryPart
+		local p = personaje()
+		local raiz = p and p:FindFirstChild("HumanoidRootPart")
+		if not raizEnemigo or not raiz or (raizEnemigo.Position - raiz.Position).Magnitude > 60 then
+			return
+		end
+		local centro = raizEnemigo.Position
+		local color = raizEnemigo.Color
+		for _ = 1, 12 do
+			local dir = Vector3.new(math.random() - 0.5, math.random() * 0.9, math.random() - 0.5).Unit
+			local tam = 0.4 + math.random() * 0.5
+			local t = neon(Vector3.new(tam, tam, tam), CFrame.new(centro) * CFrame.Angles(math.random() * 6, math.random() * 6, 0), color, 0.1, 0.45)
+			TweenService:Create(t, TweenInfo.new(0.45, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), { CFrame = t.CFrame + dir * 7 }):Play()
+		end
+		local onda = neon(Vector3.new(1, 0.2, 1), CFrame.new(centro - Vector3.new(0, 2, 0)), Color3.fromRGB(255, 240, 200), 0.3, 0.3)
+		TweenService:Create(onda, TweenInfo.new(0.3), { Size = Vector3.new(12, 0.2, 12) }):Play()
+	end)
 	jugador.CharacterAdded:Connect(function()
 		originales = {}
+		enGuardia = false
 	end)
 
 	local pantalla = Instance.new("ScreenGui")
