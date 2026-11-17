@@ -23,7 +23,7 @@ function Criadero.especie(id)
 	return Pets.Species[id]
 end
 
--- Espacios de mascotas: 3; el 4.º a nivel 300 y el 5.º a 700 (B5 8). El 6.º es de pago (fase 9).
+-- Espacios de mascotas: 3; el 4.º a nivel 300 y el 5.º a 700 (B5 8). Uno más con el pase o 60 Fragmentos de temporada.
 function Criadero.espacios(perfil)
 	local n = Pets.Slots.Start
 	for hueco = 4, 5 do
@@ -32,8 +32,9 @@ function Criadero.espacios(perfil)
 			n = hueco
 		end
 	end
-	if perfil.Purchases and perfil.Purchases.SixthPetSlot then
-		n = math.max(n, 6)
+	-- El espacio de pago se suma a los que da el nivel (con nivel 700 llega a 6).
+	if (perfil.Purchases and perfil.Purchases.SixthPetSlot) or (perfil.PetSlots or 0) >= 6 then
+		n = n + 1
 	end
 	return n
 end

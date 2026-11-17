@@ -74,6 +74,7 @@ local function cobrar(jugador, id)
 	Progression.AddXP(jugador, r.XP, "Mision")
 	Analitica.Registrar(jugador, "MisionCobrada", r.Coins, id)
 	Datos.Replicar(jugador, "Quests")
+	Eventos.emitir("MisionCobrada", jugador, 1, id)   -- XP del pase de temporada (SeasonService)
 	return true, r
 end
 

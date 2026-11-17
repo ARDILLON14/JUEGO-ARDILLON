@@ -117,8 +117,8 @@ local function comprobarPases(jugador)
 	end)
 	local perfil = Datos.GetProfile(jugador)
 	if ok and tiene and perfil and not perfil.Purchases.SixthPetSlot then
-		perfil.Purchases.SixthPetSlot = true
-		Datos.Replicar(jugador, "Pets")
+		Tienda.sextoEspacio(perfil)
+		Datos.Replicar(jugador, "PetSlots", "Equipped")
 	end
 end
 
@@ -127,6 +127,7 @@ local MOTIVOS = {
 	ya = "Ya lo tienes",
 	saldo = "No tienes suficiente",
 	maximo = "Ya está al máximo",
+	pase = "Solo se consigue en el pase de temporada",
 	servicio = "Ese servicio no existe",
 	hueco = "Hueco no válido",
 }
@@ -179,7 +180,7 @@ function MonetizationService.Iniciar(deps)
 		Tienda.aplicarServicio(perfil, id)
 		Criadero.asegurarIncubadoras(perfil)
 		Analitica.Registrar(jugador, "ServicioCristales", s.Crystals, id)
-		Datos.Replicar(jugador, "Wallet", "PetStorage", "Incubators")
+		Datos.Replicar(jugador, "Wallet", "PetStorage", "Incubators", "PetSlots")
 		return true
 	end)
 

@@ -114,7 +114,7 @@ return function(t)
 				t.ok(c.Kind == "Trail" or c.Kind == "Aura", c.Id .. " solo puede ser cosmético")
 			end
 			for id in pairs(Monetization.Services) do
-				t.ok(id == "PetStorage" or id == "ThirdIncubator", id)
+				t.ok(id == "PetStorage" or id == "ThirdIncubator" or id == "SixthPetSlot", id)
 			end
 			for _, p in ipairs(Monetization.CrystalProducts) do
 				t.ok(p.Crystals > 0 and p.Coins == nil and p.Item == nil)

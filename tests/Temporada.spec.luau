@@ -1,0 +1,105 @@
+-- Pase de temporada (A_GDD; Config/Season) y servicios con Fragmentos.
+
+local Shared = game:GetService("ReplicatedStorage").Shared
+local Server = game:GetService("ServerScriptService").Server
+local Season = require(Shared.Config.Season)
+local Monetization = require(Shared.Config.Monetization)
+local Temporada = require(Shared.Reglas.Temporada)
+local Tienda = require(Shared.Reglas.Tienda)
+local Criadero = require(Shared.Reglas.Criadero)
+local PlantillaPerfil = require(Server.Datos.PlantillaPerfil)
+
+return function(t)
+	t.describe("Pase de temporada", function()
+		t.it("temporadas de 8 semanas desde el inicio", function()
+			t.equal((Temporada.actual(Season.StartUnix)), 1)
+			t.equal((Temporada.actual(Season.StartUnix + 56 * 86400 - 1)), 1)
+			t.equal((Temporada.actual(Season.StartUnix + 56 * 86400)), 2)
+			local _, quedan = Temporada.actual(Season.StartUnix + 86400)
+			t.equal(quedan, 55 * 86400)
+		end)
+		t.it("la vía gratuita da los 60 Fragmentos del sexto espacio en unas 6,6 semanas con solo las misiones diarias", function()
+			local fragmentos = 0
+			for n = 1, Season.Levels do
+				fragmentos = fragmentos + (Season.Free[n].SeasonFragments or 0)
+			end
+			t.equal(fragmentos, 60)
+			local dias = Season.Levels * Season.XPPerLevel / (3 * Season.XP.DailyQuest)
+			t.ok(dias / 7 >= 6.4 and dias / 7 <= 7, "semanas: " .. dias / 7)
+			t.ok(dias / 7 < Season.Weeks, "da tiempo dentro de la temporada")
+		end)
+		t.it("la vía de pago solo da cosméticos y Cristales (B6 9.2)", function()
+			for n = 1, Season.Levels do
+				local r = Season.Paid[n]
+				t.ok((r.Crystals ~= nil) ~= (r.Cosmetic ~= nil), "nivel " .. n)
+				if r.Cosmetic then
+					local c = Tienda.cosmetico(r.Cosmetic)
+					t.ok(c and c.Season, r.Cosmetic .. " existe y es del pase")
+				end
+			end
+		end)
+		t.it("cobrar: hace falta el nivel, la vía de pago y no repetir", function()
+			local p = PlantillaPerfil.nuevo(0)
+			Temporada.asegurar(p, 1)
+			t.equal(select(2, Temporada.comprobar(p, 5, "Free")), "nivel")
+			Temporada.sumarXP(p, 5 * Season.XPPerLevel)
+			t.equal(Temporada.nivel(p), 5)
+			t.ok(Temporada.comprobar(p, 5, "Free"))
+			Temporada.cobrar(p, 5, "Free")
+			t.equal(p.Wallet.SeasonFragments, 6)
+			t.equal(select(2, Temporada.comprobar(p, 5, "Free")), "ya")
+			t.equal(select(2, Temporada.comprobar(p, 1, "Paid")), "pago")
+			p.Wallet.Crystals = Season.PaidCrystals
+			t.ok(Temporada.comprarPago(p))
+			t.equal(p.Wallet.Crystals, 0)
+			Temporada.cobrar(p, 1, "Paid")
+			t.equal(p.Wallet.Crystals, 15)
+			t.equal(select(2, Temporada.comprobar(p, 51, "Free")), "recompensa")
+		end)
+		t.it("la XP del pase no pasa del nivel 50", function()
+			local p = PlantillaPerfil.nuevo(0)
+			Temporada.sumarXP(p, 1e9)
+			t.equal(Temporada.nivel(p), Season.Levels)
+		end)
+		t.it("temporada nueva: el pase vuelve a cero, los Fragmentos se quedan", function()
+			local p = PlantillaPerfil.nuevo(0)
+			Temporada.asegurar(p, 1)
+			Temporada.sumarXP(p, 3000)
+			p.Season.Paid = true
+			Temporada.cobrar(p, 5, "Free")
+			t.ok(Temporada.asegurar(p, 2))
+			t.equal(p.Season.PassXP, 0)
+			t.equal(p.Season.Paid, false)
+			t.equal(Temporada.cobrada(p, 5, "Free"), false)
+			t.equal(p.Wallet.SeasonFragments, 6)
+		end)
+		t.it("los cosméticos del pase no se venden sueltos", function()
+			local p = PlantillaPerfil.nuevo(0)
+			p.Wallet.Crystals = 1e6
+			t.equal(select(2, Tienda.comprobar(p, "AuraCorona")), "pase")
+		end)
+	end)
+
+	t.describe("Espacio de mascota extra", function()
+		t.it("60 Fragmentos de temporada dan un espacio más (también a nivel 700: 6)", function()
+			local p = PlantillaPerfil.nuevo(0)
+			t.equal(select(2, Tienda.servicio(p, "SixthPetSlot")), "saldo")
+			p.Wallet.SeasonFragments = 60
+			t.ok(Tienda.servicio(p, "SixthPetSlot"))
+			Tienda.aplicarServicio(p, "SixthPetSlot")
+			t.equal(p.Wallet.SeasonFragments, 0)
+			t.equal(Criadero.espacios(p), 4)
+			p.Progress.Level = 700
+			t.equal(Criadero.espacios(p), 6)
+			t.equal(select(2, Tienda.servicio(p, "SixthPetSlot")), "ya")
+		end)
+		t.it("el cliente lo ve sin Purchases (PlantillaPerfil.vistaCliente)", function()
+			local p = PlantillaPerfil.nuevo(0)
+			Tienda.sextoEspacio(p)
+			t.equal(Criadero.espacios(PlantillaPerfil.vistaCliente(p)), 4)
+		end)
+		t.it("solo Fragmentos o Robux: no se vende con Cristales", function()
+			t.equal(Monetization.Services.SixthPetSlot.Crystals, nil)
+		end)
+	end)
+end

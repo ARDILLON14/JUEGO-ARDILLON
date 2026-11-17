@@ -6,7 +6,7 @@
 -- Fase 6: mascotas que siguen al jugador (todas las de todos los jugadores), panel de mascotas (M) y postura (T).
 -- Fase 7: barra del jefe, misiones diarias (J), tutorial y Núcleos en el panel de habilidades.
 -- Fase 8: Zona Fracturada (diálogo, panel, extracción, avisos visuales), PvP y marcador de la arena.
--- Después del roadmap: panel del Altar de renacimiento.
+-- Después del roadmap: panel del Altar de renacimiento y pase de temporada (N).
 -- Fase 9: ajustes (O) con calidad automática y tienda de cosméticos y Cristales (puesto de la plaza o L).
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -35,6 +35,7 @@ local PanelTienda = require(UI:WaitForChild("PanelTienda"))
 local PanelAjustes = require(UI:WaitForChild("PanelAjustes"))
 local PanelCosmeticos = require(UI:WaitForChild("PanelCosmeticos"))
 local PanelRenacer = require(UI:WaitForChild("PanelRenacer"))
+local PanelTemporada = require(UI:WaitForChild("PanelTemporada"))
 local AjustesController = require(Controllers:WaitForChild("AjustesController"))
 local EfectosCombate = require(Controllers:WaitForChild("EfectosCombate"))
 
@@ -51,6 +52,7 @@ AjustesController.Iniciar(Estado, carpeta, EfectosCombate)
 PanelAjustes.Iniciar(AjustesController)
 PanelCosmeticos.Iniciar(Estado)
 PanelRenacer.Iniciar(Estado)
+PanelTemporada.Iniciar(Estado)
 BossController.Iniciar(carpeta)
 HUDController.Iniciar(Estado, function()
 	PanelEstadisticas.Alternar()
@@ -94,5 +96,7 @@ UserInputService.InputBegan:Connect(function(entrada, procesado)
 		PanelAjustes.Alternar()
 	elseif entrada.KeyCode == Enum.KeyCode.L then
 		PanelCosmeticos.Alternar()
+	elseif entrada.KeyCode == Enum.KeyCode.N then
+		PanelTemporada.Alternar()
 	end
 end)

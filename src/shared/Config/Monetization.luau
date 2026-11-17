@@ -21,10 +21,16 @@ return {
 		{ Id = "AuraPrisma", Name = "Aura Prismática", Kind = "Aura", Color = { 190, 240, 255 }, Crystals = 400 },
 		{ Id = "AuraMusgo", Name = "Aura de Musgo", Kind = "Aura", Color = { 120, 220, 120 }, Crystals = 400 },
 		{ Id = "AuraPrestigio", Name = "Aura de Prestigio", Kind = "Aura", Color = { 255, 210, 80 }, CoinHours = 20 },   -- B6: aspecto de prestigio (sumidero)
+		-- Solo en la vía de pago del pase de temporada (sin precio: no se venden sueltos).
+		{ Id = "TrailAurora", Name = "Estela Aurora", Kind = "Trail", Color = { 120, 255, 200 }, Season = true },
+		{ Id = "AuraTemporada", Name = "Aura de Temporada", Kind = "Aura", Color = { 255, 140, 220 }, Season = true },
+		{ Id = "TrailEstelar", Name = "Estela Estelar", Kind = "Trail", Color = { 255, 255, 255 }, Season = true },
+		{ Id = "AuraCorona", Name = "Aura de la Corona", Kind = "Aura", Color = { 255, 190, 60 }, Season = true },
 	},
 	-- Servicios con Cristales (B6 9.1): no dan poder.
 	Services = {
 		PetStorage = { Crystals = 200, Add = 10, Max = 100 },
 		ThirdIncubator = { Crystals = 300 },
+		SixthPetSlot = { SeasonFragments = 60 },   -- también con el pase de Robux GamePasses.SixthPetSlot
 	},
 }

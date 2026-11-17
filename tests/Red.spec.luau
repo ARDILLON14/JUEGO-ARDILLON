@@ -17,7 +17,7 @@ end
 
 return function(t)
 	t.describe("Definiciones", function()
-		t.it("hay 51 Remotes del cliente al servidor (46 de C_Tecnico + subir a la superficie + 3 de la tienda de Cristales + preparar el renacimiento) y 13 del servidor al cliente", function()
+		t.it("hay 52 Remotes del cliente al servidor (46 de C_Tecnico + subir a la superficie + 3 de la tienda de Cristales + preparar el renacimiento + comprar el pase) y 13 del servidor al cliente", function()
 			local n = 0
 			for nombre, def in pairs(Remotes.ClientToServer) do
 				n = n + 1
@@ -25,7 +25,7 @@ return function(t)
 				t.ok(type(def.Params) == "table", nombre)
 				t.ok(def.Rate.PerSecond > 0 and def.Rate.Burst >= 1, nombre)
 			end
-			t.equal(n, 51)
+			t.equal(n, 52)
 			t.equal(#Remotes.ServerToClient, 13)
 		end)
 		t.it("límites de combate de C_Tecnico 5.2", function()

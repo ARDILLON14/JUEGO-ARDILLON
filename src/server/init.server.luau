@@ -6,7 +6,7 @@
 -- Fase 6: mascotas (incubación, posturas, Nido, XP, evolución) y su combate con el tope de daño.
 -- Fase 7: zonas 2 y 3, portales y ciudad (WorldService), los 3 jefes, misiones diarias y tutorial.
 -- Fase 8: reglas PvP, Zona Fracturada de la zona 3 y arena 1 contra 1.
--- Después del roadmap: renacimiento (altar de la plaza).
+-- Después del roadmap: renacimiento (altar de la plaza), arenas por equipos y pase de temporada.
 -- Fase 9: antitrampas, normas por país (PolicyService), Cristales y cosméticos, ajustes y acceso a la beta.
 -- Los servicios de las fases siguientes conectan sus Remotes con Red:conectar(nombre, manejador).
 
@@ -41,6 +41,7 @@ local AntiCheatService = require(Services.AntiCheatService)
 local ComplianceService = require(Services.ComplianceService)
 local MonetizationService = require(Services.MonetizationService)
 local RebirthService = require(Services.RebirthService)
+local SeasonService = require(Services.SeasonService)
 local Security = require(ReplicatedStorage.Shared.Config.Security)
 local ConstructorPrueba = require(script.Mundo.ConstructorPrueba)
 local LimiteFrecuencia = require(script.Net.LimiteFrecuencia)
@@ -160,6 +161,7 @@ EconomyService.AlGanar(AntiCheatService.Ingreso)
 ComplianceService.Iniciar()
 MonetizationService.Iniciar({ Datos = DataService, Economia = EconomyService, Analitica = AnalyticsService, Red = Red })
 RebirthService.Iniciar({ Datos = DataService, Stats = StatsService, Analitica = AnalyticsService, Red = Red })
+SeasonService.Iniciar({ Datos = DataService, Economia = EconomyService, Analitica = AnalyticsService, Red = Red })
 
 -- Ayudas para probar en Studio. Estos Remotes no existen en un servidor publicado.
 if enStudio then
@@ -182,6 +184,14 @@ if enStudio then
 		perfil.Progress.UnlockedZone = math.max(perfil.Progress.UnlockedZone, Niveles.zonaPorNivel(perfil.Progress.Level))
 		StatsService.Recalcular(jugador)
 		DataService.Replicar(jugador, "Progress", "Stats")
+		return true
+	end)
+	Red:conectar("Dev.SeasonXP", function(jugador, cantidad)
+		local Temporada = require(ReplicatedStorage.Shared.Reglas.Temporada)
+		local perfil = DataService.GetProfile(jugador)
+		Temporada.asegurar(perfil, (Temporada.actual(os.time())))
+		Temporada.sumarXP(perfil, cantidad)
+		DataService.Replicar(jugador, "Season")
 		return true
 	end)
 	Red:conectar("Dev.GiveCoins", function(jugador, cantidad)

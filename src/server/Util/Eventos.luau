@@ -1,7 +1,7 @@
 -- Util/Eventos: avisos entre servicios de lo que hace cada jugador (para el tutorial y las misiones).
 -- Eventos.emitir(nombre, jugador, cantidad, datos)  |  Eventos.escuchar(nombre, fn(jugador, cantidad, datos))
 -- Nombres: MineralExtraido, Deposito, VentaMineral, Asignacion, EnemigoDerrotado, HabilidadUsada,
---          ObjetoFabricado, CajaAbierta, JefeDerrotado, XPMascota, GolpesIncubacion
+--          ObjetoFabricado, CajaAbierta, JefeDerrotado, XPMascota, GolpesIncubacion, MisionCobrada
 
 local Eventos = {}
 

@@ -51,10 +51,10 @@ En Studio aparecen arriba a la derecha dos botones de prueba («+1 nivel» y «+
    o `AllowGroupId`. En Studio la beta nunca bloquea.
 3. Activar *Enable Studio Access to API Services* y publicar el lugar.
 
-Después del roadmap: renacimiento (Altar de la plaza, nivel 1.000) y arenas 2v2 y 3v3 (tres colas junto a la plaza).
+Después del roadmap: renacimiento (Altar de la plaza, nivel 1.000), arenas 2v2 y 3v3 (tres colas junto a la plaza) y pase de temporada (N).
 En Studio, el botón «Nivel 1000» sube al nivel máximo para probar el renacimiento.
 
-Teclas: P estadísticas, B inventario, K habilidades, M mascotas, J misiones, O ajustes, L cosméticos; R interactuar.
+Teclas: P estadísticas, B inventario, K habilidades, M mascotas, J misiones, N pase de temporada, O ajustes, L cosméticos; R interactuar.
 
 ## Pruebas
 

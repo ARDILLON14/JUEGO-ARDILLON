@@ -25,6 +25,9 @@ function Tienda.precio(perfil, id)
 	if c.Crystals then
 		return { Moneda = "Crystals", Cantidad = c.Crystals }
 	end
+	if not c.CoinHours then
+		return nil   -- solo del pase de temporada
+	end
 	return { Moneda = "Coins", Cantidad = math.floor(c.CoinHours * Economia.income(perfil.Progress.UnlockedZone) + 0.5) }
 end
 
@@ -36,7 +39,7 @@ end
 function Tienda.comprobar(perfil, id)
 	local p = Tienda.precio(perfil, id)
 	if not p then
-		return nil, "cosmetico"
+		return nil, POR_ID[id] and "pase" or "cosmetico"
 	end
 	if Tienda.tiene(perfil, id) then
 		return nil, "ya"
@@ -66,6 +69,12 @@ function Tienda.equipar(perfil, hueco, id)
 	return true
 end
 
+-- Sexto espacio de mascota (60 Fragmentos de temporada o el pase de Robux). PetSlots lo ve también el cliente.
+function Tienda.sextoEspacio(perfil)
+	perfil.Purchases.SixthPetSlot = true
+	perfil.PetSlots = math.max(perfil.PetSlots or 3, 6)
+end
+
 -- Servicios: almacén de mascotas (+10 hasta 100) y tercera incubadora.
 function Tienda.servicio(perfil, id)
 	local s = Monetization.Services[id]
@@ -78,7 +87,11 @@ function Tienda.servicio(perfil, id)
 	if id == "ThirdIncubator" and (perfil.Purchases.ThirdIncubator or #perfil.Incubators >= 3) then
 		return nil, "ya"
 	end
-	if (perfil.Wallet.Crystals or 0) < s.Crystals then
+	if id == "SixthPetSlot" and (perfil.PetSlots or 0) >= 6 then
+		return nil, "ya"
+	end
+	local moneda = s.SeasonFragments and "SeasonFragments" or "Crystals"
+	if (perfil.Wallet[moneda] or 0) < s[moneda] then
 		return nil, "saldo"
 	end
 	return s
@@ -86,9 +99,12 @@ end
 
 function Tienda.aplicarServicio(perfil, id)
 	local s = Monetization.Services[id]
-	perfil.Wallet.Crystals = perfil.Wallet.Crystals - s.Crystals
+	local moneda = s.SeasonFragments and "SeasonFragments" or "Crystals"
+	perfil.Wallet[moneda] = perfil.Wallet[moneda] - s[moneda]
 	if id == "PetStorage" then
 		perfil.PetStorage = (perfil.PetStorage or Pets.Storage.Pets) + s.Add
+	elseif id == "SixthPetSlot" then
+		Tienda.sextoEspacio(perfil)
 	else
 		perfil.Purchases.ThirdIncubator = true
 		table.insert(perfil.Incubators, { Egg = "", Species = "", PickHits = 0 })

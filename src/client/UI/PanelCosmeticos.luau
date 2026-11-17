@@ -21,6 +21,7 @@ local CRISTAL = Color3.fromRGB(190, 240, 255)
 local NOMBRE_SERVICIO = {
 	PetStorage = "Almacén de mascotas +10",
 	ThirdIncubator = "Tercera incubadora",
+	SixthPetSlot = "Espacio de mascota extra",
 }
 local Estado, pantalla, lista, saldo, mensaje
 
@@ -72,6 +73,9 @@ function PanelCosmeticos.Refrescar()
 					decir(ok, r, puesto and "Quitado." or "¡Equipado!")
 				end)
 			end)
+		elseif c.Season then
+			b.Text = "Pase de temporada (N)"
+			b.BackgroundColor3 = C.BotonApagado
 		else
 			local precio = Tienda.precio(perfil, c.Id)
 			b.Text = precio.Moneda == "Crystals" and (Formato.entero(precio.Cantidad) .. " Cristales") or (Formato.abreviado(precio.Cantidad) .. " monedas")
@@ -85,13 +89,15 @@ function PanelCosmeticos.Refrescar()
 		end
 	end
 	titulo(siguiente(), "Servicios")
-	for _, id in ipairs({ "PetStorage", "ThirdIncubator" }) do
+	for _, id in ipairs({ "PetStorage", "ThirdIncubator", "SixthPetSlot" }) do
 		local s = Monetization.Services[id]
 		local f = fila(siguiente())
-		local detalle = id == "PetStorage" and ("ahora " .. tostring(perfil.PetStorage or 30) .. " / " .. s.Max) or ""
-		Componentes.texto({ Size = UDim2.new(0, 300, 1, 0), Position = UDim2.new(0, 10, 0, 0), Parent = f, Text = NOMBRE_SERVICIO[id] .. "  " .. detalle })
+		local detalle = id == "PetStorage" and ("ahora " .. tostring(perfil.PetStorage or 30) .. " / " .. s.Max)
+			or id == "SixthPetSlot" and ("tienes " .. tostring(perfil.Wallet.SeasonFragments or 0) .. " Fragmentos") or ""
+		Componentes.texto({ Size = UDim2.new(0, 330, 1, 0), Position = UDim2.new(0, 10, 0, 0), Parent = f, Text = NOMBRE_SERVICIO[id] .. "  " .. detalle })
 		local b = Componentes.boton({ Size = UDim2.new(0, 170, 0, 32), Position = UDim2.new(1, -178, 0.5, -16), TextSize = 12, Parent = f,
-			Text = s.Crystals .. " Cristales", BackgroundColor3 = Color3.fromRGB(70, 120, 150) })
+			Text = s.SeasonFragments and (s.SeasonFragments .. " Fragmentos") or (s.Crystals .. " Cristales"),
+			BackgroundColor3 = s.SeasonFragments and Color3.fromRGB(150, 80, 140) or Color3.fromRGB(70, 120, 150) })
 		b.Activated:Connect(function()
 			task.spawn(function()
 				local ok, r = Estado.Invocar("Shop.CrystalService", id)
