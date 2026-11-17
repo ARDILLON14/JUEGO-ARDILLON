@@ -146,6 +146,7 @@ Remotes.ClientToServer = {
 Remotes.SoloStudio = {
 	["Dev.GiveXP"] = { Kind = "Function", Rate = rate(2), Params = { int("amount", 1, 100000000) } },
 	["Dev.GiveMastery"] = { Kind = "Function", Rate = rate(2), Params = { int("points", 1, 100000) } },
+	["Dev.PetBoost"] = { Kind = "Function", Rate = rate(2), Params = {} },
 	["Dev.GiveCoins"] = { Kind = "Function", Rate = rate(2), Params = { int("amount", 1, 1000000000000) } },
 }
 

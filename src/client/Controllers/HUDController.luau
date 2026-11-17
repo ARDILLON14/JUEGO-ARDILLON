@@ -8,6 +8,7 @@ local Shared = ReplicatedStorage:WaitForChild("Shared")
 local Progresion = require(Shared:WaitForChild("Formulas"):WaitForChild("Progresion"))
 local Estadisticas = require(Shared:WaitForChild("Reglas"):WaitForChild("Estadisticas"))
 local Mochila = require(Shared.Reglas:WaitForChild("Mochila"))
+local Criadero = require(Shared.Reglas:WaitForChild("Criadero"))
 
 local UI = script.Parent.Parent:WaitForChild("UI")
 local Componentes = require(UI:WaitForChild("Componentes"))
@@ -33,7 +34,8 @@ local function actualizarPerfil()
 	etiquetaNivel.Text = "Nivel " .. Formato.entero(nivel)
 	fijarXP(perfil.Progress.XP / necesaria, Formato.entero(perfil.Progress.XP) .. " / " .. Formato.entero(necesaria) .. " XP")
 	etiquetaMonedas.Text = Formato.abreviado(perfil.Wallet.Coins) .. " monedas"
-	local carga, capacidad = Mochila.carga(perfil), Mochila.capacidad(perfil)
+	local base = Mochila.capacidad(perfil)
+	local carga, capacidad = Mochila.carga(perfil), base + Criadero.bonos(perfil, base).BackpackUnits
 	etiquetaMochila.Text = "Mochila " .. Formato.entero(carga) .. " / " .. Formato.entero(capacidad)
 		.. "   ·   Banco " .. Formato.entero(Mochila.enBanco(perfil))
 	etiquetaMochila.TextColor3 = carga >= capacidad and C.Vida or C.Texto
@@ -125,8 +127,8 @@ end
 local function crearBotonesStudio(pantalla)
 	local fila = crear("Frame", {
 		BackgroundTransparency = 1,
-		Size = UDim2.new(0, 360, 0, 32),
-		Position = UDim2.new(1, -376, 0, 16),
+		Size = UDim2.new(0, 450, 0, 32),
+		Position = UDim2.new(1, -466, 0, 16),
 		Parent = pantalla,
 	}, { crear("UIListLayout", { FillDirection = Enum.FillDirection.Horizontal, Padding = UDim.new(0, 6) }) })
 	local function boton(texto, remote, cantidad)
@@ -138,13 +140,18 @@ local function crearBotonesStudio(pantalla)
 				if remote == "Dev.GiveXP" and perfil then
 					n = Progresion.xpForLevel(perfil.Progress.Level)   -- un nivel exacto
 				end
-				Estado.Invocar(remote, n)
+				if n == nil then
+					Estado.Invocar(remote)   -- sin parámetros (el servidor rechaza los que sobran)
+				else
+					Estado.Invocar(remote, n)
+				end
 			end)
 		end)
 	end
 	boton("+1 nivel", "Dev.GiveXP")
 	boton("+10 M $", "Dev.GiveCoins", 10000000)
 	boton("+maestría", "Dev.GiveMastery", 500)
+	boton("Mascotas+", "Dev.PetBoost")
 	crear("TextLabel", {
 		BackgroundColor3 = C.Panel, BackgroundTransparency = 0.2, Size = UDim2.new(0, 80, 1, 0), Text = "solo Studio",
 		TextColor3 = C.Texto, TextSize = 12, Font = Enum.Font.GothamBold, Parent = fila,

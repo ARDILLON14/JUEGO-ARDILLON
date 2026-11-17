@@ -789,6 +789,7 @@ Pendiente de decisión del autor
 - 2026-11-17 · Código, fase 4 (Combate y Núcleos): valores P4-01 a P4-12. Los archivos A, B, C y D no cambian.
 - 2026-11-17 · Código, fase 5 (Fabricación, rarezas y cajas): valores P5-01 a P5-11. Los archivos A, B, C y D no cambian.
 - 2026-11-17 · Combate más frenético a petición del usuario: valores P4b-01 a P4b-05. Sustituye P4-04 en lo que contradiga.
+- 2026-11-17 · Código, fase 6 (Mascotas): valores P6-01 a P6-11. Los archivos A, B, C y D no cambian.
 
 ---
 
@@ -913,4 +914,20 @@ Los archivos B siguen en sus unidades originales; el juego aplica `CurrencyScale
 | P4b-03 | Cada golpe empuja 0,6 studs y retrasa 0,15 s el siguiente ataque del enemigo; el 4.º golpe del combo (remate) empuja 4 studs | [PROVISIONAL] | `Weapons.Feel` |
 | P4b-04 | Animaciones por código (no hay archivos de animación subidos a Roblox): brazo que golpea alternando lados y remate por arriba, tajo de luz, paso adelante, temblor de cámara, destello y chispas, estela del dash, contador de combo. Solo las ve el propio jugador; las de todos (números de daño, efectos de habilidades, enemigos que revientan) siguen en el servidor | [PROVISIONAL] | Sustituir por animaciones de verdad cuando haya un animador (fase 9) |
 | P4b-05 | Los enemigos derrotados revientan en 8 pedazos que salen despedidos | [CONFIRMADO] | — |
+
+## 26. Serie P6 — decisiones tomadas al programar la fase 6 (Mascotas)
+
+| # | Decisión | Estado | Cómo probarla o revisarla |
+|---|---|---|---|
+| P6-01 | Cualquier golpe de pico (piedra o mineral) cuenta para la incubación; cada enemigo derrotado (con el 10 % del daño) cuenta 5 golpes (B5 3) | [CONFIRMADO] | `tests/Mascotas.spec.luau` |
+| P6-02 | Al eclosionar, la mascota se equipa sola si hay un espacio libre | [PROVISIONAL] | — |
+| P6-03 | XP de mascota para todas las equipadas: por enemigo (2/8/24/160) y por bloque de mineral (2 a 22 según rareza) si el jugador hizo al menos el 10 % del daño; Nido: 15 % de 717 XP/h repartido por minutos mientras el dueño está conectado | [CONFIRMADO] | — |
+| P6-04 | Fragmentos elementales: los Élites sueltan 1 y los Guardianes 3, de un elemento al azar (B5 no asigna elementos a las zonas todavía); liberar una mascota da los de su rareza | [PROVISIONAL] | `Pets.ElementDrops` |
+| P6-05 | Las mascotas atacan al último enemigo golpeado por el dueño, o al más cercano a 25 studs, solo si el dueño está en combate. Cada golpe pasa por el factor de escala y la ventana de 5 s (F31) | [CONFIRMADO] | `tests/Mascotas.spec.luau` |
+| P6-06 | Habilidades activas de esta fase: el escudo de las mascotas de Defensa en forma desatada (incluye el Escudo Facetado del Guiverno: 20 % de la vida 5 s si el dueño baja del 50 %, cada 30 s) y el Haz de Cuarzo del Guiverno en forma máxima (golpe extra contra Refractados cada 2 s, dentro del tope). Las demás activas, en la expansión 1 | [PROVISIONAL] | `Pets.Abilities` |
+| P6-07 | Los enemigos no atacan a las mascotas en esta fase: su vida y su reaparición quedan para las Zonas Fracturadas (fase 8) | [PROVISIONAL] | — |
+| P6-08 | Las mascotas recogen solas el saco del dueño (muerte en PvE) dentro de su radio (20 studs; ×1,5 en Recolectar, ×0,5 en Proteger) | [CONFIRMADO] | — |
+| P6-09 | Las mascotas se dibujan en cada cliente a partir del atributo «Mascotas» del personaje: se ven las de todos y se mueven suaves sin cargar al servidor | [CONFIRMADO] | — |
+| P6-10 | La evolución ya funciona (PetEvolutionService «preparado» dentro de PetService): forma desatada con fragmentos y 2 h de ingreso; la máxima pide material de jefe (fase 7) | [CONFIRMADO] | — |
+| P6-11 | Medidas del roadmap: el daño de mascotas nunca supera el 40 % del DPS de referencia en ninguna ventana de 5 s, incluidos los Haces de Cuarzo; nivel 50 en unas 11 horas de combate | [CONFIRMADO] | `tests/Mascotas.spec.luau` |
 

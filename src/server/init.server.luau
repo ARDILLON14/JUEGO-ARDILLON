@@ -3,6 +3,7 @@
 -- Fase 3: mapa de prueba, inventario, depósitos, minería, banco y tienda.
 -- Fase 4: enemigos, combate (ataque, bloqueo, dash, parpadeo, Ruptura) y Núcleos de Poder con sus habilidades.
 -- Fase 5: forja (fabricar, mejorar, reciclar) y cajas con Suerte, protección contra mala suerte y registro.
+-- Fase 6: mascotas (incubación, posturas, Nido, XP, evolución) y su combate con el tope de daño.
 -- Los servicios de las fases siguientes conectan sus Remotes con Red:conectar(nombre, manejador).
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -24,6 +25,8 @@ local CombatService = require(Services.CombatService)
 local PowerCoreService = require(Services.PowerCoreService)
 local CraftingService = require(Services.CraftingService)
 local BoxService = require(Services.BoxService)
+local PetService = require(Services.PetService)
+local PetCombatService = require(Services.PetCombatService)
 local ConstructorPrueba = require(script.Mundo.ConstructorPrueba)
 local LimiteFrecuencia = require(script.Net.LimiteFrecuencia)
 local Validador = require(script.Net.Validador)
@@ -85,6 +88,12 @@ BoxService.Iniciar({
 	Datos = DataService, Economia = EconomyService, Inventory = InventoryService, Stats = StatsService,
 	Analitica = AnalyticsService, Red = Red,
 })
+PetService.Iniciar({
+	Datos = DataService, Economia = EconomyService, Inventory = InventoryService, Mining = MiningService,
+	Deposits = DepositService, Enemigos = EnemyService, Analitica = AnalyticsService, Red = Red,
+})
+MiningService.FijarBonos(PetService.Bonos)
+PetCombatService.Iniciar({ Datos = DataService, Stats = StatsService, Combat = CombatService, Enemigos = EnemyService, Pets = PetService, Red = Red })
 PowerCoreService.Iniciar({
 	Datos = DataService, Stats = StatsService, Combat = CombatService, Enemigos = EnemyService,
 	Analitica = AnalyticsService, Red = Red,
@@ -100,6 +109,9 @@ if enStudio then
 		CombatService.SumarMaestria(jugador, puntos)
 		return true
 	end)
+	Red:conectar("Dev.PetBoost", function(jugador)
+		return PetService.Impulso(jugador)
+	end)
 	Red:conectar("Dev.GiveCoins", function(jugador, cantidad)
 		return EconomyService.AddCoins(jugador, cantidad, "Studio")
 	end)
@@ -107,4 +119,4 @@ end
 
 DataService.Iniciar({ Analitica = AnalyticsService })
 
-print("OREBOUND: servidor iniciado (fase 5)")
+print("OREBOUND: servidor iniciado (fase 6)")

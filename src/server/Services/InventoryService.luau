@@ -22,6 +22,7 @@ local InventoryService = {}
 
 local Datos, Stats, Analitica, Red
 local extrasMochila = {}
+local sacos = {}   -- [saco] = { Jugador, Contenido, Recoger = fn }
 local alEquipar = {}
 
 function InventoryService.NuevoId()
@@ -55,6 +56,15 @@ end
 
 function InventoryService.RegistrarExtraMochila(nombre, fn)
 	extrasMochila[nombre] = fn
+end
+
+-- Las mascotas recogen solas el saco del dueño si está dentro de su radio (B5 1).
+function InventoryService.RecogerSacosCerca(jugador, posicion, radio)
+	for saco, s in pairs(sacos) do
+		if s.Jugador == jugador and saco.Parent and (saco.Position - posicion).Magnitude <= radio then
+			s.Recoger(jugador)
+		end
+	end
 end
 
 function InventoryService.AlEquipar(fn)
@@ -197,8 +207,8 @@ local function crearSaco(jugador, posicion, contenido)
 	prompt.RequiresLineOfSight = false
 	prompt.KeyboardKeyCode = Enum.KeyCode.R
 	prompt.Parent = saco
-	prompt.Triggered:Connect(function(quien)
-		if quien ~= jugador then
+	local function recoger(quien)
+		if quien ~= jugador or not saco.Parent then
 			return
 		end
 		local perfil = Datos.GetProfile(jugador)
@@ -211,6 +221,11 @@ local function crearSaco(jugador, posicion, contenido)
 			saco:Destroy()
 		end
 		Red:obtener("Notify"):FireClient(jugador, { Text = "Recuperas " .. n .. " unidades del saco" })
+	end
+	prompt.Triggered:Connect(recoger)
+	sacos[saco] = { Jugador = jugador, Recoger = recoger }
+	saco.Destroying:Connect(function()
+		sacos[saco] = nil
 	end)
 	saco.Parent = workspace
 	task.delay(Mining.PvEDeath.RecoverSeconds, function()

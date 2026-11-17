@@ -28,6 +28,14 @@ return {
 	DPSCap = { PvE = 0.40, PvP = 0.25, WindowSeconds = 5, RefAbilityFactor = 1.39, RefCritFactor = 1.025,
 	           MaxActivePvP = 3, CombatTimeout = 5 },
 	ChestOpenSeconds = 4.5,
+	Storage = { Pets = 30, Eggs = 30 },                                        -- B5 8: almacén de 30
+	Incubators = { Start = 1, SecondAtLevel = 200 },                            -- B5 8: la tercera es de pago (fase 9)
+	ElementDrops = { Elite = 1, Guardian = 3 },                                 -- fragmentos elementales por enemigo (B5 3)
+	Combat = { AssistRadius = 25, TickSeconds = 0.25, FollowRadius = 20 },      -- propuesta: a qué distancia ayudan
+	Abilities = {                                                               -- fase 6: Defensa (escudo) y Guiverno (Haz de Cuarzo)
+		Shield = { Fraction = 0.20, Seconds = 5, Cooldown = 30, OwnerHealthBelow = 0.5 },
+		QuartzBeam = { Coef = 1.0, Cooldown = 2 },   -- un golpe extra (×1 su golpe) contra objetivos Refractados
+	},
 	Respawn = { PvE = 20, Fracture = 30 },
 	Slots = { Start = 3, Unlock = { [4] = { Level = 300 }, [5] = { Level = 700 }, [6] = { SeasonFragments = 60, GamePass = true } } },
 	Hatch = { PickHits = { Common = 500, Uncommon = 1000, Rare = 2000, Epic = 4000, Legendary = 8000, Mythic = 15000, UltraRare = 30000 },

@@ -22,6 +22,14 @@ local Datos, Stats, Inventory, Deposits, Progression, Analitica, Red
 local estados = {}         -- [jugador] = { UltimoGolpe, Pasivas = estado de Pasivas, Avisos = { [motivo] = momento } }
 local subiendo
 local alGolpear = {}
+local bonos = function()
+	return { ExtractSpeed = 0, ExtraUnitChance = 0 }
+end
+
+-- Bonos de recolección de las mascotas (los fija PetService).
+function MiningService.FijarBonos(fn)
+	bonos = fn
+end
 local azar = Random.new()
 
 local MENSAJES = {
@@ -97,7 +105,7 @@ local function golpear(jugador, depositoId)
 	end
 	local e = estado(jugador)
 	local ahora = os.clock()
-	local intervalo = 1 / Mineria.pickHitsPerSecond(pico.Rarity, 0)
+	local intervalo = 1 / Mineria.pickHitsPerSecond(pico.Rarity, bonos(jugador).ExtractSpeed)
 	if ahora - e.UltimoGolpe < intervalo * Mining.Hit.TimingTolerance then
 		return
 	end
@@ -182,6 +190,10 @@ local function alAgotar(entrada, azarDep)
 			local efectos = Pasivas.alAgotar(pico and pico.Passives or {}, estado(jugador).Pasivas, os.clock(), azarDep)
 			if efectos.UnidadExtra and unidades > 0 then
 				unidades = unidades + 1
+			end
+			if unidades > 0 and azarDep() < bonos(jugador).ExtraUnitChance then   -- mascotas: unidad extra
+				unidades = unidades + 1
+				efectos.UnidadExtra = true
 			end
 			if efectos.Reaparece then
 				reaparece = true

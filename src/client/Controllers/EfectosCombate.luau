@@ -131,6 +131,9 @@ function EfectosCombate.impacto(datos)
 		local p = neon(Vector3.new(0.2, 0.2, 0.9), CFrame.lookAt(datos.Pos, datos.Pos + dir), datos.Crit and Color3.fromRGB(255, 210, 60) or Color3.fromRGB(255, 240, 200), 0, 0.22)
 		TweenService:Create(p, TweenInfo.new(0.22), { CFrame = p.CFrame + dir * 4 }):Play()
 	end
+	if datos.Pet then
+		return   -- los golpes de mascotas no hacen temblar ni cuentan para el combo
+	end
 	if datos.Own then
 		EfectosCombate.temblar(datos.Crit and 0.35 or 0.12)
 		local ahora = os.clock()

@@ -14,6 +14,7 @@ local Mining = require(Shared.Config:WaitForChild("Mining"))
 local Rarity = require(Shared.Config:WaitForChild("Rarity"))
 local Mineria = require(Shared:WaitForChild("Formulas"):WaitForChild("Mineria"))
 local Inventario = require(Shared:WaitForChild("Reglas"):WaitForChild("Inventario"))
+local Criadero = require(Shared.Reglas:WaitForChild("Criadero"))
 local Rarezas = require(Shared:WaitForChild("Visual"):WaitForChild("Rarezas"))
 local UserInputService = game:GetService("UserInputService")
 
@@ -119,7 +120,7 @@ local function paso()
 		siguiente = ahora + 0.2
 		return
 	end
-	siguiente = ahora + 1 / Mineria.pickHitsPerSecond(pico.Rarity, 0) + 0.02
+	siguiente = ahora + 1 / Mineria.pickHitsPerSecond(pico.Rarity, Criadero.bonos(Estado.Perfil).ExtractSpeed) + 0.02
 	balancear(herramienta)
 	remoteGolpe:FireServer(parte:GetAttribute("DepositoId"))
 end

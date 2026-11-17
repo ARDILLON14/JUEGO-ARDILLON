@@ -35,6 +35,7 @@ local function estado(jugador)
 		e = {
 			Dash = Combate.nuevoDash(), Enfriamientos = {}, Combo = {}, UltimoAtaque = -1e9,
 			Bloqueando = false, UltimoBloqueo = -1e9, Control = Combate.nuevoControl(), InvulnHasta = -1e9,
+			UltimoObjetivo = nil, Escudo = 0, EscudoHasta = -1e9,
 		}
 		estados[jugador] = e
 	end
@@ -80,6 +81,7 @@ function CombatService.DanarEnemigo(jugador, enemigo, coef, opciones)
 		Tutorial = enemigo.Zona == 1 and perfil.Progress.Level <= Weapons.Enemies.TutorialMaxLevel, Extra = opciones.Extra,
 	}, ahora, aleatorio)
 	local pos = enemigo.Raiz and enemigo.Raiz.Position
+	estado(jugador).UltimoObjetivo = enemigo.Id
 	local aplicado = Enemigos.Danar(enemigo.Id, jugador, dano)
 	StatsSvc.MarcarCombate(jugador, "PvE")
 	if pos and aplicado > 0 then
@@ -255,6 +257,17 @@ local function ruptura(jugador)
 	avisar(jugador, "¡Ruptura!")
 end
 
+function CombatService.UltimoObjetivo(jugador)
+	local e = estados[jugador]
+	return e and e.UltimoObjetivo
+end
+
+function CombatService.FijarEscudo(jugador, cantidad, segundos)
+	local e = estado(jugador)
+	e.Escudo = cantidad
+	e.EscudoHasta = os.clock() + segundos
+end
+
 function CombatService.UltimoBloqueo(jugador)
 	return estado(jugador).UltimoBloqueo
 end
@@ -297,6 +310,11 @@ function CombatService.DanarJugador(jugador, dano, enemigo)
 	end
 	local d = StatsSvc.GetStats(jugador)
 	local final = Combate.danoRecibido(dano, d and d.DefensePvE or 0, bloqueado, true)
+	if e.Escudo > 0 and ahora < e.EscudoHasta then   -- escudo de mascotas: absorbe primero
+		local absorbe = math.min(e.Escudo, final)
+		e.Escudo = e.Escudo - absorbe
+		final = final - absorbe
+	end
 	h.Health = math.max(0, h.Health - final)
 	CombatService.Hit(nil, raiz.Position, final, false)
 	return final
