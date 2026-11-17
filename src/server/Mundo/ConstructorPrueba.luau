@@ -50,6 +50,7 @@ local function interactuable(nombre, etiqueta, posicion, color, accion, espera, 
 	prompt.ActionText = accion
 	prompt.ObjectText = nombre
 	prompt.HoldDuration = espera or 0
+	prompt.KeyboardKeyCode = Enum.KeyCode.R   -- E es el parpadeo (B4, 2.2: interactuar con R)
 	prompt.MaxActivationDistance = 12
 	prompt.RequiresLineOfSight = false
 	prompt.Parent = p
@@ -119,6 +120,20 @@ function ConstructorPrueba.construirSiFalta()
 	local cartelZona = parte({ Name = "Cartel", Size = Vector3.new(1, 1, 1), Position = Vector3.new(0, 1, z0 - 4), Transparency = 1, CanCollide = false, CanQuery = false }, zona)
 	cartel(cartelZona, "Cantera del Alba · Zona 1", 8, Color3.fromRGB(255, 230, 160))
 	interactuable("Banco de la cantera", Lugares.Etiqueta.Banco, Vector3.new(-40, 4, z0 - 14), Color3.fromRGB(212, 175, 55), "Depositar todo", 3, zona)
+	-- Llanura de combate de la zona 1 (fase 4): puntos de aparición de enemigos, al este de la plaza.
+	local llanura = Instance.new("Folder")
+	llanura.Name = "LlanuraDelAlba"
+	llanura.Parent = mapa
+	parte({ Name = "Suelo", Size = Vector3.new(110, 0.3, 100), Position = Vector3.new(125, 0.15, 0), Material = Enum.Material.Ground, Color = Color3.fromRGB(120, 105, 80) }, llanura)
+	local cartelLlanura = parte({ Name = "Cartel", Size = Vector3.new(1, 1, 1), Position = Vector3.new(68, 1, 0), Transparency = 1, CanCollide = false, CanQuery = false }, llanura)
+	cartel(cartelLlanura, "Llanura del Alba · Enemigos", 8, Color3.fromRGB(255, 170, 150))
+	local azar = Random.new(4)
+	for i = 1, 14 do
+		local p = parte({ Name = "PuntoEnemigo", Size = Vector3.new(1, 1, 1), Transparency = 1, CanCollide = false, CanQuery = false, CanTouch = false,
+			Position = Vector3.new(azar:NextNumber(90, 165), 0.5, azar:NextNumber(-42, 42)) }, llanura)
+		p:SetAttribute("Zona", 1)
+		CollectionService:AddTag(p, "PuntoEnemigo")
+	end
 	mapa.Parent = workspace
 	return true
 end

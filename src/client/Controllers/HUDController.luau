@@ -125,8 +125,8 @@ end
 local function crearBotonesStudio(pantalla)
 	local fila = crear("Frame", {
 		BackgroundTransparency = 1,
-		Size = UDim2.new(0, 260, 0, 32),
-		Position = UDim2.new(1, -276, 0, 16),
+		Size = UDim2.new(0, 360, 0, 32),
+		Position = UDim2.new(1, -376, 0, 16),
 		Parent = pantalla,
 	}, { crear("UIListLayout", { FillDirection = Enum.FillDirection.Horizontal, Padding = UDim.new(0, 6) }) })
 	local function boton(texto, remote, cantidad)
@@ -144,6 +144,7 @@ local function crearBotonesStudio(pantalla)
 	end
 	boton("+1 nivel", "Dev.GiveXP")
 	boton("+10 M $", "Dev.GiveCoins", 10000000)
+	boton("+maestría", "Dev.GiveMastery", 500)
 	crear("TextLabel", {
 		BackgroundColor3 = C.Panel, BackgroundTransparency = 0.2, Size = UDim2.new(0, 80, 1, 0), Text = "solo Studio",
 		TextColor3 = C.Texto, TextSize = 12, Font = Enum.Font.GothamBold, Parent = fila,

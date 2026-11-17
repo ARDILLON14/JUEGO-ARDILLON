@@ -145,6 +145,7 @@ Remotes.ClientToServer = {
 -- Solo se crean en Roblox Studio (nunca en un servidor publicado): ayudas para probar.
 Remotes.SoloStudio = {
 	["Dev.GiveXP"] = { Kind = "Function", Rate = rate(2), Params = { int("amount", 1, 100000000) } },
+	["Dev.GiveMastery"] = { Kind = "Function", Rate = rate(2), Params = { int("points", 1, 100000) } },
 	["Dev.GiveCoins"] = { Kind = "Function", Rate = rate(2), Params = { int("amount", 1, 1000000000000) } },
 }
 

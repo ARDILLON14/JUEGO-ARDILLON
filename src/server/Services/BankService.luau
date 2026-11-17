@@ -57,6 +57,7 @@ local function conectarBanco(parte)
 		prompt.HoldDuration = Mining.Bank.HoldSeconds
 		prompt.MaxActivationDistance = 12
 		prompt.RequiresLineOfSight = false
+		prompt.KeyboardKeyCode = Enum.KeyCode.R
 		prompt.Parent = parte
 	end
 	prompt.Triggered:Connect(function(jugador)

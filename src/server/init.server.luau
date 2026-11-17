@@ -1,6 +1,7 @@
 -- Arranque del servidor de OREBOUND. Carga los servicios en orden de dependencias (C_Tecnico, sección 3).
 -- Fase 1: analítica, datos y red.  Fase 2: economía (monedas), estadísticas y progresión.
 -- Fase 3: mapa de prueba, inventario, depósitos, minería, banco y tienda.
+-- Fase 4: enemigos, combate (ataque, bloqueo, dash, parpadeo, Ruptura) y Núcleos de Poder con sus habilidades.
 -- Los servicios de las fases siguientes conectan sus Remotes con Red:conectar(nombre, manejador).
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -17,6 +18,9 @@ local InventoryService = require(Services.InventoryService)
 local DepositService = require(Services.DepositService)
 local MiningService = require(Services.MiningService)
 local BankService = require(Services.BankService)
+local EnemyService = require(Services.EnemyService)
+local CombatService = require(Services.CombatService)
+local PowerCoreService = require(Services.PowerCoreService)
 local ConstructorPrueba = require(script.Mundo.ConstructorPrueba)
 local LimiteFrecuencia = require(script.Net.LimiteFrecuencia)
 local Validador = require(script.Net.Validador)
@@ -68,12 +72,25 @@ MiningService.Iniciar({
 	Datos = DataService, Stats = StatsService, Inventory = InventoryService, Deposits = DepositService,
 	Progression = ProgressionService, Analitica = AnalyticsService, Red = Red,
 })
+EnemyService.Iniciar()
+CombatService.Iniciar({
+	Datos = DataService, Stats = StatsService, Enemigos = EnemyService, Progression = ProgressionService,
+	Economia = EconomyService, Analitica = AnalyticsService, Red = Red,
+})
+PowerCoreService.Iniciar({
+	Datos = DataService, Stats = StatsService, Combat = CombatService, Enemigos = EnemyService,
+	Analitica = AnalyticsService, Red = Red,
+})
 
 -- Ayudas para probar en Studio. Estos Remotes no existen en un servidor publicado.
 if enStudio then
 	Red:conectar("Dev.GiveXP", function(jugador, cantidad)
 		local r = ProgressionService.AddXP(jugador, cantidad, "Studio")
 		return r ~= nil, r and r.Nivel
+	end)
+	Red:conectar("Dev.GiveMastery", function(jugador, puntos)
+		CombatService.SumarMaestria(jugador, puntos)
+		return true
 	end)
 	Red:conectar("Dev.GiveCoins", function(jugador, cantidad)
 		return EconomyService.AddCoins(jugador, cantidad, "Studio")
@@ -82,4 +99,4 @@ end
 
 DataService.Iniciar({ Analitica = AnalyticsService })
 
-print("OREBOUND: servidor iniciado (fase 3, minería por bloques)")
+print("OREBOUND: servidor iniciado (fase 4)")

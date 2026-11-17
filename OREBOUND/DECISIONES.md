@@ -786,6 +786,7 @@ Pendiente de decisión del autor
 - 2026-11-17 · Código, fase 3 (Minería y economía base): valores P3-01 a P3-11. Los archivos A, B, C y D no cambian.
 - 2026-11-17 · Minería por bloques a petición del usuario: valores P3b-01 a P3b-10. Sustituye P3-01, P3-02 y P3-10 en lo que contradigan. B3 sigue fijando vida, valor, unidades y XP de cada mineral.
 - 2026-11-17 · Más minerales y dinero x 1.000 a petición del usuario: valores P3c-01 a P3c-06. Sustituyen P3b-02 y P3b-04 y la mochila de 60 de B3.
+- 2026-11-17 · Código, fase 4 (Combate y Núcleos): valores P4-01 a P4-12. Los archivos A, B, C y D no cambian.
 
 ---
 
@@ -867,4 +868,21 @@ El usuario encontró pocos minerales al picar y pidió precios más altos, al es
 | P3c-06 | La interfaz abrevia las cantidades grandes: 12,5 K, 5,15 M, 2,39 B, 1,2 T | [CONFIRMADO] | En Studio |
 
 Los archivos B siguen en sus unidades originales; el juego aplica `CurrencyScale`, `OreValueScale` y `OreXPScale` encima.
+
+## 23. Serie P4 — decisiones tomadas al programar la fase 4 (Combate y Núcleos)
+
+| # | Decisión | Estado | Cómo probarla o revisarla |
+|---|---|---|---|
+| P4-01 | Arma inicial: Espada Común de zona 1. En el MVP solo se fabrican Espada, Daga y Bastón (`Weapons.EnabledTypes`) | [PROVISIONAL] | `Weapons.Starter` |
+| P4-02 | El clic hace lo que toca según lo que se lleva en la mano: con el pico, picar; con el arma, atacar. Las habilidades (Z, X, C, V), el dash (Q), el bloqueo (F) y el parpadeo (E) funcionan siempre que haya un arma equipada | [PROVISIONAL] | En Studio |
+| P4-03 | Interactuar pasa a la tecla R (B4, 2.2) porque E es el parpadeo: bancos, mercader y saco | [CONFIRMADO] | — |
+| P4-04 | Enemigos de prueba en la Llanura del Alba (zona 1): 12 vivos a la vez, reaparecen a los 8 s; 88 % Comunes, 10 % Élites, 2 % Guardianes; en grupos de 1, 2 o 3. IA sencilla: persiguen a menos de 32 studs, atacan a 6, vuelven a casa y se curan si se les aleja más de 70 | [PROVISIONAL] | `Weapons.Enemies.AI` |
+| P4-05 | Las recompensas de un enemigo (XP, monedas) se reparten por el daño hecho; la maestría (arma y Núcleo equipados) es entera para quien hizo al menos el 10 % | [CONFIRMADO] | `tests/Combate.spec.luau` |
+| P4-06 | Tutorial: hasta el nivel 10, el daño a enemigos de la zona 1 se duplica (equivale a la mitad de vida de B4) | [CONFIRMADO] | — |
+| P4-07 | El combo cuenta golpes seguidos al mismo objetivo y se reinicia tras 2 s sin golpearlo | [PROVISIONAL] | `Weapons.ComboResetSeconds` |
+| P4-08 | Dash, parpadeo y Paso de Relámpago los mueve el servidor (sin atravesar paredes). Con mucha latencia se notará un pequeño retraso; se revisará con jugadores | [PROVISIONAL] | En Studio |
+| P4-09 | Guardia rota: aturde 2 s (Tenacidad incluida) al quedarse sin energía bloqueando. La Ruptura libera y empuja 10 studs a los enemigos a menos de 10 | [CONFIRMADO] | — |
+| P4-10 | Habilidades implementadas: las 4 del Núcleo Prismático y las 2 técnicas de Espada, Daga y Bastón. Los otros 5 Núcleos usan un efecto genérico por tipo de ranura hasta su fase; Despertar y Transformación llegan en la expansión 1 (roadmap) | [PROVISIONAL] | `PowerCoreService` |
+| P4-11 | Al desbloquear una habilidad del Núcleo por maestría, se coloca sola en su ranura si estaba vacía | [PROVISIONAL] | — |
+| P4-12 | Medida del roadmap: 6,3 s por enemigo Común con el combatiente de referencia de B4 (objetivo 6,3, aceptable 4,7–7,9) | [CONFIRMADO] | `tests/Combate.spec.luau` |
 

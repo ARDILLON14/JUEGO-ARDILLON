@@ -5,6 +5,7 @@
 return {
 	Starter = "Prismatic",
 	SlotTypes = { Z = "Area", X = "Control", C = "Mobility", V = "Ultimate" },             -- GDD
+	ProjectileRange = 40, AreaRadius = 14,                                                  -- propuesta: alcance de proyectiles y áreas
 	MasteryUnlocks = { [1] = "Z", [10] = "X", [25] = "C", [50] = "V", [100] = "Awaken" },
 	SwapOutsideCityItem = "ReadjustSeal",                                                   -- GDD: cuesta un consumible
 	Awaken = { MasteryRequired = 100, DamageBonusPvE = 0.15, DamageBonusPvP = 0.08, UnlocksTransform = true },   -- GDD

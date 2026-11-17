@@ -73,6 +73,7 @@ local function conectarMercader(parte)
 		prompt.ObjectText = "Mercader"
 		prompt.MaxActivationDistance = 12
 		prompt.RequiresLineOfSight = false
+		prompt.KeyboardKeyCode = Enum.KeyCode.R
 		prompt.Parent = parte
 	end
 	prompt.Triggered:Connect(function(jugador)

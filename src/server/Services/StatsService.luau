@@ -70,7 +70,13 @@ local function aplicarPersonaje(jugador, rellenar)
 	end
 	h.MaxHealth = d.MaxHealth
 	h.Health = math.max(1, d.MaxHealth * proporcion)
-	h.WalkSpeed = d.WalkSpeed * (estado.MultiplicadorVelocidad or 1)
+	if estado.Aturdido then
+		h.WalkSpeed = 0
+		h.JumpHeight = 0
+	else
+		h.WalkSpeed = d.WalkSpeed * (estado.MultiplicadorVelocidad or 1)
+		h.JumpHeight = 7.2
+	end
 end
 
 local function enviar(jugador, forzar)
@@ -222,6 +228,15 @@ function StatsService.FijarMultiplicadorVelocidad(jugador, multiplicador)
 	local estado = estados[jugador]
 	if estado then
 		estado.MultiplicadorVelocidad = math.clamp(multiplicador, 0, 1)
+		aplicarPersonaje(jugador, false)
+	end
+end
+
+-- Aturdido: no se mueve ni salta (control de B4). Lo usa CombatService.
+function StatsService.FijarAturdido(jugador, activo)
+	local estado = estados[jugador]
+	if estado then
+		estado.Aturdido = activo == true
 		aplicarPersonaje(jugador, false)
 	end
 end

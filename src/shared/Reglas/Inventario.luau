@@ -7,6 +7,7 @@ local Rarity = require(Shared.Config.Rarity)
 local Potencia = require(Shared.Formulas.Potencia)
 local Mineria = require(Shared.Formulas.Mineria)
 local Economia = require(Shared.Formulas.Economia)
+local Nombres = require(Shared.Visual.Nombres)
 
 local Inventario = {}
 
@@ -113,6 +114,11 @@ end
 
 -- Vende un objeto no equipado al mercader (10 % de su coste de fabricación).
 -- Devuelve true y las monedas, o false y el motivo: "objeto" | "equipado" | "ultimo".
+function Inventario.crearArma(tipo, zona, rareza)
+	assert(Rarity.Multiplier[rareza], "rareza desconocida")
+	return { Kind = "Weapon", Type = tipo, Zone = zona, Rarity = rareza, Level = 0, Slots = 0, Awakened = false }
+end
+
 function Inventario.vender(perfil, id)
 	local item = perfil.Items[id]
 	if not item then
@@ -135,7 +141,7 @@ function Inventario.nombreBase(item)
 	if item.Kind == "Pickaxe" then
 		return "Pico de " .. prefijo
 	end
-	return tostring(item.Type) .. " de " .. prefijo
+	return (Nombres.Arma[item.Type] or tostring(item.Type)) .. " de " .. prefijo
 end
 
 return Inventario
