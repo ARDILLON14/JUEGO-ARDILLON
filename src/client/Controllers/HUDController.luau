@@ -127,8 +127,8 @@ end
 local function crearBotonesStudio(pantalla)
 	local fila = crear("Frame", {
 		BackgroundTransparency = 1,
-		Size = UDim2.new(0, 450, 0, 32),
-		Position = UDim2.new(1, -466, 0, 16),
+		Size = UDim2.new(0, 540, 0, 32),
+		Position = UDim2.new(1, -556, 0, 16),
 		Parent = pantalla,
 	}, { crear("UIListLayout", { FillDirection = Enum.FillDirection.Horizontal, Padding = UDim.new(0, 6) }) })
 	local function boton(texto, remote, cantidad)
@@ -138,7 +138,11 @@ local function crearBotonesStudio(pantalla)
 				local perfil = Estado.Perfil
 				local n = cantidad
 				if remote == "Dev.GiveXP" and perfil then
-					n = Progresion.xpForLevel(perfil.Progress.Level)   -- un nivel exacto
+					n = 0
+					for l = perfil.Progress.Level, perfil.Progress.Level + (cantidad or 1) - 1 do
+						n = n + Progresion.xpForLevel(l)   -- niveles exactos
+					end
+					n = n - perfil.Progress.XP
 				end
 				if n == nil then
 					Estado.Invocar(remote)   -- sin parámetros (el servidor rechaza los que sobran)
@@ -148,7 +152,8 @@ local function crearBotonesStudio(pantalla)
 			end)
 		end)
 	end
-	boton("+1 nivel", "Dev.GiveXP")
+	boton("+1 nivel", "Dev.GiveXP", 1)
+	boton("+50 niveles", "Dev.GiveXP", 50)
 	boton("+10 M $", "Dev.GiveCoins", 10000000)
 	boton("+maestría", "Dev.GiveMastery", 500)
 	boton("Mascotas+", "Dev.PetBoost")

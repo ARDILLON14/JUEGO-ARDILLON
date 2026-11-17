@@ -24,7 +24,7 @@ local MOTIVOS = {
 	repetida = "No puedes llevar la misma habilidad dos veces.",
 }
 
-local Estado, pantalla, lista, cabecera, mensaje
+local Estado, pantalla, lista, cabecera, mensaje, filaNucleos
 local botones = {}
 local borrador = nil
 
@@ -66,6 +66,30 @@ function PanelHabilidades.Refrescar()
 		local id = borrador[ranura]
 		botones[ranura].Text = ranura .. ": " .. ((id and id ~= "" and (Nombres.Habilidad[id] or id)) or "vacía")
 	end
+	-- Núcleos que tiene el jugador: cambiar es gratis en la ciudad; fuera cuesta un Sello de Reajuste.
+	for _, h in ipairs(filaNucleos:GetChildren()) do
+		if h:IsA("TextButton") then
+			h:Destroy()
+		end
+	end
+	local nucleos = {}
+	for id in pairs(perfil.Cores) do
+		table.insert(nucleos, id)
+	end
+	table.sort(nucleos)
+	for _, id in ipairs(nucleos) do
+		local b = Componentes.boton({ Size = UDim2.new(0, 96, 1, 0), TextSize = 10, TextWrapped = true, Parent = filaNucleos,
+			Text = (Nombres.Nucleo[id] or id) .. "\nmaestría " .. perfil.Cores[id].Mastery,
+			BackgroundColor3 = id == nucleo and C.XP or C.BotonApagado, TextColor3 = id == nucleo and C.Fondo or C.Texto })
+		b.Activated:Connect(function()
+			task.spawn(function()
+				local ok, motivo = Estado.Invocar("Core.Equip", id)
+				local textos = { sello = "Fuera de la ciudad necesitas un Sello de Reajuste (lo vende el mercader).", en_combate = "No puedes cambiar de Núcleo en combate." }
+				mensaje.Text = ok and ("Núcleo equipado: " .. (Nombres.Nucleo[id] or id)) or (textos[motivo] or ("No se pudo: " .. tostring(motivo)))
+				borrador = nil
+			end)
+		end)
+	end
 end
 
 -- Siguiente habilidad desbloqueada que encaja en la ranura (o vacía).
@@ -85,7 +109,7 @@ end
 function PanelHabilidades.Iniciar(estado)
 	Estado = estado
 	pantalla = crear("ScreenGui", { Name = "PanelHabilidades", ResetOnSpawn = false, Enabled = false, Parent = Players.LocalPlayer:WaitForChild("PlayerGui") })
-	local marco = crear("Frame", { BackgroundColor3 = C.Panel, Size = UDim2.new(0, 640, 0, 400), Position = UDim2.new(0.5, -320, 0.5, -200), Parent = pantalla }, {
+	local marco = crear("Frame", { BackgroundColor3 = C.Panel, Size = UDim2.new(0, 640, 0, 460), Position = UDim2.new(0.5, -320, 0.5, -230), Parent = pantalla }, {
 		Componentes.esquinas(12), crear("UIStroke", { Color = C.Borde }),
 		crear("UIPadding", { PaddingLeft = UDim.new(0, 16), PaddingRight = UDim.new(0, 16), PaddingTop = UDim.new(0, 12), PaddingBottom = UDim.new(0, 12) }),
 	})
@@ -122,6 +146,9 @@ function PanelHabilidades.Iniciar(estado)
 		Text = "Pulsa una ranura para cambiar su habilidad. V solo admite la definitiva del Núcleo o la segunda técnica del arma. La maestría sube derrotando enemigos con el arma y el Núcleo equipados.",
 		Parent = marco })
 	mensaje = Componentes.texto({ Size = UDim2.new(1, 0, 0, 18), Position = UDim2.new(0, 210, 0, 281), TextColor3 = C.TextoSuave, TextSize = 13, Parent = marco })
+	Componentes.texto({ Size = UDim2.new(1, 0, 0, 18), Position = UDim2.new(0, 0, 0, 356), TextSize = 13, Font = Enum.Font.GothamBold, Text = "Tus Núcleos (gratis en la ciudad; fuera, 1 Sello de Reajuste)", Parent = marco })
+	filaNucleos = crear("Frame", { BackgroundTransparency = 1, Size = UDim2.new(1, 0, 0, 44), Position = UDim2.new(0, 0, 0, 378), Parent = marco },
+		{ crear("UIListLayout", { FillDirection = Enum.FillDirection.Horizontal, Padding = UDim.new(0, 4) }) })
 	Estado.Cambio:Connect(function(que)
 		if que == "Perfil" then
 			PanelHabilidades.Refrescar()

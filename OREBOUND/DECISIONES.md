@@ -790,6 +790,7 @@ Pendiente de decisión del autor
 - 2026-11-17 · Código, fase 5 (Fabricación, rarezas y cajas): valores P5-01 a P5-11. Los archivos A, B, C y D no cambian.
 - 2026-11-17 · Combate más frenético a petición del usuario: valores P4b-01 a P4b-05. Sustituye P4-04 en lo que contradiga.
 - 2026-11-17 · Código, fase 6 (Mascotas): valores P6-01 a P6-11. Los archivos A, B, C y D no cambian.
+- 2026-11-17 · Código, fase 7 (Jefes y mundo 1): valores P7-01 a P7-14. Los archivos A, B, C y D no cambian.
 
 ---
 
@@ -930,4 +931,23 @@ Los archivos B siguen en sus unidades originales; el juego aplica `CurrencyScale
 | P6-09 | Las mascotas se dibujan en cada cliente a partir del atributo «Mascotas» del personaje: se ven las de todos y se mueven suaves sin cargar al servidor | [CONFIRMADO] | — |
 | P6-10 | La evolución ya funciona (PetEvolutionService «preparado» dentro de PetService): forma desatada con fragmentos y 2 h de ingreso; la máxima pide material de jefe (fase 7) | [CONFIRMADO] | — |
 | P6-11 | Medidas del roadmap: el daño de mascotas nunca supera el 40 % del DPS de referencia en ninguna ventana de 5 s, incluidos los Haces de Cuarzo; nivel 50 en unas 11 horas de combate | [CONFIRMADO] | `tests/Mascotas.spec.luau` |
+
+## 27. Serie P7 — decisiones tomadas al programar la fase 7 (Jefes y mundo 1)
+
+| # | Decisión | Estado | Cómo probarla o revisarla |
+|---|---|---|---|
+| P7-01 | Mientras los mundos no estén publicados como lugares aparte (PlaceId = 0), las zonas 1 a 3 están en el mismo lugar y los portales mueven al jugador. El camino con TeleportService (guardar, soltar el perfil y teletransportar) ya está escrito y se activa al rellenar `Worlds.Worlds[i].PlaceId` | [CONFIRMADO] | Publicar los lugares y probar en el servidor real |
+| P7-02 | Las zonas 2 y 3 del mapa de prueba están cerradas por barreras: solo se entra por su portal de la plaza, que exige tenerlas desbloqueadas (nivel 100 y 200) | [PROVISIONAL] | — |
+| P7-03 | Se reaparece en la entrada de la última zona a la que se viajó por portal | [CONFIRMADO] | — |
+| P7-04 | Reinicio de estadísticas solo en la ciudad (cierra P2-06); cambiar de Núcleo fuera de la ciudad gasta un Sello de Reajuste, que vende el mercader (0,05 h de ingreso) | [CONFIRMADO] | — |
+| P7-05 | Combate contra jefes: se apuntan en la puerta, 10 s de cuenta atrás, el número de jugadores (hasta 8) queda fijado y se les lleva a la sala. Si todos mueren o se alejan, el jefe se reinicia | [PROVISIONAL] | `Config/Bosses` |
+| P7-06 | Los 3 jefes comparten un motor: golpe normal (aviso 0,6 s, se puede bloquear o esquivar), ataque fuerte (1,2 s, hay que salir de la marca roja), letal desde la fase 2 cada 28 s (2,5 s, solo las zonas verdes son seguras; si nadie cae, 6 s expuesto), atasco de 4 s tras 3 golpes normales en fase 1, invulnerable 2 s al cambiar de fase, furia desde los 12 min. Cada jefe cambia formas, nombres y número de zonas seguras; la Madre Liquen no se mueve y su nube ralentiza; el Capataz invoca 2 enemigos cada 20 s en fase 3. Simplifica los bulbos y pilares de B4 8.3 en zonas seguras | [PROVISIONAL] | Pruebas con jugadores (roadmap: menos del 50 % de derrotas por el letal en el primer intento) |
+| P7-07 | Núcleo asociado a cada jefe (1 % por derrota con botín completo): Capataz → Sísmico, Madre Liquen → Umbrío, Leviatán → Tormenta | [PROVISIONAL] | `Bosses.List[z].Core` |
+| P7-08 | Los materiales de jefe se guardan por zona (`Materials.Boss.z1`…) y las recetas Legendaria o superior gastan los de la zona del objeto | [CONFIRMADO] | `tests/Forja.spec.luau` |
+| P7-09 | A los jefes no se les empuja y su daño recibido se multiplica por 0 (invulnerable) o 1,5 (expuesto) | [CONFIRMADO] | — |
+| P7-10 | Misiones diarias: una de minería, una de combate y una de mascotas cada día (UTC), elegidas por día y jugador; cada una paga 0,25 h de ingreso y 20 acciones de XP | [PROVISIONAL] | `Config/Quests` |
+| P7-11 | Tutorial de 7 pasos guiado por eventos del servidor (picar, depositar, vender, repartir un punto, derrotar 3 enemigos, usar Z, abrir una caja); al terminar da 0,5 h de ingreso; se puede saltar | [PROVISIONAL] | `Config/Quests.Tutorial` |
+| P7-12 | Las misiones semanales y los contratos de grieta llegan con la fase 8 | [CONFIRMADO] | — |
+| P7-13 | Dos módulos de configuración nuevos: `Bosses` y `Quests` (15 en total) | [CONFIRMADO] | `tests/Config.spec.luau` |
+| P7-14 | Medidas del roadmap: jefe en solitario 7,9 min (4 jugadores 5,5; 8 jugadores 5,1); niveles 200 y 300 en 19,7 y 40,8 h; 11.180 y 21.851 monedas/h picando en las zonas 2 y 3 (objetivo 10.301 y 20.040, ± 25 %) | [CONFIRMADO] | `tests/Mundo.spec.luau` |
 

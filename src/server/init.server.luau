@@ -4,6 +4,7 @@
 -- Fase 4: enemigos, combate (ataque, bloqueo, dash, parpadeo, Ruptura) y Núcleos de Poder con sus habilidades.
 -- Fase 5: forja (fabricar, mejorar, reciclar) y cajas con Suerte, protección contra mala suerte y registro.
 -- Fase 6: mascotas (incubación, posturas, Nido, XP, evolución) y su combate con el tope de daño.
+-- Fase 7: zonas 2 y 3, portales y ciudad (WorldService), los 3 jefes, misiones diarias y tutorial.
 -- Los servicios de las fases siguientes conectan sus Remotes con Red:conectar(nombre, manejador).
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -27,6 +28,9 @@ local CraftingService = require(Services.CraftingService)
 local BoxService = require(Services.BoxService)
 local PetService = require(Services.PetService)
 local PetCombatService = require(Services.PetCombatService)
+local WorldService = require(Services.WorldService)
+local BossService = require(Services.BossService)
+local QuestService = require(Services.QuestService)
 local ConstructorPrueba = require(script.Mundo.ConstructorPrueba)
 local LimiteFrecuencia = require(script.Net.LimiteFrecuencia)
 local Validador = require(script.Net.Validador)
@@ -94,6 +98,12 @@ PetService.Iniciar({
 })
 MiningService.FijarBonos(PetService.Bonos)
 PetCombatService.Iniciar({ Datos = DataService, Stats = StatsService, Combat = CombatService, Enemigos = EnemyService, Pets = PetService, Red = Red })
+WorldService.Iniciar({ Datos = DataService, Stats = StatsService, Analitica = AnalyticsService, Red = Red })
+BossService.Iniciar({
+	Datos = DataService, Stats = StatsService, Combat = CombatService, Enemigos = EnemyService, Economia = EconomyService,
+	Progression = ProgressionService, Analitica = AnalyticsService, Red = Red,
+})
+QuestService.Iniciar({ Datos = DataService, Economia = EconomyService, Progression = ProgressionService, Analitica = AnalyticsService, Red = Red })
 PowerCoreService.Iniciar({
 	Datos = DataService, Stats = StatsService, Combat = CombatService, Enemigos = EnemyService,
 	Analitica = AnalyticsService, Red = Red,
@@ -119,4 +129,6 @@ end
 
 DataService.Iniciar({ Analitica = AnalyticsService })
 
-print("OREBOUND: servidor iniciado (fase 6)")
+PowerCoreService.FijarCiudad(WorldService.EnCiudad)
+
+print("OREBOUND: servidor iniciado (fase 7)")

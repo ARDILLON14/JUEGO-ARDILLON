@@ -18,6 +18,7 @@ local Shared = game:GetService("ReplicatedStorage").Shared
 local Stats = require(Shared.Config.Stats)
 local Estadisticas = require(Shared.Reglas.Estadisticas)
 local Recursos = require(script.Parent.Parent.Reglas.Recursos)
+local Eventos = require(script.Parent.Parent.Util.Eventos)
 
 local StatsService = {}
 
@@ -153,6 +154,7 @@ local function asignar(jugador, stat, cantidad)
 	end
 	StatsService.Recalcular(jugador)
 	Datos.Replicar(jugador, "Stats")
+	Eventos.emitir("Asignacion", jugador, cantidad)
 	return true, { Free = Estadisticas.puntosLibres(perfil) }
 end
 

@@ -15,6 +15,7 @@ local Server = script.Parent.Parent
 local Deposito = require(Server.Reglas.Deposito)
 local Pasivas = require(Server.Reglas.Pasivas)
 local Lugares = require(Server.Util.Lugares)
+local Eventos = require(Server.Util.Eventos)
 
 local MiningService = {}
 
@@ -207,6 +208,7 @@ local function alAgotar(entrada, azarDep)
 				Progression.AddXP(jugador, xp, "Mineria")
 			end
 			Datos.Replicar(jugador, "Minerals")
+			Eventos.emitir("MineralExtraido", jugador, 1, { Rarity = regla.Rarity, Units = entraron })
 			Red:obtener("Mining.Loot"):FireClient(jugador, {
 				Mineral = regla.Mineral, Name = m and m.Name or regla.Mineral, Rarity = regla.Rarity,
 				Units = unidades, Entered = entraron, XP = xp, Extra = efectos.UnidadExtra, Respawn = efectos.Reaparece,

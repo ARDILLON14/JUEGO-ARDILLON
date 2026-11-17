@@ -4,6 +4,7 @@
 -- Fase 4: combate con el arma en la mano, Z/X/C/V, dash (Q), bloqueo (F), parpadeo (E), habilidades (K).
 -- Fase 5: forja y puesto de geodas (cajas) con sus paneles.
 -- Fase 6: mascotas que siguen al jugador (todas las de todos los jugadores), panel de mascotas (M) y postura (T).
+-- Fase 7: barra del jefe, misiones diarias (J), tutorial y Núcleos en el panel de habilidades.
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local UserInputService = game:GetService("UserInputService")
@@ -22,6 +23,8 @@ local PanelForja = require(UI:WaitForChild("PanelForja"))
 local PanelCajas = require(UI:WaitForChild("PanelCajas"))
 local PanelMascotas = require(UI:WaitForChild("PanelMascotas"))
 local PetsController = require(Controllers:WaitForChild("PetsController"))
+local BossController = require(Controllers:WaitForChild("BossController"))
+local PanelMisiones = require(UI:WaitForChild("PanelMisiones"))
 local PanelEstadisticas = require(UI:WaitForChild("PanelEstadisticas"))
 local PanelInventario = require(UI:WaitForChild("PanelInventario"))
 local PanelTienda = require(UI:WaitForChild("PanelTienda"))
@@ -34,6 +37,8 @@ PanelHabilidades.Iniciar(Estado)
 PanelForja.Iniciar(Estado)
 PanelCajas.Iniciar(Estado, carpeta)
 PanelMascotas.Iniciar(Estado)
+PanelMisiones.Iniciar(Estado)
+BossController.Iniciar(carpeta)
 HUDController.Iniciar(Estado, function()
 	PanelEstadisticas.Alternar()
 end)
@@ -63,5 +68,7 @@ UserInputService.InputBegan:Connect(function(entrada, procesado)
 		PanelHabilidades.Alternar()
 	elseif entrada.KeyCode == Enum.KeyCode.M then
 		PanelMascotas.Alternar()
+	elseif entrada.KeyCode == Enum.KeyCode.J then
+		PanelMisiones.Alternar()
 	end
 end)

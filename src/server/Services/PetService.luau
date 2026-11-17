@@ -12,6 +12,7 @@ local Pets = require(Shared.Config.Pets)
 local Rarity = require(Shared.Config.Rarity)
 local Criadero = require(Shared.Reglas.Criadero)
 local Mochila = require(Shared.Reglas.Mochila)
+local Eventos = require(script.Parent.Parent.Util.Eventos)
 
 local PetService = {}
 
@@ -78,6 +79,9 @@ local function darXP(jugador, xp)
 	if not perfil or xp <= 0 then
 		return
 	end
+	if #Criadero.equipadas(perfil) > 0 then
+		Eventos.emitir("XPMascota", jugador, xp)
+	end
 	for _, e in ipairs(Criadero.equipadas(perfil)) do
 		local subidos = Criadero.sumarXP(e.Mascota, xp)
 		if subidos > 0 then
@@ -98,6 +102,7 @@ local function sumarGolpes(jugador, golpes)
 		antes[i] = Criadero.lista(inc)
 	end
 	Criadero.sumarGolpes(perfil, golpes)
+	Eventos.emitir("GolpesIncubacion", jugador, golpes)
 	for i, inc in ipairs(perfil.Incubators) do
 		if not antes[i] and Criadero.lista(inc) then
 			avisar(jugador, "¡Un huevo está listo para eclosionar! (tecla M)", Color3.fromRGB(255, 230, 120))

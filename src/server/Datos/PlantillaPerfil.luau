@@ -10,7 +10,7 @@ local function plantilla()
 	return {
 		Version = PlantillaPerfil.Version,
 		Meta = { Created = 0, LastSave = 0, PlayTime = 0, Session = { JobId = "", PlaceId = 0, Time = 0 } },
-		Progress = { Level = 1, XP = 0, Rebirths = 0, UnlockedZone = 1, TutorialStep = 0 },
+		Progress = { Level = 1, XP = 0, Rebirths = 0, UnlockedZone = 1, TutorialStep = 0, TutorialCount = 0 },
 		Stats = {
 			Allocated = { Strength = 0, Vitality = 0, Defense = 0, Speed = 0, Energy = 0, Mining = 0, Luck = 0, PetMastery = 0 },
 			BonusPoints = 0,

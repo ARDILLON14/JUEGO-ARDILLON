@@ -176,8 +176,8 @@ local function jugadorMasCercano(pos, radio)
 end
 
 local function pensar(e, ahora)
-	if not e.Raiz or not e.Raiz.Parent then
-		return
+	if e.Jefe or not e.Raiz or not e.Raiz.Parent then
+		return   -- los jefes los mueve BossService
 	end
 	local pos = e.Raiz.Position
 	if Combate.controlado(e.Control, ahora) then
@@ -270,6 +270,42 @@ function EnemyService.Iniciar()
 	end)
 end
 
+-- Registra un enemigo creado por otro servicio (jefes). e debe traer Tipo, Zona, Vida, VidaMax, Modelo, Raiz, Barra.
+function EnemyService.Registrar(e)
+	siguienteId = siguienteId + 1
+	e.Id = siguienteId
+	e.Danos = e.Danos or {}
+	e.Estados = e.Estados or {}
+	e.Control = e.Control or Combate.nuevoControl()
+	e.ProximoAtaque = 0
+	e.Modelo:SetAttribute("EnemigoId", e.Id)
+	CollectionService:AddTag(e.Modelo, "Enemigo")
+	enemigos[e.Id] = e
+	return e
+end
+
+-- Quita un enemigo sin recompensas (jefe que se reinicia, invocaciones al acabar el combate).
+function EnemyService.Retirar(id)
+	local e = enemigos[id]
+	if e then
+		enemigos[id] = nil
+		if e.Modelo then
+			e.Modelo:Destroy()
+		end
+	end
+end
+
+-- Invoca un enemigo normal en una posición (fase 3 del Capataz). No cuenta para el cupo de la zona.
+function EnemyService.Invocar(zona, tipo, posicion)
+	if not zonas[zona] then
+		zonas[zona] = { Puntos = {}, Vivos = 0, Pendientes = 0 }
+	end
+	local e = crear(zona, tipo, posicion)
+	zonas[zona].Vivos = zonas[zona].Vivos - 1
+	e.Invocado = true
+	return e
+end
+
 function EnemyService.Obtener(id)
 	return enemigos[id]
 end
@@ -287,6 +323,10 @@ function EnemyService.Danar(id, jugador, cantidad)
 	if not e or e.Vida <= 0 or cantidad <= 0 then
 		return 0, false
 	end
+	cantidad = cantidad * (e.MultDano or 1)   -- jefes: 0 si invulnerable, 1,5 si vulnerable
+	if cantidad <= 0 then
+		return 0, false
+	end
 	local aplicado = math.min(cantidad, e.Vida)
 	e.Vida = e.Vida - aplicado
 	e.Danos[jugador.UserId] = (e.Danos[jugador.UserId] or 0) + aplicado
@@ -294,13 +334,17 @@ function EnemyService.Danar(id, jugador, cantidad)
 	e.Modelo:SetAttribute("Vida", e.Vida)
 	e.Barra.Size = UDim2.fromScale(math.clamp(e.Vida / e.VidaMax, 0, 1), 1)
 	if e.Vida > 0 then
-		e.ProximoAtaque = math.max(e.ProximoAtaque, os.clock() + Weapons.Feel.StaggerSeconds)   -- titubea al recibir golpes
+		if not e.Jefe then
+			e.ProximoAtaque = math.max(e.ProximoAtaque, os.clock() + Weapons.Feel.StaggerSeconds)   -- titubea al recibir golpes
+		end
 		return aplicado, false
 	end
 	enemigos[id] = nil
-	local z = zonas[e.Zona]
-	z.Vivos = z.Vivos - 1
-	z.Pendientes = z.Pendientes + 1
+	local z = (not e.Jefe and not e.Invocado) and zonas[e.Zona] or nil
+	if z then
+		z.Vivos = z.Vivos - 1
+		z.Pendientes = z.Pendientes + 1
+	end
 	for _, fn in ipairs(alMorir) do
 		local ok, err = pcall(fn, e)
 		if not ok then
@@ -323,9 +367,11 @@ function EnemyService.Danar(id, jugador, cantidad)
 		trozo.Parent = workspace
 		game:GetService("Debris"):AddItem(trozo, 1.2)
 	end
-	task.delay(AI.RespawnSeconds, function()
-		z.Pendientes = z.Pendientes - 1
-	end)
+	if z then
+		task.delay(AI.RespawnSeconds, function()
+			z.Pendientes = z.Pendientes - 1
+		end)
+	end
 	return aplicado, true
 end
 
@@ -385,8 +431,8 @@ end
 
 function EnemyService.Empujar(id, desde, studs)
 	local e = enemigos[id]
-	if not e or not e.Raiz then
-		return
+	if not e or not e.Raiz or e.Jefe then
+		return   -- a los jefes no se les empuja
 	end
 	local dir = e.Raiz.Position - desde
 	dir = Vector3.new(dir.X, 0, dir.Z)

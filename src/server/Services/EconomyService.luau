@@ -12,6 +12,7 @@ local Inventario = require(Shared.Reglas.Inventario)
 local Server = script.Parent.Parent
 local Monedero = require(Server.Reglas.Monedero)
 local Lugares = require(Server.Util.Lugares)
+local Eventos = require(Server.Util.Eventos)
 
 local EconomyService = {}
 
@@ -41,6 +42,7 @@ local function vender(jugador, mineral, cantidad, itemId)
 	end
 	if monedas > 0 then
 		EconomyService.AddCoins(jugador, monedas, mineral and "VentaMineral" or "VentaObjeto")
+		Eventos.emitir("VentaMineral", jugador, monedas)
 	end
 	Datos.Replicar(jugador, "Minerals", "Items")
 	return true, { Coins = monedas, Sold = vendidas }
@@ -63,6 +65,26 @@ local function comprarMochila(jugador)
 	Analitica.Registrar(jugador, "MochilaComprada", s.Price, tostring(s.Capacity))
 	Datos.Replicar(jugador, "Backpack")
 	return true, { Capacity = s.Capacity }
+end
+
+-- Shop.BuyConsumable: por ahora solo el Sello de Reajuste (los demás consumibles llegan con su uso).
+local VENDIBLES = { ReadjustSeal = true }
+local function comprarConsumible(jugador, id, cantidad)
+	if not cercaMercader(jugador) then
+		return false, "lejos"
+	end
+	if not VENDIBLES[id] then
+		return false, "consumible"
+	end
+	local perfil = Datos.GetProfile(jugador)
+	local precio = require(Shared.Formulas.Economia).consumablePrice(id, perfil.Progress.UnlockedZone) * cantidad
+	local ok, m = EconomyService.SpendCoins(jugador, precio, "Consumible")
+	if not ok then
+		return false, m
+	end
+	perfil.Consumables[id] = (perfil.Consumables[id] or 0) + cantidad
+	Datos.Replicar(jugador, "Consumables")
+	return true
 end
 
 local function conectarMercader(parte)
@@ -88,6 +110,7 @@ function EconomyService.Iniciar(deps)
 	if Red then
 		Red:conectar("Shop.Sell", vender)
 		Red:conectar("Shop.BuyBackpack", comprarMochila)
+		Red:conectar("Shop.BuyConsumable", comprarConsumible)
 		for _, parte in ipairs(CollectionService:GetTagged(Lugares.Etiqueta.Mercader)) do
 			conectarMercader(parte)
 		end

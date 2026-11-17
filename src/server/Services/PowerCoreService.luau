@@ -12,6 +12,7 @@ local Nombres = require(Shared.Visual.Nombres)
 local Server = script.Parent.Parent
 local Combate = require(Server.Reglas.Combate)
 local Lugares = require(Server.Util.Lugares)
+local Eventos = require(Server.Util.Eventos)
 
 local PowerCoreService = {}
 
@@ -280,6 +281,7 @@ local function lanzar(jugador, ranura, aim)
 	Combate.usar(estado.Enfriamientos, id, ahora, h.Datos.Cooldown)
 	StatsSvc.MarcarCombate(jugador, "PvE")
 	Analitica.Registrar(jugador, "HabilidadUsada", nil, id)
+	Eventos.emitir("HabilidadUsada", jugador, 1, { Id = id })
 end
 
 -- Combat.SetLoadout y Core.Equip -----------------------------------------
@@ -319,13 +321,31 @@ local function rellenarReparto(perfil)
 end
 PowerCoreService.RellenarReparto = rellenarReparto
 
+local enCiudad = function()
+	return true
+end
+function PowerCoreService.FijarCiudad(fn)
+	enCiudad = fn
+end
+
 local function equiparNucleo(jugador, nucleo)
 	local perfil = Datos.GetProfile(jugador)
 	if not PowerCores.Cores[nucleo] or not perfil.Cores[nucleo] then
 		return false, "nucleo"
 	end
+	if perfil.Equipped.Core == nucleo then
+		return true
+	end
 	if StatsSvc.EnCombate(jugador) then
 		return false, "en_combate"
+	end
+	-- Fuera de la ciudad cuesta un Sello de Reajuste (GDD; B6 2.4).
+	if not enCiudad(jugador) then
+		if (perfil.Consumables.ReadjustSeal or 0) < 1 then
+			return false, "sello"
+		end
+		perfil.Consumables.ReadjustSeal = perfil.Consumables.ReadjustSeal - 1
+		Datos.Replicar(jugador, "Consumables")
 	end
 	perfil.Equipped.Core = nucleo
 	rellenarReparto(perfil)

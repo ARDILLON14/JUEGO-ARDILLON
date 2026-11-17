@@ -18,6 +18,7 @@ local Habilidades = require(Shared.Reglas.Habilidades)
 local Server = script.Parent.Parent
 local Combate = require(Server.Reglas.Combate)
 local Lugares = require(Server.Util.Lugares)
+local Eventos = require(Server.Util.Eventos)
 
 local CombatService = {}
 
@@ -338,6 +339,9 @@ end
 
 -- Recompensas al derrotar un enemigo: XP, monedas y maestría del arma y del Núcleo de cada participante.
 local function alMorir(enemigo)
+	if enemigo.Jefe then
+		return   -- las recompensas de los jefes las reparte BossService (límite diario, materiales)
+	end
 	local xp = Dano.enemyXP(enemigo.Zona, enemigo.Tipo)
 	local monedas = Dano.enemyCoins(enemigo.Zona, enemigo.Tipo)
 	local puntos = Weapons.Mastery.Points[enemigo.Tipo] or 1
@@ -353,6 +357,7 @@ local function alMorir(enemigo)
 			end
 			if r.Mastery > 0 then
 				CombatService.SumarMaestria(jugador, r.Mastery)
+				Eventos.emitir("EnemigoDerrotado", jugador, 1, { Tipo = enemigo.Tipo })
 			end
 		end
 	end

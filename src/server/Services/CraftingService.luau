@@ -9,6 +9,7 @@ local Rarity = require(Shared.Config.Rarity)
 local Forja = require(Shared.Reglas.Forja)
 local Server = script.Parent.Parent
 local Lugares = require(Server.Util.Lugares)
+local Eventos = require(Server.Util.Eventos)
 
 local CraftingService = {}
 
@@ -41,6 +42,7 @@ local function fabricar(jugador, kind, tipo, zona, rareza, pasivas, stat)
 	end
 	Datos.Replicar(jugador, "Items", "Minerals", "Materials")
 	Analitica.Registrar(jugador, "ObjetoFabricado", coste.Coins, kind .. ":" .. rareza)
+	Eventos.emitir("ObjetoFabricado", jugador, 1, { Rarity = rareza })
 	if Rarity.Multiplier[rareza] >= Rarity.Multiplier.Legendary then
 		task.spawn(Datos.GuardarAhora, jugador)   -- C_Tecnico 6.4: guardado inmediato tras fabricar Legendario o superior
 	end

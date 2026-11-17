@@ -83,8 +83,9 @@ local function crearBloque(mina, clave, x, y, z, bloque)
 		regla = { Id = id, Zone = zona, MaxHealth = vida, Health = vida, Damage = {}, Depleted = false }
 		p.Name = "Piedra"
 		p.Material = Enum.Material.Slate
-		local tono = 105 + azar:NextInteger(-12, 12)
-		p.Color = Color3.fromRGB(tono, tono - 4, tono - 8)
+		local tono = azar:NextInteger(-12, 12)
+		local b = ({ [2] = { 92, 112, 88 }, [3] = { 205, 200, 190 } })[zona] or { 105, 101, 97 }   -- piedra de cada zona
+		p.Color = Color3.fromRGB(b[1] + tono, b[2] + tono, b[3] + tono)
 	end
 	regla.Tipo = bloque.Tipo
 	p:SetAttribute("DepositoId", id)

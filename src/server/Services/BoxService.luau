@@ -17,6 +17,7 @@ local Rarezas = require(Shared.Visual.Rarezas)
 local Server = script.Parent.Parent
 local Combate = require(Server.Reglas.Combate)
 local Lugares = require(Server.Util.Lugares)
+local Eventos = require(Server.Util.Eventos)
 
 local BoxService = {}
 
@@ -65,6 +66,7 @@ local function abrir(jugador, tipo, cantidad)
 		end
 	end
 	Datos.Replicar(jugador, "Items", "Eggs", "Cores", "Minerals", "Consumables", "Boxes")
+	Eventos.emitir("CajaAbierta", jugador, cantidad)
 	local faltaA, faltaB = Cajas.faltan(perfil, tipo)
 	Red:obtener("Box.Result"):FireClient(jugador, { Box = tipo, Prizes = premios, UntilLegendary = faltaA, UntilMythic = faltaB })
 	return true, #premios

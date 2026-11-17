@@ -28,7 +28,7 @@ function Forja.receta(zona, rareza)
 	if not r then
 		return nil
 	end
-	local coste = { Coins = Economia.gearCost(zona, rareza), Minerals = {}, Boss = r.Boss or 0, AncientGem = r.AncientGem or 0 }
+	local coste = { Coins = Economia.gearCost(zona, rareza), Minerals = {}, Boss = r.Boss or 0, AncientGem = r.AncientGem or 0, Zone = zona }
 	for _, rz in ipairs(Rarity.Order) do
 		if r[rz] then
 			table.insert(coste.Minerals, { Id = Mochila.mineralDe(zona, rz), Rarity = rz, Units = r[rz] })
@@ -47,8 +47,8 @@ function Forja.alcanza(perfil, coste)
 			return false, "materiales"
 		end
 	end
-	if (coste.Boss or 0) > 0 then
-		return false, "jefe"
+	if (coste.Boss or 0) > ((perfil.Materials.Boss or {})["z" .. tostring(coste.Zone)] or 0) then
+		return false, "jefe"   -- material del jefe de esa zona (fase 7)
 	end
 	if (coste.AncientGem or 0) > (perfil.Materials.AncientGems or 0) then
 		return false, "gema"
@@ -61,6 +61,10 @@ local function cobrarMateriales(perfil, coste)
 		Mochila.gastar(perfil, m.Id, m.Units)
 	end
 	perfil.Materials.AncientGems = (perfil.Materials.AncientGems or 0) - (coste.AncientGem or 0)
+	if (coste.Boss or 0) > 0 then
+		local clave = "z" .. tostring(coste.Zone)
+		perfil.Materials.Boss[clave] = perfil.Materials.Boss[clave] - coste.Boss
+	end
 end
 
 -- p = { Kind = "Pickaxe" | "Weapon", Type, Zone, Rarity, Passives, CombatStat }.

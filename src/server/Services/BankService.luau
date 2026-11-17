@@ -9,6 +9,7 @@ local Mining = require(Shared.Config.Mining)
 local Mochila = require(Shared.Reglas.Mochila)
 local Server = script.Parent.Parent
 local Lugares = require(Server.Util.Lugares)
+local Eventos = require(Server.Util.Eventos)
 
 local BankService = {}
 
@@ -29,6 +30,7 @@ function BankService.Deposit(jugador)
 	local n = Mochila.depositarTodo(perfil)
 	Datos.Replicar(jugador, "Minerals")
 	if n > 0 then
+		Eventos.emitir("Deposito", jugador, n)
 		avisar(jugador, "Depositadas " .. n .. " unidades en el banco")
 	else
 		avisar(jugador, "Tu mochila está vacía")

@@ -13,7 +13,7 @@ local Economy = require(Config.Economy)
 local Worlds = require(Config.Worlds)
 local Stats = require(Config.Stats)
 
-local MODULOS = { "Stats", "Rarity", "Mining", "Pickaxes", "Weapons", "PowerCores", "Pets", "Economy", "Boxes", "Fracture", "Worlds", "PvP", "VFX" }
+local MODULOS = { "Stats", "Rarity", "Mining", "Pickaxes", "Weapons", "PowerCores", "Pets", "Economy", "Boxes", "Fracture", "Worlds", "PvP", "VFX", "Bosses", "Quests" }
 
 local function suma(t)
 	local total = 0
@@ -28,7 +28,7 @@ local function esRareza(nombre)
 end
 
 return function(t)
-	t.it("los 13 módulos cargan y solo contienen datos", function()
+	t.it("los módulos de configuración cargan y solo contienen datos", function()
 		local function sinFunciones(valor, ruta)
 			t.ok(type(valor) ~= "function", ruta .. " es una función")
 			if type(valor) == "table" then

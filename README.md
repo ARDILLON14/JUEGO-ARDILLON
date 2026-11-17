@@ -3,7 +3,7 @@
 RPG de minería y acción para Roblox. Proyecto de [Rojo](https://rojo.space/docs) 7.7.1 (gestionado con Rokit).
 
 - **Diseño:** carpeta `OREBOUND/` (`A_GDD.md`, `B_Matematico/`, `C_Tecnico.md`, `D_Roadmap.md`, `DECISIONES.md`).
-- **Código:** `src/` (fases 1 a 6 del roadmap: Cimientos, Progresión, Minería y economía base, Combate y Núcleos, Fabricación y cajas, Mascotas).
+- **Código:** `src/` (fases 1 a 7 del roadmap: Cimientos, Progresión, Minería y economía base, Combate y Núcleos, Fabricación y cajas, Mascotas, Jefes y mundo 1).
 - **Pruebas:** `tests/`.
 
 ## Estructura del código
@@ -18,8 +18,8 @@ src/server/Datos/      Plantilla del perfil, migraciones y guardado con sesión 
 src/shared/Visual/     Nombres y colores de rarezas.
 src/server/Reglas/     Reglas puras del servidor: energía, monedero, depósitos, generación y pasivas de pico.
 src/server/Mundo/      Mapa de prueba con la cantera de bloques de la zona 1 (solo si el lugar no trae mapa propio).
-src/server/Services/   Datos, analítica, economía, estadísticas, progresión, inventario, minería, banco, enemigos, combate, Núcleos, forja, cajas y mascotas.
-src/client/            HUD, picar, combate (Z/X/C/V, Q, F, E), estadísticas (P), inventario (B), habilidades (K), mascotas (M, postura T), tienda, forja y geodas.
+src/server/Services/   Datos, analítica, economía, estadísticas, progresión, inventario, minería, banco, enemigos, combate, Núcleos, forja, cajas, mascotas, mundo, jefes y misiones.
+src/client/            HUD, picar, combate (Z/X/C/V, Q, F, E), estadísticas (P), inventario (B), habilidades (K), mascotas (M, postura T), misiones (J), jefes, tienda, forja y geodas.
 src/character/         Sustituye la regeneración de vida por defecto de Roblox.
 tests/                 Pruebas y valores de referencia (tests/Vectores, generados de OREBOUND/calculos).
 ```
