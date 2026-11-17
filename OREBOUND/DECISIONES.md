@@ -782,6 +782,7 @@ Pendiente de decisión del autor
 - 2026-11-16 · Recibido el GDD. Contraste en `00_Fuentes/Contraste_GDD.md`; valores G-01 a G-60. Los archivos A, B, C y D están pendientes de rehacer.
 - 2026-11-16 · Rehecho con el GDD: B1, B3, B4, B5, B6 y B7 regenerados; B2 retocado; A, C y D actualizados. Valores R-01 a R-48.
 - 2026-11-16 · Código, fase 1 (Cimientos): valores P1-01 a P1-09. Los archivos A, B, C y D no cambian.
+- 2026-11-17 · Código, fase 2 (Progresión): valores P2-01 a P2-10. Corrige un fallo de la fase 1 (P2-01). Los archivos A, B, C y D no cambian.
 
 ---
 
@@ -800,3 +801,19 @@ No cambian ninguna cifra de diseño. Donde difieren de `C_Tecnico.md`, manda est
 | P1-07 | En Studio sin acceso a la API de DataStore, `DataService` usa un almacén en memoria y avisa; en un servidor publicado, falla en lugar de jugar sin guardado | [CONFIRMADO] | Abrir en Studio con y sin «API Services» |
 | P1-08 | El mínimo de 3 golpes por depósito se aplica limitando cada golpe a un tercio de la vida del depósito | [CONFIRMADO] | `Mineria.hitDamage` y su prueba |
 | P1-09 | El catálogo de 66 minerales es un archivo generado (`Config/Catalogo/Minerales.luau`) que `Config/Mining` carga; la vida, el valor y la XP se calculan con las fórmulas, no se guardan | [CONFIRMADO] | `python3 calculos/c1_exportar_luau.py` y prueba de los 66 depósitos |
+
+## 19. Serie P2 — decisiones tomadas al programar la fase 2 (Progresión)
+
+| # | Decisión | Estado | Cómo probarla o revisarla |
+|---|---|---|---|
+| P2-01 | **Corrección de la fase 1.** La curva F10 usa el valor total de la estadística (puntos + equipo + mascotas + consumibles) hasta 5.000, como dice B2; la fase 1 la cortaba en 1.000. Los puntos ganados por nivel ya no se limitan a 5.000 | [CONFIRMADO] | `Progresion.curve(5000, 3) = 3,5` en `tests/Formulas.spec.luau` |
+| P2-02 | Coste del reinicio: 1,5 horas de ingreso de la zona más profunda desbloqueada (nivel 50 → 7.729 monedas). La tabla de costes de B2 (7.244 a nivel 50) es anterior a rehacer B1 con el GDD y queda desfasada | [CONFIRMADO] | `tests/Progresion.spec.luau`, Reinicio |
+| P2-03 | El Tomo de Reajuste se guarda en `Consumables.RespecTome`. Es un campo nuevo que la reconciliación rellena con 0: no hace falta subir de versión el perfil | [CONFIRMADO] | Cargar un perfil de la fase 1 y ver el campo |
+| P2-04 | Al subir de nivel se rellenan la vida y la energía | [PROVISIONAL] | Quitarlo es `Stats.LevelUpRefill = false` |
+| P2-05 | Las zonas se desbloquean solo por nivel (100 × (z − 1)). La Minería y la potencia de pico se comprueban al ir a picar (fase 3); los jefes no bloquean el paso | [PROVISIONAL] | Revisar en la fase 7 si el jefe de zona debe abrir la siguiente |
+| P2-06 | El reinicio exige estar fuera de combate. La condición «solo en la ciudad» queda abierta hasta que exista WorldService (fase 7), que la fija con `StatsService.FijarLugarReinicio` | [PROVISIONAL] | Fase 7 |
+| P2-07 | La vida vive en el Humanoid y la controla el servidor. Se sustituye el script «Health» de Roblox (que regenera un 1 %/s) para aplicar la de B2: 5 %/s fuera de combate, 0,5 %/s en combate PvE y nada en combate PvP | [CONFIRMADO] | En Studio: recibir daño y ver la regeneración |
+| P2-08 | Medida del roadmap con 240 acciones por hora: niveles 10, 50 y 100 en 0,196 / 1,883 / 5,867 h (objetivo 0,2 / 1,9 / 5,8 h). `b2_xp_niveles.csv` da 6,02 h para el nivel 100 porque aproxima con la XP/hora de cada nivel | [CONFIRMADO] | `tests/Progresion.spec.luau`, roadmap fase 2 |
+| P2-09 | Dos Remotes de prueba (`Dev.GiveXP`, `Dev.GiveCoins`) que solo se crean en Roblox Studio; un servidor publicado no los tiene | [CONFIRMADO] | `tests/Red.spec.luau` |
+| P2-10 | La XP ganada se redondea hacia abajo a un entero después de aplicar el bono de renacimiento | [CONFIRMADO] | `tests/Progresion.spec.luau`, renacimiento |
+

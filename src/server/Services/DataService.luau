@@ -8,6 +8,7 @@
 --   DataService.AlSalir(function(jugador, datos) end)   -- antes del último guardado
 --   DataService.GuardarAhora(jugador)                   -- tras compra, renacimiento, extracción...
 --   DataService.Liberar(jugador)                        -- guarda y suelta el bloqueo (antes de teletransportar)
+--   DataService.Replicar(jugador, "Progress", "Wallet") -- envía al cliente esas secciones del perfil
 -- Las operaciones sobre el perfil se hacen sin esperas intermedias: o se aplica todo o nada.
 
 local Players = game:GetService("Players")
@@ -17,6 +18,7 @@ local DataStoreService = game:GetService("DataStoreService")
 local Datos = script.Parent.Parent.Datos
 local AlmacenPerfiles = require(Datos.AlmacenPerfiles)
 local AlmacenMemoria = require(Datos.AlmacenMemoria)
+local PlantillaPerfil = require(Datos.PlantillaPerfil)
 
 local DataService = {}
 
@@ -35,6 +37,8 @@ local analitica = nil             -- AnalyticsService (opcional)
 local proximoGuardado = {}        -- [userId] = os.clock() del siguiente autoguardado
 local cargando = {}               -- [userId] = true mientras se carga
 local alCargar, alSalir = {}, {}
+local replicador = nil            -- function(jugador, secciones) que envía al cliente
+local SECCIONES_PRIVADAS = { Meta = true, Flags = true, Purchases = true }
 local cerrando = false
 
 local function jugadorPorId(userId)
@@ -206,6 +210,26 @@ function DataService.GuardarAhora(jugador)
 		proximoGuardado[userId] = os.clock() + AUTOGUARDADO
 	end
 	return guardar(userId)
+end
+
+-- Quien envía los datos al cliente (lo fija el arranque con el Remote State.Profile).
+function DataService.FijarReplicador(fn)
+	replicador = fn
+end
+
+-- Envía al propio jugador las secciones indicadas del perfil (copias). Nunca las privadas.
+function DataService.Replicar(jugador, ...)
+	local datos = DataService.GetProfile(jugador)
+	if not datos or not replicador then
+		return
+	end
+	local parcial = {}
+	for _, seccion in ipairs({ ... }) do
+		if not SECCIONES_PRIVADAS[seccion] and datos[seccion] ~= nil then
+			parcial[seccion] = PlantillaPerfil.copiar(datos[seccion])
+		end
+	end
+	replicador(jugador, parcial)
 end
 
 -- Guarda y suelta el bloqueo: después de esto el perfil ya no está en este servidor.

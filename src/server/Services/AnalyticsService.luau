@@ -12,6 +12,7 @@ local AnalyticsService = {}
 AnalyticsService.Eventos = {
 	PerfilCargado = true, FalloCarga = true, FalloGuardado = true, SesionPerdida = true,
 	EsquemaRechazado = true, FrecuenciaSuperada = true,
+	SubidaNivel = true, ZonaDesbloqueada = true, ReinicioEstadisticas = true, MonedasGanadas = true, MonedasGastadas = true,
 	CajaAbierta = true, Extraccion = true, MuertePvP = true, JefeDerrotado = true, Renacimiento = true,
 }
 

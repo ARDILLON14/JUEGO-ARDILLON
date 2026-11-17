@@ -21,13 +21,22 @@ function Validador.nuevo(deps)
 		_marcar = deps.Marcar or function() end,
 		_instancias = {},
 		_conectados = {},
+		_studio = deps.Studio == true,   -- crea y admite también Remotes.SoloStudio
 	}, Validador)
 end
 
 -- Validación común de una llamada. Devuelve true y la lista de argumentos, o false y el motivo:
 -- "desconocido", "frecuencia", "esquema" o "sin_perfil".
-function Validador:comprobar(jugador, nombre, ...)
+function Validador:_definicion(nombre)
 	local def = Remotes.ClientToServer[nombre]
+	if not def and self._studio then
+		def = Remotes.SoloStudio[nombre]
+	end
+	return def
+end
+
+function Validador:comprobar(jugador, nombre, ...)
+	local def = self:_definicion(nombre)
 	if not def then
 		return false, "desconocido"
 	end
@@ -49,7 +58,16 @@ end
 function Validador:crear(padre)
 	local carpeta = Instance.new("Folder")
 	carpeta.Name = Remotes.FolderName
+	local definiciones = {}
 	for nombre, def in pairs(Remotes.ClientToServer) do
+		definiciones[nombre] = def
+	end
+	if self._studio then
+		for nombre, def in pairs(Remotes.SoloStudio) do
+			definiciones[nombre] = def
+		end
+	end
+	for nombre, def in pairs(definiciones) do
 		local remote = Instance.new(def.Kind == "Function" and "RemoteFunction" or "RemoteEvent")
 		remote.Name = nombre
 		remote.Parent = carpeta
@@ -62,7 +80,7 @@ function Validador:crear(padre)
 		self._instancias[nombre] = remote
 	end
 	-- Un RemoteFunction sin manejador dejaría al cliente esperando: se responde "no disponible" hasta que su servicio se conecte.
-	for nombre, def in pairs(Remotes.ClientToServer) do
+	for nombre, def in pairs(definiciones) do
 		if def.Kind == "Function" then
 			self._instancias[nombre].OnServerInvoke = function()
 				return false, "no_disponible"
@@ -73,10 +91,15 @@ function Validador:crear(padre)
 	return carpeta
 end
 
+-- true si este validador admite el Remote (los de Studio solo existen en Studio).
+function Validador:existe(nombre)
+	return self:_definicion(nombre) ~= nil
+end
+
 -- Conecta el manejador de un Remote del cliente al servidor: manejador(jugador, ...args ya validados).
 -- En los RemoteFunction, lo que devuelva el manejador vuelve al cliente; si se rechaza, devuelve false y el motivo.
 function Validador:conectar(nombre, manejador)
-	local def = Remotes.ClientToServer[nombre]
+	local def = self:_definicion(nombre)
 	assert(def, "Remote desconocido: " .. tostring(nombre))
 	assert(not self._conectados[nombre], "Remote ya conectado: " .. nombre)
 	local remote = self._instancias[nombre]

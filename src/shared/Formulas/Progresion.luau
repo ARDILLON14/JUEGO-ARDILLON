@@ -43,12 +43,18 @@ function Progresion.statPoints(level)
 	if level > Stats.XP.MaxLevel then
 		points = points + p.PerLevelAfterMax * (level - Stats.XP.MaxLevel)
 	end
-	return math.min(points, p.CapTotal)
+	return points
 end
 
--- F10: 1 + M S / (S + 1000)
+-- Valor total de una estadística: puntos asignados (máx. 1.000) + bonos de equipo, mascotas y consumibles.
+-- El total se limita a 5.000 (B2, F9).
+function Progresion.capStat(stat)
+	return math.clamp(stat or 0, 0, Stats.Points.CapTotal)
+end
+
+-- F10: 1 + M S / (S + 1000), con S = valor total de la estadística.
 function Progresion.curve(stat, m)
-	stat = math.clamp(stat or 0, 0, Stats.Points.CapPerStat)
+	stat = Progresion.capStat(stat)
 	return 1 + m * stat / (stat + Stats.Curve.K)
 end
 
@@ -64,7 +70,7 @@ function Progresion.maxHealth(level, vitality, vitalityM)
 end
 
 function Progresion.maxEnergy(energy)
-	energy = math.clamp(energy or 0, 0, Stats.Points.CapPerStat)
+	energy = Progresion.capStat(energy)
 	return Stats.Energy.Base + Stats.Energy.Bonus * energy / (energy + Stats.Curve.K)
 end
 

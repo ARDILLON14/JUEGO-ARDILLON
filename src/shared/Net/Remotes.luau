@@ -24,7 +24,7 @@ local function claves(t)
 	return lista
 end
 
-local STATS = { "Strength", "Vitality", "Defense", "Speed", "Energy", "Mining", "Luck", "PetMastery" }
+local STATS = require(Config.Stats).Names
 local SLOTS = { "Z", "X", "C", "V" }
 local RARITIES = Rarity.Order
 local WEAPON_TYPES = claves(Weapons.Types)
@@ -139,6 +139,12 @@ Remotes.ClientToServer = {
 	["World.Teleport"] = { Kind = "Function", Rate = every(5), Params = { enum("worldId", WORLD_IDS) } },
 	["Settings.Save"] = { Kind = "Event", Rate = every(5), Params = { { Name = "settings", Type = "table", MaxSize = 2048 } } },
 	["Tutorial.Step"] = { Kind = "Event", Rate = rate(2), Params = { int("step", 0, 100) } },
+}
+
+-- Solo se crean en Roblox Studio (nunca en un servidor publicado): ayudas para probar.
+Remotes.SoloStudio = {
+	["Dev.GiveXP"] = { Kind = "Function", Rate = rate(2), Params = { int("amount", 1, 100000000) } },
+	["Dev.GiveCoins"] = { Kind = "Function", Rate = rate(2), Params = { int("amount", 1, 1000000000) } },
 }
 
 -- Del servidor al cliente: todos son RemoteEvent.

@@ -21,7 +21,7 @@ local function plantilla()
 			Loadout = { Z = "PrismaticLance", X = "", C = "", V = "" } },
 		Minerals = { Carried = {}, Fractured = {}, Banked = {} },
 		Materials = { Boss = {}, Element = {}, AncientGems = 0 },
-		Consumables = { CargoInsurance = 0, ReadjustSeal = 0 },
+		Consumables = { CargoInsurance = 0, ReadjustSeal = 0, RespecTome = 0 },
 		Backpack = { Tier = 0 },
 		Pets = {},         -- [id] = { Species, Level, XP, Phase }
 		PetSlots = 3,

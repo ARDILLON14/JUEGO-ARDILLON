@@ -3,6 +3,7 @@
 -- El cliente puede leerlo; el servidor calcula siempre con su propia copia.
 
 return {
+	Names = { "Strength", "Vitality", "Defense", "Speed", "Energy", "Mining", "Luck", "PetMastery" },
 	XP = { A = 100, B = 20, C = 0.8, MaxLevel = 1000, TailBase = 820100, TailSlope = 900 },
 	XPPerAction = { Base = 25, PerLevel = 3.75, PerLevelSq = 0.002 },
 	Points = { Start = 3, PerLevel = 3, PerLevelAfterMax = 1, CapPerStat = 1000, CapTotal = 5000 },
@@ -20,5 +21,6 @@ return {
 	Blink = { Distance = 12, UnlockSpeedStat = 50 },                                                                    -- GDD
 	Break = { MinControlledSeconds = 0.8 },                                                                             -- GDD: Ruptura
 	AbilityFactorRef = 1.39,
-	Respec = { FreeBelowLevel = 50, CostIncomeHours = 1.5 },
+	Respec = { FreeBelowLevel = 50, CostIncomeHours = 1.5, OutOfCombatOnly = true },
+	LevelUpRefill = true,   -- al subir de nivel se rellenan vida y energía [PROVISIONAL]
 }

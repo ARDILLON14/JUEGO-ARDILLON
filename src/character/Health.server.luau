@@ -1,0 +1,3 @@
+-- Sustituye al script «Health» que Roblox añade a cada personaje (regenera un 1 % por segundo).
+-- En OREBOUND la regeneración la controla el servidor (StatsService): 5 %/s fuera de combate,
+-- 0,5 %/s en combate PvE y nada en combate PvP. Este script vacío desactiva la regeneración por defecto.
