@@ -1,252 +1,293 @@
--- Services/DepositService: crea, daña y regenera los depósitos de cada zona (B3, sección 5).
--- Los depósitos son compartidos: todos ven los mismos. Su estado llega al cliente por atributos de la parte
--- (DepositoId, Rareza, Mineral, Zona, Vida, VidaMax), que Roblox replica solo; así no hace falta el Remote
--- Mining.DepositState de C_Tecnico.
+-- Services/DepositService: la cantera de bloques de cada zona (DECISIONES P3b).
+-- Cada zona minable es una parte con la etiqueta «Mina» y los atributos Zona, Ancho, Largo, Profundidad
+-- (en bloques) y, opcional, Salida (Vector3 adonde lleva «Subir a la superficie»). La parte marca el centro
+-- de la cara de arriba del volumen. Solo existen partes para los bloques que se ven (los que tocan aire).
 --
--- API: Obtener(id) | Danar(id, userId, cantidad) -> aplicado, agotado | Cercanos(id, radio) | RegistrarMinero(jugador, zona)
---      AlAgotar(fn)   fn(entrada, aleatorio) se llama una vez por depósito agotado, antes de quitarlo
+-- Cada bloque visible lleva atributos que Roblox replica solo: DepositoId, Tipo («Piedra» | «Mineral»),
+-- Rareza, Mineral, Zona, Vida, VidaMax. Los de «RocaMadre» (bordes y fondo) no se pueden picar.
+--
+-- API: Obtener(id) -> { Regla, Parte, Zona, Tipo } | Danar(id, userId, cantidad, suerte) -> aplicado, agotado
+--      Cercanos(id, radio) (solo minerales) | AlAgotar(fn) | MinaEn(posicion) -> zona, mina | Salida(zona)
 
 local CollectionService = game:GetService("CollectionService")
 local Players = game:GetService("Players")
 
 local Shared = game:GetService("ReplicatedStorage").Shared
 local Mining = require(Shared.Config.Mining)
+local Mineria = require(Shared.Formulas.Mineria)
 local Rarezas = require(Shared.Visual.Rarezas)
 local Server = script.Parent.Parent
 local Deposito = require(Server.Reglas.Deposito)
-local Generador = require(Server.Reglas.Generador)
+local Mina = require(Server.Reglas.Mina)
 local Lugares = require(Server.Util.Lugares)
 
 local DepositService = {}
 
-local Stats
+local S = Mining.Blocks.Size
+local ID_POR_ZONA = 10000000
 local azar = Random.new()
-local zonas = {}          -- [zona] = { Puntos = { parte }, Ocupado = { [parte] = id }, Regenera = { [parte] = os.clock() } }
-local depositos = {}      -- [id] = { Regla, Parte, Punto, Zona, Barra }
-local mineros = {}        -- [zona] = { [jugador] = os.clock() del último golpe }
+local minas = {}          -- [zona] = { Modelo (Reglas/Mina), Ancla, Origen (esquina de arriba), Carpeta, Partes = { [clave] = parte } }
+local entradas = {}       -- [id] = { Regla, Parte, Zona, Tipo, Clave }
 local alAgotar = {}
-local siguienteId = 0
-local carpeta
 
-local function nuevoId()
-	siguienteId = siguienteId + 1
-	return siguienteId
+local function aleatorio()
+	return azar:NextNumber()
 end
 
-local function crearParte(regla, punto)
-	local tam = Rarezas.TamanoDeposito[regla.Rarity] or 4
+local function centro(mina, x, y, z)
+	return mina.Origen + Vector3.new((x - 0.5) * S, -(y - 0.5) * S, (z - 0.5) * S)
+end
+
+local function idDe(zona, clave)
+	return zona * ID_POR_ZONA + clave
+end
+
+local function crearRocaMadre(mina, x, y, z)
 	local p = Instance.new("Part")
-	p.Name = "Deposito"
+	p.Name = "RocaMadre"
 	p.Anchored = true
-	p.Shape = Enum.PartType.Ball
-	p.Size = Vector3.new(tam, tam * 0.8, tam)
-	p.Material = Enum.Material.Rock
-	p.Color = Rarezas.color(regla.Rarity)
-	p.CFrame = CFrame.new(punto.Position + Vector3.new(0, tam * 0.35, 0)) * CFrame.Angles(0, azar:NextNumber(0, math.pi * 2), 0)
-	p:SetAttribute("DepositoId", regla.Id)
-	p:SetAttribute("Rareza", regla.Rarity)
-	p:SetAttribute("Mineral", regla.Mineral)
-	p:SetAttribute("Zona", regla.Zone)
+	p.Size = Vector3.new(S, S, S)
+	p.Position = centro(mina, x, y, z)
+	p.Material = Enum.Material.Basalt
+	p.Color = Color3.fromRGB(38, 36, 40)
+	p:SetAttribute("Tipo", "RocaMadre")
+	p.Parent = mina.Carpeta
+end
+
+local function crearBloque(mina, clave, x, y, z, bloque)
+	local zona = mina.Modelo.Zona
+	local id = idDe(zona, clave)
+	local regla
+	local p = Instance.new("Part")
+	p.Anchored = true
+	p.Size = Vector3.new(S, S, S)
+	p.Position = centro(mina, x, y, z)
+	p.TopSurface = Enum.SurfaceType.Smooth
+	p.BottomSurface = Enum.SurfaceType.Smooth
+	if bloque.Tipo == "Mineral" then
+		regla = Deposito.nuevo(id, zona, bloque.Rareza, bloque.Mineral)
+		p.Name = "Mineral"
+		p.Material = Enum.Material.Rock
+		p.Color = Rarezas.color(bloque.Rareza)
+		p:SetAttribute("Rareza", bloque.Rareza)
+		p:SetAttribute("Mineral", bloque.Mineral)
+		if bloque.Rareza ~= "Common" and bloque.Rareza ~= "Uncommon" and bloque.Rareza ~= "Rare" then
+			local luz = Instance.new("PointLight")
+			luz.Color = p.Color
+			luz.Range = 12
+			luz.Brightness = 1.2
+			luz.Parent = p
+		end
+	else
+		local vida = Mineria.stoneHealth(zona)
+		regla = { Id = id, Zone = zona, MaxHealth = vida, Health = vida, Damage = {}, Depleted = false }
+		p.Name = "Piedra"
+		p.Material = Enum.Material.Slate
+		local tono = 105 + azar:NextInteger(-12, 12)
+		p.Color = Color3.fromRGB(tono, tono - 4, tono - 8)
+	end
+	regla.Tipo = bloque.Tipo
+	p:SetAttribute("DepositoId", id)
+	p:SetAttribute("Tipo", bloque.Tipo)
+	p:SetAttribute("Zona", zona)
 	p:SetAttribute("Vida", regla.Health)
 	p:SetAttribute("VidaMax", regla.MaxHealth)
-	if regla.Rarity ~= "Common" and regla.Rarity ~= "Uncommon" and regla.Rarity ~= "Rare" then
-		local luz = Instance.new("PointLight")
-		luz.Color = p.Color
-		luz.Range = 10 + tam
-		luz.Brightness = 1.5
-		luz.Parent = p
-	end
-	local cartel = Instance.new("BillboardGui")
-	cartel.Size = UDim2.new(0, 160, 0, 34)
-	cartel.StudsOffset = Vector3.new(0, tam * 0.6 + 1, 0)
-	cartel.MaxDistance = 60
-	local nombre = Instance.new("TextLabel")
-	nombre.BackgroundTransparency = 1
-	nombre.Size = UDim2.new(1, 0, 0, 18)
-	nombre.Font = Enum.Font.GothamBold
-	nombre.TextScaled = true
-	nombre.TextColor3 = p.Color
-	nombre.TextStrokeTransparency = 0.2
-	local m = Mining.Minerals[regla.Mineral]
-	nombre.Text = (m and m.Name or regla.Mineral) .. " · " .. (Rarezas.Nombre[regla.Rarity] or regla.Rarity)
-	nombre.Parent = cartel
-	local fondo = Instance.new("Frame")
-	fondo.BackgroundColor3 = Color3.fromRGB(20, 20, 24)
-	fondo.BorderSizePixel = 0
-	fondo.Position = UDim2.new(0.1, 0, 0, 22)
-	fondo.Size = UDim2.new(0.8, 0, 0, 8)
-	fondo.Parent = cartel
-	local barra = Instance.new("Frame")
-	barra.BackgroundColor3 = Color3.fromRGB(120, 220, 120)
-	barra.BorderSizePixel = 0
-	barra.Size = UDim2.fromScale(1, 1)
-	barra.Parent = fondo
-	cartel.Parent = p
 	CollectionService:AddTag(p, Lugares.Etiqueta.Deposito)
-	p.Parent = carpeta
-	return p, barra
+	p.Parent = mina.Carpeta
+	mina.Partes[clave] = p
+	entradas[id] = { Regla = regla, Parte = p, Zona = zona, Tipo = bloque.Tipo, Clave = clave }
 end
 
-local function suerteMedia(zona)
-	local total, n = 0, 0
+local function quitarParte(mina, clave)
+	local p = mina.Partes[clave]
+	if p then
+		mina.Partes[clave] = nil
+		entradas[idDe(mina.Modelo.Zona, clave)] = nil
+		p:Destroy()
+	end
+end
+
+local function aplicarNovedades(mina, novedades)
+	for _, n in ipairs(novedades) do
+		if n.Tipo == "Bloque" then
+			crearBloque(mina, n.Clave, n.X, n.Y, n.Z, n.Bloque)
+		else
+			crearRocaMadre(mina, n.X, n.Y, n.Z)
+		end
+	end
+end
+
+local function hayJugadorCerca(posicion, radio)
+	for _, jugador in ipairs(Players:GetPlayers()) do
+		local pos = Lugares.posicion(jugador)
+		if pos and (pos - posicion).Magnitude <= radio then
+			return true
+		end
+	end
+	return false
+end
+
+local function regenerar(mina)
+	local m = mina.Modelo
 	local ahora = os.clock()
-	for jugador, momento in pairs(mineros[zona] or {}) do
-		if ahora - momento <= Mining.MinerWindowSeconds and jugador.Parent then
-			local d = Stats.GetStats(jugador)
-			if d then
-				total = total + d.Effective.Luck
-				n = n + 1
+	for _, clave in ipairs(Mina.huecosParaRegenerar(m, ahora)) do
+		local x, y, z = Mina.coords(m, clave)
+		if not hayJugadorCerca(centro(mina, x, y, z), Mining.Blocks.RegenPlayerRadius) then
+			local nuevo, tapados = Mina.regenerar(m, clave, aleatorio)
+			for _, t in ipairs(tapados) do
+				quitarParte(mina, t)
+			end
+			if nuevo then
+				crearBloque(mina, clave, x, y, z, nuevo)
 			end
 		end
 	end
-	return n > 0 and total / n or 0, n
 end
 
-local function aparecer(zona, punto)
-	local suerte = suerteMedia(zona)
-	local rareza = Generador.rareza(zona, suerte, azar:NextNumber())
-	local mineral = Generador.mineral(zona, rareza)
-	if not mineral then
+local function prepararMina(ancla)
+	local zona = ancla:GetAttribute("Zona")
+	if type(zona) ~= "number" or zona < 1 or zona > 10 or zona ~= math.floor(zona) or minas[zona] then
 		return
 	end
-	local id = nuevoId()
-	local regla = Deposito.nuevo(id, zona, rareza, mineral)
-	local parte, barra = crearParte(regla, punto)
-	depositos[id] = { Regla = regla, Parte = parte, Punto = punto, Zona = zona, Barra = barra }
-	zonas[zona].Ocupado[punto] = id
-end
-
-local function activos(z)
-	local n = 0
-	for _ in pairs(z.Ocupado) do
-		n = n + 1
-	end
-	return n
-end
-
-local function rellenarZona(zona)
-	local z = zonas[zona]
-	local _, presentes = suerteMedia(zona)
-	local objetivo = Generador.activos(presentes, #z.Puntos)
-	local ahora = os.clock()
-	local libres = {}
-	for _, punto in ipairs(z.Puntos) do
-		if not z.Ocupado[punto] and ahora >= (z.Regenera[punto] or 0) then
-			table.insert(libres, punto)
-		end
-	end
-	local faltan = objetivo - activos(z)
-	while faltan > 0 and #libres > 0 do
-		local i = azar:NextInteger(1, #libres)
-		aparecer(zona, libres[i])
-		table.remove(libres, i)
-		faltan = faltan - 1
-	end
-end
-
-local function quitar(id, alInstante)
-	local e = depositos[id]
-	if not e then
-		return
-	end
-	depositos[id] = nil
-	local z = zonas[e.Zona]
-	z.Ocupado[e.Punto] = nil
-	z.Regenera[e.Punto] = os.clock() + (alInstante and 0 or Generador.regeneracion())
-	e.Parte:Destroy()
-	if alInstante then
-		aparecer(e.Zona, e.Punto)
-	end
-end
-
-function DepositService.Iniciar(deps)
-	Stats = deps.Stats
-	carpeta = Instance.new("Folder")
-	carpeta.Name = "Depositos"
+	local B = Mining.Blocks
+	local ancho = ancla:GetAttribute("Ancho") or B.DefaultWidth
+	local largo = ancla:GetAttribute("Largo") or B.DefaultLength
+	local profundidad = ancla:GetAttribute("Profundidad") or B.DefaultDepth
+	local carpeta = Instance.new("Folder")
+	carpeta.Name = "Mina" .. zona
 	carpeta.Parent = workspace
-	for _, punto in ipairs(CollectionService:GetTagged(Lugares.Etiqueta.PuntoDeposito)) do
-		local zona = punto:GetAttribute("Zona")
-		if punto:IsA("BasePart") and type(zona) == "number" and zona >= 1 and zona <= 10 and zona == math.floor(zona) then
-			zonas[zona] = zonas[zona] or { Puntos = {}, Ocupado = {}, Regenera = {} }
-			table.insert(zonas[zona].Puntos, punto)
-		end
+	local mina = {
+		Modelo = Mina.nueva({ Zona = zona, Ancho = ancho, Largo = largo, Profundidad = profundidad }),
+		Ancla = ancla,
+		Origen = ancla.Position - Vector3.new(ancho * S / 2, 0, largo * S / 2),
+		Carpeta = carpeta,
+		Partes = {},
+	}
+	minas[zona] = mina
+	aplicarNovedades(mina, Mina.iniciar(mina.Modelo, aleatorio))
+	print(string.format("OREBOUND: mina de la zona %d con %d x %d x %d bloques", zona, ancho, largo, profundidad))
+end
+
+function DepositService.Iniciar()
+	for _, ancla in ipairs(CollectionService:GetTagged(Lugares.Etiqueta.Mina)) do
+		prepararMina(ancla)
 	end
-	for zona, z in pairs(zonas) do
-		mineros[zona] = {}
-		print(string.format("OREBOUND: zona %d con %d puntos de depósito", zona, #z.Puntos))
-	end
-	Players.PlayerRemoving:Connect(function(jugador)
-		for _, m in pairs(mineros) do
-			m[jugador] = nil
-		end
-	end)
 	task.spawn(function()
 		while true do
-			for zona in pairs(zonas) do
-				rellenarZona(zona)
+			task.wait(5)
+			for _, mina in pairs(minas) do
+				regenerar(mina)
 			end
-			task.wait(1)
 		end
 	end)
 end
 
 function DepositService.Obtener(id)
-	return depositos[id]
+	return entradas[id]
 end
 
 function DepositService.AlAgotar(fn)
 	table.insert(alAgotar, fn)
 end
 
--- Aplica daño. Si se agota, avisa a los AlAgotar y lo quita (o lo hace reaparecer si alguno lo pide).
-function DepositService.Danar(id, userId, cantidad)
-	local e = depositos[id]
+-- Aplica daño a un bloque. Al romperse: si es mineral, avisa a los AlAgotar (reparto); después lo quita,
+-- destapa lo que hay detrás (sorteado con la Suerte de quien lo rompe) y, con Eco estelar, vuelve a ponerlo.
+function DepositService.Danar(id, userId, cantidad, suerte)
+	local e = entradas[id]
 	if not e then
 		return 0, false
 	end
 	local aplicado, agotado = Deposito.golpear(e.Regla, userId, cantidad)
 	e.Parte:SetAttribute("Vida", e.Regla.Health)
-	e.Barra.Size = UDim2.fromScale(math.clamp(e.Regla.Health / e.Regla.MaxHealth, 0, 1), 1)
-	if agotado then
-		local reaparece = false
+	if not agotado then
+		return aplicado, false
+	end
+	local reaparece = false
+	if e.Tipo == "Mineral" then
 		for _, fn in ipairs(alAgotar) do
-			local ok, r = pcall(fn, e, function()
-				return azar:NextNumber()
-			end)
+			local ok, r = pcall(fn, e, aleatorio)
 			if ok and r == true then
 				reaparece = true
 			elseif not ok then
 				warn("DepositService: " .. tostring(r))
 			end
 		end
-		quitar(id, reaparece)
 	end
-	return aplicado, agotado
+	local mina = minas[e.Zona]
+	local m = mina.Modelo
+	local x, y, z = Mina.coords(m, e.Clave)
+	local bloque = m.Bloques[e.Clave]
+	quitarParte(mina, e.Clave)
+	local _, novedades = Mina.picar(m, x, y, z, os.clock(), aleatorio, suerte or 0)
+	aplicarNovedades(mina, novedades)
+	if reaparece and bloque then
+		-- Eco estelar: el mismo mineral vuelve a estar ahí.
+		m.Aire[e.Clave] = nil
+		m.NumAire = m.NumAire - 1
+		m.Bloques[e.Clave] = bloque
+		crearBloque(mina, e.Clave, x, y, z, bloque)
+	end
+	return aplicado, true
 end
 
--- Otros depósitos activos a menos de radio studs de este (para Eco del filo y Onda sísmica).
+-- Otros bloques de mineral visibles a menos de radio studs (para Eco del filo y Onda sísmica), del más cercano al más lejano.
 function DepositService.Cercanos(id, radio)
-	local e = depositos[id]
+	local e = entradas[id]
 	local lista = {}
 	if not e then
 		return lista
 	end
+	local mina = minas[e.Zona]
+	local m = mina.Modelo
+	local x0, y0, z0 = Mina.coords(m, e.Clave)
+	local r = math.ceil(radio / S)
 	local origen = e.Parte.Position
-	for otroId, otro in pairs(depositos) do
-		if otroId ~= id and otro.Zona == e.Zona and (otro.Parte.Position - origen).Magnitude <= radio then
-			table.insert(lista, otroId)
+	for dx = -r, r do
+		for dy = -r, r do
+			for dz = -r, r do
+				local x, y, z = x0 + dx, y0 + dy, z0 + dz
+				if (dx ~= 0 or dy ~= 0 or dz ~= 0) and Mina.dentro(m, x, y, z) then
+					local otro = entradas[idDe(e.Zona, Mina.clave(m, x, y, z))]
+					if otro and otro.Tipo == "Mineral" and (otro.Parte.Position - origen).Magnitude <= radio then
+						table.insert(lista, otro.Regla.Id)
+					end
+				end
+			end
 		end
 	end
 	table.sort(lista, function(a, b)
-		return (depositos[a].Parte.Position - origen).Magnitude < (depositos[b].Parte.Position - origen).Magnitude
+		return (entradas[a].Parte.Position - origen).Magnitude < (entradas[b].Parte.Position - origen).Magnitude
 	end)
 	return lista
 end
 
-function DepositService.RegistrarMinero(jugador, zona)
-	if mineros[zona] then
-		mineros[zona][jugador] = os.clock()
+-- Zona de la mina en la que está esa posición (dentro del volumen o hasta 6 studs por encima), o nil.
+function DepositService.MinaEn(posicion)
+	for zona, mina in pairs(minas) do
+		local m = mina.Modelo
+		local rel = posicion - mina.Origen
+		if rel.X >= 0 and rel.X <= m.Ancho * S and rel.Z >= 0 and rel.Z <= m.Largo * S and rel.Y <= 6 and rel.Y >= -(m.Profundidad + 1) * S then
+			return zona, mina
+		end
 	end
+	return nil
+end
+
+-- Adónde lleva «Subir a la superficie»: el atributo Salida de la mina o el borde de la cara de arriba.
+function DepositService.Salida(zona)
+	local mina = minas[zona]
+	if not mina then
+		return nil
+	end
+	local salida = mina.Ancla:GetAttribute("Salida")
+	if typeof(salida) == "Vector3" then
+		return salida
+	end
+	return mina.Origen + Vector3.new(-6, 4, -6)
+end
+
+function DepositService.RegistrarMinero()
+	-- Sin uso con la minería por bloques: la Suerte la pone quien destapa cada bloque.
 end
 
 return DepositService

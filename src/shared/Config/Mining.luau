@@ -18,7 +18,16 @@ return {
 		MiningReqFactor = { Common = 1, Uncommon = 1, Rare = 1.5, Epic = 2.5, Legendary = 3.5, Mythic = 5, UltraRare = 7 },
 		XPScale = 0.69, ValueBase = 10, ValueGrowth = 2.00, MinHits = 3, MaxReach = 10,
 	},
-	Spawn = { ActiveBase = 40, RespawnSeconds = 45, ExtraPerMinerAbove = 5, MinerThreshold = 8, ActiveMax = 80 },
+	Spawn = { ActiveBase = 40, RespawnSeconds = 45, ExtraPerMinerAbove = 5, MinerThreshold = 8, ActiveMax = 80 },   -- B3 original (rocas sueltas); sin uso desde P3b
+	Blocks = {   -- minería por bloques (DECISIONES P3b; calibrado con calculos/c3_mina_bloques.py)
+		Size = 4,                      -- studs por bloque
+		OreChance = 0.04,              -- probabilidad de que un bloque recién destapado sea mineral (1 de cada 25)
+		StoneHealthFactor = 1.0,       -- vida de la piedra = PotZona x dureza x 1: un golpe con el pico de la zona
+		DefaultWidth = 24, DefaultLength = 24, DefaultDepth = 40,   -- tamaño de la cantera en bloques
+		RegenSeconds = 240,            -- un hueco vuelve a ser piedra tras este tiempo
+		RegenPlayerRadius = 12,        -- ... si no hay ningún jugador a menos de estos studs
+		ReturnChannelSeconds = 3,      -- «Subir a la superficie»: segundos quieto antes de subir
+	},
 	Backpack = { Base = 60 },
 	Bank = { HoldSeconds = 3, Radius = 15 },             -- B3, sección 8: depositar lleva 3 s
 	Merchant = { Radius = 15 },

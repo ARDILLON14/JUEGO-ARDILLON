@@ -1,6 +1,6 @@
 -- Arranque del cliente de OREBOUND.
 -- Fase 2: estado local del perfil, HUD y panel de estadísticas (tecla P).
--- Fase 3: picar (herramienta «Pico»), inventario (tecla B) y tienda del mercader.
+-- Fase 3: picar bloques (herramienta «Pico»), subir a la superficie (H), inventario (B) y tienda del mercader.
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local UserInputService = game:GetService("UserInputService")
@@ -28,6 +28,7 @@ HUDController.AlAviso("OpenShop", function()
 	PanelTienda.Abrir()
 end)
 MiningController.Iniciar(Estado, carpeta, HUDController.Avisar)
+HUDController.BotonSubir(MiningController.BajoTierra, MiningController.Subir)
 
 UserInputService.InputBegan:Connect(function(entrada, procesado)
 	if procesado then

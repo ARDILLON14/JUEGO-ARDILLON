@@ -1,5 +1,6 @@
 -- Services/MiningService: valida cada golpe de pico y reparte mineral y XP al agotar un depósito (B3).
--- El cliente solo dice a qué depósito golpea; distancia, ritmo, requisitos y daño los decide el servidor.
+-- Minería por bloques (P3b): la piedra solo abre camino; los bloques de mineral son los depósitos de B3.
+-- El cliente solo dice a qué bloque golpea; distancia, ritmo, requisitos y daño los decide el servidor.
 --
 -- API: AlGolpear(fn)  fn(jugador, entrada)  cada golpe válido (incubación de huevos, fase 6)
 
@@ -19,6 +20,7 @@ local MiningService = {}
 
 local Datos, Stats, Inventory, Deposits, Progression, Analitica, Red
 local estados = {}         -- [jugador] = { UltimoGolpe, Pasivas = estado de Pasivas, Avisos = { [motivo] = momento } }
+local subiendo
 local alGolpear = {}
 local azar = Random.new()
 
@@ -64,6 +66,7 @@ local function golpear(jugador, depositoId)
 		return
 	end
 	local regla = entrada.Regla
+	local esMineral = entrada.Tipo == "Mineral"
 	local alcance = Mining.Deposit.MaxReach + entrada.Parte.Size.X / 2 + Mining.Hit.ReachTolerance
 	if (raiz.Position - entrada.Parte.Position).Magnitude > alcance then
 		return
@@ -88,7 +91,7 @@ local function golpear(jugador, depositoId)
 		return
 	end
 	local mineria = d.Effective.Mining
-	if mineria < Mineria.depositMiningReq(regla.Zone, regla.Rarity) then
+	if esMineral and mineria < Mineria.depositMiningReq(regla.Zone, regla.Rarity) then
 		avisar(jugador, "mineria")
 		return
 	end
@@ -98,35 +101,71 @@ local function golpear(jugador, depositoId)
 	if ahora - e.UltimoGolpe < intervalo * Mining.Hit.TimingTolerance then
 		return
 	end
-	if Inventory.Espacio(jugador) <= 0 then
+	if esMineral and Inventory.Espacio(jugador) <= 0 then
 		avisar(jugador, "mochila_llena")
 		return
 	end
 	e.UltimoGolpe = ahora
-	Deposits.RegistrarMinero(jugador, regla.Zone)
+	local suerte = d.Effective.Luck
 
 	local efectos = Pasivas.alGolpear(pico.Passives, e.Pasivas, ahora, aleatorio)
-	local dano = Mineria.hitDamage(regla.MaxHealth, potencia, mineria) * efectos.Multiplicador + efectos.CadenaFraccion * regla.MaxHealth
-	Deposits.Danar(depositoId, jugador.UserId, dano)
+	local dano
+	if esMineral then
+		dano = Mineria.hitDamage(regla.MaxHealth, potencia, mineria) * efectos.Multiplicador + efectos.CadenaFraccion * regla.MaxHealth
+	else
+		dano = Mineria.stoneHitDamage(potencia, mineria) * efectos.Multiplicador
+	end
+	Deposits.Danar(depositoId, jugador.UserId, dano, suerte)
 	local V = Pickaxes.PassiveValues
 	if efectos.Eco then
 		local otro = Deposits.Cercanos(depositoId, V.BladeEchoRadius)[1]
 		local o = otro and Deposits.Obtener(otro)
 		if o then
-			Deposits.Danar(otro, jugador.UserId, Mineria.hitDamage(o.Regla.MaxHealth, potencia, mineria))
+			Deposits.Danar(otro, jugador.UserId, Mineria.hitDamage(o.Regla.MaxHealth, potencia, mineria), suerte)
 		end
 	end
 	if efectos.Onda then
 		for _, otro in ipairs(Deposits.Cercanos(depositoId, V.SeismicWaveRadius)) do
 			local o = Deposits.Obtener(otro)
 			if o then
-				Deposits.Danar(otro, jugador.UserId, V.SeismicWaveFraction * Mineria.hitDamage(o.Regla.MaxHealth, potencia, mineria))
+				Deposits.Danar(otro, jugador.UserId, V.SeismicWaveFraction * Mineria.hitDamage(o.Regla.MaxHealth, potencia, mineria), suerte)
 			end
 		end
 	end
 	for _, fn in ipairs(alGolpear) do
 		task.spawn(fn, jugador, entrada)
 	end
+end
+
+-- «Subir a la superficie»: 3 s sin moverse y sin recibir daño; después, a la salida de la mina.
+subiendo = {}
+local function subir(jugador)
+	if subiendo[jugador] then
+		return
+	end
+	local raiz = Lugares.raiz(jugador)
+	if not raiz then
+		return
+	end
+	local zona = Deposits.MinaEn(raiz.Position)
+	local salida = zona and Deposits.Salida(zona)
+	if not salida then
+		Red:obtener("Notify"):FireClient(jugador, { Text = "Solo puedes subir desde dentro de una mina.", Kind = "Warning", Short = true })
+		return
+	end
+	local personaje = jugador.Character
+	local h = personaje and personaje:FindFirstChildOfClass("Humanoid")
+	local inicio, vida = raiz.Position, h and h.Health or 0
+	subiendo[jugador] = true
+	Red:obtener("Notify"):FireClient(jugador, { Text = "Subiendo a la superficie… no te muevas", Short = true })
+	task.wait(Mining.Blocks.ReturnChannelSeconds)
+	subiendo[jugador] = nil
+	local r2 = Lugares.raiz(jugador)
+	if not r2 or r2 ~= raiz or (r2.Position - inicio).Magnitude > 4 or (h and h.Health < vida) then
+		Red:obtener("Notify"):FireClient(jugador, { Text = "Te has movido: subida cancelada", Kind = "Warning", Short = true })
+		return
+	end
+	personaje:PivotTo(CFrame.new(salida + Vector3.new(0, 3, 0)))
 end
 
 -- Reparto al agotarse un depósito. Devuelve true si debe reaparecer al instante (Eco estelar).
@@ -174,8 +213,10 @@ function MiningService.Iniciar(deps)
 	Progression, Analitica, Red = deps.Progression, deps.Analitica, deps.Red
 	Deposits.AlAgotar(alAgotar)
 	Red:conectar("Mining.Hit", golpear)
+	Red:conectar("World.ReturnToSurface", subir)
 	Players.PlayerRemoving:Connect(function(jugador)
 		estados[jugador] = nil
+		subiendo[jugador] = nil
 	end)
 end
 

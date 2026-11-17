@@ -17,7 +17,7 @@ src/server/Net/        Límite de frecuencia y validación común de cada Remote
 src/server/Datos/      Plantilla del perfil, migraciones y guardado con sesión bloqueada.
 src/shared/Visual/     Nombres y colores de rarezas.
 src/server/Reglas/     Reglas puras del servidor: energía, monedero, depósitos, generación y pasivas de pico.
-src/server/Mundo/      Mapa de prueba de la zona 1 (solo si el lugar no trae mapa propio).
+src/server/Mundo/      Mapa de prueba con la cantera de bloques de la zona 1 (solo si el lugar no trae mapa propio).
 src/server/Services/   Datos, analítica, economía, estadísticas, progresión, inventario, depósitos, minería y banco.
 src/client/            HUD, picar, panel de estadísticas (P), inventario (B) y tienda del mercader.
 src/character/         Sustituye la regeneración de vida por defecto de Roblox.
@@ -37,8 +37,9 @@ rojo serve
 En Studio hay que activar *Game Settings → Security → Enable Studio Access to API Services* para que el guardado use
 DataStore. Sin eso, `DataService` avisa y guarda solo en memoria.
 
-Si el lugar no tiene mapa, se crea uno de prueba (ciudad con banco y mercader, y la zona 1). Para usar un mapa propio,
-etiqueta con CollectionService las partes `PuntoDeposito` (con atributo `Zona`), `Banco` y `Mercader`.
+Si el lugar no tiene mapa, se crea uno de prueba: ciudad con banco y mercader, y la Cantera del Alba (zona 1), un volumen
+de bloques que se excava hacia abajo. Para usar un mapa propio, etiqueta con CollectionService una parte `Mina` en el centro
+de la cara de arriba de la cantera (atributos `Zona`, `Ancho`, `Largo`, `Profundidad` y `Salida`) y las partes `Banco` y `Mercader`.
 
 En Studio aparecen arriba a la derecha dos botones de prueba («+1 nivel» y «+10.000 $») que no existen en el juego publicado.
 

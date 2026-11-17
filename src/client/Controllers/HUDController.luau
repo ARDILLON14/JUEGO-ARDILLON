@@ -150,6 +150,24 @@ local function crearBotonesStudio(pantalla)
 	}, { Componentes.esquinas(6) })
 end
 
+-- Botón «Subir a la superficie (H)»: solo se ve bajo tierra. bajoTierra() y subir() los da MiningController.
+function HUDController.BotonSubir(bajoTierra, subir)
+	local pantalla = jugador:WaitForChild("PlayerGui"):WaitForChild("HUD")
+	local boton = Componentes.boton({
+		Size = UDim2.new(0, 230, 0, 40),
+		Position = UDim2.new(1, -246, 1, -104),
+		Text = "Subir a la superficie (H)",
+		BackgroundColor3 = C.Energia,
+		TextColor3 = C.Fondo,
+		Visible = false,
+		Parent = pantalla,
+	})
+	boton.Activated:Connect(subir)
+	RunService.Heartbeat:Connect(function()
+		boton.Visible = bajoTierra()
+	end)
+end
+
 function HUDController.Iniciar(estado, alPulsarPanel)
 	Estado = estado
 	local pantalla = crear("ScreenGui", {

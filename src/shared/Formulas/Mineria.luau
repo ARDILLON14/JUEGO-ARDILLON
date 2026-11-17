@@ -87,6 +87,15 @@ function Mineria.hitDamage(maxHealth, pickPower, miningStat)
 	return math.min(perHit, maxHealth / Mining.Deposit.MinHits)
 end
 
+-- Minería por bloques: la piedra cae de un golpe con el pico de la zona y no tiene mínimo de golpes.
+function Mineria.stoneHealth(zone)
+	return Potencia.zonePower(zone) * Mineria.hardness(zone) * Mining.Blocks.StoneHealthFactor
+end
+
+function Mineria.stoneHitDamage(pickPower, miningStat)
+	return pickPower * Progresion.curve(miningStat, Stats.M.Mining)
+end
+
 function Mineria.pickHitsPerSecond(rarity, extractSpeedBonus)
 	local hps = Pickaxes.HitsPerSecond[rarity] * (1 + (extractSpeedBonus or 0))
 	return math.min(hps, Pickaxes.HitsPerSecondMax)

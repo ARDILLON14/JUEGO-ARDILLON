@@ -312,7 +312,8 @@ return function(t)
 		end)
 	end)
 
-	t.describe("Medidas del roadmap, fase 3", function()
+	t.describe("Referencia de B3 (rocas sueltas): ritmo por depósito", function()
+		-- Modelo original de B3, que fija el valor de cada bloque de mineral. El ritmo real con bloques está en Mina.spec.
 		-- Minero de referencia de B3 (sección 6): zona 1, nivel 50, build equilibrada (Minería 18), pico Raro,
 		-- 6 s para llegar a cada depósito, mochila de 60 y 40 s por viaje al banco.
 		local VIAJE, BANCO = 6, 40
@@ -345,55 +346,6 @@ return function(t)
 		t.it("monedas por hora en la zona 1: 5.152 (aceptable 3.864–6.441) y cerca de B3", function()
 			t.ok(equilibrado.Monedas >= 3864 and equilibrado.Monedas <= 6441, tostring(equilibrado.Monedas))
 			t.near(equilibrado.Monedas, 5175, 5175 * 0.02, "B3, sección 6")
-		end)
-		t.it("tiempo sin depósito libre con 8 mineros: menos del 5 %", function()
-			-- 2 horas simuladas a pasos de 0,5 s. Cada minero busca un depósito libre, tarda 6 s en llegar y lo pica.
-			local rng = generador(7)
-			local puntos, dt, duracion = 40, 0.5, 7200
-			local activos = {}            -- [punto] = { Ocupado, Rareza } o nil si está regenerándose
-			local regenera = {}           -- [punto] = segundo en que reaparece
-			for i = 1, puntos do
-				activos[i] = { Ocupado = false, Rareza = Generador.rareza(1, 0, rng()) }
-			end
-			local mineros, esperando = {}, 0
-			for i = 1, 8 do
-				mineros[i] = { Hasta = 0, Punto = nil }
-			end
-			local potencia, hps = Potencia.itemPower(1, "Rare"), Pickaxes.HitsPerSecond.Rare
-			local tiempo = 0
-			while tiempo < duracion do
-				for i = 1, puntos do
-					if not activos[i] and tiempo >= regenera[i] then
-						activos[i] = { Ocupado = false, Rareza = Generador.rareza(1, 0, rng()) }
-					end
-				end
-				for _, m in ipairs(mineros) do
-					if tiempo >= m.Hasta then
-						if m.Punto then
-							activos[m.Punto] = nil
-							regenera[m.Punto] = tiempo + Generador.regeneracion()
-							m.Punto = nil
-						end
-						local libre
-						for i = 1, puntos do
-							if activos[i] and not activos[i].Ocupado then
-								libre = i
-								break
-							end
-						end
-						if libre then
-							activos[libre].Ocupado = true
-							m.Punto = libre
-							m.Hasta = tiempo + VIAJE + Mineria.extractionSeconds(Mineria.depositHealth(1, activos[libre].Rareza), potencia, 18, hps)
-						else
-							esperando = esperando + dt
-						end
-					end
-				end
-				tiempo = tiempo + dt
-			end
-			local fraccion = esperando / (duracion * #mineros)
-			t.ok(fraccion < 0.05, tostring(fraccion))
 		end)
 	end)
 end

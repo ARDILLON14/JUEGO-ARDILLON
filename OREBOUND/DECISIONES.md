@@ -784,6 +784,7 @@ Pendiente de decisión del autor
 - 2026-11-16 · Código, fase 1 (Cimientos): valores P1-01 a P1-09. Los archivos A, B, C y D no cambian.
 - 2026-11-17 · Código, fase 2 (Progresión): valores P2-01 a P2-10. Corrige un fallo de la fase 1 (P2-01). Los archivos A, B, C y D no cambian.
 - 2026-11-17 · Código, fase 3 (Minería y economía base): valores P3-01 a P3-11. Los archivos A, B, C y D no cambian.
+- 2026-11-17 · Minería por bloques a petición del usuario: valores P3b-01 a P3b-10. Sustituye P3-01, P3-02 y P3-10 en lo que contradigan. B3 sigue fijando vida, valor, unidades y XP de cada mineral.
 
 ---
 
@@ -833,4 +834,21 @@ No cambian ninguna cifra de diseño. Donde difieren de `C_Tecnico.md`, manda est
 | P3-09 | Depositar en el banco son 3 s manteniendo pulsado su aviso de proximidad | [CONFIRMADO] | En Studio |
 | P3-10 | Medidas del roadmap: depósito Común con el pico Común en 6,0 s (objetivo 6,0); 3,83 minutos por carga de mochila (objetivo 3,5, aceptable 2,6–4,4); 5.175 monedas por hora en la zona 1 (objetivo 5.152); 0,9 % del tiempo sin depósito libre con 8 mineros (objetivo menos del 5 %) | [CONFIRMADO] | `tests/Mineria.spec.luau`, medidas del roadmap |
 | P3-11 | `Shop.BuyConsumable` aún no está conectado: los consumibles llegan con la fabricación (fase 5) y las Zonas Fracturadas (fase 8) | [PROVISIONAL] | Fase 5 |
+
+## 21. Serie P3b — minería por bloques (petición del usuario tras probar la fase 3)
+
+El usuario pidió que la cantera no tuviera rocas sueltas, sino que se excavara bloque a bloque, al estilo de Minecraft, encontrando los minerales al picar. Se eligió excavar hacia abajo (la zona es una cantera) con una tecla para subir. Cálculo: `calculos/c3_mina_bloques.py`.
+
+| # | Decisión | Estado | Cómo probarla o revisarla |
+|---|---|---|---|
+| P3b-01 | Cada zona minable es un volumen de bloques de 4 studs: 24 × 24 bloques de planta y 40 de profundidad (96 × 96 × 160 studs). Solo existen partes para los bloques que se ven | [PROVISIONAL] | Atributos de la parte «Mina» |
+| P3b-02 | Un bloque se sortea cuando queda a la vista: mineral con un **4 %** de probabilidad (1 de cada 25), con la rareza de la tabla de B3 y la Suerte de quien lo destapa; si no, piedra | [PROVISIONAL] | `Mining.Blocks.OreChance` |
+| P3b-03 | Los bloques de mineral son los depósitos de B3: misma vida, mínimo de 3 golpes, unidades, valor y XP. La piedra cae de un golpe con el pico de la zona y no da nada | [CONFIRMADO] | `tests/Mina.spec.luau` |
+| P3b-04 | Calibración con el minero de referencia de B3 (excava pozos y túneles, pica los minerales a su alcance, sube a depositar): 249 minerales/h, **5.122 monedas/h** (objetivo 5.152), 53.292 XP/h (objetivo 52.200, +2 %) y **3,95 min por carga** (aceptable 2,6–4,4). La misma simulación con el código del juego da 5.282 monedas/h y 3,96 min | [CONFIRMADO] | `python3 calculos/c3_mina_bloques.py` y `tests/Mina.spec.luau` |
+| P3b-05 | Un hueco vuelve a ser piedra a los 240 s si no hay ningún jugador a menos de 12 studs. Los bloques que quedan tapados se vuelven a sortear cuando se destapen | [PROVISIONAL] | Con 20 jugadores picando (unos 1.600 bloques/h cada uno) quedan del orden de 2.100 huecos a la vez, el 9 % de la cantera |
+| P3b-06 | Bordes y fondo de la cantera: roca madre que no se puede picar | [CONFIRMADO] | — |
+| P3b-07 | «Subir a la superficie» (tecla H o botón): 3 s sin moverse ni recibir daño y lleva a la salida de la mina. Es un Remote nuevo, `World.ReturnToSurface` (47 en total en lugar de los 46 de C_Tecnico) | [PROVISIONAL] | En Studio |
+| P3b-08 | Sin rocas sueltas dejan de usarse los depósitos activos, la regeneración de 45 s y el escalado por mineros de B3 (sección 5). La Suerte ya no es la media de la zona: cuenta la de quien destapa cada bloque | [CONFIRMADO] | — |
+| P3b-09 | Un mapa propio de Studio solo necesita una parte con la etiqueta `Mina` en el centro de la cara de arriba (atributos `Zona`, `Ancho`, `Largo`, `Profundidad` y `Salida`) y nada debajo. El mapa de prueba quita el suelo de la plantilla y pone uno con el hueco de la cantera | [CONFIRMADO] | — |
+| P3b-10 | Eco del filo y Onda sísmica solo afectan a bloques de mineral; Eco estelar vuelve a poner el mismo mineral en su sitio | [PROVISIONAL] | `Pickaxes.PassiveValues` |
 

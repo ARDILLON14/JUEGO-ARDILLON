@@ -136,6 +136,7 @@ Remotes.ClientToServer = {
 	["Quest.SwapContract"] = { Kind = "Function", Rate = every(5), Params = { id("contractId") } },
 	["Season.Claim"] = { Kind = "Function", Rate = rate(3), Params = { int("level", 1, 200), enum("track", { "Free", "Paid" }) } },
 	["Rebirth.Confirm"] = { Kind = "Function", Rate = every(10), Params = { id("token") } },
+	["World.ReturnToSurface"] = { Kind = "Event", Rate = every(5), Params = {} },   -- minería por bloques (P3b)
 	["World.Teleport"] = { Kind = "Function", Rate = every(5), Params = { enum("worldId", WORLD_IDS) } },
 	["Settings.Save"] = { Kind = "Event", Rate = every(5), Params = { { Name = "settings", Type = "table", MaxSize = 2048 } } },
 	["Tutorial.Step"] = { Kind = "Event", Rate = rate(2), Params = { int("step", 0, 100) } },

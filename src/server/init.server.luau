@@ -55,7 +55,7 @@ Players.PlayerRemoving:Connect(function(jugador)
 end)
 
 if ConstructorPrueba.construirSiFalta() then
-	print("OREBOUND: no hay mapa con PuntosDeposito; se ha creado el mapa de prueba de la zona 1")
+	print("OREBOUND: no hay ninguna Mina en el mapa; se ha creado el mapa de prueba de la zona 1")
 end
 
 EconomyService.Iniciar({ Datos = DataService, Analitica = AnalyticsService, Red = Red })
@@ -63,7 +63,7 @@ StatsService.Iniciar({ Datos = DataService, Economia = EconomyService, Analitica
 ProgressionService.Iniciar({ Datos = DataService, Stats = StatsService, Analitica = AnalyticsService, Red = Red })
 InventoryService.Iniciar({ Datos = DataService, Stats = StatsService, Analitica = AnalyticsService, Red = Red })
 BankService.Iniciar({ Datos = DataService, Inventory = InventoryService, Red = Red })
-DepositService.Iniciar({ Stats = StatsService })
+DepositService.Iniciar()
 MiningService.Iniciar({
 	Datos = DataService, Stats = StatsService, Inventory = InventoryService, Deposits = DepositService,
 	Progression = ProgressionService, Analitica = AnalyticsService, Red = Red,
@@ -82,4 +82,4 @@ end
 
 DataService.Iniciar({ Analitica = AnalyticsService })
 
-print("OREBOUND: servidor iniciado (fase 3)")
+print("OREBOUND: servidor iniciado (fase 3, minería por bloques)")

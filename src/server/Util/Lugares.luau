@@ -5,7 +5,7 @@ local CollectionService = game:GetService("CollectionService")
 
 local Lugares = {}
 
-Lugares.Etiqueta = { Banco = "Banco", Mercader = "Mercader", PuntoDeposito = "PuntoDeposito", Deposito = "Deposito" }
+Lugares.Etiqueta = { Banco = "Banco", Mercader = "Mercader", Mina = "Mina", Deposito = "Deposito" }
 
 function Lugares.raiz(jugador)
 	local personaje = jugador.Character
