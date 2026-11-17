@@ -783,6 +783,7 @@ Pendiente de decisión del autor
 - 2026-11-16 · Rehecho con el GDD: B1, B3, B4, B5, B6 y B7 regenerados; B2 retocado; A, C y D actualizados. Valores R-01 a R-48.
 - 2026-11-16 · Código, fase 1 (Cimientos): valores P1-01 a P1-09. Los archivos A, B, C y D no cambian.
 - 2026-11-17 · Código, fase 2 (Progresión): valores P2-01 a P2-10. Corrige un fallo de la fase 1 (P2-01). Los archivos A, B, C y D no cambian.
+- 2026-11-17 · Código, fase 3 (Minería y economía base): valores P3-01 a P3-11. Los archivos A, B, C y D no cambian.
 
 ---
 
@@ -816,4 +817,20 @@ No cambian ninguna cifra de diseño. Donde difieren de `C_Tecnico.md`, manda est
 | P2-08 | Medida del roadmap con 240 acciones por hora: niveles 10, 50 y 100 en 0,196 / 1,883 / 5,867 h (objetivo 0,2 / 1,9 / 5,8 h). `b2_xp_niveles.csv` da 6,02 h para el nivel 100 porque aproxima con la XP/hora de cada nivel | [CONFIRMADO] | `tests/Progresion.spec.luau`, roadmap fase 2 |
 | P2-09 | Dos Remotes de prueba (`Dev.GiveXP`, `Dev.GiveCoins`) que solo se crean en Roblox Studio; un servidor publicado no los tiene | [CONFIRMADO] | `tests/Red.spec.luau` |
 | P2-10 | La XP ganada se redondea hacia abajo a un entero después de aplicar el bono de renacimiento | [CONFIRMADO] | `tests/Progresion.spec.luau`, renacimiento |
+
+## 20. Serie P3 — decisiones tomadas al programar la fase 3 (Minería y economía base)
+
+| # | Decisión | Estado | Cómo probarla o revisarla |
+|---|---|---|---|
+| P3-01 | Si el lugar no tiene puntos de depósito, el servidor crea un mapa de prueba: plaza con banco y mercader, y la Cantera del Alba (zona 1) con 48 puntos y un segundo banco. Un mapa hecho en Studio solo necesita etiquetar partes con CollectionService: `PuntoDeposito` (con atributo `Zona`), `Banco` y `Mercader` | [CONFIRMADO] | Abrir en Studio sin mapa: aparece `MapaPrueba` en Workspace |
+| P3-02 | El estado de los depósitos llega al cliente por atributos de la parte (`DepositoId`, `Rareza`, `Mineral`, `Zona`, `Vida`, `VidaMax`), que Roblox replica solo. No se usa el Remote `Mining.DepositState` de C_Tecnico | [CONFIRMADO] | — |
+| P3-03 | Pico inicial: Común de zona 1 con la pasiva Golpe certero | [PROVISIONAL] | `Pickaxes.Starter` |
+| P3-04 | La venta toma primero de la mochila y después del banco. Las monedas se redondean hacia abajo una vez por venta, por eso la tienda vende cada mineral de una vez | [CONFIRMADO] | `tests/Mineria.spec.luau`, venta |
+| P3-05 | Al morir en PvE se pierde el 20 % de cada mineral llevado, redondeado al entero más cercano | [CONFIRMADO] | `tests/Mineria.spec.luau`, muerte en PvE |
+| P3-06 | Valores concretos de las pasivas propuestas: Eco del filo golpea el depósito más cercano a 8 studs; Fractura en cadena = el siguiente golpe quita además el 25 % de la vida máxima; Sonar rúnico resalta en el cliente los depósitos Épicos o mejores a 30 studs | [PROVISIONAL] | `Pickaxes.PassiveValues` |
+| P3-07 | Cada golpe comprueba zona desbloqueada, potencia de pico de la zona y Minería del depósito según su rareza (F13 y F14) | [CONFIRMADO] | — |
+| P3-08 | Validación del golpe: se admite hasta un 15 % antes del intervalo del pico y 2 studs más de alcance, por la latencia | [PROVISIONAL] | `Mining.Hit`; revisar con la telemetría de rechazos |
+| P3-09 | Depositar en el banco son 3 s manteniendo pulsado su aviso de proximidad | [CONFIRMADO] | En Studio |
+| P3-10 | Medidas del roadmap: depósito Común con el pico Común en 6,0 s (objetivo 6,0); 3,83 minutos por carga de mochila (objetivo 3,5, aceptable 2,6–4,4); 5.175 monedas por hora en la zona 1 (objetivo 5.152); 0,9 % del tiempo sin depósito libre con 8 mineros (objetivo menos del 5 %) | [CONFIRMADO] | `tests/Mineria.spec.luau`, medidas del roadmap |
+| P3-11 | `Shop.BuyConsumable` aún no está conectado: los consumibles llegan con la fabricación (fase 5) y las Zonas Fracturadas (fase 8) | [PROVISIONAL] | Fase 5 |
 

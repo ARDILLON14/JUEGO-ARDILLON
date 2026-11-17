@@ -18,11 +18,16 @@ return {
 		Major  = { "RunicSonar", "OpenVein", "SeismicWave", "ChainFracture" },   -- Sonar rúnico (GDD) y propuestas
 		Unique = { "StellarEcho" },
 	},
-	PassiveValues = { BladeEcho = 0.10, LightBallast = 0.15, RunicSonarStuds = 30 },   -- GDD
+	PassiveValues = { BladeEcho = 0.10, LightBallast = 0.15, RunicSonarStuds = 30,   -- GDD
+	                  BladeEchoRadius = 8, SureStrikeEvery = 10, SureStrikeMultiplier = 2,  -- propuestas (B3, 3.3)
+	                  RunicSonarMinRarity = "Epic", OpenVeinChance = 0.10,
+	                  SeismicWaveCooldown = 12, SeismicWaveFraction = 0.5, SeismicWaveRadius = 8,
+	                  ChainFractureFraction = 0.25, StellarEchoChance = 0.05, StellarEchoCooldown = 60 },
 	CombatStat = {   -- GDD: defensa o velocidad de ataque; tope en PvP
 		Epic = { PvE = 0.03, PvP = 0.02 }, Legendary = { PvE = 0.03, PvP = 0.02 },
 		Mythic = { PvE = 0.05, PvP = 0.03 }, UltraRare = { PvE = 0.05, PvP = 0.03 }, Celestial = { PvE = 0.06, PvP = 0.03 },
 	},
 	Upgrade = { LevelMax = 10, LevelBonus = 0.025, Slots = 3, SlotBonus = 0.05, AwakenBonus = 0.10 },
+	Starter = { Zone = 1, Rarity = "Common", Passives = { "SureStrike" } },   -- pico con el que se empieza [PROVISIONAL]
 	ZonePrefix = { "Pizarra", "Verdín", "Sal", "Brasa", "Escarcha", "Eco", "Obsidiana", "Magma", "Vitral", "Astral" },
 }

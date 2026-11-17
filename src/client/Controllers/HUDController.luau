@@ -7,6 +7,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Shared = ReplicatedStorage:WaitForChild("Shared")
 local Progresion = require(Shared:WaitForChild("Formulas"):WaitForChild("Progresion"))
 local Estadisticas = require(Shared:WaitForChild("Reglas"):WaitForChild("Estadisticas"))
+local Mochila = require(Shared.Reglas:WaitForChild("Mochila"))
 
 local UI = script.Parent.Parent:WaitForChild("UI")
 local Componentes = require(UI:WaitForChild("Componentes"))
@@ -19,7 +20,8 @@ local HUDController = {}
 local jugador = Players.LocalPlayer
 local Estado
 local fijarVida, fijarEnergia, fijarXP
-local etiquetaNivel, etiquetaMonedas, botonPanel, contenedorAvisos
+local etiquetaNivel, etiquetaMonedas, etiquetaMochila, botonPanel, contenedorAvisos
+local manejadores = {}   -- [Kind] = fn(datos) para avisos que abren paneles (OpenShop...)
 
 local function actualizarPerfil()
 	local perfil = Estado.Perfil
@@ -31,6 +33,10 @@ local function actualizarPerfil()
 	etiquetaNivel.Text = "Nivel " .. Formato.entero(nivel)
 	fijarXP(perfil.Progress.XP / necesaria, Formato.entero(perfil.Progress.XP) .. " / " .. Formato.entero(necesaria) .. " XP")
 	etiquetaMonedas.Text = Formato.entero(perfil.Wallet.Coins) .. " monedas"
+	local carga, capacidad = Mochila.carga(perfil), Mochila.capacidad(perfil)
+	etiquetaMochila.Text = "Mochila " .. Formato.entero(carga) .. " / " .. Formato.entero(capacidad)
+		.. "   ·   Banco " .. Formato.entero(Mochila.enBanco(perfil))
+	etiquetaMochila.TextColor3 = carga >= capacidad and C.Vida or C.Texto
 	local libres = Estadisticas.puntosLibres(perfil)
 	if libres > 0 then
 		botonPanel.Text = "Estadísticas (P) · " .. Formato.entero(libres) .. " libres"
@@ -59,20 +65,29 @@ local function vigilarVida(personaje)
 	pintar()
 end
 
-local function aviso(texto, color)
+local function aviso(texto, color, corto)
 	local etiqueta = Componentes.texto({
-		Size = UDim2.new(1, 0, 0, 36),
+		Size = UDim2.new(1, 0, 0, corto and 28 or 36),
 		BackgroundTransparency = 0.15,
 		BackgroundColor3 = C.Panel,
 		Text = texto,
 		TextColor3 = color or C.Texto,
-		TextSize = 18,
+		TextSize = corto and 15 or 18,
 		Font = Enum.Font.GothamBold,
 		TextXAlignment = Enum.TextXAlignment.Center,
 		Parent = contenedorAvisos,
 	})
 	Componentes.esquinas(8).Parent = etiqueta
-	task.delay(3.5, function()
+	local hijos = contenedorAvisos:GetChildren()
+	if #hijos > 7 then   -- como mucho 6 avisos a la vez
+		for _, h in ipairs(hijos) do
+			if h:IsA("TextLabel") and h ~= etiqueta then
+				h:Destroy()
+				break
+			end
+		end
+	end
+	task.delay(corto and 2.5 or 3.5, function()
 		etiqueta:Destroy()
 	end)
 end
@@ -86,9 +101,25 @@ local function alAviso(datos)
 		if datos.Zone then
 			aviso("Nueva zona desbloqueada: zona " .. tostring(datos.Zone), C.Energia)
 		end
+	elseif manejadores[datos.Kind] then
+		manejadores[datos.Kind](datos)
 	elseif type(datos.Text) == "string" then
-		aviso(datos.Text)
+		local color = datos.Color
+		if datos.Kind == "Warning" then
+			color = C.Vida
+		end
+		aviso(datos.Text, color, datos.Short)
 	end
+end
+
+-- Para otros controladores: muestra un aviso ({ Text, Color, Short, Kind }).
+function HUDController.Avisar(datos)
+	alAviso(datos)
+end
+
+-- Registra qué hacer con los avisos de un tipo (por ejemplo «OpenShop» abre la tienda).
+function HUDController.AlAviso(kind, fn)
+	manejadores[kind] = fn
 end
 
 local function crearBotonesStudio(pantalla)
@@ -114,9 +145,9 @@ local function crearBotonesStudio(pantalla)
 	boton("+1 nivel", "Dev.GiveXP")
 	boton("+10.000 $", "Dev.GiveCoins", 10000)
 	crear("TextLabel", {
-		BackgroundTransparency = 1, Size = UDim2.new(0, 80, 1, 0), Text = "solo Studio", TextColor3 = C.TextoSuave,
-		TextSize = 11, Font = Enum.Font.Gotham, Parent = fila,
-	})
+		BackgroundColor3 = C.Panel, BackgroundTransparency = 0.2, Size = UDim2.new(0, 80, 1, 0), Text = "solo Studio",
+		TextColor3 = C.Texto, TextSize = 12, Font = Enum.Font.GothamBold, Parent = fila,
+	}, { Componentes.esquinas(6) })
 end
 
 function HUDController.Iniciar(estado, alPulsarPanel)
@@ -132,7 +163,7 @@ function HUDController.Iniciar(estado, alPulsarPanel)
 	local marco = crear("Frame", {
 		BackgroundColor3 = C.Panel,
 		BackgroundTransparency = 0.2,
-		Size = UDim2.new(0, 280, 0, 132),
+		Size = UDim2.new(0, 280, 0, 156),
 		Position = UDim2.new(0, 16, 0, 16),
 		Parent = pantalla,
 	}, {
@@ -146,6 +177,7 @@ function HUDController.Iniciar(estado, alPulsarPanel)
 	local _, fe = Componentes.barra({ Size = UDim2.new(1, 0, 0, 16), LayoutOrder = 4, Parent = marco }, C.Energia)
 	fijarXP, fijarVida, fijarEnergia = fx, fv, fe
 	etiquetaMonedas = Componentes.texto({ Size = UDim2.new(1, 0, 0, 18), Text = "0 monedas", TextColor3 = C.XP, LayoutOrder = 5, Parent = marco })
+	etiquetaMochila = Componentes.texto({ Size = UDim2.new(1, 0, 0, 18), Text = "Mochila 0 / 60", TextSize = 13, LayoutOrder = 6, Parent = marco })
 
 	botonPanel = Componentes.boton({
 		Size = UDim2.new(0, 230, 0, 40),

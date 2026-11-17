@@ -20,6 +20,11 @@ return {
 	},
 	Spawn = { ActiveBase = 40, RespawnSeconds = 45, ExtraPerMinerAbove = 5, MinerThreshold = 8, ActiveMax = 80 },
 	Backpack = { Base = 60 },
+	Bank = { HoldSeconds = 3, Radius = 15 },             -- B3, sección 8: depositar lleva 3 s
+	Merchant = { Radius = 15 },
+	Hit = { TimingTolerance = 0.85, ReachTolerance = 2 },   -- margen por latencia en la validación del servidor
+	Share = { MinFractionForUnit = 0.10 },               -- B3, 5.3: con el 10 % del daño, al menos 1 unidad
+	MinerWindowSeconds = 60,                             -- un jugador cuenta como minero de la zona si picó en este tiempo
 	PvEDeath = { LossFraction = 0.20, RecoverSeconds = 120, NoLossBelowLevel = 25 },
 	Minerals = require(script.Parent.Catalogo.Minerales),   -- 66 minerales, generados de calculos/b3_minerales.csv
 }
