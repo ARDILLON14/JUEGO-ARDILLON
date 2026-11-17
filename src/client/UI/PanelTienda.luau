@@ -10,6 +10,8 @@ local Mining = require(Shared:WaitForChild("Config"):WaitForChild("Mining"))
 local Rarity = require(Shared.Config:WaitForChild("Rarity"))
 local Mochila = require(Shared:WaitForChild("Reglas"):WaitForChild("Mochila"))
 local Rarezas = require(Shared:WaitForChild("Visual"):WaitForChild("Rarezas"))
+local Inventario = require(Shared.Reglas:WaitForChild("Inventario"))
+local Economia = require(Shared:WaitForChild("Formulas"):WaitForChild("Economia"))
 
 local Componentes = require(script.Parent:WaitForChild("Componentes"))
 local Formato = require(script.Parent:WaitForChild("Formato"))
@@ -103,7 +105,26 @@ function PanelTienda.Refrescar()
 		local vacia = crear("Frame", { BackgroundTransparency = 1, Size = UDim2.new(1, 0, 0, 34), Parent = lista })
 		Componentes.texto({ Size = UDim2.fromScale(1, 1), Text = "No tienes minerales. Ve a picar a la Cantera del Alba.", TextColor3 = C.TextoSuave, Parent = vacia })
 	end
-	lista.CanvasSize = UDim2.new(0, 0, 0, #filas * 38)
+	-- Objetos que no se llevan equipados: se venden por el 10 % de su coste de fabricación.
+	local n = #filas
+	for id, item in pairs(Estado.Perfil.Items) do
+		if not Inventario.estaEquipado(Estado.Perfil, id) and item.Rarity ~= "Celestial" then
+			n = n + 1
+			local precio = Economia.gearSellPrice(item.Zone, item.Rarity)
+			local fila = crear("Frame", { BackgroundColor3 = C.Fondo, BackgroundTransparency = 0.3, Size = UDim2.new(1, -8, 0, 34), LayoutOrder = 1000 + n, Parent = lista }, { Componentes.esquinas(6) })
+			Componentes.texto({ Size = UDim2.new(0, 380, 1, 0), Position = UDim2.new(0, 8, 0, 0), TextColor3 = Rarezas.color(item.Rarity), Font = Enum.Font.GothamBold, Parent = fila,
+				Text = Inventario.nombreBase(item) .. " (" .. (Rarezas.Nombre[item.Rarity] or item.Rarity) .. ")" })
+			local b = Componentes.boton({ Size = UDim2.new(0, 110, 0, 26), Position = UDim2.new(1, -116, 0.5, -13), TextSize = 12, BackgroundColor3 = C.Peligro,
+				Text = "Vender " .. Formato.abreviado(precio), Parent = fila })
+			b.Activated:Connect(function()
+				task.spawn(function()
+					local ok, r = Estado.Invocar("Shop.Sell", nil, nil, id)
+					avisar(ok and ("Vendido por " .. Formato.abreviado(r.Coins) .. " monedas") or (MOTIVOS[r] or ("No se pudo: " .. tostring(r))))
+				end)
+			end)
+		end
+	end
+	lista.CanvasSize = UDim2.new(0, 0, 0, n * 38)
 	resumen.Text = "Valor total: " .. Formato.abreviado(total) .. " monedas   ·   Tienes " .. Formato.abreviado(Estado.Perfil and Estado.Perfil.Wallet.Coins or 0)
 	botonTodo.Text = "Vender todo (" .. Formato.abreviado(total) .. ")"
 	local perfil = Estado.Perfil

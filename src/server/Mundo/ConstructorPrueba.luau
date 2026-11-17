@@ -105,6 +105,8 @@ function ConstructorPrueba.construirSiFalta()
 	spawn.Parent = ciudad
 	interactuable("Banco", Lugares.Etiqueta.Banco, Vector3.new(-20, 4, 12), Color3.fromRGB(212, 175, 55), "Depositar todo", 3, ciudad)
 	interactuable("Mercader", Lugares.Etiqueta.Mercader, Vector3.new(20, 4, 12), Color3.fromRGB(70, 130, 90), "Abrir tienda", 0, ciudad)
+	interactuable("Forja", "Forja", Vector3.new(-24, 4, -14), Color3.fromRGB(150, 70, 40), "Abrir forja", 0, ciudad)
+	interactuable("Geodas", "Cajas", Vector3.new(24, 4, -14), Color3.fromRGB(110, 90, 160), "Ver cajas", 0, ciudad)
 
 	-- Zona 1: Cantera del Alba (24 x 24 bloques y 40 de profundidad)
 	local zona = Instance.new("Folder")

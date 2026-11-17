@@ -24,6 +24,7 @@ local function plantilla()
 		Consumables = { CargoInsurance = 0, ReadjustSeal = 0, RespecTome = 0 },
 		Backpack = { Tier = 0 },
 		Pets = {},         -- [id] = { Species, Level, XP, Phase }
+		Eggs = {},         -- [id] = { Species }  (cajas de mascotas; se incuban en la fase 6)
 		PetSlots = 3,
 		PetStorage = 30,
 		Incubators = { { Egg = "", PickHits = 0 } },

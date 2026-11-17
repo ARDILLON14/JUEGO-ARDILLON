@@ -787,6 +787,7 @@ Pendiente de decisión del autor
 - 2026-11-17 · Minería por bloques a petición del usuario: valores P3b-01 a P3b-10. Sustituye P3-01, P3-02 y P3-10 en lo que contradigan. B3 sigue fijando vida, valor, unidades y XP de cada mineral.
 - 2026-11-17 · Más minerales y dinero x 1.000 a petición del usuario: valores P3c-01 a P3c-06. Sustituyen P3b-02 y P3b-04 y la mochila de 60 de B3.
 - 2026-11-17 · Código, fase 4 (Combate y Núcleos): valores P4-01 a P4-12. Los archivos A, B, C y D no cambian.
+- 2026-11-17 · Código, fase 5 (Fabricación, rarezas y cajas): valores P5-01 a P5-11. Los archivos A, B, C y D no cambian.
 
 ---
 
@@ -885,4 +886,20 @@ Los archivos B siguen en sus unidades originales; el juego aplica `CurrencyScale
 | P4-10 | Habilidades implementadas: las 4 del Núcleo Prismático y las 2 técnicas de Espada, Daga y Bastón. Los otros 5 Núcleos usan un efecto genérico por tipo de ranura hasta su fase; Despertar y Transformación llegan en la expansión 1 (roadmap) | [PROVISIONAL] | `PowerCoreService` |
 | P4-11 | Al desbloquear una habilidad del Núcleo por maestría, se coloca sola en su ranura si estaba vacía | [PROVISIONAL] | — |
 | P4-12 | Medida del roadmap: 6,3 s por enemigo Común con el combatiente de referencia de B4 (objetivo 6,3, aceptable 4,7–7,9) | [CONFIRMADO] | `tests/Combate.spec.luau` |
+
+## 24. Serie P5 — decisiones tomadas al programar la fase 5 (Fabricación, rarezas y cajas)
+
+| # | Decisión | Estado | Cómo probarla o revisarla |
+|---|---|---|---|
+| P5-01 | Los «materiales» de las recetas de B6 son minerales de la zona del objeto: «30 Lingotes Común» = 30 unidades del mineral Común de esa zona. Se gastan primero del banco y después de la mochila | [PROVISIONAL] | `tests/Forja.spec.luau` |
+| P5-02 | Materiales de las mejoras (B6 no los fija): niveles 1–5, 5 unidades Poco común; 6–10, 3 Raro; cada ranura, 6 Épico; despertar, 4 Mítico; todos de la zona del objeto. Las monedas son las de B6 | [PROVISIONAL] | `Economy.UpgradeMaterials` |
+| P5-03 | Reciclar devuelve al banco el 30 % de los minerales de la receta (`Sell.RecycleFraction`) y no da monedas | [PROVISIONAL] | — |
+| P5-04 | Legendario y superiores necesitan materiales de jefe: no se pueden fabricar hasta la fase 7. Celestial no se fabrica por la forja | [CONFIRMADO] | — |
+| P5-05 | Las cajas se compran para la zona más profunda desbloqueada (Box.Open no lleva zona en C_Tecnico) | [CONFIRMADO] | — |
+| P5-06 | Caja de mascotas: la rareza sale de la tabla estándar con su garantía y la especie, al azar entre las de esa rareza (las probabilidades de B6 5.2 coinciden). Da un huevo, que se incuba en la fase 6 (`Eggs` en el perfil, campo nuevo) | [CONFIRMADO] | `tests/Forja.spec.luau` |
+| P5-07 | Caja de Núcleos: rarezas Raro 60, Épico 30, Legendario 10 (suma de B6 5.4) y Núcleo al azar dentro de la rareza. No hay Núcleos Míticos, así que la garantía de la apertura 100 da Legendario. Un repetido da 200 puntos de maestría de ese Núcleo | [CONFIRMADO] | — |
+| P5-08 | Caja de zona: el lote de «materiales» es el mineral de la rareza siguiente por el mismo valor; el de consumibles da Seguros de carga (1/1/2/3/5/8/12 según rareza) | [PROVISIONAL] | `Boxes.Boxes.Zone` |
+| P5-09 | La caja de evento existe en las reglas pero no se vende: se ganará con fichas cuando lleguen los eventos | [CONFIRMADO] | — |
+| P5-10 | Máximo de 120 objetos en el inventario | [PROVISIONAL] | `Economy.MaxItems` |
+| P5-11 | Medidas del roadmap: 100.000 aperturas con Legendario o superior en 4,449 % ± 0,2 y ninguna racha de más de 50; el arma Rara de la zona cuesta 1,2 horas de ingreso y sus minerales se juntan en menos tiempo | [CONFIRMADO] | `tests/Forja.spec.luau` |
 

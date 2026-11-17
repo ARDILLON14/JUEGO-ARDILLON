@@ -29,11 +29,11 @@ local DESCRIPCION = {
 	StellarEcho = "5 % de que el depósito reaparezca al instante",
 }
 
-local Estado, pantalla, cabecera, columnaMochila, columnaBanco
+local Estado, pantalla, cabecera, columnaMochila, columnaBanco, listaObjetos, mensaje
 
 local function rellenar(columna, tabla)
 	for _, h in ipairs(columna:GetChildren()) do
-		if h:IsA("TextLabel") then
+		if h:IsA("TextLabel") and h.Name ~= "Titulo" then
 			h:Destroy()
 		end
 	end
@@ -82,11 +82,53 @@ function PanelInventario.Refrescar()
 	columnaBanco:FindFirstChild("Titulo").Text = "Banco " .. Formato.entero(Mochila.enBanco(perfil))
 	rellenar(columnaMochila, perfil.Minerals.Carried)
 	rellenar(columnaBanco, perfil.Minerals.Banked)
+
+	-- Objetos: equipar picos y armas.
+	for _, h in ipairs(listaObjetos:GetChildren()) do
+		if h:IsA("Frame") then
+			h:Destroy()
+		end
+	end
+	local ids = {}
+	for id in pairs(perfil.Items) do
+		table.insert(ids, id)
+	end
+	table.sort(ids, function(a, b)
+		local ia, ib = perfil.Items[a], perfil.Items[b]
+		if ia.Kind ~= ib.Kind then
+			return ia.Kind == "Pickaxe"
+		end
+		return Inventario.potencia(ia) > Inventario.potencia(ib)
+	end)
+	local huevos = 0
+	for _ in pairs(perfil.Eggs or {}) do
+		huevos = huevos + 1
+	end
+	listaObjetos:FindFirstChild("Titulo").Text = "Objetos " .. #ids .. "   ·   Huevos " .. huevos .. "   ·   Seguros de carga " .. (perfil.Consumables.CargoInsurance or 0)
+	for i, id in ipairs(ids) do
+		local item = perfil.Items[id]
+		local f = Componentes.crear("Frame", { BackgroundTransparency = 1, Size = UDim2.new(1, -10, 0, 26), LayoutOrder = i + 1, Parent = listaObjetos })
+		Componentes.texto({ Size = UDim2.new(1, -110, 1, 0), TextSize = 12, TextColor3 = Rarezas.color(item.Rarity), Parent = f,
+			Text = Inventario.nombreBase(item) .. " (" .. (Rarezas.Nombre[item.Rarity] or item.Rarity) .. ") · potencia " .. Formato.abreviado(Inventario.potencia(item))
+				.. (item.Level and item.Level > 0 and (" · +" .. item.Level) or "") })
+		if Inventario.estaEquipado(perfil, id) then
+			Componentes.texto({ Size = UDim2.new(0, 100, 1, 0), Position = UDim2.new(1, -100, 0, 0), TextSize = 12, TextColor3 = C.XP, Text = "Equipado", Parent = f })
+		else
+			local b = Componentes.boton({ Size = UDim2.new(0, 96, 0, 22), Position = UDim2.new(1, -100, 0, 2), TextSize = 12, Text = "Equipar", Parent = f })
+			b.Activated:Connect(function()
+				task.spawn(function()
+					local ok, motivo = Estado.Invocar("Inventory.Equip", id, item.Kind)
+					local textos = { nivel = "Necesitas más nivel para ese objeto.", mineria = "Necesitas más Minería para ese pico.", en_combate = "No puedes cambiar de equipo en combate." }
+					mensaje.Text = ok and "Equipado" or (textos[motivo] or ("No se pudo: " .. tostring(motivo)))
+				end)
+			end)
+		end
+	end
 end
 
 local function columna(posicion, padre)
 	local c = crear("ScrollingFrame", {
-		BackgroundColor3 = C.Fondo, BackgroundTransparency = 0.3, BorderSizePixel = 0, Size = UDim2.new(0.5, -6, 1, -110),
+		BackgroundColor3 = C.Fondo, BackgroundTransparency = 0.3, BorderSizePixel = 0, Size = UDim2.new(0.5, -6, 0, 190),
 		Position = posicion, ScrollBarThickness = 6, AutomaticCanvasSize = Enum.AutomaticSize.Y, CanvasSize = UDim2.new(), Parent = padre,
 	}, {
 		Componentes.esquinas(8),
@@ -101,7 +143,7 @@ function PanelInventario.Iniciar(estado)
 	Estado = estado
 	pantalla = crear("ScreenGui", { Name = "PanelInventario", ResetOnSpawn = false, Enabled = false, Parent = Players.LocalPlayer:WaitForChild("PlayerGui") })
 	local marco = crear("Frame", {
-		BackgroundColor3 = C.Panel, Size = UDim2.new(0, 560, 0, 430), Position = UDim2.new(0.5, -280, 0.5, -215), Parent = pantalla,
+		BackgroundColor3 = C.Panel, Size = UDim2.new(0, 600, 0, 600), Position = UDim2.new(0.5, -300, 0.5, -300), Parent = pantalla,
 	}, {
 		Componentes.esquinas(12),
 		crear("UIStroke", { Color = C.Borde, Thickness = 1 }),
@@ -116,6 +158,9 @@ function PanelInventario.Iniciar(estado)
 		TextYAlignment = Enum.TextYAlignment.Top, Font = Enum.Font.GothamBold, Parent = marco })
 	columnaMochila = columna(UDim2.new(0, 0, 0, 104), marco)
 	columnaBanco = columna(UDim2.new(0.5, 6, 0, 104), marco)
+	listaObjetos = columna(UDim2.new(0, 0, 0, 302), marco)
+	listaObjetos.Size = UDim2.new(1, 0, 1, -330)
+	mensaje = Componentes.texto({ Size = UDim2.new(1, 0, 0, 20), Position = UDim2.new(0, 0, 1, -20), TextSize = 13, TextColor3 = C.TextoSuave, Parent = marco })
 	Estado.Cambio:Connect(function(que)
 		if que == "Perfil" then
 			PanelInventario.Refrescar()

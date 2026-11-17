@@ -17,6 +17,14 @@ return {
 	CelestialForgeHours = 10, PrestigeSkinHours = 20,
 	QuestCoinBonus = 0.10,
 	Rebirth = { Max = 10, XPBonus = 0.05, StatPoints = 10 },
+	UpgradeMaterials = {   -- minerales de la zona del objeto por cada mejora (B3: «nivel de objeto 1-5 / 6-10», ranuras, despertar) [PROVISIONAL]
+		LevelLow = { Rarity = "Uncommon", Units = 5 },    -- niveles 1 a 5
+		LevelHigh = { Rarity = "Rare", Units = 3 },       -- niveles 6 a 10
+		Slot = { Rarity = "Epic", Units = 6 },            -- B6: 6 Gemas talladas por ranura
+		Awaken = { Rarity = "Mythic", Units = 4 },        -- B6: 4 Catalizadores
+	},
+	InsuranceRecipe = { Uncommon = 8, Rare = 1 },        -- Seguro de carga (B6, 7.2): de la zona más profunda desbloqueada
+	MaxItems = 120,                                      -- objetos en el inventario (C_Tecnico 6.1: tamaño del perfil)
 	Recipes = {   -- materiales de la zona, por rareza del mineral de origen (B6, sección 2.2)
 		Common    = { Common = 30 },
 		Uncommon  = { Common = 40, Uncommon = 20 },

@@ -2,6 +2,7 @@
 -- Fase 1: analítica, datos y red.  Fase 2: economía (monedas), estadísticas y progresión.
 -- Fase 3: mapa de prueba, inventario, depósitos, minería, banco y tienda.
 -- Fase 4: enemigos, combate (ataque, bloqueo, dash, parpadeo, Ruptura) y Núcleos de Poder con sus habilidades.
+-- Fase 5: forja (fabricar, mejorar, reciclar) y cajas con Suerte, protección contra mala suerte y registro.
 -- Los servicios de las fases siguientes conectan sus Remotes con Red:conectar(nombre, manejador).
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -21,6 +22,8 @@ local BankService = require(Services.BankService)
 local EnemyService = require(Services.EnemyService)
 local CombatService = require(Services.CombatService)
 local PowerCoreService = require(Services.PowerCoreService)
+local CraftingService = require(Services.CraftingService)
+local BoxService = require(Services.BoxService)
 local ConstructorPrueba = require(script.Mundo.ConstructorPrueba)
 local LimiteFrecuencia = require(script.Net.LimiteFrecuencia)
 local Validador = require(script.Net.Validador)
@@ -77,6 +80,11 @@ CombatService.Iniciar({
 	Datos = DataService, Stats = StatsService, Enemigos = EnemyService, Progression = ProgressionService,
 	Economia = EconomyService, Analitica = AnalyticsService, Red = Red,
 })
+CraftingService.Iniciar({ Datos = DataService, Economia = EconomyService, Inventory = InventoryService, Analitica = AnalyticsService, Red = Red })
+BoxService.Iniciar({
+	Datos = DataService, Economia = EconomyService, Inventory = InventoryService, Stats = StatsService,
+	Analitica = AnalyticsService, Red = Red,
+})
 PowerCoreService.Iniciar({
 	Datos = DataService, Stats = StatsService, Combat = CombatService, Enemigos = EnemyService,
 	Analitica = AnalyticsService, Red = Red,
@@ -99,4 +107,4 @@ end
 
 DataService.Iniciar({ Analitica = AnalyticsService })
 
-print("OREBOUND: servidor iniciado (fase 4)")
+print("OREBOUND: servidor iniciado (fase 5)")

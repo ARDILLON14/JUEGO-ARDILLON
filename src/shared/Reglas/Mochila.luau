@@ -11,6 +11,39 @@ local Economia = require(Shared.Formulas.Economia)
 
 local Mochila = {}
 
+-- Índice [zona][rareza] = id del mineral (uno por rareza y zona en el catálogo de B3).
+local INDICE = {}
+for id, m in pairs(Mining.Minerals) do
+	INDICE[m.Zone] = INDICE[m.Zone] or {}
+	INDICE[m.Zone][m.Rarity] = id
+end
+
+function Mochila.mineralDe(zona, rareza)
+	return INDICE[zona] and INDICE[zona][rareza]
+end
+
+-- Quita n unidades de un mineral, primero del banco y después de la mochila. Devuelve true si había.
+function Mochila.gastar(perfil, mineral, n)
+	if Mochila.existencias(perfil, mineral) < n then
+		return false
+	end
+	local delBanco = math.min(n, perfil.Minerals.Banked[mineral] or 0)
+	local resto = (perfil.Minerals.Banked[mineral] or 0) - delBanco
+	perfil.Minerals.Banked[mineral] = resto > 0 and resto or nil
+	local deMochila = n - delBanco
+	if deMochila > 0 then
+		local r = (perfil.Minerals.Carried[mineral] or 0) - deMochila
+		perfil.Minerals.Carried[mineral] = r > 0 and r or nil
+	end
+	return true
+end
+
+function Mochila.alBanco(perfil, mineral, n)
+	if n > 0 then
+		perfil.Minerals.Banked[mineral] = (perfil.Minerals.Banked[mineral] or 0) + n
+	end
+end
+
 local function total(tabla)
 	local n = 0
 	for _, unidades in pairs(tabla) do

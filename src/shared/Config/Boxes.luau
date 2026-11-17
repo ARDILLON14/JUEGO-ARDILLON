@@ -11,13 +11,16 @@ return {
 		           TypeWeights = { Sword = 17, Axe = 17, Dagger = 17, Spear = 17, Staff = 16, Bow = 16 } },
 		Zone   = { PriceHours = 0.6, Currency = "Coins",
 		           CategoryWeights = { Pickaxe = 35, Minerals = 40, Materials = 15, Consumables = 10 },
-		           LotHours = { Common = 0.15, Uncommon = 0.25, Rare = 0.4, Epic = 0.8, Legendary = 2, Mythic = 5, UltraRare = 12 } },
+		           LotHours = { Common = 0.15, Uncommon = 0.25, Rare = 0.4, Epic = 0.8, Legendary = 2, Mythic = 5, UltraRare = 12 },
+		           InsuranceLot = { Common = 1, Uncommon = 1, Rare = 2, Epic = 3, Legendary = 5, Mythic = 8, UltraRare = 12 } },   -- lote de consumibles [PROVISIONAL]
 		Pet    = { PriceHours = 0.75, Currency = "Coins", PriceZone = "HighestUnlocked" },
 		Core   = { PriceHours = 3.0, Currency = "Coins", PriceZone = "HighestUnlocked", DuplicateMasteryPoints = 200,   -- GDD: cajas de Núcleos
-		           Weights = { Ember = 30, Frost = 30, Prismatic = 15, Storm = 15, Seismic = 5, Umbral = 5 } },
+		           GuaranteeBMin = "Legendary",   -- no hay Núcleos Míticos: la garantía de la apertura 100 da Legendario
+		           Weights = { Ember = 30, Frost = 30, Prismatic = 15, Storm = 15, Seismic = 5, Umbral = 5 } },   -- rarezas: Raro 60, Épico 30, Legendario 10
 		Event  = { Currency = "EventTokens", LuckApplies = false, GuaranteeBMin = "UltraRare",
 		           Weights = { Rare = 45, Epic = 33, Legendary = 15, Mythic = 5, UltraRare = 1.5, Celestial = 0.5 } },
 	},
+	Purchasable = { "Weapon", "Zone", "Pet", "Core" },   -- la de evento se gana con fichas (fase de eventos)
 	ShowOddsBeforeOpen = true,       -- GDD
 	Animation = { Seconds = 2.5, FastSeconds = 1.0, Skippable = true, MultiOpen = 10 },
 	LogSize = 200,
