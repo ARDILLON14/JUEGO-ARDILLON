@@ -38,7 +38,17 @@ def cargar_rig(rig):
 
 
 def previas(arm, nombre, spec, carpeta):
-    from PIL import Image, ImageDraw
+    try:
+        from PIL import Image, ImageDraw
+    except ImportError:
+        # Blender normal no trae Pillow: se dejan las imágenes sueltas en vez de la hoja.
+        m = spec.get("marcadores", {})
+        n = spec["frames"]
+        for vista in ("frente", "lado"):
+            rig_provisional.vista(vista)
+            for f in sorted({0, m.get("hit", n // 2), n - 1}):
+                oreb_anim.render(os.path.join(carpeta, f"{nombre}_{vista}_{f}.png"), f)
+        return os.path.join(carpeta, nombre + "_*.png")
     m = spec.get("marcadores", {})
     n = spec["frames"]
     frames = sorted({0, m.get("hit", n // 2), m.get("cancel_ok", (n * 3) // 4), n - 1, max(1, m.get("hit", n // 2) - 3)})
