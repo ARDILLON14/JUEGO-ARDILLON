@@ -8,3 +8,5 @@
 
 sourcemap.json
 __pycache__/
+# Previsualizaciones de animación (se regeneran con herramientas/blender/generar.py)
+assets/animaciones/previas/

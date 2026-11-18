@@ -1,0 +1,229 @@
+{
+  "mining_stance_loop": {
+    "frames": 30,
+    "segundos": 1.0,
+    "loop": true,
+    "superior": true,
+    "marcadores": {}
+  },
+  "mining_swing_loop": {
+    "frames": 30,
+    "segundos": 1.0,
+    "loop": true,
+    "superior": true,
+    "marcadores": {
+      "hit": 12
+    }
+  },
+  "mining_swing_down_loop": {
+    "frames": 30,
+    "segundos": 1.0,
+    "loop": true,
+    "superior": true,
+    "marcadores": {
+      "hit": 12
+    }
+  },
+  "combat_combo1": {
+    "frames": 24,
+    "segundos": 0.8,
+    "loop": false,
+    "superior": true,
+    "marcadores": {
+      "hit_start": 4,
+      "hit": 5,
+      "hit_end": 7,
+      "cancel_ok": 19
+    }
+  },
+  "combat_combo2": {
+    "frames": 24,
+    "segundos": 0.8,
+    "loop": false,
+    "superior": true,
+    "marcadores": {
+      "hit_start": 4,
+      "hit": 5,
+      "hit_end": 7,
+      "cancel_ok": 19
+    }
+  },
+  "combat_combo3": {
+    "frames": 24,
+    "segundos": 0.8,
+    "loop": false,
+    "superior": false,
+    "marcadores": {
+      "hit_start": 5,
+      "hit": 6,
+      "hit_end": 8,
+      "cancel_ok": 19
+    }
+  },
+  "combat_combo4": {
+    "frames": 30,
+    "segundos": 1.0,
+    "loop": false,
+    "superior": false,
+    "marcadores": {
+      "hit_start": 8,
+      "hit": 9,
+      "hit_end": 11,
+      "cancel_ok": 24
+    }
+  },
+  "combat_dash_fwd": {
+    "frames": 12,
+    "segundos": 0.4,
+    "loop": false,
+    "superior": false,
+    "marcadores": {
+      "cancel_ok": 8
+    }
+  },
+  "combat_dash_bwd": {
+    "frames": 12,
+    "segundos": 0.4,
+    "loop": false,
+    "superior": false,
+    "marcadores": {
+      "cancel_ok": 8
+    }
+  },
+  "combat_blink": {
+    "frames": 10,
+    "segundos": 0.333,
+    "loop": false,
+    "superior": false,
+    "marcadores": {
+      "blink": 2
+    }
+  },
+  "combat_block_start": {
+    "frames": 5,
+    "segundos": 0.167,
+    "loop": false,
+    "superior": true,
+    "marcadores": {}
+  },
+  "combat_block_loop": {
+    "frames": 30,
+    "segundos": 1.0,
+    "loop": true,
+    "superior": true,
+    "marcadores": {}
+  },
+  "combat_block_hit": {
+    "frames": 8,
+    "segundos": 0.267,
+    "loop": false,
+    "superior": true,
+    "marcadores": {}
+  },
+  "combat_hurt_light": {
+    "frames": 12,
+    "segundos": 0.4,
+    "loop": false,
+    "superior": true,
+    "marcadores": {
+      "cancel_ok": 6
+    }
+  },
+  "combat_stunned_loop": {
+    "frames": 30,
+    "segundos": 1.0,
+    "loop": true,
+    "superior": false,
+    "marcadores": {}
+  },
+  "combat_break": {
+    "frames": 15,
+    "segundos": 0.5,
+    "loop": false,
+    "superior": false,
+    "marcadores": {
+      "break": 4,
+      "cancel_ok": 10
+    }
+  },
+  "combat_cast_area": {
+    "frames": 30,
+    "segundos": 1.0,
+    "loop": false,
+    "superior": true,
+    "marcadores": {
+      "hit_start": 11,
+      "hit": 12,
+      "hit_end": 14,
+      "cancel_ok": 20
+    }
+  },
+  "combat_cast_control": {
+    "frames": 36,
+    "segundos": 1.2,
+    "loop": false,
+    "superior": false,
+    "marcadores": {
+      "hit_start": 17,
+      "hit": 18,
+      "hit_end": 22,
+      "cancel_ok": 28
+    }
+  },
+  "combat_cast_mobility": {
+    "frames": 18,
+    "segundos": 0.6,
+    "loop": false,
+    "superior": false,
+    "marcadores": {
+      "hit_start": 8,
+      "hit": 9,
+      "hit_end": 11,
+      "cancel_ok": 12
+    }
+  },
+  "combat_ultimate": {
+    "frames": 75,
+    "segundos": 2.5,
+    "loop": false,
+    "superior": false,
+    "marcadores": {
+      "hit_start": 30,
+      "hit": 33,
+      "hit_end": 40
+    }
+  },
+  "combat_transform": {
+    "frames": 45,
+    "segundos": 1.5,
+    "loop": false,
+    "superior": false,
+    "marcadores": {
+      "transform": 24
+    }
+  },
+  "combat_tech_spinning_slash": {
+    "frames": 30,
+    "segundos": 1.0,
+    "loop": false,
+    "superior": false,
+    "marcadores": {
+      "hit_start": 8,
+      "hit": 12,
+      "hit_end": 18,
+      "cancel_ok": 22
+    }
+  },
+  "combat_tech_riposte": {
+    "frames": 20,
+    "segundos": 0.667,
+    "loop": false,
+    "superior": false,
+    "marcadores": {
+      "hit_start": 4,
+      "hit": 5,
+      "hit_end": 7,
+      "cancel_ok": 14
+    }
+  }
+}
